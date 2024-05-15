@@ -1,0 +1,10 @@
+.navbar {
+  background-color: theme("colors.ivory");
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  height: var(--navbar-height);
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}

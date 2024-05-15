@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: theme('colors.garnet');
+  --background-start-rgb: 214, 219, 220;
+  --background-color: theme('colors.peach-yellow');
+  --navbar-height: 70px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: theme('colors.atomic-tangerine');
+    --background-start-rgb: theme('colors.garnet');
+    --background-color: theme('colors.black');
+  }
+}
+
+@layer base {
+  body,
+  main {
+    @apply text-base;
+    background-color: var(--background-color);
+    min-height: calc(100vh - var(--navbar-height));
+  }
+
+  nav {
+    @apply fixed;
+    @apply top-0;
+    @apply z-10;
+    height: var(--navbar-height);
+  }
+
+  main {
+    margin-top: var(--navbar-height);
+    @apply box-content;
+    @apply relative;
+    @apply flex;
+    @apply flex-col;
+    @apply items-center;
+  }
+
+  h1 {
+    @apply text-5xl;
+    @apply font-medium;
+  }
+
+  h2 {
+    @apply text-4xl;
+    @apply font-bold;
+  }
+
+  h3 {
+    @apply text-3xl;
+    @apply font-semibold;
+  }
+
+  h4 {
+    @apply text-2xl;
+    @apply font-bold;
+  }
+
+  h5 {
+    @apply text-xl;
+    @apply font-bold;
+  }
+
+  h6 {
+    @apply text-md;
+    @apply font-bold;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  .inputBox {
+    @apply flex flex-row w-full items-center px-4 py-1 bg-white border border-garnet rounded-lg justify-between;
+  }
+
+  .btn-primary {
+    @apply bg-garnet text-ivory text-md tracking-widest font-semibold py-2 px-4 hover:bg-atomic-tangerine hover:text-garnet;
+  }
+
+  .btn-secondary {
+    @apply bg-bittersweet text-white text-md tracking-widest font-semibold py-2 px-4 hover:bg-sunglow hover:text-garnet;
+  }
+
+  .btn {
+    @apply py-3 px-5 rounded-xl cursor-pointer font-bold;
+  }
+}
+
+/* TODO: add differetn styles for different buttons */

@@ -1,0 +1,13 @@
+.links {
+  @apply text-bittersweet;
+  @apply text-base;
+  @apply underline;
+  @apply mx-auto;
+  @apply relative;
+  @apply flex;
+  @apply inline-block;
+}
+
+.links:hover {
+  @apply text-atomic-tangerine;
+}
