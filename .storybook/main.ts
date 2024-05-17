@@ -20,4 +20,5 @@ const config: StorybookConfig = {
   staticDirs: ["..\\public"],
   webpackFinal,
 };
+
 export default config;

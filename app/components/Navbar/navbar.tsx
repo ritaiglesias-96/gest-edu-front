@@ -1,3 +1,4 @@
+'use client';
 import styles from './navbar.module.css';
 import GestEduIcon from '@/assets/svg/logo-black-horizontal.svg';
 import Login from '@/assets/svg/login.svg';
@@ -6,54 +7,63 @@ import User from '@/assets/svg/user.svg';
 import Pencil from '@/assets/svg/edit.svg';
 import Link from 'next/link';
 import { Role } from '@/lib/definitions';
+import { useContext, useEffect, useState } from 'react';
+import { SessionContext } from '../../../context/SessionContext';
 
-export default function Navbar({ type }: { type: Role }): JSX.Element {
-  switch (type) {
-    case 'admin':
+export default function Navbar() {
+  const session = useContext(SessionContext);
+  const [rol, setRol] = useState<Role>(Role.public);
+  useEffect(() => {
+    console.log(session.session);
+
+    if (session.session) setRol(session.session?.rol);
+    else setRol(Role.public);
+  }, [session.session]);
+
+  switch (rol) {
+    case Role.admin:
       return <NavbarAdmin />;
-    case 'estudiante':
+    case Role.estudiante:
       return <NavbarEstudiante />;
-    case 'funcionario':
+    case Role.funcionario:
       return (
         <nav className={styles.navbar}>
-          <Link href='/'>
+          <Link href="/">
             <GestEduIcon />
           </Link>
-          <div className='flex flex-row gap-4'>
+          <div className="flex flex-row gap-4">
             <Link
-              className='flex flex-col gap-1  text-wrap align-middle text-sm'
-              href={'/'}
+              className="flex flex-col gap-1  text-wrap align-middle text-sm"
+              href="/"
             >
-              <User className='h-6 sm:w-auto' />
+              <User className="h-6 sm:w-auto" />
               <span>Perfil</span>
             </Link>
             <LogoutButton />
           </div>
         </nav>
       );
-      break;
-    case 'coordinador':
+    case Role.coordinador:
       return (
         <nav className={styles.navbar}>
-          <Link href='/'>
+          <Link href="/">
             <GestEduIcon />
           </Link>
           <LogoutButton />
         </nav>
       );
-      break;
     default:
       return (
         <nav className={styles.navbar}>
-          <Link href='/'>
+          <Link href="/">
             <GestEduIcon />
           </Link>
-          <div className='flex flex-row gap-4'>
+          <div className="flex flex-row gap-4">
             <Link
-              className='flex flex-col gap-1 text-wrap align-middle text-sm'
-              href={'/ingresar'}
+              className="flex flex-col gap-1 text-wrap align-middle text-sm"
+              href="/ingresar"
             >
-              <Login className='h-6 w-auto self-center' />
+              <Login className="h-6 w-auto self-center" />
               <span>Ingresar</span>
             </Link>
           </div>
@@ -63,12 +73,11 @@ export default function Navbar({ type }: { type: Role }): JSX.Element {
 }
 
 function LogoutButton() {
+  const session = useContext(SessionContext);
   return (
-    <form
-    // action={} TODO add logout action
-    >
-      <button className='flex flex-col gap-1 text-wrap align-middle text-sm'>
-        <Logout className='h-auto sm:w-auto' />
+    <form action={session.logout}>
+      <button className="flex flex-col gap-1 text-wrap align-middle text-sm">
+        <Logout className="h-auto sm:w-auto" />
         <span>Salir</span>
       </button>
     </form>
@@ -80,22 +89,22 @@ function LogoutButton() {
 function NavbarEstudiante() {
   return (
     <nav className={styles.navbar}>
-      <Link href='/estudiante'>
+      <Link href="/estudiante">
         <GestEduIcon />
       </Link>
-      <div className='flex flex-row gap-6'>
+      <div className="flex flex-row gap-6">
         <Link
-          className='flex flex-col gap-1  text-wrap align-middle text-sm'
-          href={'/estudiante/inscripciones'}
+          className="flex flex-col gap-1  text-wrap align-middle text-sm"
+          href="/estudiante/inscripciones"
         >
-          <Pencil className='h-6 self-center sm:w-auto' />
+          <Pencil className="h-6 self-center sm:w-auto" />
           <span>Inscripciones</span>
         </Link>
         <Link
-          className='flex flex-col gap-1  text-wrap align-middle text-sm'
-          href={'/estudiante/perfil'}
+          className="flex flex-col gap-1  text-wrap align-middle text-sm"
+          href="/estudiante/perfil"
         >
-          <User className='h-6 sm:w-auto' />
+          <User className="h-6 sm:w-auto" />
           <span>Perfil</span>
         </Link>
         <LogoutButton />
@@ -107,15 +116,15 @@ function NavbarEstudiante() {
 function NavbarAdmin() {
   return (
     <nav className={styles.navbar}>
-      <Link href='/'>
+      <Link href="/">
         <GestEduIcon />
       </Link>
-      <div className='flex flex-row gap-4'>
+      <div className="flex flex-row gap-4">
         <Link
-          className='flex flex-col gap-1  text-wrap align-middle text-sm'
-          href={'/'}
+          className="flex flex-col gap-1  text-wrap align-middle text-sm"
+          href="/"
         >
-          <User className='h-6 sm:w-auto' />
+          <User className="h-6 sm:w-auto" />
           <span>Perfil</span>
         </Link>
         <LogoutButton />

@@ -5,13 +5,13 @@ import { SessionContext } from '../../context/SessionContext';
 import { Role } from '@/lib/definitions';
 import { useRouter } from 'next/navigation';
 
-export default function EstudianteHome() {
+export default function FuncionarioHome() {
   const session = useContext(SessionContext);
   const router = useRouter();
   useEffect(() => {
     if (!session.session) {
       router.push('/');
-    } else if (session.session?.rol !== Role.estudiante) {
+    } else if (session.session?.rol !== Role.funcionario) {
       switch (session.session?.rol) {
         case Role.admin:
           router.push('/administrador');
@@ -19,8 +19,8 @@ export default function EstudianteHome() {
         case Role.coordinador:
           router.push('/coordinador');
           break;
-        case Role.funcionario:
-          router.push('/funcionario');
+        case Role.estudiante:
+          router.push('/estudiante');
           break;
         default:
           break;
@@ -30,7 +30,7 @@ export default function EstudianteHome() {
 
   return (
     <section className=" text-ivory">
-      <h1>Estudiante</h1>
+      <h1>Funcionario</h1>
     </section>
   );
 }

@@ -3,6 +3,7 @@ import { poppins } from './styles/fonts';
 import './styles/globals.css';
 import Navbar from './components/Navbar/navbar';
 import { Role } from './lib/definitions';
+import { SessionProvider } from '../context/SessionContext';
 
 export const metadata: Metadata = {
   title: {
@@ -18,12 +19,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    //TODO: change role according to session, context?
     <html lang='en'>
-      <body className={`${poppins.className} antialiased`}>
-        <Navbar type={Role.public} />
-        <main>{children}</main>
-      </body>
+      <SessionProvider>
+        <body className={`${poppins.className} antialiased`}>
+          <Navbar />
+          <main>{children}</main>
+        </body>
+      </SessionProvider>
     </html>
   );
 }

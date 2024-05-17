@@ -1,6 +1,5 @@
 'use server';
-const bcrypt = require('bcryptjs');
-import { z } from 'zod';
+const apiRoute = process.env.BACK_API;
 
 export type LoginState = {
   errors?: {
@@ -10,57 +9,29 @@ export type LoginState = {
   message?: string | null;
 };
 
-const SignInFormSchema = z.object({
-  email: z
-    .string({ required_error: 'Campo requerido' })
-    .email({ message: 'Ingrese un correo valido' }),
-  password: z
-    .string({ required_error: 'Campo requerido' })
-    .min(8, { message: 'La contraseña debe tener al menos 8 caracteres' }),
-});
-
-export async function login(prevState: LoginState, formData: FormData) {
-  const validatedFields = SignInFormSchema.safeParse({
-    email: formData.get('email'),
-    password: formData.get('password'),
+export const loginFetch = async (data: { email: string; password: string }) => {
+  const response = await fetch(`https://localhost:8080/gest-edu/api/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  }).then((res) => {
+    return res.json();
   });
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to login User.',
-    };
-  }
-  const data = validatedFields.data;
-  // TODO update this to do login with backend
-  // const user = await findUserByEmail(data.email);
-  // if (!user) {
-  //   return {
-  //     errors: { email: ['Correo electronico no registrado'] },
-  //     message: 'Failed to login User.',
-  //   };
-  // }
-  // const passwordsMatch = await verifyPasswords(data.password, user.password);
-  // if (!passwordsMatch) {
-  //   return {
-  //     errors: { password: ['Contraseña incorrecta'] },
-  //     message: 'Failed to login User.',
-  //   };
-  // }
-  // try {
-  //   await signIn('credentials', formData);
-  //   return { message: 'Success' };
-  // } catch (error) {
-  //   if (error instanceof AuthError) {
-  //     switch (error.type) {
-  //       case 'CredentialsSignin':
-  //         return { message: 'Credenciales invalidas' };
-  //       default:
-  //         return { message: 'Failed to Create User.' };
-  //     }
-  //   } else {
-  return { message: 'Failed to Create User.' };
-  //   }
-  // }
-}
+  return response;
+};
 
+export const logoutFetch = async (token: string) => {
+  const response = await fetch(`https://localhost:8080/gest-edu/api/logout`, {
+    method: 'POST',
+    headers: {
+      Authorization: token,
+    },
+  }).then((res) => {
+    return res.status;
+  });
+  console.log(response);
+  return response;
+};
 // Session

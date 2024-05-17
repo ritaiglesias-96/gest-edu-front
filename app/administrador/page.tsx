@@ -11,10 +11,10 @@ export default function EstudianteHome() {
   useEffect(() => {
     if (!session.session) {
       router.push('/');
-    } else if (session.session?.rol !== Role.estudiante) {
+    } else if (session.session?.rol !== Role.admin) {
       switch (session.session?.rol) {
-        case Role.admin:
-          router.push('/administrador');
+        case Role.estudiante:
+          router.push('/estudiante');
           break;
         case Role.coordinador:
           router.push('/coordinador');
@@ -30,7 +30,7 @@ export default function EstudianteHome() {
 
   return (
     <section className=" text-ivory">
-      <h1>Estudiante</h1>
+      <h1>Admin</h1>
     </section>
   );
 }
