@@ -45,3 +45,13 @@ export const Password: Story = {
     children: <KeyIcon className="h-auto w-6 fill-garnet sm:w-8" />,
   },
 };
+
+export const NoIcon: Story = {
+  args: {
+    placeholder: "Este input no tiene icono",
+    type: "text",
+    name: "texto",
+    label: "Sin icono",
+    required: true,
+  },
+};

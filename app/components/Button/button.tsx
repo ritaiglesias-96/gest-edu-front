@@ -1,23 +1,23 @@
-import clsx from "clsx";
+import clsx from 'clsx';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   className?: string;
-  styling?: "primary" | "secondary" | "pill" | "link" | "outline";
+  styling?: 'primary' | 'secondary' | 'pill' | 'link' | 'outline';
 }
 
 export default function Button({
   children,
   className,
-  styling = "primary",
+  styling = 'primary',
   ...rest
 }: ButtonProps) {
   const classes = {
-    primary: "btn-primary btn",
-    secondary: "btn-secondary btn",
-    pill: "btn-pill btn",
-    link: "btn-link btn",
-    outline: "btn-outline btn",
+    primary: 'btn-primary btn',
+    secondary: 'btn-secondary btn',
+    pill: 'btn-pill btn',
+    link: 'btn-link btn',
+    outline: 'btn-outline btn',
   };
 
   return (

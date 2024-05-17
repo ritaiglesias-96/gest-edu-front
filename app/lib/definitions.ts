@@ -1,5 +1,15 @@
 import { UUID } from 'crypto';
 
+export const initialState = { message: '', errors: {} };
+
+export type LoginState = {
+  errors?: {
+    email?: string[];
+    password?: string[];
+  };
+  message?: string | null;
+};
+
 export type User = {
   id?: UUID;
   name: string;
@@ -24,10 +34,10 @@ export type UserUpdate = {
 };
 
 export enum Role {
-  estudiante = 'estudiante',
-  funcionario = 'funcionario',
-  coordinador = 'coordinador',
-  admin = 'admin',
+  estudiante = 'ROL_ESTUDIANTE',
+  funcionario = 'ROL_FUNCIONARIO',
+  coordinador = 'ROL_COORDINADOR',
+  admin = 'ROL_ADMINISTRADOR',
   public = 'public',
 }
 

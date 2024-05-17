@@ -3,22 +3,25 @@ import styles from "./form.module.css";
 import GestEduIcon from "@/assets/svg/logo-black-vertical.svg";
 import UserIcon from "@/assets/svg/user.svg";
 import KeyIcon from "@/assets/svg/key.svg";
-import Button from "@/components/Button/button";
-import Link from "next/link";
-import InputField from "@/components/InputField/inputField";
-import { login } from "@/lib/data/actions";
-import { useFormState, useFormStatus } from "react-dom";
-import FormContainer from "@/components/FormContainer/formContainer";
 import EmailIcon from "@/assets/svg/email.svg";
+import PhoneIcon from "@/assets/svg/phone.svg";
+import LocationIcon from "@/assets/svg/place.svg";
 import FingerprintIcon from "@/assets/svg/fingerprint.svg";
 import CalendarIcon from "@/assets/svg/calendar.svg";
+import Button from "@/components/Button/button";
+import FormContainer from "@/components/FormContainer/formContainer";
+import InputField from "@/components/InputField/inputField";
+import Link from "next/link";
+import { useFormState, useFormStatus } from "react-dom";
 import { registerUser } from "@/lib/data/estudiante/actions";
-import { altaCarrera } from "@/lib/data/coordinador/actions";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useContext, useEffect } from "react";
+import { SessionContext } from "@/../context/SessionContext";
+import { Role, initialState } from "@/lib/definitions";
 
 function LoginForm() {
-  const initialState = { message: "", errors: {} };
-  const [logIn, dispatch] = useFormState(login, initialState);
+  const session = useContext(SessionContext);
+  const [logIn, dispatch] = useFormState(session.login, initialState);
 
   return (
     <form
@@ -85,8 +88,6 @@ function LoginForm() {
 function RegistrarForm() {
   const initialState = { message: "", errors: {} };
   const [register, dispatch] = useFormState(registerUser, initialState);
-  console.log(register.message, register.errors);
-
   return (
     <form
       className="flex min-h-full flex-col items-center justify-between gap-1 md:mx-auto md:h-full md:max-w-full md:gap-2 md:px-6"
@@ -139,11 +140,11 @@ function RegistrarForm() {
           ))}
       </div>
       <InputField
-        placeholder="1.234.789-0"
+        placeholder="12347890 (sin puntos ni guiones)"
         type="string"
         name="ci"
         label="Cedula de Identidad"
-        pattern="^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]"
+        pattern="^[1-9]\d{3}\d{3}[1-9]"
       >
         <FingerprintIcon className="h-auto w-6 fill-garnet sm:w-8" />
       </InputField>
@@ -178,8 +179,7 @@ function RegistrarForm() {
         name="domicilio"
         label="Dirección"
       >
-        {/* TODO: change to location icon */}
-        <CalendarIcon className="h-auto w-6 fill-garnet sm:w-8" />
+        <LocationIcon className="h-auto w-6 fill-garnet sm:w-8" />
       </InputField>
       <div id="domicilio-error" aria-live="polite" aria-atomic="true">
         {register?.errors?.domicilio &&
@@ -195,8 +195,7 @@ function RegistrarForm() {
         name="telefono"
         label="Telefono"
       >
-        {/* TODO: change to phone icon */}
-        <CalendarIcon className="h-auto w-6 fill-garnet sm:w-8" />
+        <PhoneIcon className="h-auto w-6 fill-garnet sm:w-8" />
       </InputField>
       <div id="telefono-error" aria-live="polite" aria-atomic="true">
         {register?.errors?.telefono &&
@@ -248,88 +247,6 @@ function RegistrarForm() {
   );
 }
 
-function AltaCarreraForm() {
-  const initialState = { message: "", errors: {} };
-  const [alta, dispatch] = useFormState(altaCarrera, initialState);
-  console.log(alta.message, alta.errors);
-  //TODO poner los iconos correspondientes
-  return (
-    <form
-      className="flex min-h-full flex-col items-center justify-between gap-1 md:mx-auto md:h-full md:max-w-full md:gap-2 md:px-6"
-      action={dispatch}
-    >
-      <h1 className="text-center text-2xl font-bold leading-snug text-black">
-        Complete el formulario para dar alta a la nueva carrera
-      </h1>
-      <InputField placeholder="Nombre" type="text" name="nombre" label="Nombre">
-        <UserIcon className="h-auto w-6 fill-garnet sm:w-8" />
-      </InputField>
-      <div id="nombre-error" aria-live="polite" aria-atomic="true">
-        {alta?.errors?.nombre &&
-          alta.errors.nombre.map((error: string) => (
-            <p className="mt-2 text-sm text-garnet" key={error}>
-              {error}
-            </p>
-          ))}
-      </div>
-      <InputField
-        placeholder="Descripcion"
-        type="text"
-        name="descripcion"
-        label="Descripcion"
-      >
-        <UserIcon className="h-auto w-6 fill-garnet sm:w-8" />
-      </InputField>
-      <div id="descripcion-error" aria-live="polite" aria-atomic="true">
-        {alta?.errors?.descripcion &&
-          alta.errors.descripcion.map((error: string) => (
-            <p className="mt-2 text-sm text-garnet" key={error}>
-              {error}
-            </p>
-          ))}
-      </div>
-      <InputField
-        placeholder="Creditos"
-        type="number"
-        name="creditos"
-        label="Creditos de Carrera"
-      >
-        <EmailIcon className="h-auto w-6 fill-garnet sm:w-8" />
-      </InputField>
-      <div id="creditos-error" aria-live="polite" aria-atomic="true">
-        {alta?.errors?.creditos &&
-          alta.errors.creditos.map((error: string) => (
-            <p className="mt-2 text-sm text-garnet" key={error}>
-              {error}
-            </p>
-          ))}
-      </div>
-      <InputField
-        placeholder="Duracion"
-        type="number"
-        name="duracion"
-        label="Duracion de Carrera"
-      >
-        <FingerprintIcon className="h-auto w-6 fill-garnet sm:w-8" />
-      </InputField>
-      <div id="duracion-error" aria-live="polite" aria-atomic="true">
-        {alta?.errors?.duracion &&
-          alta.errors.duracion.map((error: string) => (
-            <p className="mt-2 text-sm text-garnet" key={error}>
-              {error}
-            </p>
-          ))}
-      </div>
-      <div className="flex w-2/3 flex-col justify-between gap-1 sm:w-full sm:flex-row">
-        <RegisterButton />
-        <Button className="w-full" styling="secondary">
-          <Link href="/ingresar">Volver</Link>
-        </Button>
-      </div>
-    </form>
-  );
-}
-
 function LoginButton() {
   const { pending } = useFormStatus();
   return (
@@ -350,6 +267,29 @@ function RegisterButton() {
 
 export default function Form() {
   const path = usePathname();
+  const router = useRouter();
+  const session = useContext(SessionContext);
+
+  useEffect(() => {
+    if (session.session?.email !== null) {
+      switch (session.session?.rol) {
+        case Role.admin:
+          router.push("/admin");
+          break;
+        case Role.coordinador:
+          router.push("/coordinador");
+          break;
+        case Role.funcionario:
+          router.push("/funcionario");
+          break;
+        case Role.estudiante:
+          router.push("/estudiante");
+          break;
+        default:
+          break;
+      }
+    }
+  }, [router, session.session]);
 
   return (
     <FormContainer>

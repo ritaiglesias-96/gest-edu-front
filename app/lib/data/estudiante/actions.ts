@@ -1,6 +1,9 @@
 'use server';
 const bcrypt = require('bcryptjs');
 import { z } from 'zod';
+import { redirect } from 'next/navigation';
+
+const apiRoute = process.env.BACK_API;
 
 export type State = {
   errors?: {
@@ -16,7 +19,6 @@ export type State = {
   };
   message?: string | null;
 };
-
 // forms
 const RegisterFormSchema = z
   .object({
@@ -53,11 +55,14 @@ const RegisterFormSchema = z
 
 export async function registerUser(prevState: State, formData: FormData) {
   const validatedFields = RegisterFormSchema.safeParse({
+    ci: formData.get('ci'),
     nombre: formData.get('nombre'),
+    apellido: formData.get('apellido'),
     email: formData.get('email'),
     password: formData.get('password'),
+    telefono: formData.get('telefono'),
+    domicilio: formData.get('domicilio'),
     confirmPassword: formData.get('confirmPassword'),
-    ci: formData.get('ci'),
     fechaNac: formData.get('fechaNac'),
   });
 
@@ -66,44 +71,63 @@ export async function registerUser(prevState: State, formData: FormData) {
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields. Failed to Create User.',
     };
+  } else {
+    const {
+      ci,
+      nombre,
+      apellido,
+      email,
+      password,
+      telefono,
+      domicilio,
+      fechaNac,
+    } = validatedFields.data;
+
+    // TODO update this to do register with backend
+
+    console.log(
+      JSON.stringify({
+        ci,
+        nombre,
+        apellido,
+        email,
+        password,
+        telefono,
+        domicilio,
+        fechaNac,
+        TipoUsuario: 'ESTUDIANTE',
+      })
+    );
+    const response = await fetch(`${apiRoute}/usuario/registro`, {
+      method: 'POST',
+      body: JSON.stringify({
+        ci,
+        nombre,
+        apellido,
+        email,
+        password,
+        telefono,
+        domicilio,
+        fechaNac,
+        TipoUsuario: 'ESTUDIANTE',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((res) => {
+      console.log(res);
+      return res;
+    });
+
+    if (response.status === 201) {
+      return {
+        message: 'Registrado con exito',
+      };
+    } else {
+      return {
+        message: 'Error al registrar',
+      };
+    }
+    // TODO update this to do login after register with backend
   }
-
-  const { nombre, email, password, ci, fechaNac } = validatedFields.data;
-
-  // TODO update this to do register with backend
-  // if (await findUserByEmail(email)) {
-  //   return {
-  //     errors: { email: ['Correo electronico ya registrado'] },
-  //     message: 'Ya existe una cuenta con este correo electronico',
-  //   };
-  // } else {
-  //   const response = await fetch(registrarURL, {
-  //     method: 'POST',
-  //     body: JSON.stringify({ nombre, email, password, ci, fechaNac }),
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   }).then((res) => res.json());
-
-  // TODO update this to do login after register with backend
-  // if (response.ok) {
-  //   try {
-  //     await signIn('credentials', formData);
-  //     return { message: 'Success' };
-  //   } catch (error) {
-  //     if (error instanceof AuthError) {
-  //       switch (error.type) {
-  //         case 'CredentialsSignin':
-  //           return { message: 'Credenciales invalidas' };
-  //         default:
-  //           return { message: 'Failed to Create User.' };
-  //       }
-  //     } else {
-  //       return { message: 'Failed to Create User.' };
-  //     }
-  //   }
-  // } else {
-  return { message: 'Failed to register User.' };
-  // }
-  // }
 }
