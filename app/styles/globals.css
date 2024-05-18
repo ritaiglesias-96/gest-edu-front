@@ -3,18 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: theme('colors.garnet');
-  --background-start-rgb: 214, 219, 220;
-  --background-color: theme('colors.peach-yellow');
+  --foreground-rgb: theme('colors.atomic-tangerine');
+  --background-start-rgb: theme('colors.garnet');
+  --background-color: theme('colors.black');
   --navbar-height: 70px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: theme('colors.atomic-tangerine');
-    --background-start-rgb: theme('colors.garnet');
-    --background-color: theme('colors.black');
-  }
 }
 
 @layer base {

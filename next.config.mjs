@@ -1,10 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'instagram*',
+        port: '',
+      },
+    ],
+  },
   webpack: (config) => {
     // Add a rule to handle SVG files
     config.module.rules.push({
       test: /\.svg$/iu,
-      use: [{ loader: "@svgr/webpack" }],
+      use: [{ loader: '@svgr/webpack' }],
     });
     return config;
   },

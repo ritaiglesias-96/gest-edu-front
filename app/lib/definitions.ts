@@ -11,17 +11,16 @@ export type LoginState = {
 };
 
 export type User = {
-  id?: UUID;
-  name: string;
-  surname: string;
+  nombre: string;
+  apellido: string;
   email: string;
   password: string;
   role: Role;
-  image: string;
-  birthdate: Date;
+  imagen: string;
+  fechaNac: string;
   ci: string;
-  phone: string;
-  address: string;
+  telefono: string;
+  domicilio: string;
 };
 
 export type UserUpdate = {
