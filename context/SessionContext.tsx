@@ -1,10 +1,9 @@
 'use client';
 import React, { createContext, useEffect, useState } from 'react';
-import { decodeJwt, errors } from 'jose';
-import { Role, initialState } from '@/lib/definitions';
-import { LoginState, loginFetch, logoutFetch } from '@/lib/data/actions';
+import { decodeJwt } from 'jose';
+import { Role, initialState, LoginState } from '@/lib/definitions';
+import { loginFetch, logoutFetch } from '@/lib/data/actions';
 import { z } from 'zod';
-import { error } from 'console';
 
 const apiRoute = process.env.BACK_API;
 // Define the shape of the session context

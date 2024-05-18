@@ -12,6 +12,7 @@ interface InputFieldProps {
   label: string;
   required?: boolean;
   pattern?: string;
+  value?: string;
 }
 
 export default function InputField({
@@ -23,6 +24,7 @@ export default function InputField({
   required,
   className,
   pattern,
+  value,
 }: InputFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
@@ -67,6 +69,7 @@ export default function InputField({
               aria-describedby={`${name}-error`}
               required={required}
               onChange={handleInput}
+              value={value}
             />
           </div>
         </div>

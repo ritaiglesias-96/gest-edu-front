@@ -15,7 +15,7 @@ import Link from 'next/link';
 import { useFormState, useFormStatus } from 'react-dom';
 import { registerUser } from '@/lib/data/estudiante/actions';
 import { usePathname, useRouter } from 'next/navigation';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SessionContext } from '@/../context/SessionContext';
 import { Role, initialState } from '@/lib/definitions';
 
@@ -71,7 +71,7 @@ function LoginForm() {
       </div>
       <LoginButton />
       <div className='my-4 flex w-full flex-col gap-3 text-center'>
-        <Link className={styles.links} href={'#'}>
+        <Link className={styles.links} href='/resetPass'>
           Olvidé mi contraseña
         </Link>
         <span>
@@ -85,9 +85,18 @@ function LoginForm() {
   );
 }
 
-function RegistrarForm() {
+function RegistrarForm({
+  registrado,
+}: {
+  registrado: (value: boolean) => void;
+}) {
   const initialState = { message: '', errors: {} };
   const [register, dispatch] = useFormState(registerUser, initialState);
+  useEffect(() => {
+    if (register.message.includes('201')) {
+      registrado(true);
+    }
+  }, [register.message, registrado]);
   return (
     <form
       className='flex min-h-full flex-col items-center justify-between gap-1 md:mx-auto md:h-full md:max-w-full md:gap-2 md:px-6'
@@ -237,11 +246,8 @@ function RegistrarForm() {
             </p>
           ))}
       </div>
-      <div className='flex w-2/3 flex-col justify-between gap-1 sm:w-full sm:flex-row'>
+      <div className='flex w-2/3 items-center flex-col gap-1 sm:w-full'>
         <RegisterButton />
-        <Button className='w-full' styling='secondary'>
-          <Link href='/ingresar'>Volver</Link>
-        </Button>
       </div>
     </form>
   );
@@ -259,7 +265,7 @@ function LoginButton() {
 function RegisterButton() {
   const { pending } = useFormStatus();
   return (
-    <Button className='w-full' styling='primary' disabled={pending}>
+    <Button className='w-2/3' styling='primary' disabled={pending}>
       {pending ? 'Registrando...' : 'Registrarse'}
     </Button>
   );
@@ -269,6 +275,7 @@ export default function Form() {
   const path = usePathname();
   const router = useRouter();
   const session = useContext(SessionContext);
+  const [registrado, setRegistrado] = useState(false);
 
   useEffect(() => {
     if (session.session?.email !== null) {
@@ -288,12 +295,19 @@ export default function Form() {
         default:
           break;
       }
+      if (registrado) {
+        router.push('/ingresar');
+      }
     }
-  }, [router, session.session]);
+  }, [registrado, router, session.session]);
 
   return (
     <FormContainer>
-      {path === '/ingresar' ? <LoginForm /> : <RegistrarForm />}
+      {path === '/ingresar' ? (
+        <LoginForm />
+      ) : (
+        <RegistrarForm registrado={setRegistrado} />
+      )}
     </FormContainer>
   );
 }
