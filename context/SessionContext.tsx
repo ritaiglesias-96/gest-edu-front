@@ -1,9 +1,9 @@
-'use client';
-import React, { createContext, useEffect, useState } from 'react';
-import { decodeJwt } from 'jose';
-import { Role, initialState } from '@/lib/definitions';
-import { LoginState, loginFetch, logoutFetch } from '@/lib/data/actions';
-import { z } from 'zod';
+"use client";
+import React, { createContext, useEffect, useState } from "react";
+import { decodeJwt } from "jose";
+import { Role, initialState } from "@/lib/definitions";
+import { LoginState, loginFetch, logoutFetch } from "@/lib/data/actions";
+import { z } from "zod";
 
 const apiRoute = process.env.BACK_API;
 // Define the shape of the session context
@@ -37,19 +37,19 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [session, setSession] = useState<Session>(() => {
-    if (typeof window !== 'undefined') {
-      const savedSession = window.sessionStorage.getItem('session');
+    if (typeof window !== "undefined") {
+      const savedSession = window.sessionStorage.getItem("session");
       return savedSession ? JSON.parse(savedSession) : null;
     }
     return null;
   });
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       if (session) {
-        window.sessionStorage.setItem('session', JSON.stringify(session));
+        window.sessionStorage.setItem("session", JSON.stringify(session));
       } else {
-        window.sessionStorage.removeItem('session');
+        window.sessionStorage.removeItem("session");
       }
     }
   }, [session]);
@@ -57,34 +57,34 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
   const login = async (prevState: LoginState, formData: FormData) => {
     const SignInFormSchema = z.object({
       email: z
-        .string({ required_error: 'Campo requerido' })
-        .email({ message: 'Ingrese un correo valido' }),
+        .string({ required_error: "Campo requerido" })
+        .email({ message: "Ingrese un correo valido" }),
       password: z
-        .string({ required_error: 'Campo requerido' })
-        .min(8, { message: 'La contraseña debe tener al menos 8 caracteres' }),
+        .string({ required_error: "Campo requerido" })
+        .min(4, { message: "La contraseña debe tener al menos 4 caracteres" }),
     });
     const validatedFields = SignInFormSchema.safeParse({
-      email: formData.get('email'),
-      password: formData.get('password'),
+      email: formData.get("email"),
+      password: formData.get("password"),
     });
     if (!validatedFields.success) {
       return {
         errors: validatedFields.error.flatten().fieldErrors,
-        message: 'Missing Fields. Failed to login User.',
+        message: "Missing Fields. Failed to login User.",
       };
     } else {
       const response = await loginFetch(validatedFields.data);
       console.log(response);
-      if (!response.status) {
+      if (response.status === 401 || !response.status) {
         return {
-          message: 'Fail to login User. Please check your credentials.',
+          errors: { password: ["Correo o contraseña incorrectos"] },
         };
       } else {
         const { email, jwt } = response;
         const { roles } = decodeJwt(jwt);
         setSession({ email, jwt, rol: roles as Role });
         return {
-          message: 'Inicio de sesion con exito. Welcome!',
+          message: "Inicio de sesion con exito. Welcome!",
         };
       }
     }

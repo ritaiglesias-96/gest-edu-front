@@ -6,8 +6,6 @@ export type State = {
   errors?: {
     nombre?: string[];
     descripcion?: string[];
-    creditos?: number[];
-    duracion?: number[];
   };
   message?: string | null;
 };
@@ -21,23 +19,12 @@ const AltaCarreraFormSchema = z.object({
   descripcion: z.string({
     required_error: "Campo requerido",
   }),
-  creditos: z.number({
-    required_error: "Campo requerido",
-    invalid_type_error: "Los creditos deben ser un numero",
-  }),
-
-  duracion: z.number({
-    required_error: "Campo requerido",
-    invalid_type_error: "La duracion debe ser un numero",
-  }),
 });
 
 export async function altaCarrera(prevState: State, formData: FormData) {
   const validatedFields = AltaCarreraFormSchema.safeParse({
     nombre: formData.get("nombre"),
     descripcion: formData.get("email"),
-    creditos: formData.get("password"),
-    duracion: formData.get("confirmPassword"),
   });
 
   if (!validatedFields.success) {
@@ -47,7 +34,7 @@ export async function altaCarrera(prevState: State, formData: FormData) {
     };
   }
 
-  const { nombre, descripcion, creditos, duracion } = validatedFields.data;
+  const { nombre, descripcion } = validatedFields.data;
 
   return { message: "Failed to register User." };
 }

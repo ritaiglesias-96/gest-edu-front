@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useContext } from "react";
-import { SessionContext } from "../../context/SessionContext";
+import { SessionContext } from "../../../context/SessionContext";
 import { Role } from "@/lib/definitions";
 import { useRouter } from "next/navigation";
 
@@ -30,7 +30,7 @@ export default function CoordinadorHome() {
 
   return (
     <section className=" text-ivory">
-      <h1>Coordinador</h1>
+      <h1>Coordinador/Carreras</h1>
     </section>
   );
 }
