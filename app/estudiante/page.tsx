@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useContext } from 'react';
 import { SessionContext } from '../../context/SessionContext';
 import { Role } from '@/lib/definitions';
@@ -29,7 +28,7 @@ export default function EstudianteHome() {
   }, [router, session.session]);
 
   return (
-    <section className=" text-ivory">
+    <section className=' text-ivory'>
       <h1>Estudiante</h1>
     </section>
   );

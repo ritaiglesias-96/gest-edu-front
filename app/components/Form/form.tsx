@@ -1,23 +1,23 @@
-"use client";
-import styles from "./form.module.css";
-import GestEduIcon from "@/assets/svg/logo-black-vertical.svg";
-import UserIcon from "@/assets/svg/user.svg";
-import KeyIcon from "@/assets/svg/key.svg";
-import EmailIcon from "@/assets/svg/email.svg";
-import PhoneIcon from "@/assets/svg/phone.svg";
-import LocationIcon from "@/assets/svg/place.svg";
-import FingerprintIcon from "@/assets/svg/fingerprint.svg";
-import CalendarIcon from "@/assets/svg/calendar.svg";
-import Button from "@/components/Button/button";
-import FormContainer from "@/components/FormContainer/formContainer";
-import InputField from "@/components/InputField/inputField";
-import Link from "next/link";
-import { useFormState, useFormStatus } from "react-dom";
-import { registerUser } from "@/lib/data/estudiante/actions";
-import { usePathname, useRouter } from "next/navigation";
-import { useContext, useEffect } from "react";
-import { SessionContext } from "@/../context/SessionContext";
-import { Role, initialState } from "@/lib/definitions";
+'use client';
+import styles from './form.module.css';
+import GestEduIcon from '@/assets/svg/logo-black-vertical.svg';
+import UserIcon from '@/assets/svg/user.svg';
+import KeyIcon from '@/assets/svg/key.svg';
+import EmailIcon from '@/assets/svg/email.svg';
+import PhoneIcon from '@/assets/svg/phone.svg';
+import LocationIcon from '@/assets/svg/place.svg';
+import FingerprintIcon from '@/assets/svg/fingerprint.svg';
+import CalendarIcon from '@/assets/svg/calendar.svg';
+import Button from '@/components/Button/button';
+import FormContainer from '@/components/FormContainer/formContainer';
+import InputField from '@/components/InputField/inputField';
+import Link from 'next/link';
+import { useFormState, useFormStatus } from 'react-dom';
+import { registerUser } from '@/lib/data/estudiante/actions';
+import { usePathname, useRouter } from 'next/navigation';
+import { useContext, useEffect } from 'react';
+import { SessionContext } from '@/../context/SessionContext';
+import { Role, initialState } from '@/lib/definitions';
 
 function LoginForm() {
   const session = useContext(SessionContext);
@@ -71,12 +71,12 @@ function LoginForm() {
       </div>
       <LoginButton />
       <div className="my-4 flex w-full flex-col gap-3 text-center">
-        <Link className={styles.links} href={"#"}>
+        <Link className={styles.links} href={'#'}>
           Olvidé mi contraseña
         </Link>
         <span>
-          ¿No tienes aun una cuenta?{" "}
-          <Link className={styles.links} href={"/estudiante/registrarse"}>
+          ¿No tienes aun una cuenta?{' '}
+          <Link className={styles.links} href={'/estudiante/registrarse'}>
             Regístrate
           </Link>
         </span>
@@ -86,7 +86,7 @@ function LoginForm() {
 }
 
 function RegistrarForm() {
-  const initialState = { message: "", errors: {} };
+  const initialState = { message: '', errors: {} };
   const [register, dispatch] = useFormState(registerUser, initialState);
   return (
     <form
@@ -251,7 +251,7 @@ function LoginButton() {
   const { pending } = useFormStatus();
   return (
     <Button className="w-auto" styling="primary" disabled={pending}>
-      {pending ? "Ingresando..." : "Ingresar"}
+      {pending ? 'Ingresando...' : 'Ingresar'}
     </Button>
   );
 }
@@ -260,7 +260,7 @@ function RegisterButton() {
   const { pending } = useFormStatus();
   return (
     <Button className="w-full" styling="primary" disabled={pending}>
-      {pending ? "Registrando..." : "Registrarse"}
+      {pending ? 'Registrando...' : 'Registrarse'}
     </Button>
   );
 }
@@ -274,16 +274,16 @@ export default function Form() {
     if (session.session?.email !== null) {
       switch (session.session?.rol) {
         case Role.admin:
-          router.push("/admin");
+          router.push('/admin');
           break;
         case Role.coordinador:
-          router.push("/coordinador");
+          router.push('/coordinador');
           break;
         case Role.funcionario:
-          router.push("/funcionario");
+          router.push('/funcionario');
           break;
         case Role.estudiante:
-          router.push("/estudiante");
+          router.push('/estudiante');
           break;
         default:
           break;
@@ -293,7 +293,7 @@ export default function Form() {
 
   return (
     <FormContainer>
-      {path === "/ingresar" ? <LoginForm /> : <RegistrarForm />}
+      {path === '/ingresar' ? <LoginForm /> : <RegistrarForm />}
     </FormContainer>
   );
 }

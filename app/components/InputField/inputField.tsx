@@ -37,14 +37,14 @@ export default function InputField({
   return (
     <>
       <div className={clsx('inputBox', className)}>
-        <div className="flex w-full flex-row">
+        <div className='flex w-full flex-row'>
           {children}
-          <div className="flex w-full  flex-col">
+          <div className='flex w-full  flex-col'>
             <label
               htmlFor={name}
               className={
                 'px-3 py-0 text-sm font-semibold sm:text-base' +
-                (required ? ' after:content-[' * '] after:text-garnet' : '')
+                (required ? 'after:content-["*"] after:text-garnet' : '')
               }
             >
               {label}
@@ -71,18 +71,18 @@ export default function InputField({
           </div>
         </div>
         {type === 'password' && (
-          <button type="button" onClick={() => setShowPassword(!showPassword)}>
+          <button type='button' onClick={() => setShowPassword(!showPassword)}>
             {showPassword ? (
-              <VisibilityIcon className="h-auto w-6 fill-garnet sm:w-8" />
+              <VisibilityIcon className='h-auto w-6 fill-garnet sm:w-8' />
             ) : (
-              <VisibilityOffIcon className="h-auto w-6 fill-garnet sm:w-8" />
+              <VisibilityOffIcon className='h-auto w-6 fill-garnet sm:w-8' />
             )}
           </button>
         )}
       </div>
       {error && (
-        <div className="self-start pl-2">
-          <p className="text-sm text-garnet">Campo requerido</p>
+        <div className='self-start pl-2'>
+          <p className='text-sm text-garnet'>Campo requerido</p>
         </div>
       )}
     </>
