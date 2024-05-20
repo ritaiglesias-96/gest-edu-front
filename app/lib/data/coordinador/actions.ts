@@ -9,8 +9,6 @@ export type State = {
   errors?: {
     nombre?: string[];
     descripcion?: string[];
-    //duracionAnios?: number[];
-    //creditos?: number[];
   };
   message?: string | null;
 };
@@ -30,10 +28,7 @@ export async function altaCarrera(prevState: State, formData: FormData) {
   const validatedFields = AltaCarreraFormSchema.safeParse({
     nombre: formData.get('nombre'),
     descripcion: formData.get('descripcion'),
-    //duracionAnios: formData.get('duracionAnios'),
-    //creditos: formData.get('creditos'),
   });
-  console.log('buenas toy en altaCarrera');
 
   if (!validatedFields.success) {
     return {
@@ -46,8 +41,6 @@ export async function altaCarrera(prevState: State, formData: FormData) {
       JSON.stringify({
         nombre,
         descripcion,
-        //duracionAnios,
-        //creditos,
       })
     );
     //TODO sacar duracionAnios y creditos cuando en el back lo calculen
