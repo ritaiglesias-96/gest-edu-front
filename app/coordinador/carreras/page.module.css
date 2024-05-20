@@ -1,0 +1,20 @@
+.dataTable {
+  border: none;
+  @apply text-base;
+  @apply font-poppins;
+  @apply font-normal;
+  background-color: theme('colors.ivory');
+  width: fit-content;
+
+  & * {
+    @apply text-base;
+    @apply font-poppins;
+    @apply font-normal;
+  }
+}
+
+.this {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,11 +1,40 @@
-import { UUID } from 'crypto';
-
 export const initialState = { message: '', errors: {} };
 
 export type LoginState = {
   errors?: {
     email?: string[];
     password?: string[];
+  };
+  message?: string | null;
+};
+
+export type RegisterState = {
+  errors?: {
+    nombre?: string[];
+    apellido?: string[];
+    email?: string[];
+    ci?: string[];
+    fechaNac?: string[];
+    domicilio?: string[];
+    telefono?: string[];
+    password?: string[];
+    confirmPassword?: string[];
+  };
+  message?: string | null;
+};
+
+export type ResetPassState = {
+  errors?: {
+    email?: string[];
+  };
+  message?: string | null;
+};
+
+export type CambiarPassState = {
+  errors?: {
+    password?: string[];
+    confirmPassword?: string[];
+    tokenPassword?: string[];
   };
   message?: string | null;
 };

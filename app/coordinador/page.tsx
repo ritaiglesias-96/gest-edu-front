@@ -28,9 +28,5 @@ export default function CoordinadorHome() {
     }
   }, [router, session.session]);
 
-  return (
-    <section className=' text-ivory'>
-      <h1>Coordinador</h1>
-    </section>
-  );
+  return <h1>Coordinador</h1>;
 }

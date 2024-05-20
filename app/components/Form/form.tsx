@@ -15,7 +15,7 @@ import Link from 'next/link';
 import { useFormState, useFormStatus } from 'react-dom';
 import { registerUser } from '@/lib/data/estudiante/actions';
 import { usePathname, useRouter } from 'next/navigation';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SessionContext } from '@/../context/SessionContext';
 import { Role, initialState } from '@/lib/definitions';
 
@@ -268,28 +268,13 @@ function RegisterButton() {
 export default function Form() {
   const path = usePathname();
   const router = useRouter();
-  const session = useContext(SessionContext);
+  const [registrado, setRegistrado] = useState(false);
 
   useEffect(() => {
-    if (session.session?.email !== null) {
-      switch (session.session?.rol) {
-        case Role.admin:
-          router.push('/admin');
-          break;
-        case Role.coordinador:
-          router.push('/coordinador');
-          break;
-        case Role.funcionario:
-          router.push('/funcionario');
-          break;
-        case Role.estudiante:
-          router.push('/estudiante');
-          break;
-        default:
-          break;
-      }
+    if (registrado) {
+      router.push('/ingresar');
     }
-  }, [router, session.session]);
+  }, [registrado, router]);
 
   return (
     <FormContainer>

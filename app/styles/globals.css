@@ -28,6 +28,11 @@
     margin-top: var(--navbar-height);
     @apply box-content;
     @apply relative;
+    @apply block;
+    @apply h-full;
+  }
+
+  section {
     @apply flex;
     @apply flex-col;
     @apply items-center;
@@ -61,6 +66,11 @@
   h6 {
     @apply text-md;
     @apply font-bold;
+  }
+
+  a:active {
+    @apply text-bittersweet;
+    @apply fill-bittersweet;
   }
 }
 

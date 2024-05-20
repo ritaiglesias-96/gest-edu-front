@@ -62,7 +62,7 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
         .email({ message: 'Ingrese un correo valido' }),
       password: z
         .string({ required_error: 'Campo requerido' })
-        .min(8, { message: 'La contraseña debe tener al menos 8 caracteres' }),
+        .min(4, { message: 'La contraseña debe tener al menos 8 caracteres' }),
     });
     const validatedFields = SignInFormSchema.safeParse({
       email: formData.get('email'),
@@ -84,7 +84,7 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
         const { roles } = decodeJwt(jwt);
         setSession({ email, jwt, rol: roles as Role });
         return {
-          message: 'Inicio de sesion con exito. Welcome!',
+          message: 'Inicio de sesion con exito. 200',
         };
       }
     }
