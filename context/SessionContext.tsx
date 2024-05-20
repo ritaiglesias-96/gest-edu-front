@@ -1,8 +1,8 @@
 'use client';
 import React, { createContext, useEffect, useState } from 'react';
-import { decodeJwt, errors } from 'jose';
-import { Role, initialState } from '@/lib/definitions';
-import { LoginState, loginFetch, logoutFetch } from '@/lib/data/actions';
+import { decodeJwt } from 'jose';
+import { Role, initialState, LoginState } from '@/lib/definitions';
+import { loginFetch, logoutFetch } from '@/lib/data/actions';
 import { z } from 'zod';
 import { error } from 'console';
 
@@ -62,7 +62,7 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
         .email({ message: 'Ingrese un correo valido' }),
       password: z
         .string({ required_error: 'Campo requerido' })
-        .min(4, { message: 'La contraseña debe tener al menos 8 caracteres' }),
+        .min(4, { message: 'La contraseña debe tener al menos 4 caracteres' }),
     });
     const validatedFields = SignInFormSchema.safeParse({
       email: formData.get('email'),

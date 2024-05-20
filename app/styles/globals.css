@@ -6,6 +6,9 @@
   --foreground-rgb: theme('colors.atomic-tangerine');
   --background-start-rgb: theme('colors.garnet');
   --background-color: theme('colors.black');
+  --foreground-rgb: theme('colors.atomic-tangerine');
+  --background-start-rgb: theme('colors.garnet');
+  --background-color: theme('colors.black');
   --navbar-height: 70px;
 }
 
