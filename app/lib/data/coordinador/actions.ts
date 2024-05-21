@@ -1,8 +1,6 @@
 'use server';
-const bcrypt = require('bcryptjs');
+import { cookies } from 'next/headers';
 import { z } from 'zod';
-import { redirect } from 'next/navigation';
-
 const apiRoute = process.env.BACK_API;
 
 export type State = {
@@ -12,7 +10,23 @@ export type State = {
   };
   message?: string | null;
 };
+
 // forms
+export const getCarreras = async () => {
+  const token = cookies().get('token');
+  if (token) {
+    const response = await fetch(`${apiRoute}/carreras`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      return res.json();
+    });
+    return response;
+  }
+};
+
 const AltaCarreraFormSchema = z.object({
   nombre: z.string({
     invalid_type_error: 'Ingrese un nombre valido',
@@ -37,32 +51,27 @@ export async function altaCarrera(prevState: State, formData: FormData) {
     };
   } else {
     const { nombre, descripcion } = validatedFields.data;
-    console.log(
-      JSON.stringify({
-        nombre,
-        descripcion,
-      })
-    );
-    //TODO sacar duracionAnios y creditos cuando en el back lo calculen
-    const response = await fetch(`${apiRoute}/carrera`, {
+
+    const response = await fetch(`${apiRoute}/carreras`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Authorization: `Bearer ${cookies().get('token')}`,
+      },
       body: JSON.stringify({
         nombre,
         descripcion,
-        duracionAnios: 69,
-        creditos: 420,
+        duracionAnios: 5,
+        creditos: 200,
       }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
     }).then((res) => {
       console.log(res);
       return res;
     });
 
-    if (response.status === 201) {
+    if (response.status === 200) {
       return {
-        message: 'Creada con exito',
+        message: 'Creada con exito. 201',
       };
     } else {
       return {

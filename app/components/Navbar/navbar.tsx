@@ -15,8 +15,6 @@ export default function Navbar() {
   const session = useContext(SessionContext);
   const [rol, setRol] = useState<Role>(Role.public);
   useEffect(() => {
-    console.log(session.session);
-
     if (session.session) setRol(session.session?.rol);
     else setRol(Role.public);
   }, [session.session]);
@@ -130,13 +128,13 @@ function NavbarAdmin() {
 function NavbarCoordinador() {
   return (
     <nav className={styles.navbar}>
-      <Link href='/'>
+      <Link href='/coordinador'>
         <GestEduIcon />
       </Link>
       <div className='flex flex-row gap-4'>
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
-          href='/carreras'
+          href='/coordinador/carreras'
         >
           <Hat className='h-6 sm:w-auto' />
           <span>Carreras</span>

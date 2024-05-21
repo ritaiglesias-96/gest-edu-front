@@ -27,65 +27,82 @@ export default function InputField({
   value,
 }: InputFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState(false);
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (required && e.target.value === '') {
-      setError(true);
-    } else {
-      setError(false);
-    }
-  };
+
   return (
     <>
-      <div className={clsx('inputBox', className)}>
-        <div className="flex w-full flex-row">
-          {children}
-          <div className="flex w-full  flex-col">
-            <label
-              htmlFor={name}
-              className={
-                'px-3 py-0 text-sm font-semibold sm:text-base' +
-                (required ? 'after:content-["*"] after:text-garnet' : '')
-              }
-            >
-              {label}
-            </label>
-            <input
-              className={
-                'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:outline-none focus:underline sm:text-base'
-              }
-              pattern={pattern}
-              id={name}
-              type={
-                type === 'password'
-                  ? showPassword
-                    ? 'text'
-                    : 'password'
-                  : type
-              }
-              name={name}
-              placeholder={placeholder}
-              aria-describedby={`${name}-error`}
-              required={required}
-              onChange={handleInput}
-              value={value}
-            />
+      {type === 'textarea' ? (
+        <div className={clsx('inputBox', className)}>
+          <div className='flex w-full flex-row'>
+            {children}
+            <div className='flex w-full text-black flex-col'>
+              <label
+                htmlFor={name}
+                className={
+                  'px-3 py-0 text-sm font-semibold sm:text-base' +
+                  (required ? 'after:content-["*"] after:text-garnet' : '')
+                }
+              >
+                {label}
+              </label>
+              <textarea
+                className={
+                  'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:outline-none focus:underline sm:text-base'
+                }
+                name={name}
+                placeholder={placeholder}
+                aria-describedby={`${name}-error`}
+                id={name}
+              />
+            </div>
           </div>
         </div>
-        {type === 'password' && (
-          <button type="button" onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? (
-              <VisibilityIcon className="h-auto w-6 fill-garnet sm:w-8" />
-            ) : (
-              <VisibilityOffIcon className="h-auto w-6 fill-garnet sm:w-8" />
-            )}
-          </button>
-        )}
-      </div>
-      {error && (
-        <div className="self-start pl-2">
-          <p className="text-sm text-garnet">Campo requerido</p>
+      ) : (
+        <div className={clsx('inputBox', className)}>
+          <div className='flex w-full flex-row'>
+            {children}
+            <div className='flex w-full text-black flex-col'>
+              <label
+                htmlFor={name}
+                className={
+                  'px-3 py-0 text-sm font-semibold sm:text-base' +
+                  (required ? 'after:content-["*"] after:text-garnet' : '')
+                }
+              >
+                {label}
+              </label>
+              <input
+                className={
+                  'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:outline-none focus:underline sm:text-base'
+                }
+                pattern={pattern}
+                id={name}
+                type={
+                  type === 'password'
+                    ? showPassword
+                      ? 'text'
+                      : 'password'
+                    : type
+                }
+                name={name}
+                placeholder={placeholder}
+                aria-describedby={`${name}-error`}
+                required={required}
+                value={value}
+              />
+            </div>
+          </div>
+          {type === 'password' && (
+            <button
+              type='button'
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                <VisibilityIcon className='h-auto w-6 fill-garnet sm:w-8' />
+              ) : (
+                <VisibilityOffIcon className='h-auto w-6 fill-garnet sm:w-8' />
+              )}
+            </button>
+          )}
         </div>
       )}
     </>

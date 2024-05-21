@@ -16,6 +16,7 @@
   body,
   main {
     @apply text-base;
+    @apply text-black;
     background-color: var(--background-color);
     min-height: calc(100vh - var(--navbar-height));
   }
@@ -31,6 +32,12 @@
     margin-top: var(--navbar-height);
     @apply box-content;
     @apply relative;
+    @apply block;
+    @apply h-full;
+  }
+
+  section {
+    @apply text-ivory;
     @apply flex;
     @apply flex-col;
     @apply items-center;
@@ -64,6 +71,11 @@
   h6 {
     @apply text-md;
     @apply font-bold;
+  }
+
+  a:active {
+    @apply text-bittersweet;
+    @apply fill-bittersweet;
   }
 }
 

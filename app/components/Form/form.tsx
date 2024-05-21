@@ -17,7 +17,7 @@ import { registerUser } from '@/lib/data/estudiante/actions';
 import { usePathname, useRouter } from 'next/navigation';
 import { useContext, useEffect, useState } from 'react';
 import { SessionContext } from '@/../context/SessionContext';
-import { Role, initialState } from '@/lib/definitions';
+import { initialState } from '@/lib/definitions';
 
 function LoginForm() {
   const session = useContext(SessionContext);
@@ -97,6 +97,7 @@ function RegistrarForm({
       registrado(true);
     }
   }, [register.message, registrado]);
+
   return (
     <form
       className='flex min-h-full flex-col items-center justify-between gap-1 md:mx-auto md:h-full md:max-w-full md:gap-2 md:px-6'
@@ -274,32 +275,13 @@ function RegisterButton() {
 export default function Form() {
   const path = usePathname();
   const router = useRouter();
-  const session = useContext(SessionContext);
   const [registrado, setRegistrado] = useState(false);
 
   useEffect(() => {
-    if (session.session?.email !== null) {
-      switch (session.session?.rol) {
-        case Role.admin:
-          router.push('/admin');
-          break;
-        case Role.coordinador:
-          router.push('/coordinador');
-          break;
-        case Role.funcionario:
-          router.push('/funcionario');
-          break;
-        case Role.estudiante:
-          router.push('/estudiante');
-          break;
-        default:
-          break;
-      }
-      if (registrado) {
-        router.push('/ingresar');
-      }
+    if (registrado) {
+      router.push('/ingresar');
     }
-  }, [registrado, router, session.session]);
+  }, [registrado, router]);
 
   return (
     <FormContainer>

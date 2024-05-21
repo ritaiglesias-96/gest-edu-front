@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
 import { poppins } from './styles/fonts';
 import './styles/globals.css';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import Navbar from './components/Navbar/navbar';
-import { Role } from './lib/definitions';
 import { SessionProvider } from '../context/SessionContext';
+import { authRol, isAuthenticated } from './utils/auth';
+import { Role } from './lib/definitions';
+import { use, useEffect, useLayoutEffect } from 'react';
 
 export const metadata: Metadata = {
   title: {
@@ -20,12 +23,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <SessionProvider>
-        <body className={`${poppins.className} antialiased`}>
-          <Navbar />
-          <main>{children}</main>
-        </body>
-      </SessionProvider>
+      <AppRouterCacheProvider>
+        <SessionProvider>
+          <body className={`${poppins.className} antialiased`}>
+            <Navbar />
+            <main>{children}</main>
+          </body>
+        </SessionProvider>
+      </AppRouterCacheProvider>
     </html>
   );
 }

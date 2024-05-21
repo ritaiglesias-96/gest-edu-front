@@ -1,7 +1,5 @@
 'use server';
-const bcrypt = require('bcryptjs');
 import { z } from 'zod';
-import { redirect } from 'next/navigation';
 import { RegisterState } from '@/lib/definitions';
 
 const apiRoute = process.env.BACK_API;
@@ -73,7 +71,6 @@ export async function registerUser(
       fechaNac,
     } = validatedFields.data;
 
-    // TODO update this to do register with backend
     const response = await fetch(`${apiRoute}/usuario/registro`, {
       method: 'POST',
       body: JSON.stringify({

@@ -6,5 +6,9 @@ export const metadata: Metadata = {
 };
 
 export default function LoginPage() {
-  return <Form />;
+  return (
+    <section>
+      <Form />
+    </section>
+  );
 }

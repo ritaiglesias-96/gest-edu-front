@@ -5,9 +5,6 @@ import { Role, initialState, LoginState } from '@/lib/definitions';
 import { loginFetch, logoutFetch } from '@/lib/data/actions';
 import { z } from 'zod';
 
-const apiRoute = process.env.BACK_API;
-// Define the shape of the session context
-
 type Session = {
   jwt: string;
   email: string;
@@ -74,16 +71,18 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
       };
     } else {
       const response = await loginFetch(validatedFields.data);
+
       if (response.status === 401 || !response.status) {
         return {
           errors: { password: ['Correo o contraseña incorrectos'] },
         };
       } else {
-        const { email, jwt } = response;
+        const data = response;
+        const { jwt, email } = data;
         const { roles } = decodeJwt(jwt);
         setSession({ email, jwt, rol: roles as Role });
         return {
-          message: 'Inicio de sesion con exito. Welcome!',
+          message: 'Inicio de sesion con exito. 200',
         };
       }
     }
@@ -94,7 +93,7 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
       setSession(null);
     } else {
       const response = await logoutFetch(session.jwt);
-      console.log(response);
+
       if (response && response === 204) {
         setSession(null);
       }
