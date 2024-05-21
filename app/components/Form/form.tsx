@@ -17,7 +17,7 @@ import { registerUser } from '@/lib/data/estudiante/actions';
 import { usePathname, useRouter } from 'next/navigation';
 import { useContext, useEffect, useState } from 'react';
 import { SessionContext } from '@/../context/SessionContext';
-import { Role, initialState } from '@/lib/definitions';
+import { initialState } from '@/lib/definitions';
 
 function LoginForm() {
   const session = useContext(SessionContext);
@@ -97,6 +97,7 @@ function RegistrarForm({
       registrado(true);
     }
   }, [register.message, registrado]);
+
   return (
     <form
       className='flex min-h-full flex-col items-center justify-between gap-1 md:mx-auto md:h-full md:max-w-full md:gap-2 md:px-6'

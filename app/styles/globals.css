@@ -16,6 +16,7 @@
   body,
   main {
     @apply text-base;
+    @apply text-black;
     background-color: var(--background-color);
     min-height: calc(100vh - var(--navbar-height));
   }
@@ -36,6 +37,7 @@
   }
 
   section {
+    @apply text-ivory;
     @apply flex;
     @apply flex-col;
     @apply items-center;

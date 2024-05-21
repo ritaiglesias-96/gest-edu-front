@@ -1,4 +1,5 @@
 'use server';
+import { cookies } from 'next/headers';
 import { z } from 'zod';
 const apiRoute = process.env.BACK_API;
 
@@ -12,17 +13,17 @@ export type State = {
 
 // forms
 export const getCarreras = async () => {
-  const token = sessionStorage.getItem('token');
+  const token = cookies().get('token');
   if (token) {
-    const response = await fetch(`https://localhost:8080/gest-edu/api/login`, {
+    const response = await fetch(`${apiRoute}/carreras`, {
       method: 'GET',
-      // headers: {
-      //   Authotization: token,
-      // },
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
     }).then((res) => {
       return res.json();
     });
-    return response.body;
+    return response;
   }
 };
 
@@ -51,25 +52,26 @@ export async function altaCarrera(prevState: State, formData: FormData) {
   } else {
     const { nombre, descripcion } = validatedFields.data;
 
-    const response = await fetch(`${apiRoute}/carrera`, {
+    const response = await fetch(`${apiRoute}/carreras`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Authorization: `Bearer ${cookies().get('token')}`,
+      },
       body: JSON.stringify({
         nombre,
         descripcion,
-        duracionAnios: 69,
-        creditos: 420,
+        duracionAnios: 5,
+        creditos: 200,
       }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
     }).then((res) => {
       console.log(res);
       return res;
     });
 
-    if (response.status === 201) {
+    if (response.status === 200) {
       return {
-        message: 'Creada con exito',
+        message: 'Creada con exito. 201',
       };
     } else {
       return {

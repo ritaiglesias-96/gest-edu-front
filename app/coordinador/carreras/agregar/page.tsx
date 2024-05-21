@@ -4,11 +4,19 @@ import InputField from '@/components/InputField/inputField';
 import FormContainer from '@/components/FormContainer/formContainer';
 import { useFormState, useFormStatus } from 'react-dom';
 import { altaCarrera } from '@/lib/data/coordinador/actions';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-//TODO La descripción va a tener que ser un text area, Podes incluso mandarle al componente de input una opción pa que te renderice uno u otro
 export default function AltaCarreraPage() {
   const initialState = { message: '', errors: {} };
   const [alta, dispatch] = useFormState(altaCarrera, initialState);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (alta.message.includes('201')) {
+      router.back();
+    }
+  }, [alta.message, router]);
 
   return (
     <FormContainer>
@@ -17,7 +25,7 @@ export default function AltaCarreraPage() {
         action={dispatch}
       >
         <h1 className='text-center text-2xl font-bold leading-snug text-black'>
-          Complete el formulario para agregar carrera
+          Agregar carrera
         </h1>
         <InputField
           placeholder='Nombre'
@@ -35,10 +43,9 @@ export default function AltaCarreraPage() {
         </div>
         <InputField
           placeholder='Descripcion'
-          type='text'
+          type='textarea'
           name='descripcion'
           label='Descripcion'
-          pattern='textArea'
         ></InputField>
         <div id='descripcion-error' aria-live='polite' aria-atomic='true'>
           {alta?.errors?.descripcion &&

@@ -1,33 +1,23 @@
 import { Role } from '@/lib/definitions';
 import { authRol } from '@/utils/auth';
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const funcionarioPath = ['/funcionario', '/funcionario/*'];
-const estudiantePath = ['/estudiante', '/estudiante/*'];
-const administradorPath = ['/administrador', '/administrador/*'];
-const coordinadorPath = ['/coordinador', '/coordinador/*'];
+// TODO: Add the routes for each role
+// const funcionarioPath = ['/funcionario', '/funcionario/*'];
+// const estudiantePath = ['/estudiante', '/estudiante/*'];
+// const administradorPath = ['/administrador', '/administrador/*'];
+// const coordinadorPath = ['/coordinador', 'coordinador/*'];
 
-const protectedRoutes = [
-  ...funcionarioPath,
-  ...estudiantePath,
-  ...administradorPath,
-  ...coordinadorPath,
-];
-
-const publicRoutes = ['/ingresar', '/estudiante/registrar', '/resetPass'];
+const publicRoutes = ['/ingresar', '/estudiante/registrar', '/resetPass', '/'];
 
 export default function middleware(req: NextRequest) {
   // req.cookies.delete('token');
   const rol = authRol();
+  console.log(rol);
   const isLoggedIn = rol !== Role.public;
 
-  if (
-    !isLoggedIn &&
-    protectedRoutes.includes(req.nextUrl.pathname) &&
-    !publicRoutes.includes(req.nextUrl.pathname)
-  ) {
+  if (!isLoggedIn && !publicRoutes.includes(req.nextUrl.pathname)) {
     const absoluteURL = new URL('/', req.nextUrl.origin);
     return NextResponse.redirect(absoluteURL.toString());
   } else {
@@ -39,19 +29,21 @@ export default function middleware(req: NextRequest) {
       return NextResponse.redirect(absoluteURL.toString());
     } else if (
       rol === Role.coordinador &&
-      !coordinadorPath.includes(req.nextUrl.pathname)
+      !req.nextUrl.pathname.includes('coordinador')
     ) {
+      console.log('redirecting');
+
       const absoluteURL = new URL('/coordinador', req.nextUrl.origin);
       return NextResponse.redirect(absoluteURL.toString());
     } else if (
       rol === Role.funcionario &&
-      !funcionarioPath.includes(req.nextUrl.pathname)
+      !req.nextUrl.pathname.includes('funcionario')
     ) {
       const absoluteURL = new URL('/funcionario', req.nextUrl.origin);
       return NextResponse.redirect(absoluteURL.toString());
     } else if (
       rol === Role.admin &&
-      !administradorPath.includes(req.nextUrl.pathname)
+      !req.nextUrl.pathname.includes('administrador')
     ) {
       const absoluteURL = new URL('/administrador', req.nextUrl.origin);
       return NextResponse.redirect(absoluteURL.toString());

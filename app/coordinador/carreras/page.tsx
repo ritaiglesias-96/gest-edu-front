@@ -3,10 +3,17 @@ import styles from './page.module.css';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import EyeIcon from '@/assets/svg/visibility.svg';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import Button from '@/components/Button/button';
+import { getCarreras } from '@/lib/data/coordinador/actions';
 
 const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', maxWidth: 70 },
-  { field: 'nombre', headerName: 'Nombre', maxWidth: 200 },
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+    cellClassName: 'w-full',
+  },
   {
     field: 'duracionAnios',
     headerName: 'Duracion',
@@ -20,7 +27,8 @@ const columns: GridColDef[] = [
   {
     field: 'detalles',
     headerName: 'Detalles',
-    cellClassName: 'flex items-center',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
     renderCell: (params) => (
       <Link
         href={`/coordinador/carreras/${params.id}`}
@@ -32,31 +40,22 @@ const columns: GridColDef[] = [
   },
 ];
 
-const rows = [
-  {
-    id: 1,
-    nombre: 'Tecnologo informatico InitData',
-    descripcion:
-      'Carrera de tecnologo informatico donde se enseña a programar en java, c++, c# y python',
-    duracionAnios: 3,
-    creditos: 256,
-    existePlanEstudio: false,
-  },
-  {
-    id: 2,
-    nombre: 'Diseño UX/UI InitData',
-    descripcion:
-      'Carrera de diseño UX/UI donde se enseña a diseñar interfaces de usuario y experiencia de usuario',
-    duracionAnios: 2,
-    creditos: 180,
-    existePlanEstudio: false,
-  },
-];
-
 export default function CarrerasPage() {
+  const [rows, setRows] = useState([]);
+  useEffect(() => {
+    getCarreras().then((data) => {
+      setRows(data.content);
+    });
+  }, []);
   return (
-    <div className='relative h-full m-w-fit overflow-auto justify-center py-10 box-border'>
-      <div className='h-fit w-fit px-4'>
+    <div className='relative h-full w-full md:w-2/3 m-w-fit overflow-auto justify-center box-border'>
+      <h1 className='font-bold text-center'>Carreras</h1>
+      <div className='h-fit w-full p-4'>
+        <div className='flex flex-row rounded-md my-4 p-4 box-content bg-ivory'>
+          <Link href='/coordinador/carreras/agregar'>
+            <Button styling='primary'>Agregar Carrera</Button>
+          </Link>
+        </div>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -66,9 +65,10 @@ export default function CarrerasPage() {
             },
           }}
           rowSelection={false}
-          disableColumnResize={true}
+          autosizeOnMount={true}
           pageSizeOptions={[5, 10]}
           className={styles.dataTable}
+          autosizeOptions={{ expand: true }}
         />
       </div>
     </div>

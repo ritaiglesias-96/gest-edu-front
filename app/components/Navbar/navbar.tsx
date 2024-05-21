@@ -43,14 +43,7 @@ export default function Navbar() {
         </nav>
       );
     case Role.coordinador:
-      return (
-        <nav className={styles.navbar}>
-          <Link href='/'>
-            <GestEduIcon />
-          </Link>
-          <LogoutButton />
-        </nav>
-      );
+      return <NavbarCoordinador />;
     default:
       return (
         <nav className={styles.navbar}>
@@ -135,13 +128,13 @@ function NavbarAdmin() {
 function NavbarCoordinador() {
   return (
     <nav className={styles.navbar}>
-      <Link href='/'>
+      <Link href='/coordinador'>
         <GestEduIcon />
       </Link>
       <div className='flex flex-row gap-4'>
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
-          href='/carreras'
+          href='/coordinador/carreras'
         >
           <Hat className='h-6 sm:w-auto' />
           <span>Carreras</span>
