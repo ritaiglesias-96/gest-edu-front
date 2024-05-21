@@ -30,10 +30,10 @@ const RegisterFormSchema = z
     telefono: z.string({ required_error: 'Campo requerido' }),
     password: z
       .string({ required_error: 'Campo requerido' })
-      .min(8, { message: 'La contraseña debe tener al menos 8 caracteres' }),
+      .min(4, { message: 'La contraseña debe tener al menos 8 caracteres' }),
     confirmPassword: z
       .string({ required_error: 'Campo requerido' })
-      .min(8, { message: 'La contraseña debe tener al menos 8 caracteres' }),
+      .min(4, { message: 'La contraseña debe tener al menos 8 caracteres' }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Las contraseñas no coinciden',
