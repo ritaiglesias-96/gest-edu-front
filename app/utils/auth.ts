@@ -1,28 +1,25 @@
 import { Role } from '@/lib/definitions';
+import { decodeJwt } from 'jose';
+import { cookies } from 'next/headers';
 
 export const isAuthenticated = () => {
-  if (typeof window !== 'undefined') {
-    const session = sessionStorage.getItem('session');
-
-    if (session) {
-      const { token } = JSON.parse(session);
-      if (token) {
-        return true;
-      }
-    }
-  }
-  return false;
+  const cookie = cookies().get('token');
+  return cookie && cookie.value !== '' ? true : false;
 };
 
 export const authRol = () => {
-  if (typeof window !== 'undefined') {
-    const session = sessionStorage.getItem('session');
-    if (session) {
-      const { rol } = JSON.parse(session);
-      if (rol) {
-        return rol;
-      }
-    }
+  const cookie = cookies().get('token');
+  if (cookie && cookie.value !== '') {
+    // console.log(cookie?.value);
+    const { roles } = decodeJwt(cookie.value);
+    return roles as Role;
+  } else {
+    return Role.public;
   }
-  return Role.public;
+};
+
+export const authToken = () => {
+  const cookie = cookies().get('token');
+
+  return cookie && cookie.value !== '' ? cookie.value : '';
 };

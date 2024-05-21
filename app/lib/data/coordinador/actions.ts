@@ -50,13 +50,7 @@ export async function altaCarrera(prevState: State, formData: FormData) {
     };
   } else {
     const { nombre, descripcion } = validatedFields.data;
-    console.log(
-      JSON.stringify({
-        nombre,
-        descripcion,
-      })
-    );
-    //TODO sacar duracionAnios y creditos cuando en el back lo calculen
+
     const response = await fetch(`${apiRoute}/carrera`, {
       method: 'POST',
       body: JSON.stringify({

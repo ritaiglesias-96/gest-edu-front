@@ -4,6 +4,9 @@ import './styles/globals.css';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import Navbar from './components/Navbar/navbar';
 import { SessionProvider } from '../context/SessionContext';
+import { authRol, isAuthenticated } from './utils/auth';
+import { Role } from './lib/definitions';
+import { use, useEffect, useLayoutEffect } from 'react';
 
 export const metadata: Metadata = {
   title: {

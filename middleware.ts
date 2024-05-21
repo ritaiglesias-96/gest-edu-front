@@ -1,5 +1,6 @@
 import { Role } from '@/lib/definitions';
-import { authRol, isAuthenticated } from '@/utils/auth';
+import { authRol } from '@/utils/auth';
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -18,18 +19,21 @@ const protectedRoutes = [
 const publicRoutes = ['/ingresar', '/estudiante/registrar', '/resetPass'];
 
 export default function middleware(req: NextRequest) {
+  // req.cookies.delete('token');
+  const rol = authRol();
+  const isLoggedIn = rol !== Role.public;
+
   if (
-    !isAuthenticated &&
+    !isLoggedIn &&
     protectedRoutes.includes(req.nextUrl.pathname) &&
     !publicRoutes.includes(req.nextUrl.pathname)
   ) {
     const absoluteURL = new URL('/', req.nextUrl.origin);
     return NextResponse.redirect(absoluteURL.toString());
   } else {
-    const rol = authRol();
     if (
       rol === Role.estudiante &&
-      !estudiantePath.includes(req.nextUrl.pathname)
+      !req.nextUrl.pathname.includes('estudiante')
     ) {
       const absoluteURL = new URL('/estudiante', req.nextUrl.origin);
       return NextResponse.redirect(absoluteURL.toString());
@@ -54,3 +58,16 @@ export default function middleware(req: NextRequest) {
     }
   }
 }
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
+};

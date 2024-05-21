@@ -1,4 +1,5 @@
 'use server';
+import { cookies } from 'next/headers';
 import { z } from 'zod';
 import { ResetPassState, CambiarPassState } from '../definitions';
 const apiRoute = process.env.BACK_API;
@@ -13,6 +14,10 @@ export const loginFetch = async (data: { email: string; password: string }) => {
   }).then((res) => {
     return res.json();
   });
+  cookies().set({
+    name: 'token',
+    value: response.jwt.toString(),
+  });
   return response;
 };
 
@@ -20,12 +25,13 @@ export const logoutFetch = async (token: string) => {
   const response = await fetch(`https://localhost:8080/gest-edu/api/logout`, {
     method: 'POST',
     headers: {
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
   }).then((res) => {
+    console.log(res);
     return res.status;
   });
-  console.log(response);
+  cookies().delete('token');
   return response;
 };
 
@@ -112,8 +118,6 @@ export const cambiarPassFetch = async (
     };
   } else {
     const { password, confirmPassword, tokenPassword } = validatedFields.data;
-    console.log(password, confirmPassword, tokenPassword);
-
     const response = await fetch(
       `https://localhost:8080/gest-edu/api/usuario/cambiarPassword`,
       {
