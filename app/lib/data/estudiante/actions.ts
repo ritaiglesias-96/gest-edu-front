@@ -1,21 +1,9 @@
 'use server';
 import { z } from 'zod';
+import { RegisterState } from '@/lib/definitions';
+
 const apiRoute = process.env.BACK_API;
 
-export type State = {
-  errors?: {
-    nombre?: string[];
-    apellido?: string[];
-    email?: string[];
-    password?: string[];
-    ci?: string[];
-    fechaNac?: string[];
-    domicilio?: string[];
-    telefono?: string[];
-    confirmPassword?: string[];
-  };
-  message?: string | null;
-};
 // forms
 const RegisterFormSchema = z
   .object({
@@ -50,15 +38,18 @@ const RegisterFormSchema = z
     path: ['confirmPassword'], // path of error
   });
 
-export async function registerUser(prevState: State, formData: FormData) {
+export async function registerUser(
+  prevState: RegisterState,
+  formData: FormData
+) {
   const validatedFields = RegisterFormSchema.safeParse({
     ci: formData.get('ci'),
     nombre: formData.get('nombre'),
     apellido: formData.get('apellido'),
     email: formData.get('email'),
-    password: formData.get('password'),
     telefono: formData.get('telefono'),
     domicilio: formData.get('domicilio'),
+    password: formData.get('password'),
     confirmPassword: formData.get('confirmPassword'),
     fechaNac: formData.get('fechaNac'),
   });
@@ -103,7 +94,7 @@ export async function registerUser(prevState: State, formData: FormData) {
 
     if (response.status === 201) {
       return {
-        message: 'Registrado con exito',
+        message: 'Registrado con exito. 201',
       };
     } else {
       return {

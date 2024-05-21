@@ -143,7 +143,7 @@ function NavbarCoordinador() {
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
           href='/carreras'
         >
-          <User className='h-6 sm:w-auto' />
+          <Hat className='h-6 sm:w-auto' />
           <span>Carreras</span>
         </Link>
         <Link
