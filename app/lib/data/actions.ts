@@ -1,7 +1,8 @@
 'use server';
 import { cookies } from 'next/headers';
 import { z } from 'zod';
-import { ResetPassState, CambiarPassState } from '../definitions';
+import { ResetPassState, CambiarPassState, EditarPerfilState } from '../definitions';
+import { Cookie } from 'next/font/google';
 const apiRoute = process.env.BACK_API;
 
 export const loginFetch = async (data: { email: string; password: string }) => {
@@ -150,6 +151,55 @@ export const cambiarPassFetch = async (
         message: 'Error en el servidor',
       };
     }
+  }
+};
+
+export const editarPerfilFetch = async (prevState: EditarPerfilState, formData: FormData) => {
+  const SignInFormSchema = z.object({
+    telefono: z
+      .string({ required_error: 'Campo requerido' }),
+    domicilio: z
+      .string({ required_error: 'Campo requerido' }),
+    imagen: z
+      .string({ required_error: 'Campo requerido' }),
+  });
+  const validatedFields = SignInFormSchema.safeParse({
+    telefono: formData.get('telefono'),
+    domicilio: formData.get('domicilio'),
+    imagen: formData.get('imagen'),
+  });
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Edit User.',
+    };
+  } 
+  else {   
+    if(cookies().get('token') !== null){
+      const token = cookies().get('token')!.value;      
+      
+      const response = await fetch(`${apiRoute}/usuario/perfil`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(validatedFields.data),
+      }).then((res) => {
+        return res.json();
+      });
+
+      if(response.status === 200){
+        return {
+          message: 'Perfil editado con exito.',
+        };
+      }
+      else if (response.status === 403) {
+        return {
+          errors: { imagen: ['Token invalido.'] },
+        };
+      } 
+    }   
   }
 };
 // Session
