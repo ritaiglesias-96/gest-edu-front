@@ -1,8 +1,8 @@
 'use server';
 import { cookies } from 'next/headers';
 import { z } from 'zod';
-import { ResetPassState, CambiarPassState, EditarPerfilState } from '../definitions';
-import { Cookie } from 'next/font/google';
+import { ResetPassState, CambiarPassState, EditarPerfilState, User } from '../definitions';
+import { authToken } from '@/utils/auth';
 const apiRoute = process.env.BACK_API;
 
 export const loginFetch = async (data: { email: string; password: string }) => {
@@ -174,21 +174,21 @@ export const editarPerfilFetch = async (prevState: EditarPerfilState, formData: 
       message: 'Missing Fields. Failed to Edit User.',
     };
   } 
-  else {   
-    if(cookies().get('token') !== null){
-      const token = cookies().get('token')!.value;      
-      
+  else {    
+    const token = authToken(); 
+    
+    if(token !== ''){
       const response = await fetch(`${apiRoute}/usuario/perfil`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
         body: JSON.stringify(validatedFields.data),
       }).then((res) => {
         return res.json();
       });
-
+  
       if(response.status === 200){
         return {
           message: 'Perfil editado con exito.',
@@ -198,8 +198,24 @@ export const editarPerfilFetch = async (prevState: EditarPerfilState, formData: 
         return {
           errors: { imagen: ['Token invalido.'] },
         };
-      } 
-    }   
-  }
+      }     
+    }
+  }     
 };
+
+export const obtenerDatosUsuario = async () => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/usuario/perfil`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      return res.json(); 
+    }); 
+    return response;
+  }
+}
+
 // Session

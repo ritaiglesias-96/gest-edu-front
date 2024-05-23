@@ -1,83 +1,34 @@
 'use client';
 
-import { editarPerfilFetch } from '@/lib/data/actions';
-import { Role, User, initialState } from '@/lib/definitions';
+import { Role, User } from '@/lib/definitions';
 import Button from '@/components/Button/button';
 import Image from 'next/image';
-import { useContext } from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
-import { SessionContext } from '../../../context/SessionContext';
-import InputField from '../InputField/inputField';
+import { useFormStatus } from 'react-dom';
 import UserIcon from '@/assets/svg/user.svg';
-import PhoneIcon from '@/assets/svg/phone.svg';
 import LocationIcon from '@/assets/svg/place.svg';
-import GestEduIcon from '@/assets/svg/logo-black-vertical.svg';
+import FingerprintIcon from '@/assets/svg/fingerprint.svg';
+import CalendarIcon from '@/assets/svg/fingerprint.svg';
+import EmailIcon from '@/assets/svg/fingerprint.svg';
+import { initializeApp } from "firebase/app";
+import { FormControl, InputLabel, Input } from '@mui/material';
 import FormContainer from '../FormContainer/formContainer';
+import { authToken } from '@/utils/auth';
+import { useState, useEffect } from 'react';
+import { obtenerDatosUsuario } from '@/lib/data/actions';
 
-function EditarPerfilUsuario() {
-  const session = useContext(SessionContext);
-  const [editar, dispatch] = useFormState(editarPerfilFetch, initialState);
 
-  return (
-    <form
-      className='flex h-full flex-col items-center justify-between gap-2 md:gap-2 md:px-6'
-      action={dispatch}
-    >
-      <GestEduIcon className='h-auto w-2/4' />
-      <h1 className='text-center text-2xl font-bold text-black'>
-        Perfil de usuario
-      </h1>
-      <InputField
-        placeholder='Telefono'
-        type='text'
-        name='telefono'
-        label='telefono'
-      >
-        <PhoneIcon className='h-auto w-6 fill-garnet sm:w-8' />
-      </InputField>
-      <div id='telefono-error' aria-live='polite' aria-atomic='true'>
-        {editar?.errors?.imagen &&
-          editar.errors.imagen.map((error: string) => (
-            <p className='mt-2 text-sm text-garnet' key={error}>
-              {error}
-            </p>
-          ))}
-      </div>
-      <InputField
-        placeholder='Domicilio'
-        type='text'
-        name='domicilio'
-        label='Domicilio'
-      >
-        <LocationIcon className='h-auto w-6 fill-garnet sm:w-8' />
-      </InputField>
-      <div
-        className='self-start pl-2'
-        id='domicilio-error'
-        aria-live='polite'
-        aria-atomic='true'
-      >
-      </div>
-      <InputField
-        placeholder='Imagen'
-        type='text'
-        name='imagen'
-        label='Imagen'
-      >
-        <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
-      </InputField>
-      <div
-        className='self-start pl-2'
-        id='imagen-error'
-        aria-live='polite'
-        aria-atomic='true'
-      >
-      </div>
-      <EditarPerfilButton />
-      
-    </form>
-  );
-}
+const firebaseConfig = {
+  apiKey: "AIzaSyCVI7TOxOsaQ0zApLLgZxpBW9_78LPxQk8",
+  authDomain: "gestedu-4b92d.firebaseapp.com",
+  projectId: "gestedu-4b92d",
+  storageBucket: "gestedu-4b92d.appspot.com",
+  messagingSenderId: "648304797890",
+  appId: "1:648304797890:web:7cdd9694e8097da5d4335b"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
 
 function EditarPerfilButton() {
   const { pending } = useFormStatus();
@@ -89,6 +40,7 @@ function EditarPerfilButton() {
 }
 
 export default function Profile() {
+  
   const user: User = {
     nombre: 'Jane',
     apellido: 'Doe',
@@ -100,27 +52,142 @@ export default function Profile() {
     fechaNac: '12/12/1990',
     ci: '12546897',
     telefono: '099546987',
-    domicilio: '',
+    domicilio: 'Calle Falsa 1234',
   };
 
+  const [usuario, setUsuario] = useState(user);
+  
+  useEffect(() => {
+    obtenerDatosUsuario().then((u) => {
+      usuario.nombre = u.Nombre;
+      usuario.apellido = u.Apelldio;
+      usuario.email = u.email;
+      usuario.password = '';
+      //usuario.role = Role.estudiante;
+      usuario.imagen= u.imagen;
+      usuario.fechaNac = u.fechaNac;
+      usuario.ci = u.ci; 
+      usuario.telefono = u.telefono;
+      usuario.domicilio = u.domicilio;
+    }); 
+  });
+
+  
+
   return (
-    // <div className=' rounded-2xl sm:bg-ivory sm:my-4 sm:w-2/3 min-h-full'>
-    //   <Image
-    //     src={user.imagen}
-    //     alt='user image'
-    //     width={200}
-    //     height={100}
-    //     style={{
-    //       objectFit: 'cover',
-    //       height: '200px',
-    //       borderRadius: '50%',
-    //       padding: '10px',
-    //     }}
-    //   />
-    // </div>
     <FormContainer>
-      <EditarPerfilUsuario />
+      <div>
+        <div style={{ display: 'inline-block', alignContent: 'center' }}>
+          <Image
+            src={user.imagen}
+            alt=''
+            width={150}
+            height={150}
+            style={{
+              objectFit: 'cover',
+              height: '150px',
+              borderRadius: '50%',
+              padding: '20px',
+              display: 'inline-block'
+            }}
+          />
+        </div>
+        <div id="divNombreCabezal" style={{ display: 'inline-block', verticalAlign: 'middle', height: '100%' }}>
+          <h3>{user.nombre} {user.apellido}</h3>
+        </div>
+        <div>
+          <h6 style={{
+            objectFit: 'cover',
+            padding: '10px'
+          }}>Datos Personlanes:</h6>
+        </div>
+        <div style={{
+          width: '50%',
+          objectFit: 'cover',
+          padding: '10px',
+          display: 'inline-block'
+        }}>
+
+          <div id='divNombre' style={{ paddingBottom: '15px' }}>
+            <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
+              <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
+            </div>
+            <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+              <InputLabel htmlFor="component-simple">Nombre</InputLabel>
+              <Input id="component-simple" value={user.nombre} size='small' />
+            </FormControl>
+          </div>
+
+          <div id='divDocumento' style={{ paddingBottom: '15px' }}>
+            <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
+              <FingerprintIcon className='h-auto w-6 fill-garnet sm:w-8' />
+            </div>
+            <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+              <InputLabel htmlFor="component-simple">Documento</InputLabel>
+              <Input id="component-simple" value={user.ci} size='small' />
+            </FormControl>
+          </div>
+
+          <div id='divFechaNacimiento' style={{ paddingBottom: '15px' }}>
+            <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
+              <CalendarIcon className='h-auto w-6 fill-garnet sm:w-8' />
+            </div>
+            <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+              <InputLabel htmlFor="component-simple">Fecha de nacimiento</InputLabel>
+              <Input id="component-simple" value={user.fechaNac} size='small' />
+            </FormControl>
+          </div>
+
+        </div>
+        <div style={{
+          width: '50%',
+          objectFit: 'cover',
+          padding: '10px',
+          paddingBottom: '10%',
+          display: 'inline-block'
+        }}>
+
+          <div id='divApellido' style={{ paddingBottom: '15px' }}>
+            <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
+              <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
+            </div>
+            <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+              <InputLabel htmlFor="component-simple">Apellido</InputLabel>
+              <Input id="component-simple" value={user.apellido} size='small' />
+            </FormControl>
+          </div>
+
+          <div id='divCorreo' style={{ paddingBottom: '15px' }}>
+            <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
+              <EmailIcon className='h-auto w-6 fill-garnet sm:w-8' />
+            </div>
+            <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+              <InputLabel htmlFor="component-simple">Correo electrónico</InputLabel>
+              <Input id="component-simple" value={user.email} size='small' />
+            </FormControl>
+          </div>
+
+          <div id='divFechaNac' style={{ paddingBottom: '15px' }}>
+            <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
+              <LocationIcon className='h-auto w-6 fill-garnet sm:w-8' />
+            </div>
+            <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+              <InputLabel htmlFor="component-simple">Domicilio</InputLabel>
+              <Input id="component-simple" value={user.domicilio} size='small' />
+            </FormControl>
+          </div>
+        </div>
+        <div style={{ alignContent: 'center', textAlign: 'center' }}>
+
+          <div style={{ padding: '5px', display: 'inline-block' }}>
+            <Button id='btnEditar' className='primary'>Editar datos</Button>
+          </div>
+
+        </div>
+      </div>
     </FormContainer>
-    
   );
 }
+
+
+
