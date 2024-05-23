@@ -104,3 +104,5 @@ export async function registerUser(
     // TODO update this to do login after register with backend
   }
 }
+
+export async function InscribirACarrera() {}
