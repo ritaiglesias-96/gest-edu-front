@@ -17,7 +17,7 @@ export const loginFetch = async (data: { email: string; password: string }) => {
   });
   cookies().set({
     name: 'token',
-    value: response.jwt.toString(),
+    value: response.jwt,
   });
   return response;
 };
@@ -154,7 +154,36 @@ export const cambiarPassFetch = async (
   }
 };
 
-export const editarPerfilFetch = async (prevState: EditarPerfilState, formData: FormData) => {
+export const editarUsuarioFetch = async (telefono: string, domicilio: string, imagen: string) =>
+{
+  const token = authToken();     
+  if(token !== ''){
+    const response = await fetch(`${apiRoute}/usuario/perfil`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+      body: JSON.stringify({ telefono, domicilio, imagen }),
+    }).then((res) => {
+      return res.json();
+    });
+
+    if(response.status === 200){
+      return {
+        message: 'Perfil editado con exito.',
+      };
+    }
+    else if (response.status === 403) {
+      return {
+        message: 'Error al editar datos.',
+      };
+    }     
+  }
+}
+
+//No se usa
+export const editarPerfilFetch = async (prevSate: EditarPerfilState, formData: FormData) => {
   const SignInFormSchema = z.object({
     telefono: z
       .string({ required_error: 'Campo requerido' }),
@@ -175,16 +204,16 @@ export const editarPerfilFetch = async (prevState: EditarPerfilState, formData: 
     };
   } 
   else {    
-    const token = authToken(); 
-    
+    const token = authToken();     
     if(token !== ''){
+      const {telefono, domicilio, imagen } = validatedFields.data;
       const response = await fetch(`${apiRoute}/usuario/perfil`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-        body: JSON.stringify(validatedFields.data),
+        body: JSON.stringify({ telefono, domicilio, imagen }),
       }).then((res) => {
         return res.json();
       });
@@ -196,7 +225,7 @@ export const editarPerfilFetch = async (prevState: EditarPerfilState, formData: 
       }
       else if (response.status === 403) {
         return {
-          errors: { imagen: ['Token invalido.'] },
+          message: 'Error al editar datos.',
         };
       }     
     }
@@ -205,16 +234,35 @@ export const editarPerfilFetch = async (prevState: EditarPerfilState, formData: 
 
 export const obtenerDatosUsuario = async () => {
   const token = authToken();
+  
   if (token) {
-    const response = await fetch(`${apiRoute}/usuario/perfil`, {
-      method: 'GET',
-      headers: {
-        Authotization: `Bearer ${token}`,
-      },
-    }).then((res) => {
-      return res.json(); 
-    }); 
-    return response;
+    console.log('tkn: ', token);
+
+    try {
+      const response = await fetch('https://localhost:8080/gest-edu/api/usuario/perfil', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        // Manejar errores HTTP
+        console.error(`HTTP Error: ${response.status}`);
+        return null; 
+      }
+
+      // Lee el cuerpo de la respuesta como JSON
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      // Manejar errores de red u otros errores
+      console.error('Fetch Error:', error);
+      return null;
+    } 
+  } else {
+    console.error('No token available');
+    return null;
   }
 }
 

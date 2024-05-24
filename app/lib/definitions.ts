@@ -44,7 +44,6 @@ export type EditarPerfilState = {
     telefono?: string[];
     domicilio?: string[];
     imagen?: string[];
-    token?: string[];
   };
   message?: string | null;
 };
