@@ -3,41 +3,33 @@
 import { Role, User } from '@/lib/definitions';
 import Button from '@/components/Button/button';
 import Image from 'next/image';
-import { useFormStatus } from 'react-dom';
 import UserIcon from '@/assets/svg/user.svg';
 import LocationIcon from '@/assets/svg/place.svg';
 import FingerprintIcon from '@/assets/svg/fingerprint.svg';
 import CalendarIcon from '@/assets/svg/calendar.svg';
 import EmailIcon from '@/assets/svg/email.svg';
-import { FormControl, InputLabel, Input, Link, styled, IconButton } from '@mui/material';
+import { FormControl, InputLabel, Input, styled, IconButton } from '@mui/material';
 import FormContainer from '../FormContainer/formContainer';
 import { useEffect, useState } from 'react';
 import { editarUsuarioFetch, obtenerDatosUsuarioFetch } from '@/lib/data/actions';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import ButtonMaterial from '@mui/material/Button';
+import { fbStorage } from '../../../firebase.config';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
-function EditarPerfilButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button className='w-auto' styling='primary' disabled={pending}>
-      {pending ? 'Editando...' : 'Editar'}
-    </Button>
-  );
-}
 
 export default function Profile() {
 
   const user: User = {
-    nombre: 'Jane',
-    apellido: 'Doe',
-    email: 'janedoe@mail.com',
+    nombre: '',
+    apellido: '',
+    email: '',
     password: '',
     role: Role.estudiante,
     imagen: '',
-    fechaNac: '12/12/1990',
-    ci: '12546897',
-    telefono: '099546987',
-    domicilio: 'Calle Falsa 1234',
+    fechaNac: '',
+    ci: '',
+    telefono: '',
+    domicilio: '',
   };
 
   const [datosUsuario, setUsuario] = useState<User>(user);
@@ -47,7 +39,7 @@ export default function Profile() {
 
   useEffect(() => {
     obtenerDatosUsuarioFetch()
-      .then(u => {
+      .then(u => {        
         setUsuario(u);
         setLoading(false);
         console.log('USUARIO', u);
@@ -67,12 +59,9 @@ export default function Profile() {
     }
   }
 
-
-
   const handleChange = (name: string, newValue: string) => {
     if (name === 'telefono') setUsuario({ ...datosUsuario, telefono: newValue });
-    if (name === 'domicilio') setUsuario({ ...datosUsuario, domicilio: newValue });
-    //if(name === 'imagen') setUsuario({ ...datosUsuario, imagen: newValue });
+    if (name === 'domicilio') setUsuario({ ...datosUsuario, domicilio: newValue });    
   };
 
   if (loading) {
@@ -83,33 +72,45 @@ export default function Profile() {
     return <p>Error al cargar los datos: {error}</p>;
   }
 
+  if (editado) {
+    setEditado(false);
+    alert("EDITADO!");
+  }
+
   const handlefile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Aquí puedes manejar el archivo
-      console.log('Archivo seleccionado:', file);
-      // Puedes leer el contenido del archivo si es necesario
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const content = e.target?.result;
-        console.log('Contenido del archivo:', file.name);
-      };
-      reader.readAsText(file); // Puedes cambiar readAsText a otro método dependiendo del tipo de archivo
+      // Referencia a la ubicación donde se almacenará el archivo en Firebase Storage
+      // El nombre de archivo se guarda con la cedula de la persona
+      const storageRef = ref(fbStorage, datosUsuario.ci);
+
+      // Subir el archivo
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      // Escuchar los cambios de estado del proceso de subida
+      uploadTask.on('state_changed', 
+        (snapshot) => {
+          // Progreso de la subida
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+        }, 
+        (error) => {
+          // Manejar errores
+          console.error('Error uploading file:', error);
+        }, 
+        () => {
+          // Subida completa, obtener URL de descarga
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL: any) => {
+            console.log("url: ", downloadURL);
+            setUsuario({ ...datosUsuario, imagen: downloadURL });
+          });
+        }
+      );
+
     }
   };
 
-  const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-  });
-
+  
   return (
     <FormContainer>
       <div>
@@ -118,7 +119,7 @@ export default function Profile() {
             <Image
               loader={() => datosUsuario?.imagen}
               src={datosUsuario?.imagen}
-              alt='user image'
+              alt=''
               width={200}
               height={100}
               style={{
@@ -137,7 +138,7 @@ export default function Profile() {
             <>
               <input
                 style={{ display: "none" }}
-                accept="image/png, image/jpeg" 
+                accept="image/png, image/jpeg"
                 id="choose-file"
                 type="file"
                 onChange={(event) => handlefile(event)}
@@ -148,15 +149,6 @@ export default function Profile() {
                 </IconButton>
               </label>
             </>
-            {/* <ButtonMaterial
-              component="label"
-              role={undefined}
-              variant="text"
-              tabIndex={-1}
-              startIcon={<CameraAltIcon fontSize='medium'/>}
-            >
-              <VisuallyHiddenInput type="file" />
-            </ButtonMaterial> */}
           </div>
         </div>
 
