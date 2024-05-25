@@ -6,16 +6,19 @@ import Image from 'next/image';
 import UserIcon from '@/assets/svg/user.svg';
 import LocationIcon from '@/assets/svg/place.svg';
 import FingerprintIcon from '@/assets/svg/fingerprint.svg';
+import PhoneIcon from '@/assets/svg/phone.svg';
 import CalendarIcon from '@/assets/svg/calendar.svg';
 import EmailIcon from '@/assets/svg/email.svg';
-import { FormControl, InputLabel, Input, styled, IconButton } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import { FormControl, InputLabel, Input, IconButton, Alert, Collapse } from '@mui/material';
 import FormContainer from '../FormContainer/formContainer';
 import { useEffect, useState } from 'react';
 import { editarUsuarioFetch, obtenerDatosUsuarioFetch } from '@/lib/data/actions';
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import { fbStorage } from '../../../firebase.config';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 export default function Profile() {
 
@@ -37,6 +40,9 @@ export default function Profile() {
   const [error, setError] = useState(null);
   const [editado, setEditado] = useState(false);
   const [date, setDate] = useState('');
+  const [ci, setCI] = useState('');
+  const [validPhone, setValidPhone] = useState(false);
+  const [isOpen, setOpen] = useState(false);
 
   useEffect(() => {
     obtenerDatosUsuarioFetch()
@@ -57,32 +63,43 @@ export default function Profile() {
     setDate(formattedDate);
   }, [datosUsuario]);
 
+  useEffect(() => {
+    const formattedCI = datosUsuario?.ci.replace(/^(\d{1})(\d{3})(\d{3})(\d{1})$/, '$1.$2.$3-$4');
+    setCI(formattedCI);
+  });
+
+  useEffect(() => {
+    const validPhone = !/^\d+$/.test(datosUsuario?.telefono);
+    setValidPhone(validPhone);
+  });
+
   function formatDate(inputDate: string) {
-    if(inputDate !== null){
+    if (inputDate !== null) {
       // Crear un objeto Date a partir de la cadena de entrada
-    const date = new Date(inputDate);
+      const date = new Date(inputDate);
 
-    // Obtener el día, mes y año de la fecha
-    const day = date.getDate();
-    const month = date.getMonth() + 1; // Los meses en JavaScript son 0-indexed (0 = Enero, 11 = Diciembre)
-    const year = date.getFullYear();
+      // Obtener el día, mes y año de la fecha
+      const day = date.getDate();
+      const month = date.getMonth() + 1; // Los meses en JavaScript son 0-indexed (0 = Enero, 11 = Diciembre)
+      const year = date.getFullYear();
 
-    // Formatear el día y el mes para que tengan siempre dos dígitos
-    const formattedDay = day < 10 ? '0' + day : day;
-    const formattedMonth = month < 10 ? '0' + month : month;
+      // Formatear el día y el mes para que tengan siempre dos dígitos
+      const formattedDay = day < 10 ? '0' + day : day;
+      const formattedMonth = month < 10 ? '0' + month : month;
 
-    // Devolver la fecha formateada
-    return `${formattedDay}/${formattedMonth}/${year}`;
+      // Devolver la fecha formateada
+      return `${formattedDay}/${formattedMonth}/${year}`;
     }
 
     return '';
-}
+  }
 
   const handleClickEditar = () => {
     if (datosUsuario.telefono !== '' && datosUsuario.domicilio !== '' && datosUsuario.imagen !== '') {
       editarUsuarioFetch(datosUsuario.telefono, datosUsuario.domicilio, datosUsuario.imagen)
         .then(() => {
           setEditado(true);
+          setOpen(true);
         });
     }
   }
@@ -98,11 +115,6 @@ export default function Profile() {
 
   if (error) {
     return <p>Error al cargar los datos: {error}</p>;
-  }
-
-  if (editado) {
-    setEditado(false);
-    alert("EDITADO!");
   }
 
   const handlefile = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,7 +150,6 @@ export default function Profile() {
     }
   };
 
-
   return (
     <FormContainer>
       <div>
@@ -154,8 +165,10 @@ export default function Profile() {
                 objectFit: 'cover',
                 height: '200px',
                 borderRadius: '50%',
-                padding: '10px',
-                display: 'inline-block'
+                display: 'inline-block',
+                border: '2px solid black',
+                marginRight: '15px',
+                marginBottom: '15px'
               }}
             />
             <div id="divNombreCabezal" style={{ display: 'inline-block', verticalAlign: 'middle', height: '100%' }}>
@@ -186,7 +199,7 @@ export default function Profile() {
             padding: '10px'
           }}>Datos Personlanes:</h6>
         </div>
-        <div style={{verticalAlign: 'top'}}>
+        <div style={{ verticalAlign: 'top' }}>
           <div style={{
             width: '50%',
             objectFit: 'cover',
@@ -211,7 +224,7 @@ export default function Profile() {
               </div>
               <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
                 <InputLabel htmlFor="component-simple">Documento</InputLabel>
-                <Input id="component-simple" value={datosUsuario?.ci} size='small' />
+                <Input id="component-simple" value={ci} size='small' />
               </FormControl>
             </div>
 
@@ -227,7 +240,7 @@ export default function Profile() {
 
             <div id='divTelefono' style={{ paddingBottom: '15px' }}>
               <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-                <CalendarIcon className='h-auto w-6 fill-garnet sm:w-8' />
+                <PhoneIcon className='h-auto w-6 fill-garnet sm:w-8' />
               </div>
               <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
                 <InputLabel htmlFor="component-simple">Telefono</InputLabel>
@@ -241,6 +254,7 @@ export default function Profile() {
                   inputProps={{
                     inputMode: 'numeric',
                   }} />
+                {validPhone && <p style={{ color: 'red' }}>¡Ingrese solo números!</p>}
               </FormControl>
             </div>
 
@@ -290,6 +304,15 @@ export default function Profile() {
             <Button id='btnEditar' className='primary' onClick={handleClickEditar}>Editar datos</Button>
           </div>
         </div>
+        <Collapse in={isOpen}>
+          <Alert
+            icon={<CheckIcon fontSize="inherit" />}
+            severity="success"
+            variant="filled"
+            onClose={() => { setOpen(false) }}>
+            ¡Datos editados correctamente!
+          </Alert>
+        </Collapse>
       </div>
     </FormContainer>
   );
