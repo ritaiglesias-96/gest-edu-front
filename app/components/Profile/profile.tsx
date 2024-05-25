@@ -12,7 +12,7 @@ import { FormControl, InputLabel, Input, styled, IconButton } from '@mui/materia
 import FormContainer from '../FormContainer/formContainer';
 import { useEffect, useState } from 'react';
 import { editarUsuarioFetch, obtenerDatosUsuarioFetch } from '@/lib/data/actions';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import { fbStorage } from '../../../firebase.config';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
@@ -36,10 +36,11 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editado, setEditado] = useState(false);
+  const [date, setDate] = useState('');
 
   useEffect(() => {
     obtenerDatosUsuarioFetch()
-      .then(u => {        
+      .then(u => {
         setUsuario(u);
         setLoading(false);
         console.log('USUARIO', u);
@@ -49,6 +50,33 @@ export default function Profile() {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    const inputDate = datosUsuario?.fechaNac;
+    const formattedDate = formatDate(inputDate);
+    setDate(formattedDate);
+  }, [datosUsuario]);
+
+  function formatDate(inputDate: string) {
+    if(inputDate !== null){
+      // Crear un objeto Date a partir de la cadena de entrada
+    const date = new Date(inputDate);
+
+    // Obtener el día, mes y año de la fecha
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Los meses en JavaScript son 0-indexed (0 = Enero, 11 = Diciembre)
+    const year = date.getFullYear();
+
+    // Formatear el día y el mes para que tengan siempre dos dígitos
+    const formattedDay = day < 10 ? '0' + day : day;
+    const formattedMonth = month < 10 ? '0' + month : month;
+
+    // Devolver la fecha formateada
+    return `${formattedDay}/${formattedMonth}/${year}`;
+    }
+
+    return '';
+}
 
   const handleClickEditar = () => {
     if (datosUsuario.telefono !== '' && datosUsuario.domicilio !== '' && datosUsuario.imagen !== '') {
@@ -61,7 +89,7 @@ export default function Profile() {
 
   const handleChange = (name: string, newValue: string) => {
     if (name === 'telefono') setUsuario({ ...datosUsuario, telefono: newValue });
-    if (name === 'domicilio') setUsuario({ ...datosUsuario, domicilio: newValue });    
+    if (name === 'domicilio') setUsuario({ ...datosUsuario, domicilio: newValue });
   };
 
   if (loading) {
@@ -88,16 +116,16 @@ export default function Profile() {
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       // Escuchar los cambios de estado del proceso de subida
-      uploadTask.on('state_changed', 
+      uploadTask.on('state_changed',
         (snapshot) => {
           // Progreso de la subida
           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log('Upload is ' + progress + '% done');
-        }, 
+        },
         (error) => {
           // Manejar errores
           console.error('Error uploading file:', error);
-        }, 
+        },
         () => {
           // Subida completa, obtener URL de descarga
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL: any) => {
@@ -110,7 +138,7 @@ export default function Profile() {
     }
   };
 
-  
+
   return (
     <FormContainer>
       <div>
@@ -145,7 +173,7 @@ export default function Profile() {
               />
               <label htmlFor="choose-file">
                 <IconButton aria-label="upload" component="span">
-                  <CameraAltIcon />
+                  <FileUploadRoundedIcon />
                 </IconButton>
               </label>
             </>
@@ -158,99 +186,103 @@ export default function Profile() {
             padding: '10px'
           }}>Datos Personlanes:</h6>
         </div>
-        <div style={{
-          width: '50%',
-          objectFit: 'cover',
-          padding: '10px',
-          display: 'inline-block'
-        }}>
+        <div style={{verticalAlign: 'top'}}>
+          <div style={{
+            width: '50%',
+            objectFit: 'cover',
+            padding: '10px',
+            display: 'inline-block',
+            verticalAlign: 'top'
+          }}>
 
-          <div id='divNombre' style={{ paddingBottom: '15px' }}>
-            <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-              <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
+            <div id='divNombre' style={{ paddingBottom: '15px' }}>
+              <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
+                <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
+              </div>
+              <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+                <InputLabel htmlFor="component-simple">Nombre</InputLabel>
+                <Input id="component-simple" name="nombre" value={datosUsuario?.nombre} size='small' />
+              </FormControl>
             </div>
-            <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-              <InputLabel htmlFor="component-simple">Nombre</InputLabel>
-              <Input id="component-simple" name="nombre" value={datosUsuario?.nombre} size='small' />
-            </FormControl>
+
+            <div id='divDocumento' style={{ paddingBottom: '15px' }}>
+              <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
+                <FingerprintIcon className='h-auto w-6 fill-garnet sm:w-8' />
+              </div>
+              <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+                <InputLabel htmlFor="component-simple">Documento</InputLabel>
+                <Input id="component-simple" value={datosUsuario?.ci} size='small' />
+              </FormControl>
+            </div>
+
+            <div id='divFechaNacimiento' style={{ paddingBottom: '15px' }}>
+              <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
+                <CalendarIcon className='h-auto w-6 fill-garnet sm:w-8' />
+              </div>
+              <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+                <InputLabel htmlFor="component-simple">Fecha de nacimiento</InputLabel>
+                <Input id="component-simple" value={date} size='small' />
+              </FormControl>
+            </div>
+
+            <div id='divTelefono' style={{ paddingBottom: '15px' }}>
+              <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
+                <CalendarIcon className='h-auto w-6 fill-garnet sm:w-8' />
+              </div>
+              <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+                <InputLabel htmlFor="component-simple">Telefono</InputLabel>
+                <Input
+                  id="component-simple"
+                  name="telefono"
+                  value={datosUsuario?.telefono}
+                  size='small'
+                  onChange={(e) => handleChange(e.target.name, e.target.value)}
+                  readOnly={false}
+                  inputProps={{
+                    inputMode: 'numeric',
+                  }} />
+              </FormControl>
+            </div>
+
           </div>
+          <div style={{
+            width: '50%',
+            objectFit: 'cover',
+            padding: '10px',
+            paddingBottom: '10%',
+            display: 'inline-block',
+            verticalAlign: 'top'
+          }}>
 
-          <div id='divDocumento' style={{ paddingBottom: '15px' }}>
-            <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-              <FingerprintIcon className='h-auto w-6 fill-garnet sm:w-8' />
+            <div id='divApellido' style={{ paddingBottom: '15px' }}>
+              <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
+                <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
+              </div>
+              <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+                <InputLabel htmlFor="component-simple">Apellido</InputLabel>
+                <Input id="component-simple" value={datosUsuario?.apellido} size='small' />
+              </FormControl>
             </div>
-            <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-              <InputLabel htmlFor="component-simple">Documento</InputLabel>
-              <Input id="component-simple" value={datosUsuario?.ci} size='small' />
-            </FormControl>
-          </div>
 
-          <div id='divFechaNacimiento' style={{ paddingBottom: '15px' }}>
-            <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-              <CalendarIcon className='h-auto w-6 fill-garnet sm:w-8' />
+            <div id='divCorreo' style={{ paddingBottom: '15px' }}>
+              <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
+                <EmailIcon className='h-auto w-6 fill-garnet sm:w-8' />
+              </div>
+              <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+                <InputLabel htmlFor="component-simple">Correo electrónico</InputLabel>
+                <Input id="component-simple" value={datosUsuario?.email} size='small' />
+              </FormControl>
             </div>
-            <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-              <InputLabel htmlFor="component-simple">Fecha de nacimiento</InputLabel>
-              <Input id="component-simple" value={datosUsuario?.fechaNac} size='small' />
-            </FormControl>
-          </div>
 
-          <div id='divTelefono' style={{ paddingBottom: '15px' }}>
-            <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-              <CalendarIcon className='h-auto w-6 fill-garnet sm:w-8' />
+            <div id='divFechaNac' style={{ paddingBottom: '15px' }}>
+              <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
+                <LocationIcon className='h-auto w-6 fill-garnet sm:w-8' />
+              </div>
+              <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+                <InputLabel htmlFor="component-simple">Domicilio</InputLabel>
+                <Input id="component-simple" name="domicilio" value={datosUsuario?.domicilio} size='small' onChange={(e) => handleChange(e.target.name, e.target.value)} />
+              </FormControl>
             </div>
-            <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-              <InputLabel htmlFor="component-simple">Telefono</InputLabel>
-              <Input
-                id="component-simple"
-                name="telefono"
-                value={datosUsuario?.telefono}
-                size='small'
-                onChange={(e) => handleChange(e.target.name, e.target.value)}
-                readOnly={false}
-                inputProps={{
-                  inputMode: 'numeric',
-                }} />
-            </FormControl>
-          </div>
-
-        </div>
-        <div style={{
-          width: '50%',
-          objectFit: 'cover',
-          padding: '10px',
-          paddingBottom: '10%',
-          display: 'inline-block'
-        }}>
-
-          <div id='divApellido' style={{ paddingBottom: '15px' }}>
-            <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-              <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
-            </div>
-            <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-              <InputLabel htmlFor="component-simple">Apellido</InputLabel>
-              <Input id="component-simple" value={datosUsuario?.apellido} size='small' />
-            </FormControl>
-          </div>
-
-          <div id='divCorreo' style={{ paddingBottom: '15px' }}>
-            <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-              <EmailIcon className='h-auto w-6 fill-garnet sm:w-8' />
-            </div>
-            <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-              <InputLabel htmlFor="component-simple">Correo electrónico</InputLabel>
-              <Input id="component-simple" value={datosUsuario?.email} size='small' />
-            </FormControl>
-          </div>
-
-          <div id='divFechaNac' style={{ paddingBottom: '15px' }}>
-            <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-              <LocationIcon className='h-auto w-6 fill-garnet sm:w-8' />
-            </div>
-            <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-              <InputLabel htmlFor="component-simple">Domicilio</InputLabel>
-              <Input id="component-simple" name="domicilio" value={datosUsuario?.domicilio} size='small' onChange={(e) => handleChange(e.target.name, e.target.value)} />
-            </FormControl>
           </div>
         </div>
         <div style={{ alignContent: 'center', textAlign: 'center' }}>
