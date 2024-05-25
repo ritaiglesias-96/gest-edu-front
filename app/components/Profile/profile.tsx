@@ -12,7 +12,7 @@ import EmailIcon from '@/assets/svg/email.svg';
 import { FormControl, InputLabel, Input, Link } from '@mui/material';
 import FormContainer from '../FormContainer/formContainer';
 import { useEffect, useState } from 'react';
-import { editarPerfilFetch, editarUsuarioFetch, obtenerDatosUsuario } from '@/lib/data/actions';
+import { editarPerfilFetch, editarUsuarioFetch, obtenerDatosUsuarioFetch } from '@/lib/data/actions';
 
 function EditarPerfilButton() {
   const { pending } = useFormStatus();
@@ -44,11 +44,11 @@ export default function Profile() {
   const [editado, setEditado] = useState(false);
 
   useEffect(() => {
-    obtenerDatosUsuario()
+    obtenerDatosUsuarioFetch()
         .then(u => {
           setUsuario(u);
           setLoading(false);
-          console.log(u);
+          console.log('USUARIO', u);
         })
         .catch(error => {
             setError(error);
@@ -61,15 +61,12 @@ export default function Profile() {
     {      
       editarUsuarioFetch(datosUsuario.telefono, datosUsuario.domicilio, datosUsuario.imagen)
         .then(()=>{
-          setEditado(true);
-          setIsOpen(true);
+          setEditado(true);          
       });
     }
   }
 
-  const closeModal = () => {
-    setIsOpen(false);
-  };
+
 
   const handleChange = (name: string, newValue: string) => {
     if(name === 'telefono') setUsuario({ ...datosUsuario, telefono: newValue });
@@ -85,26 +82,28 @@ export default function Profile() {
     return <p>Error al cargar los datos: {error}</p>;
   }  
 
+  const urlImagen = 'https://i.ebayimg.com/images/g/RNsAAOSwGotWq6ju/s-l500.jpg';
+  
   return (    
     <FormContainer>
       <div>
-        <div style={{ display: 'inline-block', alignContent: 'center' }}>
+        <div style={{ display: 'inline-block', alignContent: 'center'}}>
           <Image
-            src={datosUsuario.imagen}
-            alt=''
-            width={150}
-            height={150}
+            loader={() => urlImagen}
+            src={urlImagen}
+            alt='user image'
+            width={200}
+            height={100}
             style={{
               objectFit: 'cover',
-              height: '150px',
+              height: '200px',
               borderRadius: '50%',
-              padding: '20px',
-              display: 'inline-block'
+              padding: '10px',
             }}
           />
         </div>
         <div id="divNombreCabezal" style={{ display: 'inline-block', verticalAlign: 'middle', height: '100%' }}>
-          <h3>{datosUsuario.nombre} {datosUsuario.apellido}</h3>
+          <h3>{datosUsuario?.nombre} {datosUsuario?.apellido}</h3>
         </div>
         <div>
           <h6 style={{
@@ -125,7 +124,7 @@ export default function Profile() {
             </div>
             <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
               <InputLabel htmlFor="component-simple">Nombre</InputLabel>
-              <Input id="component-simple" name="nombre" value={datosUsuario.nombre} size='small'  />
+              <Input id="component-simple" name="nombre" value={datosUsuario?.nombre} size='small'  />
             </FormControl>
           </div>
 
@@ -135,7 +134,7 @@ export default function Profile() {
             </div>
             <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
               <InputLabel htmlFor="component-simple">Documento</InputLabel>
-              <Input id="component-simple" value={datosUsuario.ci} size='small' />
+              <Input id="component-simple" value={datosUsuario?.ci} size='small' />
             </FormControl>
           </div>
 
@@ -145,7 +144,7 @@ export default function Profile() {
             </div>
             <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
               <InputLabel htmlFor="component-simple">Fecha de nacimiento</InputLabel>
-              <Input id="component-simple" value={datosUsuario.fechaNac} size='small' />
+              <Input id="component-simple" value={datosUsuario?.fechaNac} size='small' />
             </FormControl>
           </div>
 
@@ -155,7 +154,16 @@ export default function Profile() {
             </div>
             <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
               <InputLabel htmlFor="component-simple">Telefono</InputLabel>
-              <Input id="component-simple" name="telefono" value={datosUsuario.telefono} size='small' onChange={(e) => handleChange(e.target.name, e.target.value)} readOnly={false} />
+              <Input 
+                id="component-simple" 
+                name="telefono" 
+                value={datosUsuario?.telefono} 
+                size='small' 
+                onChange={(e) => handleChange(e.target.name, e.target.value)} 
+                readOnly={false} 
+                inputProps={{
+                  inputMode: 'numeric',
+                }}/>
             </FormControl>
           </div>
 
@@ -174,7 +182,7 @@ export default function Profile() {
             </div>
             <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
               <InputLabel htmlFor="component-simple">Apellido</InputLabel>
-              <Input id="component-simple" value={datosUsuario.apellido} size='small' />
+              <Input id="component-simple" value={datosUsuario?.apellido} size='small' />
             </FormControl>
           </div>
 
@@ -184,7 +192,7 @@ export default function Profile() {
             </div>
             <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
               <InputLabel htmlFor="component-simple">Correo electrónico</InputLabel>
-              <Input id="component-simple" value={datosUsuario.email} size='small' />
+              <Input id="component-simple" value={datosUsuario?.email} size='small' />
             </FormControl>
           </div>
 
@@ -194,7 +202,7 @@ export default function Profile() {
             </div>
             <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
               <InputLabel htmlFor="component-simple">Domicilio</InputLabel>
-              <Input id="component-simple" name="domicilio" value={datosUsuario.domicilio} size='small' onChange={(e) => handleChange(e.target.name, e.target.value)}/>
+              <Input id="component-simple" name="domicilio" value={datosUsuario?.domicilio} size='small' onChange={(e) => handleChange(e.target.name, e.target.value)}/>
             </FormControl>
           </div>
         </div>

@@ -232,7 +232,7 @@ export const editarPerfilFetch = async (prevSate: EditarPerfilState, formData: F
   }     
 };
 
-export const obtenerDatosUsuario = async () => {
+export const obtenerDatosUsuarioFetch = async () => {
   const token = authToken();
   
   if (token) {
