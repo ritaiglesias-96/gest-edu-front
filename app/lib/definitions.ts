@@ -48,6 +48,15 @@ export type CarreraState = {
   message?: string | null;
 };
 
+export type EditarPerfilState = {
+  errors?: {
+    telefono?: string[];
+    domicilio?: string[];
+    imagen?: string[];
+  };
+  message?: string | null;
+};
+
 export type AsignaturaState = {
   errors?: {
     nombre?: string[];

@@ -1,9 +1,15 @@
 'use server';
 import { cookies } from 'next/headers';
 import { z } from 'zod';
-import { ResetPassState, CambiarPassState } from '../definitions';
 import { redirect } from 'next/navigation';
 import { ResetPassFormSchema } from './schemasZod';
+import {
+  ResetPassState,
+  CambiarPassState,
+  EditarPerfilState,
+  User,
+} from '../definitions';
+import { authToken } from '@/utils/auth';
 const apiRoute = process.env.BACK_API;
 
 export const loginFetch = async (data: { email: string; password: string }) => {
@@ -143,4 +149,120 @@ export const cambiarPassFetch = async (
     }
   }
 };
+
+export const editarUsuarioFetch = async (
+  telefono: string,
+  domicilio: string,
+  imagen: string
+) => {
+  const token = authToken();
+  if (token !== '') {
+    const response = await fetch(`${apiRoute}/usuario/perfil`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ telefono, domicilio, imagen }),
+    }).then((res) => {
+      return res.json();
+    });
+
+    if (response.status === 200) {
+      return {
+        message: 'Perfil editado con exito.',
+      };
+    } else if (response.status === 403) {
+      return {
+        message: 'Error al editar datos.',
+      };
+    }
+  }
+};
+
+//No se usa
+export const editarPerfilFetch = async (
+  prevSate: EditarPerfilState,
+  formData: FormData
+) => {
+  const SignInFormSchema = z.object({
+    telefono: z.string({ required_error: 'Campo requerido' }),
+    domicilio: z.string({ required_error: 'Campo requerido' }),
+    imagen: z.string({ required_error: 'Campo requerido' }),
+  });
+  const validatedFields = SignInFormSchema.safeParse({
+    telefono: formData.get('telefono'),
+    domicilio: formData.get('domicilio'),
+    imagen: formData.get('imagen'),
+  });
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Edit User.',
+    };
+  } else {
+    const token = authToken();
+    if (token !== '') {
+      const { telefono, domicilio, imagen } = validatedFields.data;
+      const response = await fetch(`${apiRoute}/usuario/perfil`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ telefono, domicilio, imagen }),
+      }).then((res) => {
+        return res.json();
+      });
+
+      if (response.status === 200) {
+        return {
+          message: 'Perfil editado con exito.',
+        };
+      } else if (response.status === 403) {
+        return {
+          message: 'Error al editar datos.',
+        };
+      }
+    }
+  }
+};
+
+export const obtenerDatosUsuarioFetch = async () => {
+  const token = authToken();
+
+  if (token) {
+    console.log('tkn: ', token);
+
+    try {
+      const response = await fetch(
+        'https://localhost:8080/gest-edu/api/usuario/perfil',
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        // Manejar errores HTTP
+        console.error(`HTTP Error: ${response.status}`);
+        return null;
+      }
+
+      // Lee el cuerpo de la respuesta como JSON
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      // Manejar errores de red u otros errores
+      console.error('Fetch Error:', error);
+      return null;
+    }
+  } else {
+    console.error('No token available');
+    return null;
+  }
+};
+
 // Session
