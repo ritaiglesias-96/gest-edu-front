@@ -3,7 +3,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { decodeJwt } from 'jose';
 import { Role, initialState, LoginState } from '@/lib/definitions';
 import { loginFetch, logoutFetch } from '@/lib/data/actions';
-import { z } from 'zod';
+import { SignInFormSchema } from '@/lib/data/schemasZod';
 
 type Session = {
   jwt: string;
@@ -52,14 +52,6 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [session]);
 
   const login = async (prevState: LoginState, formData: FormData) => {
-    const SignInFormSchema = z.object({
-      email: z
-        .string({ required_error: 'Campo requerido' })
-        .email({ message: 'Ingrese un correo valido' }),
-      password: z
-        .string({ required_error: 'Campo requerido' })
-        .min(4, { message: 'La contraseña debe tener al menos 4 caracteres' }),
-    });
     const validatedFields = SignInFormSchema.safeParse({
       email: formData.get('email'),
       password: formData.get('password'),
@@ -71,7 +63,7 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
       };
     } else {
       const response = await loginFetch(validatedFields.data);
-
+      console.log(response);
       if (response.status === 401 || !response.status) {
         return {
           errors: { password: ['Correo o contraseña incorrectos'] },
@@ -90,11 +82,12 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logout = async () => {
     if (session === null) {
+      console.log('logout - no session');
       setSession(null);
     } else {
       const response = await logoutFetch(session.jwt);
-
-      if (response && response === 204) {
+      if (response === undefined || response === 204) {
+        console.log('logout');
         setSession(null);
       }
     }

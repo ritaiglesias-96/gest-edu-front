@@ -14,7 +14,7 @@ import InputField from '@/components/InputField/inputField';
 import Link from 'next/link';
 import { useFormState, useFormStatus } from 'react-dom';
 import { registerUser } from '@/lib/data/estudiante/actions';
-import { usePathname, useRouter } from 'next/navigation';
+import { redirect, usePathname, useRouter } from 'next/navigation';
 import { useContext, useEffect, useState } from 'react';
 import { SessionContext } from '@/../context/SessionContext';
 import { initialState } from '@/lib/definitions';
@@ -22,6 +22,12 @@ import { initialState } from '@/lib/definitions';
 function LoginForm() {
   const session = useContext(SessionContext);
   const [logIn, dispatch] = useFormState(session.login, initialState);
+
+  useEffect(() => {
+    if (logIn.message?.includes('200')) {
+      redirect('/');
+    }
+  }, [logIn.message]);
 
   return (
     <form
@@ -74,9 +80,9 @@ function LoginForm() {
         <Link className={styles.links} href='/resetPass'>
           Olvidé mi contraseña
         </Link>
-        <span>
+        <span className='text-black'>
           ¿No tienes aun una cuenta?{' '}
-          <Link className={styles.links} href={'/estudiante/registrarse'}>
+          <Link className={styles.links} href='/registrarse'>
             Regístrate
           </Link>
         </span>
@@ -90,7 +96,6 @@ function RegistrarForm({
 }: {
   registrado: (value: boolean) => void;
 }) {
-  const initialState = { message: '', errors: {} };
   const [register, dispatch] = useFormState(registerUser, initialState);
   useEffect(() => {
     if (register.message.includes('201')) {
@@ -151,7 +156,7 @@ function RegistrarForm({
       </div>
       <InputField
         placeholder='12347890 (sin puntos ni guiones)'
-        type='string'
+        type='text'
         name='ci'
         label='Cedula de Identidad'
         pattern='^[1-9]\d{3}\d{3}[1-9]'
@@ -247,7 +252,7 @@ function RegistrarForm({
             </p>
           ))}
       </div>
-      <div className='flex w-2/3 items-center flex-col gap-1 sm:w-full'>
+      <div className='flex w-2/3 flex-col items-center gap-1 sm:w-full'>
         <RegisterButton />
       </div>
     </form>

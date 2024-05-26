@@ -41,38 +41,59 @@
     @apply flex;
     @apply flex-col;
     @apply items-center;
+    @apply h-full;
   }
 
   h1 {
-    @apply text-5xl;
+    @apply py-2;
     @apply font-medium;
+    @apply text-2xl;
+    @apply md:text-3xl;
+    @apply lg:text-4xl;
   }
 
   h2 {
-    @apply text-4xl;
+    @apply py-2;
+    @apply text-xl;
+    @apply md:text-2xl;
+    @apply lg:text-3xl;
     @apply font-bold;
   }
 
   h3 {
-    @apply text-3xl;
+    @apply text-md;
+    @apply py-2;
+    @apply md:text-xl;
+    @apply lg:text-2xl;
     @apply font-semibold;
   }
 
   h4 {
-    @apply text-2xl;
+    @apply py-2;
+    @apply text-base;
+    @apply lg:text-xl;
     @apply font-bold;
   }
 
   h5 {
+    @apply py-2;
     @apply text-xl;
     @apply font-bold;
   }
 
   h6 {
+    @apply py-2;
     @apply text-md;
     @apply font-bold;
   }
 
+  p,
+  a {
+    @apply py-1;
+    @apply text-sm;
+    @apply sm:text-base;
+    @apply font-normal;
+  }
   a:active {
     @apply text-bittersweet;
     @apply fill-bittersweet;
@@ -91,15 +112,29 @@
   }
 
   .btn-primary {
-    @apply bg-garnet text-ivory text-md tracking-widest font-semibold py-2 px-4 hover:bg-atomic-tangerine hover:text-garnet;
+    @apply bg-garnet font-normal text-ivory text-sm sm:text-base lg:text-md tracking-widest lg:font-semibold py-2 px-4 hover:bg-atomic-tangerine hover:text-garnet;
   }
 
   .btn-secondary {
-    @apply bg-bittersweet text-white text-md tracking-widest font-semibold py-2 px-4 hover:bg-sunglow hover:text-garnet;
+    @apply bg-bittersweet font-normal text-white text-sm sm:text-base lg:text-md tracking-widest lg:font-semibold py-2 px-4 hover:bg-sunglow hover:text-garnet;
   }
 
   .btn {
-    @apply py-3 px-5 rounded-xl cursor-pointer font-bold;
+    @apply py-3 px-5 rounded-xl cursor-pointer;
+  }
+
+  .btn-pill {
+    @apply p-2 m-1 max-w-fit bg-garnet rounded-full cursor-pointer font-bold;
+    &:hover {
+      @apply bg-atomic-tangerine;
+      & > svg {
+        @apply fill-garnet;
+      }
+    }
+
+    & > svg {
+      @apply fill-ivory;
+    }
   }
 }
 

@@ -39,6 +39,33 @@ export type CambiarPassState = {
   message?: string | null;
 };
 
+export type CarreraState = {
+  errors?: {
+    nombre?: string[];
+    descripcion?: string[];
+    carreraId?: string[];
+  };
+  message?: string | null;
+};
+
+export type AsignaturaState = {
+  errors?: {
+    nombre?: string[];
+    descripcion?: string[];
+    creditos?: string[];
+  };
+  message?: string | null;
+};
+
+export type DocenteState = {
+  errors?: {
+    nombre?: string[];
+    apellido?: string[];
+    documento?: string[];
+  };
+  message?: string | null;
+};
+
 export type User = {
   nombre: string;
   apellido: string;
@@ -52,13 +79,20 @@ export type User = {
   domicilio: string;
 };
 
-export type UserUpdate = {
-  name: string;
-  email: string;
-  password: string;
-  birthdate: Date;
-  ci: string;
-  image: string;
+export type Carrera = {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  duracionAnios: number;
+  creditos: number;
+  existePlanEstudio: boolean;
+};
+
+export type Asignatura = {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  creditos: number;
 };
 
 export enum Role {

@@ -2,6 +2,8 @@
 import { cookies } from 'next/headers';
 import { z } from 'zod';
 import { ResetPassState, CambiarPassState } from '../definitions';
+import { redirect } from 'next/navigation';
+import { ResetPassFormSchema } from './schemasZod';
 const apiRoute = process.env.BACK_API;
 
 export const loginFetch = async (data: { email: string; password: string }) => {
@@ -11,14 +13,17 @@ export const loginFetch = async (data: { email: string; password: string }) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  }).then((res) => {
-    return res.json();
   });
-  cookies().set({
-    name: 'token',
-    value: response.jwt.toString(),
-  });
-  return response;
+  if (response.ok) {
+    const data = await response.json();
+    cookies().set({
+      name: 'token',
+      value: data.jwt.toString(),
+    });
+    return data;
+  } else {
+    return response.json();
+  }
 };
 
 export const logoutFetch = async (token: string) => {
@@ -32,7 +37,7 @@ export const logoutFetch = async (token: string) => {
     return res.status;
   });
   cookies().delete('token');
-  return response;
+  redirect('/');
 };
 
 export const resetPassFetch = async (
@@ -91,25 +96,11 @@ export const cambiarPassFetch = async (
   prevState: CambiarPassState,
   formData: FormData
 ) => {
-  const validatedFields = z
-    .object({
-      password: z
-        .string({ required_error: 'Campo requerido' })
-        .min(4, { message: 'La contraseña debe tener al menos 8 caracteres' }),
-      confirmPassword: z
-        .string({ required_error: 'Campo requerido' })
-        .min(4, { message: 'La contraseña debe tener al menos 8 caracteres' }),
-      tokenPassword: z.string({ required_error: 'Campo requerido' }),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: 'Las contraseñas no coinciden',
-      path: ['confirmPassword'], // path of error
-    })
-    .safeParse({
-      password: formData.get('password'),
-      confirmPassword: formData.get('confirmPassword'),
-      tokenPassword: formData.get('tokenPassword'),
-    });
+  const validatedFields = ResetPassFormSchema.safeParse({
+    password: formData.get('password'),
+    confirmPassword: formData.get('confirmPassword'),
+    tokenPassword: formData.get('tokenPassword'),
+  });
 
   if (!validatedFields.success) {
     return {
