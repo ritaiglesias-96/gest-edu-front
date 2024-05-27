@@ -39,6 +39,16 @@ export type CambiarPassState = {
   message?: string | null;
 };
 
+export type EditarPerfilState = {
+  errors?: {
+    telefono?: string[];
+    domicilio?: string[];
+    imagen?: string[];
+  };
+  message?: string | null;
+};
+
+
 export type User = {
   nombre: string;
   apellido: string;

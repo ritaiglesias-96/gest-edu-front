@@ -33,7 +33,7 @@ export default function Navbar() {
           <div className='flex flex-row gap-4'>
             <Link
               className='flex flex-col gap-1  text-wrap align-middle text-sm'
-              href='/'
+              href='/funcionario/perfil'
             >
               <User className='h-6 sm:w-auto' />
               <span>Perfil</span>
@@ -114,7 +114,7 @@ function NavbarAdmin() {
       <div className='flex flex-row gap-4'>
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm active:color-bittersweet'
-          href='/'
+          href='/administrador/perfil'
         >
           <Hat className='h-6 sm:w-auto' />
           <span>Perfil</span>
@@ -141,7 +141,7 @@ function NavbarCoordinador() {
         </Link>
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
-          href='/'
+          href='/coordinador/perfil'
         >
           <User className='h-6 sm:w-auto' />
           <span>Perfil</span>
