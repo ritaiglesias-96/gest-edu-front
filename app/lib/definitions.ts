@@ -1,5 +1,13 @@
 export const initialState = { message: '', errors: {} };
 
+export enum Role {
+  estudiante = 'ROL_ESTUDIANTE',
+  funcionario = 'ROL_FUNCIONARIO',
+  coordinador = 'ROL_COORDINADOR',
+  admin = 'ROL_ADMINISTRADOR',
+  public = 'public',
+}
+
 export type LoginState = {
   errors?: {
     email?: string[];
@@ -39,6 +47,15 @@ export type CambiarPassState = {
   message?: string | null;
 };
 
+export type CarreraState = {
+  errors?: {
+    nombre?: string[];
+    descripcion?: string[];
+    carreraId?: string[];
+  };
+  message?: string | null;
+};
+
 export type EditarPerfilState = {
   errors?: {
     telefono?: string[];
@@ -48,6 +65,23 @@ export type EditarPerfilState = {
   message?: string | null;
 };
 
+export type AsignaturaState = {
+  errors?: {
+    nombre?: string[];
+    descripcion?: string[];
+    creditos?: string[];
+  };
+  message?: string | null;
+};
+
+export type DocenteState = {
+  errors?: {
+    nombre?: string[];
+    apellido?: string[];
+    documento?: string[];
+  };
+  message?: string | null;
+};
 
 export type User = {
   nombre: string;
@@ -62,21 +96,33 @@ export type User = {
   domicilio: string;
 };
 
-export type UserUpdate = {
-  name: string;
-  email: string;
-  password: string;
-  birthdate: Date;
-  ci: string;
-  image: string;
+export const emptyUser: User = {
+  nombre: '',
+  apellido: '',
+  email: '',
+  password: '',
+  role: Role.estudiante,
+  imagen: '',
+  fechaNac: '',
+  ci: '',
+  telefono: '',
+  domicilio: '',
 };
 
-export enum Role {
-  estudiante = 'ROL_ESTUDIANTE',
-  funcionario = 'ROL_FUNCIONARIO',
-  coordinador = 'ROL_COORDINADOR',
-  admin = 'ROL_ADMINISTRADOR',
-  public = 'public',
-}
+export type Carrera = {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  duracionAnios: number;
+  creditos: number;
+  existePlanEstudio: boolean;
+};
+
+export type Asignatura = {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  creditos: number;
+};
 
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]

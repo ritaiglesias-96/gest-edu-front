@@ -12,7 +12,7 @@ interface InputFieldProps {
   label: string;
   required?: boolean;
   pattern?: string;
-  value?: string;
+  value?: string | number;
 }
 
 export default function InputField({
@@ -88,6 +88,7 @@ export default function InputField({
                 aria-describedby={`${name}-error`}
                 required={required}
                 value={value}
+                readOnly={value ? true : false}
               />
             </div>
           </div>

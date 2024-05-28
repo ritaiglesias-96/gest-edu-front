@@ -1,6 +1,6 @@
 'use client';
-
-import { Role, User } from '@/lib/definitions';
+import { User, emptyUser } from '@/lib/definitions';
+import './profile.css';
 import Button from '@/components/Button/button';
 import Image from 'next/image';
 import UserIcon from '@/assets/svg/user.svg';
@@ -10,32 +10,26 @@ import PhoneIcon from '@/assets/svg/phone.svg';
 import CalendarIcon from '@/assets/svg/calendar.svg';
 import EmailIcon from '@/assets/svg/email.svg';
 import CheckIcon from '@mui/icons-material/Check';
-import { FormControl, InputLabel, Input, IconButton, Alert, Collapse } from '@mui/material';
+import {
+  FormControl,
+  InputLabel,
+  Input,
+  IconButton,
+  Alert,
+  Collapse,
+} from '@mui/material';
 import FormContainer from '../FormContainer/formContainer';
 import { useEffect, useState } from 'react';
-import { editarUsuarioFetch, obtenerDatosUsuarioFetch } from '@/lib/data/actions';
+import {
+  editarUsuarioFetch,
+  obtenerDatosUsuarioFetch,
+} from '@/lib/data/actions';
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import { fbStorage } from '../../../firebase.config';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
 
 export default function Profile() {
-
-  const user: User = {
-    nombre: '',
-    apellido: '',
-    email: '',
-    password: '',
-    role: Role.estudiante,
-    imagen: '',
-    fechaNac: '',
-    ci: '',
-    telefono: '',
-    domicilio: '',
-  };
-
-  const [datosUsuario, setUsuario] = useState<User>(user);
+  const [datosUsuario, setUsuario] = useState<User>(emptyUser);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editado, setEditado] = useState(false);
@@ -44,34 +38,36 @@ export default function Profile() {
   const [validPhone, setValidPhone] = useState(false);
   const [isOpen, setOpen] = useState(false);
 
+  const fetchDatosUser = async () => {
+    const data = await obtenerDatosUsuarioFetch().catch((error) => {
+      setError(error);
+      setLoading(false);
+    });
+    console.log(data);
+
+    if (data.imagen === null)
+      data.imagen = '../../../public/assets/images/default-user.png';
+    setUsuario(data);
+    setLoading(false);
+    console.log('USUARIO', data);
+  };
+
   useEffect(() => {
-    obtenerDatosUsuarioFetch()
-      .then(u => {
-        setUsuario(u);
-        setLoading(false);
-        console.log('USUARIO', u);
-      })
-      .catch(error => {
-        setError(error);
-        setLoading(false);
-      });
+    fetchDatosUser();
   }, []);
 
   useEffect(() => {
     const inputDate = datosUsuario?.fechaNac;
     const formattedDate = formatDate(inputDate);
     setDate(formattedDate);
-  }, [datosUsuario]);
-
-  useEffect(() => {
-    const formattedCI = datosUsuario?.ci.replace(/^(\d{1})(\d{3})(\d{3})(\d{1})$/, '$1.$2.$3-$4');
+    const formattedCI = datosUsuario?.ci.replace(
+      /^(\d{1})(\d{3})(\d{3})(\d{1})$/,
+      '$1.$2.$3-$4'
+    );
     setCI(formattedCI);
-  });
-
-  useEffect(() => {
     const validPhone = !/^\d+$/.test(datosUsuario?.telefono);
     setValidPhone(validPhone);
-  });
+  }, [datosUsuario]);
 
   function formatDate(inputDate: string) {
     if (inputDate !== null) {
@@ -95,18 +91,27 @@ export default function Profile() {
   }
 
   const handleClickEditar = () => {
-    if (datosUsuario.telefono !== '' && datosUsuario.domicilio !== '' && datosUsuario.imagen !== '') {
-      editarUsuarioFetch(datosUsuario.telefono, datosUsuario.domicilio, datosUsuario.imagen)
-        .then(() => {
-          setEditado(true);
-          setOpen(true);
-        });
+    if (
+      datosUsuario.telefono !== '' &&
+      datosUsuario.domicilio !== '' &&
+      datosUsuario.imagen !== ''
+    ) {
+      editarUsuarioFetch(
+        datosUsuario.telefono,
+        datosUsuario.domicilio,
+        datosUsuario.imagen
+      ).then(() => {
+        setEditado(true);
+        setOpen(true);
+      });
     }
-  }
+  };
 
   const handleChange = (name: string, newValue: string) => {
-    if (name === 'telefono') setUsuario({ ...datosUsuario, telefono: newValue });
-    if (name === 'domicilio') setUsuario({ ...datosUsuario, domicilio: newValue });
+    if (name === 'telefono')
+      setUsuario({ ...datosUsuario, telefono: newValue });
+    if (name === 'domicilio')
+      setUsuario({ ...datosUsuario, domicilio: newValue });
   };
 
   if (loading) {
@@ -128,10 +133,12 @@ export default function Profile() {
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       // Escuchar los cambios de estado del proceso de subida
-      uploadTask.on('state_changed',
+      uploadTask.on(
+        'state_changed',
         (snapshot) => {
           // Progreso de la subida
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log('Upload is ' + progress + '% done');
         },
         (error) => {
@@ -141,175 +148,206 @@ export default function Profile() {
         () => {
           // Subida completa, obtener URL de descarga
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL: any) => {
-            console.log("url: ", downloadURL);
+            console.log('url: ', downloadURL);
             setUsuario({ ...datosUsuario, imagen: downloadURL });
           });
         }
       );
-
     }
   };
 
   return (
-    <FormContainer>
-      <div>
+    <FormContainer className=' text-black sm:w-4/5 md:w-2/3'>
+      <div className=' grid w-full grid-cols-1 items-center justify-items-center gap-4 sm:grid-cols-2'>
+        <div className='relative'>
+          <Image
+            loader={() => datosUsuario?.imagen}
+            src={datosUsuario?.imagen}
+            alt=''
+            width={200}
+            height={100}
+            className='h-32 w-auto rounded-full border-2 border-black object-cover md:h-48'
+          />
+          <div className='absolute -bottom-2 flex w-full justify-center'>
+            <input
+              style={{ display: 'none' }}
+              accept='image/png, image/jpeg'
+              id='choose-file'
+              type='file'
+              onChange={(event) => handlefile(event)}
+            />
+            <label htmlFor='choose-file'>
+              <IconButton aria-label='upload' component='span'>
+                <FileUploadRoundedIcon />
+              </IconButton>
+            </label>
+          </div>
+        </div>
         <div>
-          <div style={{ display: 'inline-block', verticalAlign: 'center' }}>
-            <Image
-              loader={() => datosUsuario?.imagen}
-              src={datosUsuario?.imagen}
-              alt=''
-              width={200}
-              height={100}
-              style={{
-                objectFit: 'cover',
-                height: '200px',
-                borderRadius: '50%',
-                display: 'inline-block',
-                border: '2px solid black',
-                marginRight: '15px',
-                marginBottom: '15px'
+          <h3 className=' break-all'>
+            {datosUsuario?.nombre} {datosUsuario?.apellido}
+          </h3>
+        </div>
+        <div className=' col-span-full'>
+          <h4>Datos Personlanes:</h4>
+        </div>
+        <div
+          id='divNombre'
+          className='flex w-full flex-row justify-center gap-2'
+        >
+          <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
+          <FormControl
+            variant='standard'
+            style={{ display: 'inline-block', verticalAlign: 'middle' }}
+          >
+            <InputLabel htmlFor='component-simple'>Nombre</InputLabel>
+            <Input
+              id='component-simple'
+              name='nombre'
+              value={datosUsuario?.nombre}
+              size='small'
+              disabled={true}
+            />
+          </FormControl>
+        </div>
+        <div
+          id='divApellido'
+          className='flex w-full flex-row justify-center gap-2'
+        >
+          <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
+          <FormControl
+            variant='standard'
+            style={{ display: 'inline-block', verticalAlign: 'middle' }}
+          >
+            <InputLabel htmlFor='component-simple'>Apellido</InputLabel>
+            <Input
+              id='component-simple'
+              value={datosUsuario?.apellido}
+              size='small'
+              disabled={true}
+            />
+          </FormControl>
+        </div>
+        <div
+          id='divDocumento'
+          className='flex w-full flex-row justify-center gap-2'
+        >
+          <FingerprintIcon className='h-auto w-6 fill-garnet sm:w-8' />
+          <FormControl
+            variant='standard'
+            style={{ display: 'inline-block', verticalAlign: 'middle' }}
+          >
+            <InputLabel htmlFor='component-simple'>Documento</InputLabel>
+            <Input
+              id='component-simple'
+              value={ci}
+              size='small'
+              disabled={true}
+            />
+          </FormControl>
+        </div>
+        <div
+          id='divCorreo'
+          className='flex w-full flex-row justify-center gap-2'
+        >
+          <EmailIcon className='h-auto w-6 fill-garnet sm:w-8' />
+          <FormControl
+            variant='standard'
+            style={{
+              display: 'inline-block',
+              verticalAlign: 'middle',
+            }}
+          >
+            <InputLabel htmlFor='component-simple'>
+              Correo electrónico
+            </InputLabel>
+            <Input
+              id='component-simple'
+              value={datosUsuario?.email}
+              size='small'
+              disabled={true}
+            />
+          </FormControl>
+        </div>
+        <div
+          id='divFechaNacimiento'
+          className='flex w-full flex-row justify-center gap-2'
+        >
+          <CalendarIcon className='h-auto w-6 fill-garnet sm:w-8' />
+          <FormControl
+            variant='standard'
+            style={{ display: 'inline-block', verticalAlign: 'middle' }}
+          >
+            <InputLabel htmlFor='component-simple'>
+              Fecha de nacimiento
+            </InputLabel>
+            <Input
+              id='component-simple'
+              value={date}
+              size='small'
+              disabled={true}
+            />
+          </FormControl>
+        </div>
+        <div
+          id='divTelefono'
+          className='flex w-full flex-row justify-center gap-2'
+        >
+          <PhoneIcon className='h-auto w-6 fill-garnet sm:w-8' />
+          <FormControl
+            variant='standard'
+            style={{ display: 'inline-block', verticalAlign: 'middle' }}
+          >
+            <InputLabel htmlFor='component-simple'>Telefono</InputLabel>
+            <Input
+              id='component-simple'
+              name='telefono'
+              value={datosUsuario?.telefono}
+              size='small'
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
+              readOnly={false}
+              inputProps={{
+                inputMode: 'numeric',
               }}
             />
-            <div id="divNombreCabezal" style={{ display: 'inline-block', verticalAlign: 'middle', height: '100%' }}>
-              <h3>{datosUsuario?.nombre} {datosUsuario?.apellido}</h3>
-            </div>
-          </div>
-          <div style={{ marginLeft: '80px', marginTop: '-50px' }}>
-            <>
-              <input
-                style={{ display: "none" }}
-                accept="image/png, image/jpeg"
-                id="choose-file"
-                type="file"
-                onChange={(event) => handlefile(event)}
-              />
-              <label htmlFor="choose-file">
-                <IconButton aria-label="upload" component="span">
-                  <FileUploadRoundedIcon />
-                </IconButton>
-              </label>
-            </>
-          </div>
+            {validPhone && (
+              <p style={{ color: 'red' }}>¡Ingrese solo números!</p>
+            )}
+          </FormControl>
         </div>
-
-        <div>
-          <h6 style={{
-            objectFit: 'cover',
-            padding: '10px'
-          }}>Datos Personlanes:</h6>
+        <div
+          id='divFechaNac'
+          className='flex w-full flex-row justify-center gap-2'
+        >
+          <LocationIcon className='h-auto w-6 fill-garnet sm:w-8' />
+          <FormControl
+            variant='standard'
+            style={{ display: 'inline-block', verticalAlign: 'middle' }}
+          >
+            <InputLabel htmlFor='component-simple'>Domicilio</InputLabel>
+            <Input
+              id='component-simple'
+              name='domicilio'
+              value={datosUsuario?.domicilio}
+              size='small'
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
+            />
+          </FormControl>
         </div>
-        <div style={{ verticalAlign: 'top' }}>
-          <div style={{
-            width: '50%',
-            objectFit: 'cover',
-            padding: '10px',
-            display: 'inline-block',
-            verticalAlign: 'top'
-          }}>
-
-            <div id='divNombre' style={{ paddingBottom: '15px' }}>
-              <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-                <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
-              </div>
-              <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-                <InputLabel htmlFor="component-simple">Nombre</InputLabel>
-                <Input id="component-simple" name="nombre" value={datosUsuario?.nombre} size='small' />
-              </FormControl>
-            </div>
-
-            <div id='divDocumento' style={{ paddingBottom: '15px' }}>
-              <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-                <FingerprintIcon className='h-auto w-6 fill-garnet sm:w-8' />
-              </div>
-              <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-                <InputLabel htmlFor="component-simple">Documento</InputLabel>
-                <Input id="component-simple" value={ci} size='small' />
-              </FormControl>
-            </div>
-
-            <div id='divFechaNacimiento' style={{ paddingBottom: '15px' }}>
-              <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-                <CalendarIcon className='h-auto w-6 fill-garnet sm:w-8' />
-              </div>
-              <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-                <InputLabel htmlFor="component-simple">Fecha de nacimiento</InputLabel>
-                <Input id="component-simple" value={date} size='small' />
-              </FormControl>
-            </div>
-
-            <div id='divTelefono' style={{ paddingBottom: '15px' }}>
-              <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-                <PhoneIcon className='h-auto w-6 fill-garnet sm:w-8' />
-              </div>
-              <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-                <InputLabel htmlFor="component-simple">Telefono</InputLabel>
-                <Input
-                  id="component-simple"
-                  name="telefono"
-                  value={datosUsuario?.telefono}
-                  size='small'
-                  onChange={(e) => handleChange(e.target.name, e.target.value)}
-                  readOnly={false}
-                  inputProps={{
-                    inputMode: 'numeric',
-                  }} />
-                {validPhone && <p style={{ color: 'red' }}>¡Ingrese solo números!</p>}
-              </FormControl>
-            </div>
-
-          </div>
-          <div style={{
-            width: '50%',
-            objectFit: 'cover',
-            padding: '10px',
-            paddingBottom: '10%',
-            display: 'inline-block',
-            verticalAlign: 'top'
-          }}>
-
-            <div id='divApellido' style={{ paddingBottom: '15px' }}>
-              <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-                <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
-              </div>
-              <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-                <InputLabel htmlFor="component-simple">Apellido</InputLabel>
-                <Input id="component-simple" value={datosUsuario?.apellido} size='small' />
-              </FormControl>
-            </div>
-
-            <div id='divCorreo' style={{ paddingBottom: '15px' }}>
-              <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-                <EmailIcon className='h-auto w-6 fill-garnet sm:w-8' />
-              </div>
-              <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-                <InputLabel htmlFor="component-simple">Correo electrónico</InputLabel>
-                <Input id="component-simple" value={datosUsuario?.email} size='small' />
-              </FormControl>
-            </div>
-
-            <div id='divFechaNac' style={{ paddingBottom: '15px' }}>
-              <div style={{ display: 'inline-block', verticalAlign: 'middle', paddingRight: '5px' }}>
-                <LocationIcon className='h-auto w-6 fill-garnet sm:w-8' />
-              </div>
-              <FormControl variant="standard" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-                <InputLabel htmlFor="component-simple">Domicilio</InputLabel>
-                <Input id="component-simple" name="domicilio" value={datosUsuario?.domicilio} size='small' onChange={(e) => handleChange(e.target.name, e.target.value)} />
-              </FormControl>
-            </div>
-          </div>
+        <div className='col-span-full'>
+          <Button id='btnEditar' styling='primary' onClick={handleClickEditar}>
+            Editar datos
+          </Button>
         </div>
-        <div style={{ alignContent: 'center', textAlign: 'center' }}>
-          <div style={{ padding: '5px', display: 'inline-block' }}>
-            <Button id='btnEditar' className='primary' onClick={handleClickEditar}>Editar datos</Button>
-          </div>
-        </div>
-        <Collapse in={isOpen}>
+        <Collapse in={isOpen} className='col-span-full'>
           <Alert
-            icon={<CheckIcon fontSize="inherit" />}
-            severity="success"
-            variant="filled"
-            onClose={() => { setOpen(false) }}>
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='success'
+            variant='filled'
+            onClose={() => {
+              setOpen(false);
+            }}
+          >
             ¡Datos editados correctamente!
           </Alert>
         </Collapse>

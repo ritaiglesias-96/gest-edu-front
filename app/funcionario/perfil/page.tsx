@@ -1,5 +1,5 @@
 import Profile from '@/components/Profile/profile';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Perfil',
@@ -7,6 +7,8 @@ export const metadata: Metadata = {
 
 export default function EditarPerfilPage() {
   return (
-      <Profile/>
+    <section>
+      <Profile />
+    </section>
   );
 }
