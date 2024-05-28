@@ -15,10 +15,8 @@ export default function Modal({ carrera }: any) {
     try {
       await InscribirACarrera(carrera.id, 'INSCRIPCION_A_CARRERA');
       console.log('Successfully enrolled in course!');
-      // Handle successful enrollment (e.g., close modal, show confirmation message)
     } catch (error) {
       console.error('Error enrolling in course:', error);
-      setError(error.toString()); // Assuming error is a string
     } finally {
       setIsLoading(false);
     }
