@@ -1,8 +1,9 @@
 'use client';
 import Modal from '@/components/Modal/modal';
+import { useState } from 'react';
 
 export default function CarrerasHome() {
-  const carrera = {
+  const [carrera, setcarrera] = useState({
     id: 1,
     nombre: 'Tecnologo informatico InitData',
     descripcion:
@@ -10,7 +11,7 @@ export default function CarrerasHome() {
     duracionAnios: 1.5,
     creditos: 9,
     existePlanEstudio: true,
-  };
+  });
 
   return (
     <section className="text-ivory">
