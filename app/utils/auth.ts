@@ -10,7 +10,6 @@ export const isAuthenticated = () => {
 export const authRol = () => {
   const cookie = cookies().get('token');
   if (cookie && cookie.value !== '') {
-    // console.log(cookie?.value);
     const { roles } = decodeJwt(cookie.value);
     return roles as Role;
   } else {

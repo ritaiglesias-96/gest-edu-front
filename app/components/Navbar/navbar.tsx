@@ -4,6 +4,7 @@ import GestEduIcon from '@/assets/svg/logo-black-horizontal.svg';
 import Login from '@/assets/svg/login.svg';
 import Logout from '@/assets/svg/logout.svg';
 import User from '@/assets/svg/user.svg';
+import Users from '@/assets/svg/people.svg';
 import Hat from '@/assets/svg/school.svg';
 import Pencil from '@/assets/svg/edit.svg';
 import Link from 'next/link';
@@ -25,23 +26,7 @@ export default function Navbar() {
     case Role.estudiante:
       return <NavbarEstudiante />;
     case Role.funcionario:
-      return (
-        <nav className={styles.navbar}>
-          <Link href='/'>
-            <GestEduIcon />
-          </Link>
-          <div className='flex flex-row gap-4'>
-            <Link
-              className='flex flex-col gap-1  text-wrap align-middle text-sm'
-              href='/'
-            >
-              <User className='h-6 sm:w-auto' />
-              <span>Perfil</span>
-            </Link>
-            <LogoutButton />
-          </div>
-        </nav>
-      );
+      return <NavbarFuncionario />;
     case Role.coordinador:
       return <NavbarCoordinador />;
     default:
@@ -113,8 +98,8 @@ function NavbarAdmin() {
       </Link>
       <div className='flex flex-row gap-4'>
         <Link
-          className='flex flex-col gap-1  text-wrap align-middle text-sm active:color-bittersweet'
-          href='/'
+          className='flex flex-col  gap-1 text-wrap align-middle text-sm'
+          href='/administrador/perfil'
         >
           <Hat className='h-6 sm:w-auto' />
           <span>Perfil</span>
@@ -141,7 +126,34 @@ function NavbarCoordinador() {
         </Link>
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
-          href='/'
+          href='/coordinador/perfil'
+        >
+          <User className='h-6 sm:w-auto' />
+          <span>Perfil</span>
+        </Link>
+        <LogoutButton />
+      </div>
+    </nav>
+  );
+}
+
+function NavbarFuncionario() {
+  return (
+    <nav className={styles.navbar}>
+      <Link href='/'>
+        <GestEduIcon />
+      </Link>
+      <div className='flex flex-row gap-4'>
+        <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/funcionario/docentes'
+        >
+          <Users className='h-6 w-auto self-center' />
+          <span>Docentes</span>
+        </Link>
+        <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/funcionario/perfil'
         >
           <User className='h-6 sm:w-auto' />
           <span>Perfil</span>
