@@ -3,12 +3,12 @@ import Modal from '@/components/Modal/modal';
 
 export default function CarrerasHome() {
   const carrera = {
-    id: 0,
-    nombre: 'Ingenieria de Produccion',
+    id: 1,
+    nombre: 'Tecnologo informatico InitData',
     descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel odio ultrices, eleifend massa eu, ullamcorper arcu. Praesent orci quam, hendrerit at urna eu, lobortis faucibus arcu. Nulla a augue vulputate, faucibus quam et, iaculis dui. Donec augue quam, semper et venenatis id, pellentesque rhoncus sem. Proin pretium eget nisl vitae feugiat.',
-    duracionAnios: 4,
-    creditos: 420,
+      'Carrera de tecnologo informatico donde se enseña a programar en java, c++, c# y python',
+    duracionAnios: 1.5,
+    creditos: 9,
     existePlanEstudio: true,
   };
 

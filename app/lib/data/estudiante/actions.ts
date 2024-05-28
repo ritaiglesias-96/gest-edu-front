@@ -1,6 +1,7 @@
 'use server';
 import { z } from 'zod';
 import { RegisterState } from '@/lib/definitions';
+import { authToken } from '@/utils/auth';
 
 const apiRoute = process.env.BACK_API;
 
@@ -105,4 +106,37 @@ export async function registerUser(
   }
 }
 
-export async function InscribirACarrera() {}
+export async function InscribirACarrera(
+  carreraId: Number,
+  tipoTramite: String
+) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/tramites/nuevo-tramite?carreraId=${carreraId}&tipoTramite=${tipoTramite}`,
+      {
+        method: 'POST',
+        /*         body: JSON.stringify({
+          carreraId,
+          tipoTramite,
+        }), */
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    ).then((res) => {
+      console.log(res);
+      return res;
+    });
+    if (response.status === 200) {
+      return {
+        message: 'Inscripto exitosamente.',
+      };
+    } else if (response.status === 403) {
+      return {
+        message: 'Error al inscribirse.',
+      };
+    }
+  }
+}
