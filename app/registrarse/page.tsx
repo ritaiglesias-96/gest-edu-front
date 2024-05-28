@@ -2,5 +2,9 @@
 import Form from '@/components/Form/form';
 
 export default function RegisterPage() {
-  return <Form />;
+  return (
+    <section>
+      <Form />
+    </section>
+  );
 }
