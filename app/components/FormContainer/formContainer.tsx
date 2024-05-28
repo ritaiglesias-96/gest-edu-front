@@ -19,7 +19,7 @@ export default function FormContainer({
     <>
       <Link
         href={previousPath === '' ? '/' : previousPath}
-        className='absolute z-0 size-full bg-garnet/60'
+        className='absolute z-0 size-full blur-3xl'
       />
       <div
         className={clsx(

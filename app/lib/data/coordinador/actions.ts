@@ -28,25 +28,6 @@ export const getCarreras = async () => {
   }
 };
 
-export const getDocentes = async () => {
-  const token = authToken();
-  if (token) {
-    const response = await fetch(`${apiRoute}/docentes`, {
-      method: 'GET',
-      headers: {
-        Authotization: `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-      return data;
-    } else {
-      return null;
-    }
-  }
-};
-
 export const getAsignatura = async (id: string) => {
   const token = authToken();
   if (token) {
@@ -268,46 +249,6 @@ export async function altaAsignatura(
     } else {
       return {
         message: 'Error al crear asignatura',
-      };
-    }
-  }
-}
-
-export async function altaDocente(prevState: DocenteState, formData: FormData) {
-  const token = authToken();
-  const validatedFields = AltaDocenteFormSchema.safeParse({
-    nombre: formData.get('nombre'),
-    apellido: formData.get('apellido'),
-    documento: formData.get('documento'),
-  });
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Career.',
-    };
-  } else {
-    const { nombre, apellido, documento } = validatedFields.data;
-
-    const response = await fetch(`${apiRoute}/docentes`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        nombre,
-        apellido,
-        documento,
-      }),
-    });
-    if (response.ok) {
-      return {
-        message: 'Creada con exito. 201',
-      };
-    } else {
-      return {
-        message: 'Error al crear carrera',
       };
     }
   }

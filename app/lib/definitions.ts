@@ -1,5 +1,13 @@
 export const initialState = { message: '', errors: {} };
 
+export enum Role {
+  estudiante = 'ROL_ESTUDIANTE',
+  funcionario = 'ROL_FUNCIONARIO',
+  coordinador = 'ROL_COORDINADOR',
+  admin = 'ROL_ADMINISTRADOR',
+  public = 'public',
+}
+
 export type LoginState = {
   errors?: {
     email?: string[];
@@ -88,6 +96,19 @@ export type User = {
   domicilio: string;
 };
 
+export const emptyUser: User = {
+  nombre: '',
+  apellido: '',
+  email: '',
+  password: '',
+  role: Role.estudiante,
+  imagen: '',
+  fechaNac: '',
+  ci: '',
+  telefono: '',
+  domicilio: '',
+};
+
 export type Carrera = {
   id: number;
   nombre: string;
@@ -103,13 +124,5 @@ export type Asignatura = {
   descripcion: string;
   creditos: number;
 };
-
-export enum Role {
-  estudiante = 'ROL_ESTUDIANTE',
-  funcionario = 'ROL_FUNCIONARIO',
-  coordinador = 'ROL_COORDINADOR',
-  admin = 'ROL_ADMINISTRADOR',
-  public = 'public',
-}
 
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]

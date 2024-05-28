@@ -18,38 +18,40 @@ export default function ResetPaswordPage() {
     }
   }, [resetPass.message]);
   return (
-    <FormContainer>
-      {confirmSent ? (
-        <ModalConfirm />
-      ) : (
-        <form
-          className='flex h-full flex-col items-center justify-between gap-2 md:gap-2 md:px-6'
-          action={dispatch}
-        >
-          <h1 className='text-center text-2xl font-bold text-black'>
-            Restablecer contraseña
-          </h1>
-          <InputField
-            type='email'
-            name='email'
-            label='Email'
-            placeholder='myemail@email.com'
-            required
+    <section>
+      <FormContainer>
+        {confirmSent ? (
+          <ModalConfirm />
+        ) : (
+          <form
+            className='flex h-full flex-col items-center justify-between gap-2 md:gap-2 md:px-6'
+            action={dispatch}
           >
-            <EmailIcon className='h-auto w-6 fill-garnet sm:w-8' />
-          </InputField>
-          <div id='email-error' aria-live='polite' aria-atomic='true'>
-            {resetPass?.errors?.email &&
-              resetPass.errors.email.map((error: string) => (
-                <p className='mt-2 text-sm text-garnet' key={error}>
-                  {error}
-                </p>
-              ))}
-          </div>
-          <RestablecerButton />
-        </form>
-      )}
-    </FormContainer>
+            <h1 className='text-center text-2xl font-bold text-black'>
+              Restablecer contraseña
+            </h1>
+            <InputField
+              type='email'
+              name='email'
+              label='Email'
+              placeholder='myemail@email.com'
+              required
+            >
+              <EmailIcon className='h-auto w-6 fill-garnet sm:w-8' />
+            </InputField>
+            <div id='email-error' aria-live='polite' aria-atomic='true'>
+              {resetPass?.errors?.email &&
+                resetPass.errors.email.map((error: string) => (
+                  <p className='mt-2 text-sm text-garnet' key={error}>
+                    {error}
+                  </p>
+                ))}
+            </div>
+            <RestablecerButton />
+          </form>
+        )}
+      </FormContainer>
+    </section>
   );
 }
 
@@ -59,7 +61,7 @@ function ModalConfirm() {
       <h1 className='text-center text-2xl font-bold text-black'>
         ¡Revisa tu correo!
       </h1>
-      <p className='text-center text-md text-black py-5'>
+      <p className='py-5 text-center text-md text-black'>
         Te hemos enviado un enlace para restablecer tu contraseña
       </p>
       <Button className='w-full' styling='primary'>

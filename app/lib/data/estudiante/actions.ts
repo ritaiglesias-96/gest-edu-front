@@ -36,7 +36,7 @@ export async function registerUser(
       domicilio,
       fechaNac,
     } = validatedFields.data;
-
+    const imagen = '/public/images/defaultUserImage.png';
     const response = await fetch(`${apiRoute}/registro`, {
       method: 'POST',
       body: JSON.stringify({
@@ -46,6 +46,7 @@ export async function registerUser(
         email,
         password,
         telefono,
+        imagen,
         domicilio,
         fechaNac,
         TipoUsuario: 'ESTUDIANTE',

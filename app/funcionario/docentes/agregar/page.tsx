@@ -6,7 +6,7 @@ import InputField from '@/components/InputField/inputField';
 import UserIcon from '@/assets/svg/user.svg';
 import FormContainer from '@/components/FormContainer/formContainer';
 import { useFormState, useFormStatus } from 'react-dom';
-import { altaDocente } from '@/lib/data/coordinador/actions';
+import { altaDocente } from '@/lib/data/funcionario/actions';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { initialState } from '@/lib/definitions';

@@ -1,0 +1,8 @@
+#component-simple {
+  color: black;
+  -webkit-text-fill-color: black;
+}
+
+.MuiInput-root > * {
+  border-bottom-style: solid;
+}

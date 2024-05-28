@@ -2,12 +2,12 @@
 import { cookies } from 'next/headers';
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
-import { ResetPassFormSchema } from './schemasZod';
+import { AltaDocenteFormSchema, ResetPassFormSchema } from './schemasZod';
 import {
   ResetPassState,
   CambiarPassState,
   EditarPerfilState,
-  User,
+  DocenteState,
 } from '../definitions';
 import { authToken } from '@/utils/auth';
 const apiRoute = process.env.BACK_API;
@@ -264,5 +264,3 @@ export const obtenerDatosUsuarioFetch = async () => {
     return null;
   }
 };
-
-// Session

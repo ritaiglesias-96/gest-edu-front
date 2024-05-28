@@ -101,7 +101,8 @@ function RegistrarForm({
     if (register.message.includes('201')) {
       registrado(true);
     }
-  }, [register.message, registrado]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [register.message]);
 
   return (
     <form

@@ -1,6 +1,5 @@
 import { GridColDef } from '@mui/x-data-grid';
 import EyeIcon from '@/assets/svg/visibility.svg';
-import PencilIcon from '@/assets/svg/edit.svg';
 import Link from 'next/link';
 
 export const carreraColumns: GridColDef[] = [
@@ -93,37 +92,6 @@ export const usuarioColumns: GridColDef[] = [
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
-  },
-];
-
-export const docenteColumns: GridColDef[] = [
-  { field: 'id', headerName: 'ID' },
-  {
-    field: 'documento',
-    headerName: 'Cedula',
-  },
-  {
-    field: 'nombre',
-    headerName: 'Nombre',
-  },
-  {
-    field: 'apellido',
-    headerName: 'Apellido',
-    type: 'string',
-  },
-  {
-    field: 'editar',
-    headerName: 'Editar',
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.id}`}
-        className='mx-auto flex size-fit'
-      >
-        <PencilIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
