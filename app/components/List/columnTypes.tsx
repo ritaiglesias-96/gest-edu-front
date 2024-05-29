@@ -96,3 +96,29 @@ export const usuarioColumns: GridColDef[] = [
     ),
   },
 ];
+
+
+export const estudianteColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'ci', headerName: 'Cedula' },
+  { field: 'nombre', headerName: 'Nombre' },
+  { field: 'apellido', headerName: 'Apellido' },
+  { field: 'email', headerName: 'Email' },
+  { field: 'telefono', headerName: 'Telefono' },
+  { field: 'domicilio', headerName: 'Domicilio' },
+  { field: 'fechaNac', headerName: 'Fecha de Nacimiento'},
+  {
+    field: 'detalles',
+    headerName: 'Detalles',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.row.ci}`}
+        className='mx-auto flex size-fit'
+      >
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
