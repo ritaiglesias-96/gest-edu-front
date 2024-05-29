@@ -149,5 +149,9 @@ export async function registrarPeriodoExamen(
         };
       }
     }
+  } else {
+    return {
+      message: 'Debe ser un funcionario para registrar periodos de examen',
+    };
   }
 }
