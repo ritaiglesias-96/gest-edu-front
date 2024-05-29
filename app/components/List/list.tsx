@@ -1,16 +1,16 @@
-import styles from "./list.module.css";
+import styles from './list.module.css';
 import {
   asignaturaColumns,
   carreraColumns,
   usuarioColumns,
   estudianteColumns,
-} from "./columnTypes";
-import { useEffect, useState } from "react";
-import Button from "@/components/Button/button";
-import EditIcon from "@/assets/svg/edit.svg";
-import DeleteIcon from "@/assets/svg/delete.svg";
-import SaveIcon from "@/assets/svg/done.svg";
-import CancelIcon from "@/assets/svg/close.svg";
+} from './columnTypes';
+import { useEffect, useState } from 'react';
+import Button from '@/components/Button/button';
+import EditIcon from '@/assets/svg/edit.svg';
+import DeleteIcon from '@/assets/svg/delete.svg';
+import SaveIcon from '@/assets/svg/done.svg';
+import CancelIcon from '@/assets/svg/close.svg';
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -22,17 +22,17 @@ import {
   GridRowId,
   GridRowModel,
   GridRowEditStopReasons,
-} from "@mui/x-data-grid";
-import { editDocente, deleteDocente } from "@/lib/data/funcionario/actions";
-import Link from "next/link";
+} from '@mui/x-data-grid';
+import { editDocente, deleteDocente } from '@/lib/data/funcionario/actions';
+import Link from 'next/link';
 
 type columnType =
-  | "carrera"
-  | "asignatura"
-  | "usuario"
-  | "docente"
-  | "estudiante"
-  | "none";
+  | 'carrera'
+  | 'asignatura'
+  | 'usuario'
+  | 'docente'
+  | 'estudiante'
+  | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
   rows: GridRowsProp[];
@@ -76,16 +76,16 @@ function NormalDataGrid({
 }) {
   let columns: GridColDef[] = [];
   switch (columnsType) {
-    case "carrera":
+    case 'carrera':
       columns = carreraColumns;
       break;
-    case "asignatura":
+    case 'asignatura':
       columns = asignaturaColumns;
       break;
-    case "usuario":
+    case 'usuario':
       columns = usuarioColumns;
       break;
-    case "estudiante":
+    case 'estudiante':
       columns = estudianteColumns;
       break;
     default:
@@ -121,7 +121,7 @@ function EditableDocentesDataGrid({
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
-  const handleRowEditStop: GridEventListener<"rowEditStop"> = (
+  const handleRowEditStop: GridEventListener<'rowEditStop'> = (
     params,
     event
   ) => {
@@ -188,47 +188,47 @@ function EditableDocentesDataGrid({
 
   const columns: GridColDef[] = [
     {
-      field: "id",
-      type: "number",
-      headerName: "ID",
+      field: 'id',
+      type: 'number',
+      headerName: 'ID',
       width: 90,
       editable: false,
     },
-    { field: "nombre", headerName: "Nombre", width: 180, editable: true },
+    { field: 'nombre', headerName: 'Nombre', width: 180, editable: true },
     {
-      field: "apellido",
-      headerName: "Apellido",
+      field: 'apellido',
+      headerName: 'Apellido',
       width: 180,
       editable: true,
     },
     {
-      field: "documento",
-      headerName: "Cedula",
+      field: 'documento',
+      headerName: 'Cedula',
       width: 180,
       editable: true,
     },
     {
-      field: "actions",
-      type: "actions",
-      headerName: "Actions",
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
       width: 150,
-      cellClassName: "actions",
+      cellClassName: 'actions',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon className="h-auto w-6 fill-garnet sm:w-8" />}
-              label="Save"
+              icon={<SaveIcon className='h-auto w-6 fill-garnet sm:w-8' />}
+              label='Save'
               sx={{
-                color: "#802c2c",
+                color: '#802c2c',
               }}
               onClick={handleSaveClick(id)}
               key={id}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon className="h-auto w-6 fill-garnet sm:w-8" />}
-              label="Cancel"
+              icon={<CancelIcon className='h-auto w-6 fill-garnet sm:w-8' />}
+              label='Cancel'
               onClick={handleCancelClick(id)}
               key={`${id}-cancel`}
             />,
@@ -236,22 +236,22 @@ function EditableDocentesDataGrid({
         }
         return [
           <GridActionsCellItem
-            icon={<EditIcon className="h-auto w-6 fill-garnet sm:w-8 " />}
-            label="Edit"
+            icon={<EditIcon className='h-auto w-6 fill-garnet sm:w-8 ' />}
+            label='Edit'
             onClick={handleEditClick(id)}
             key={id}
             sx={{
-              color: "#802c2c",
+              color: '#802c2c',
             }}
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon className="h-auto w-6 fill-garnet sm:w-8" />}
-            label="Delete"
+            icon={<DeleteIcon className='h-auto w-6 fill-garnet sm:w-8' />}
+            label='Delete'
             onClick={handleDeleteClick(id)}
             key={`${id}-delete`}
             sx={{
-              color: "#802c2c",
-              height: "100%",
+              color: '#802c2c',
+              height: '100%',
             }}
           />,
         ];
@@ -260,17 +260,17 @@ function EditableDocentesDataGrid({
   ];
 
   return (
-    <div className="h-fit w-full p-4">
-      <div className="my-4 box-content flex flex-row justify-end rounded-md bg-ivory p-4">
-        <Link href="/funcionario/docentes/agregar">
-          <Button styling="primary">Agregar Docente</Button>
+    <div className='h-fit w-full p-4'>
+      <div className='my-4 box-content flex flex-row justify-end rounded-md bg-ivory p-4'>
+        <Link href='/funcionario/docentes/agregar'>
+          <Button styling='primary'>Agregar Docente</Button>
         </Link>
       </div>
       <DataGrid
         rows={rows}
         loading={rowsLoading}
         columns={columns}
-        editMode="row"
+        editMode='row'
         rowModesModel={rowModesModel}
         autosizeOnMount={true}
         autoHeight={true}
@@ -280,7 +280,7 @@ function EditableDocentesDataGrid({
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        sx={{ backgroundColor: "#f6f6e9", color: "black" }}
+        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
       />
     </div>
   );
