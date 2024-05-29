@@ -125,4 +125,12 @@ export type Asignatura = {
   creditos: number;
 };
 
+export type PeriodoExamenState = {
+  errors?: {
+    fechaInicio?: string[];
+    fechaFin?: string[];
+    carreraId?: string[];
+  };
+  message?: string | null;
+};
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
