@@ -9,7 +9,7 @@ import { initialState } from '@/lib/definitions';
 import { registrarPeriodoExamen } from '@/lib/data/funcionario/actions';
 import InputField from '@/components/InputField/inputField';
 
-function Form({ carrera }: any) {
+function Form({ carreraId }: any) {
   const [registro, dispatch] = useFormState(
     registrarPeriodoExamen,
     initialState
@@ -21,7 +21,6 @@ function Form({ carrera }: any) {
       router.back();
     }
   }, [registro.message, router]);
-
   return (
     <FormContainer>
       <form
@@ -29,7 +28,7 @@ function Form({ carrera }: any) {
         action={dispatch}
       >
         <h1 className='pb-4 text-center text-2xl font-bold leading-snug text-black'>
-          Agregar periodo de examen de la carrera {carrera.nombre}
+          Agregar periodo de examen a la carrera
         </h1>
         <InputField
           type='date'
@@ -64,7 +63,7 @@ function Form({ carrera }: any) {
           name='carreraId'
           label='Carrera ID'
           className='hidden'
-          value={carrera.id}
+          value={carreraId}
         />
         <div id='carreraId-error' aria-live='polite' aria-atomic='true'>
           {registro?.errors?.carreraId &&
@@ -91,20 +90,14 @@ function RegistrarPeriodoButton() {
   );
 }
 
-export default function FuncionarioHorariosExamenesAgregarHome() {
-  const [carrera, setcarrera] = useState({
-    id: 2,
-    nombre: 'Tecnologo informatico InitData',
-    descripcion:
-      'Carrera de tecnologo informatico donde se enseña a programar en java, c++, c# y python',
-    duracionAnios: 1.5,
-    creditos: 9,
-    existePlanEstudio: true,
-  });
-
+export default function FuncionarioHorariosExamenesAgregarHome({
+  params,
+}: {
+  params: { id: string };
+}) {
   return (
     <section className='text-ivory'>
-      <Form carrera={carrera} className='inset-1/2' />
+      <Form carreraId={params.id} className='inset-1/2' />
     </section>
   );
 }

@@ -109,7 +109,6 @@ export async function registrarPeriodoExamen(
   formData: FormData
 ) {
   const token = authToken();
-
   if (token) {
     const validatedFields = RegistrarPeriopdoExamenFormSchema.safeParse({
       fechaInicio: formData.get('fechaInicio'),
@@ -136,14 +135,16 @@ export async function registrarPeriodoExamen(
           id: 0,
           fechaInicio,
           fechaFin,
-          carreraId: carrId,
+          carreraid: carrId,
         }),
       });
       if (response.ok) {
+        console.log('response not ok');
         return {
           message: 'Registrado con exito. 200',
         };
       } else {
+        console.log(response);
         return {
           message: 'Error al registrar periodo de examen',
         };
@@ -153,5 +154,66 @@ export async function registrarPeriodoExamen(
     return {
       message: 'Debe ser un funcionario para registrar periodos de examen',
     };
+  }
+}
+
+export const getCarreras = async () => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/carreras`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } else {
+      return null;
+    }
+  }
+};
+
+export async function getCarreraYAsignatura(id: string) {
+  const token = authToken();
+  if (token) {
+    const carreraJson = await getCarrera(id);
+    if (!carreraJson) return null;
+    const asignaturas = await fetch(`${apiRoute}/carreras/${id}/asignaturas`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (asignaturas.ok) {
+      const asignaturasJson = await asignaturas.json();
+      return { carrera: carreraJson, asignaturas: asignaturasJson.content };
+    } else {
+      return { carrera: carreraJson, asignaturas: [] };
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function getCarrera(id: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/carreras/${id}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  } else {
+    return null;
   }
 }
