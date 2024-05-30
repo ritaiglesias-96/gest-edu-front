@@ -139,12 +139,10 @@ export async function registrarPeriodoExamen(
         }),
       });
       if (response.ok) {
-        console.log('response not ok');
         return {
           message: 'Registrado con exito. 200',
         };
       } else {
-        console.log(response);
         return {
           message: 'Error al registrar periodo de examen',
         };
@@ -192,6 +190,27 @@ export async function getCarreraYAsignatura(id: string) {
       return { carrera: carreraJson, asignaturas: asignaturasJson.content };
     } else {
       return { carrera: carreraJson, asignaturas: [] };
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function getPeriodosExamenCarrera(id: string) {
+  const token = authToken();
+  const carreraJson = await getCarrera(id);
+  if (token) {
+    const periodos = await fetch(`${apiRoute}/carreras/${id}/periodos-examen`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (periodos.ok) {
+      const periodosJson = await periodos.json();
+      return { carrera: carreraJson, periodos: periodosJson.content };
+    } else {
+      return { carrera: carreraJson, periodos: [] };
     }
   } else {
     return null;

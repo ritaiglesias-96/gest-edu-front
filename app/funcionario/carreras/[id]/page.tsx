@@ -1,6 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { getCarreraYAsignatura } from '@/lib/data/funcionario/actions';
+import {
+  getCarreraYAsignatura,
+  getPeriodosExamenCarrera,
+} from '@/lib/data/funcionario/actions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
 import Button from '@/components/Button/button';
@@ -17,12 +20,34 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
   const [fallout, setFallout] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  function formatDate(dateString: string): string {
+    const parts = dateString.split('T');
+    if (parts.length !== 2) {
+      throw new Error('Invalid date format. Expected YYYY-MM-DDTHH:mm');
+    }
+
+    const datePart = parts[0];
+    const [year, month, day] = datePart.split('-');
+
+    // Ensure two-digit formatting for month and day
+    const formattedMonth = month.padStart(2, '0');
+    const formattedDay = day.padStart(2, '0');
+
+    return `${formattedDay}/${formattedMonth}/${year}`;
+  }
+
   useEffect(() => {
     const fetch = async () => {
-      const existeCarrera = await getCarreraYAsignatura(params.id);
-      if (existeCarrera) {
-        setCarrera(existeCarrera.carrera);
-        setRows(existeCarrera.asignaturas);
+      const existePeriodos = await getPeriodosExamenCarrera(params.id);
+      if (existePeriodos) {
+        const modifiedData = existePeriodos.periodos.map((item: any) => ({
+          ...item,
+          fechaInicio: formatDate(item.fechaInicio),
+          fechaFin: formatDate(item.fechaFin),
+        }));
+        console.log(modifiedData);
+        setCarrera(existePeriodos.carrera);
+        setRows(modifiedData);
         setRowsLoading(false);
       } else {
         setFallout(true);
@@ -74,7 +99,7 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
             <List
               rows={rows}
               rowsLoading={rowsLoading}
-              columnsType='asignatura'
+              columnsType='periodosExamen'
             />
           </div>
         )}

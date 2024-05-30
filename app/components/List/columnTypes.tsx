@@ -1,6 +1,7 @@
 import { GridColDef } from '@mui/x-data-grid';
 import EyeIcon from '@/assets/svg/visibility.svg';
 import Link from 'next/link';
+import formatDate from '@/utils/dateFormatter';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -94,5 +95,17 @@ export const usuarioColumns: GridColDef[] = [
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
+  },
+];
+
+export const periodosExamenColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'fechaInicio',
+    headerName: 'Fecha de inicio',
+  },
+  {
+    field: 'fechaFin',
+    headerName: 'Fecha de fin',
   },
 ];

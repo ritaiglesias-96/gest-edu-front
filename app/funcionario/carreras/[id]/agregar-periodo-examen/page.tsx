@@ -16,6 +16,7 @@ function Form({ carreraId }: any) {
   );
   const router = useRouter();
 
+
   useEffect(() => {
     if (registro.message.includes('200')) {
       router.back();
