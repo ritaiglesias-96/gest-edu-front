@@ -100,3 +100,36 @@ export async function deleteDocente(id: string) {
     return null;
   }
 }
+
+export async function getEstudiantes() {
+  const token = authToken();
+  const response = await fetch(`${apiRoute}/estudiantes/listar`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return null;
+  }
+}
+
+export async function getEstudiante(ci: string) {
+  const token = authToken();
+  const response = await fetch(`${apiRoute}/estudiantes/buscar/${ci}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return null;
+  }
+}
+
