@@ -7,6 +7,7 @@ import {
   AltaDocenteFormSchema,
   CarreraFormSchema,
 } from '../schemasZod';
+import { log } from 'console';
 const apiRoute = process.env.BACK_API;
 
 export const getCarreras = async () => {
@@ -251,5 +252,57 @@ export async function altaAsignatura(
         message: 'Error al crear asignatura',
       };
     }
+  }
+
+}
+
+export async function getPrevituras(id: string) {
+
+  const token = authToken();
+  if (token) {
+    const previas = await fetch(`${apiRoute}/asignaturas/${id}/previas`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (previas.ok) {
+      const data = await previas.json();
+      return data;
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function getAsgignaturaYPrevituras(id: string) {
+  const token = authToken();
+  console.log('token');
+
+  if (token) {
+    const asignaturaJson = await getAsignatura(id);
+    if (!asignaturaJson) return null;
+    const previaturas = await fetch(`${apiRoute}/asignatura/${id}/previas`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (previaturas.ok) {
+      console.log("previaturas", previaturas);
+
+      const previaturasJson = await previaturas.json();
+      return { asignatura: asignaturaJson, previaturas: previaturasJson };
+    } else {
+      console.log('no previas');
+
+      return { asignatura: asignaturaJson, asignaturas: [] };
+    }
+  } else {
+    console.log('otro else');
+
+    return null;
   }
 }

@@ -2,6 +2,7 @@ import styles from './list.module.css';
 import {
   asignaturaColumns,
   carreraColumns,
+  previaturasColumns,
   usuarioColumns,
 } from './columnTypes';
 import { useEffect, useState } from 'react';
@@ -31,6 +32,7 @@ type columnType =
   | 'usuario'
   | 'docente'
   | 'estudiante'
+    'previtaturas'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -83,6 +85,9 @@ function NormalDataGrid({
       break;
     case 'usuario':
       columns = usuarioColumns;
+      break;
+    case 'previtaturas':
+      columns = previaturasColumns;
       break;
     default:
       break;

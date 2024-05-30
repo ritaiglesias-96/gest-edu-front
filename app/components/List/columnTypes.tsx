@@ -1,5 +1,6 @@
 import { GridColDef } from '@mui/x-data-grid';
 import EyeIcon from '@/assets/svg/visibility.svg';
+import School from '@/assets/svg/school.svg';
 import Link from 'next/link';
 
 export const carreraColumns: GridColDef[] = [
@@ -64,6 +65,20 @@ export const asignaturaColumns: GridColDef[] = [
       </Link>
     ),
   },
+  {
+    field: 'previas',
+    headerName: 'Previas',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/previas/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <School className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
 ];
 
 export const usuarioColumns: GridColDef[] = [
@@ -94,5 +109,18 @@ export const usuarioColumns: GridColDef[] = [
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
+  },
+];
+
+export const previaturasColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+  },
+  {
+    field: 'descripcion',
+    headerName: 'Descripcion',
+    type: 'string',
   },
 ];
