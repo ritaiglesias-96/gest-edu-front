@@ -144,6 +144,13 @@ function NavbarFuncionario() {
         <GestEduIcon />
       </Link>
       <div className='flex flex-row gap-4'>
+      <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/funcionario/estudiantes'
+        >
+          <Users className='h-6 w-auto self-center' />
+          <span>Estudiantes</span>
+        </Link>
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
           href='/funcionario/docentes'
