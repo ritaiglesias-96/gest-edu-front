@@ -254,6 +254,96 @@ export async function altaAsignatura(
   }
 }
 
+export async function getPrevituras(id: string) {
+  const token = authToken();
+  if (token) {
+    const previas = await fetch(`${apiRoute}/asignaturas/${id}/previas`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (previas.ok) {
+      const data = await previas.json();
+      return data;
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function getNoPrevituras(id: string) {
+  const token = authToken();
+  if (token) {
+    const noPrevias = await fetch(`${apiRoute}/asignaturas/${id}/no-previas`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (noPrevias.ok) {
+      const data = await noPrevias.json();
+      return data;
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function getAsgignaturaYPrevituras(id: string) {
+  const token = authToken();
+
+  if (token) {
+    const asignaturaJson = await getAsignatura(id);
+    if (!asignaturaJson) return null;
+    const previaturas = await fetch(`${apiRoute}/asignatura/${id}/previas`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (previaturas.ok) {
+      const previaturasJson = await previaturas.json();
+      return { asignatura: asignaturaJson, previaturas: previaturasJson };
+    } else {
+      return { asignatura: asignaturaJson, asignaturas: [] };
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function altaPreviaFetch(asignaturaId: string, previaId: string) {
+  const token = authToken();
+  if (token) {
+    const previaturas = await fetch(
+      `${apiRoute}/asignaturas/${asignaturaId}/previa/${previaId}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    if (previaturas.ok) {
+      console.log(previaturas);
+
+      return {
+        message: 'Previa creada con exito.',
+      };
+    } else {
+      console.log(previaturas);
+      return {
+        message: 'Error al crear previatura',
+      };
+    }
+  }
+}
 export async function altaPlanEstudio(asignaturas: Asignatura[], id: string) {
   const token = authToken();
   const response = await fetch(
