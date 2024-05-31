@@ -100,3 +100,16 @@ export const AltaDocenteFormSchema = z.object({
       message: 'Ingrese un CI valido',
     }),
 });
+
+export const RegistrarFechaExamenFormSchema = z.object({
+  fecha: z.string({
+    invalid_type_error: 'Ingrese una fecha valida',
+    required_error: 'Campo requerido',
+  }),
+  diasPrevInsc: z.number({
+    invalid_type_error: 'Ingrese una fecha valida',
+    required_error: 'Campo requerido',
+  }),
+  asignaturaId: z.string(),
+  stringArray: z.number().array(),
+});

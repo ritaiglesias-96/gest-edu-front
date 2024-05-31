@@ -1,8 +1,11 @@
 'use server';
 
 import { authToken } from '@/utils/auth';
-import { AltaDocenteFormSchema } from '../schemasZod';
-import { DocenteState } from '@/lib/definitions';
+import {
+  AltaDocenteFormSchema,
+  RegistrarFechaExamenFormSchema,
+} from '../schemasZod';
+import { DocenteState, FechaExamenState } from '@/lib/definitions';
 import { GridRowModel } from '@mui/x-data-grid/models/gridRows';
 const apiRoute = process.env.BACK_API;
 
@@ -133,3 +136,55 @@ export async function getEstudiante(ci: string) {
   }
 }
 
+export async function registrarFechaExamen(
+  prevState: FechaExamenState,
+  formData: FormData
+) {
+  const token = authToken();
+  if (token) {
+    const validatedFields = RegistrarFechaExamenFormSchema.safeParse({
+      fecha: formData.get('fecha'),
+      diasPrevInsc: formData.get('diasPrevInsc'),
+      asignaturaId: formData.get('asignaturaId'),
+      docentes: formData.get('docentes'),
+    });
+
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Create Subject.',
+      };
+    } else {
+      const { fecha, diasPrevInsc, asignaturaId, stringArray /* docentes? */ } =
+        validatedFields.data;
+      const asigId = parseInt(asignaturaId);
+
+      const response = await fetch(`${apiRoute}/periodoExamen/registrar`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          fecha,
+          diasPrevInsc,
+          asignaturaId: asigId,
+          stringArray,
+        }),
+      });
+      if (response.ok) {
+        return {
+          message: 'Registrado con exito. 200',
+        };
+      } else {
+        return {
+          message: 'Error al registrar periodo de examen',
+        };
+      }
+    }
+  } else {
+    return {
+      message: 'Debe ser un funcionario para registrar periodos de examen',
+    };
+  }
+}
