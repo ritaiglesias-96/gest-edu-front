@@ -277,9 +277,29 @@ export async function getPrevituras(id: string) {
   }
 }
 
+export async function getNoPrevituras(id: string) {
+
+  const token = authToken();
+  if (token) {
+    const noPrevias = await fetch(`${apiRoute}/asignaturas/${id}/no-previas`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (noPrevias.ok) {
+      const data = await noPrevias.json();
+      return data;
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
+
 export async function getAsgignaturaYPrevituras(id: string) {
   const token = authToken();
-  console.log('token');
 
   if (token) {
     const asignaturaJson = await getAsignatura(id);
@@ -291,18 +311,38 @@ export async function getAsgignaturaYPrevituras(id: string) {
       },
     });
     if (previaturas.ok) {
-      console.log("previaturas", previaturas);
 
       const previaturasJson = await previaturas.json();
       return { asignatura: asignaturaJson, previaturas: previaturasJson };
     } else {
-      console.log('no previas');
-
       return { asignatura: asignaturaJson, asignaturas: [] };
     }
   } else {
-    console.log('otro else');
-
     return null;
+  }
+}
+
+export async function altaPreviaFetch(asignaturaId: string, previaId: string) {
+  const token = authToken();
+  if (token) {
+    const previaturas = await fetch(`${apiRoute}/asignaturas/${asignaturaId}/previa/${previaId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (previaturas.ok) {
+      console.log(previaturas);
+      
+      return {
+        message: 'Previa creada con exito.',
+      };
+    } else {
+      console.log(previaturas);
+      return {
+        message: 'Error al crear previatura',
+      };
+    }
   }
 }

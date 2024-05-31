@@ -2,6 +2,8 @@ import { GridColDef } from '@mui/x-data-grid';
 import EyeIcon from '@/assets/svg/visibility.svg';
 import School from '@/assets/svg/school.svg';
 import Link from 'next/link';
+import Button from '@/components/Button/button';
+import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -123,4 +125,51 @@ export const previaturasColumns: GridColDef[] = [
     headerName: 'Descripcion',
     type: 'string',
   },
+];
+
+export const noPreviaturasColumns: GridColDef[] = [  
+  { 
+    field: 'idAsignatura', 
+    headerName: 'ID Asignatura' ,
+    renderHeader: () => null,
+    renderCell: () => null
+  },
+  { 
+    field: 'id', 
+    headerName: 'ID' 
+  },
+  {
+    field: 'semestrePlanEstudio',
+    headerName: 'Semestre'
+  },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+  },
+  {
+    field: 'descripcion',
+    headerName: 'Descripcion',
+  },
+  {
+    field: 'agregar',
+    headerName: '',
+    cellClassName: 'flex items-center ',
+    headerAlign: 'center',
+    sortable: false,
+    disableColumnMenu: true,
+    renderCell: (params) => (
+      <div className='my-2 box-content flex flex-col items-center justify-center rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+        <Button           
+          className="w-full"
+          styling='primary' 
+          onClick={() => {
+            altaPreviaFetch(params.row.idAsignatura, params.row.id);
+            location.reload();
+          }}          
+          >
+          Agregar
+        </Button>
+      </div>
+    ),
+  }
 ];
