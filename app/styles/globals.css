@@ -16,12 +16,12 @@
   body,
   main {
     @apply text-base;
-    @apply text-black;
     background-color: var(--background-color);
     min-height: calc(100vh - var(--navbar-height));
   }
 
   nav {
+    @apply text-black;
     @apply fixed;
     @apply top-0;
     @apply z-10;
@@ -33,7 +33,6 @@
     @apply box-content;
     @apply relative;
     @apply block;
-    @apply h-full;
   }
 
   section {
@@ -113,6 +112,10 @@
 
   .btn-primary {
     @apply bg-garnet font-normal text-ivory text-sm sm:text-base lg:text-md tracking-widest lg:font-semibold py-2 px-4 hover:bg-atomic-tangerine hover:text-garnet;
+  }
+
+  .btn-primary:disabled {
+    @apply bg-grey-600 font-normal text-grey-900 text-sm sm:text-base lg:text-md tracking-widest lg:font-semibold py-2 px-4 hover:bg-grey-800 hover:text-grey-500 cursor-not-allowed;
   }
 
   .btn-secondary {

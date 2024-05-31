@@ -54,6 +54,11 @@ export const asignaturaColumns: GridColDef[] = [
     type: 'number',
   },
   {
+    field: 'semestrePlanEstudio',
+    headerName: 'Semestre',
+    type: 'number',
+  },
+  {
     field: 'detalles',
     headerName: 'Detalles',
     cellClassName: 'flex items-center self-end',
@@ -94,7 +99,7 @@ export const usuarioColumns: GridColDef[] = [
     headerName: 'Nombre',
   },
   {
-    field: 'rol',
+    field: 'tipoUsuario',
     headerName: 'Rol',
     type: 'string',
   },
