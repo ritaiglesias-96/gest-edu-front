@@ -188,3 +188,63 @@ export async function registrarFechaExamen(
     };
   }
 }
+
+export const getCarreras = async () => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/carreras`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } else {
+      return null;
+    }
+  }
+};
+
+export async function getPeriodosExamenCarrera(id: string) {
+  const token = authToken();
+  const carreraJson = await getCarrera(id);
+  if (token) {
+    const periodos = await fetch(`${apiRoute}/carreras/${id}/periodos-examen`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (periodos.ok) {
+      const periodosJson = await periodos.json();
+      return { carrera: carreraJson, periodos: periodosJson.content };
+    } else {
+      return { carrera: carreraJson, periodos: [] };
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function getCarrera(id: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/carreras/${id}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+}

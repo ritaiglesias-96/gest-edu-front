@@ -97,7 +97,6 @@ export const usuarioColumns: GridColDef[] = [
   },
 ];
 
-
 export const estudianteColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   { field: 'ci', headerName: 'Cedula' },
@@ -106,7 +105,7 @@ export const estudianteColumns: GridColDef[] = [
   { field: 'email', headerName: 'Email' },
   { field: 'telefono', headerName: 'Telefono' },
   { field: 'domicilio', headerName: 'Domicilio' },
-  { field: 'fechaNac', headerName: 'Fecha de Nacimiento'},
+  { field: 'fechaNac', headerName: 'Fecha de Nacimiento' },
   {
     field: 'detalles',
     headerName: 'Detalles',
@@ -120,5 +119,17 @@ export const estudianteColumns: GridColDef[] = [
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
+  },
+];
+
+export const periodosExamenColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'fechaInicio',
+    headerName: 'Fecha de inicio',
+  },
+  {
+    field: 'fechaFin',
+    headerName: 'Fecha de fin',
   },
 ];
