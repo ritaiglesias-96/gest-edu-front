@@ -1,9 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import {
-  getCarreraYAsignatura,
-  getPeriodosExamenCarrera,
-} from '@/lib/data/funcionario/actions';
+import { getPeriodosExamenCarrera } from '@/lib/data/funcionario/actions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
 import Button from '@/components/Button/button';
@@ -45,7 +42,6 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
           fechaInicio: formatDate(item.fechaInicio),
           fechaFin: formatDate(item.fechaFin),
         }));
-        console.log(modifiedData);
         setCarrera(existePeriodos.carrera);
         setRows(modifiedData);
         setRowsLoading(false);

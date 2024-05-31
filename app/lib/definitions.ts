@@ -133,4 +133,16 @@ export type PeriodoExamenState = {
   };
   message?: string | null;
 };
+export type Estudiante = {
+  id: number;
+  ci: string;
+  nombre: string;
+  apellido: string;
+  email: string;
+  telefono: string;
+  domicilio: string;
+  fechaNac?: string;
+  imagen?: string;
+};
+
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
