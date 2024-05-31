@@ -1,3 +1,5 @@
+import { grey, indigo } from '@mui/material/colors';
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -21,6 +23,8 @@ module.exports = {
       'peach-yellow': '#fbe2ab',
       ivory: '#f6f6e9',
       white: '#ffffff',
+      grey,
+      indigo,
     },
     fontFamily: {
       poppins: ['var(--font-poppins)'],

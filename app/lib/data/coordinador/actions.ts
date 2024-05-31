@@ -1,12 +1,8 @@
 'use server';
-import { AsignaturaState, CarreraState, DocenteState } from '@/lib/definitions';
+import { Asignatura, AsignaturaState, CarreraState } from '@/lib/definitions';
 import { authToken } from '@/utils/auth';
 import { revalidatePath } from 'next/cache';
-import {
-  AltaAsignaturaFormSchema,
-  AltaDocenteFormSchema,
-  CarreraFormSchema,
-} from '../schemasZod';
+import { AltaAsignaturaFormSchema, CarreraFormSchema } from '../schemasZod';
 const apiRoute = process.env.BACK_API;
 
 export const getCarreras = async () => {
@@ -71,6 +67,8 @@ export async function getCarreraYAsignatura(id: string) {
   const token = authToken();
   if (token) {
     const carreraJson = await getCarrera(id);
+    console.log(carreraJson);
+
     if (!carreraJson) return null;
     const asignaturas = await fetch(`${apiRoute}/carreras/${id}/asignaturas`, {
       method: 'GET',
@@ -80,6 +78,8 @@ export async function getCarreraYAsignatura(id: string) {
     });
     if (asignaturas.ok) {
       const asignaturasJson = await asignaturas.json();
+      console.log(asignaturasJson.content);
+
       return { carrera: carreraJson, asignaturas: asignaturasJson.content };
     } else {
       return { carrera: carreraJson, asignaturas: [] };
@@ -251,5 +251,29 @@ export async function altaAsignatura(
         message: 'Error al crear asignatura',
       };
     }
+  }
+}
+
+export async function altaPlanEstudio(asignaturas: Asignatura[], id: string) {
+  const token = authToken();
+  const response = await fetch(
+    `${apiRoute}/carreras/${id}/asignaturas/semestre-plan-estudio`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(asignaturas),
+    }
+  );
+  if (response.ok) {
+    return {
+      message: 'Creado con exito. 200',
+    };
+  } else {
+    return {
+      message: 'Error al crear plan de estudio',
+    };
   }
 }
