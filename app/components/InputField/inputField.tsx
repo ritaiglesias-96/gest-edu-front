@@ -34,7 +34,7 @@ export default function InputField({
         <div className={clsx('inputBox', className)}>
           <div className='flex w-full flex-row'>
             {children}
-            <div className='flex w-full text-black flex-col'>
+            <div className='flex w-full flex-col text-black'>
               <label
                 htmlFor={name}
                 className={
@@ -46,7 +46,7 @@ export default function InputField({
               </label>
               <textarea
                 className={
-                  'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:outline-none focus:underline sm:text-base'
+                  'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:underline focus:outline-none sm:text-base'
                 }
                 name={name}
                 placeholder={placeholder}
@@ -60,7 +60,7 @@ export default function InputField({
         <div className={clsx('inputBox', className)}>
           <div className='flex w-full flex-row'>
             {children}
-            <div className='flex w-full text-black flex-col'>
+            <div className='flex w-full flex-col text-black'>
               <label
                 htmlFor={name}
                 className={
@@ -72,7 +72,7 @@ export default function InputField({
               </label>
               <input
                 className={
-                  'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:outline-none focus:underline sm:text-base'
+                  'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:underline focus:outline-none sm:text-base'
                 }
                 pattern={pattern}
                 id={name}
