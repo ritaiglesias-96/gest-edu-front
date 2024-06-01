@@ -31,6 +31,22 @@ export type RegisterState = {
   message?: string | null;
 };
 
+export type RegisterUserState = {
+  errors?: {
+    nombre?: string[];
+    apellido?: string[];
+    email?: string[];
+    password?: string[];
+    ci?: string[];
+    fechaNac?: string[];
+    domicilio?: string[];
+    telefono?: string[];
+    confirmPassword?: string[];
+    tipoUsuario?: string[];
+  };
+  message?: string | null;
+};
+
 export type ResetPassState = {
   errors?: {
     email?: string[];
@@ -123,6 +139,8 @@ export type Asignatura = {
   nombre: string;
   descripcion: string;
   creditos: number;
+  carreraId: number;
+  semestrePlanEstudio: number;
 };
 
 export type PeriodoExamenState = {

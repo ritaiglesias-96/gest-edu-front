@@ -28,6 +28,9 @@ import {
 } from '@mui/x-data-grid';
 import { editDocente, deleteDocente } from '@/lib/data/funcionario/actions';
 import Link from 'next/link';
+import { Asignatura } from '@/lib/definitions';
+import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
+import { useRouter } from 'next/navigation';
 
 type columnType =
   | 'carrera'
@@ -41,6 +44,7 @@ type columnType =
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
+  isEditableAsignaturas?: boolean;
   rows: GridRowsProp[];
   rowsLoading: boolean;
   columnsType: columnType;
@@ -48,13 +52,14 @@ interface ListProps {
 
 export default function List({
   isEditableDocentes,
+  isEditableAsignaturas,
   rows,
   rowsLoading,
   columnsType,
 }: ListProps) {
   return (
     <div className={styles.dataGridContainer}>
-      {!isEditableDocentes && (
+      {columnsType !== 'none' && (
         <NormalDataGrid
           rows={rows}
           columnsType={columnsType}
@@ -63,6 +68,12 @@ export default function List({
       )}
       {isEditableDocentes && (
         <EditableDocentesDataGrid
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
+      )}
+      {isEditableAsignaturas && (
+        <EditableAsignaturasDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
@@ -289,6 +300,190 @@ function EditableDocentesDataGrid({
         <Link href='/funcionario/docentes/agregar'>
           <Button styling='primary'>Agregar Docente</Button>
         </Link>
+      </div>
+      <DataGrid
+        rows={rows}
+        loading={rowsLoading}
+        columns={columns}
+        editMode='row'
+        rowModesModel={rowModesModel}
+        autosizeOnMount={true}
+        autoHeight={true}
+        onRowModesModelChange={handleRowModesModelChange}
+        onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
+        slotProps={{
+          toolbar: { setRows, setRowModesModel },
+        }}
+        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+      />
+    </div>
+  );
+}
+
+function EditableAsignaturasDataGrid({
+  rowsParent,
+  rowsLoadingParent,
+}: {
+  rowsParent: GridRowsProp;
+  rowsLoadingParent: boolean;
+}) {
+  const router = useRouter();
+  const [carreraId, setCarreraId] = useState<string>('');
+  const [disabled, setDisabled] = useState(true);
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
+  const handleRowEditStop: GridEventListener<'rowEditStop'> = (
+    params,
+    event
+  ) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
+  };
+
+  useEffect(() => {
+    setCarreraId(rowsParent[0]?.carreraId);
+    setRows(rowsParent);
+    setRowsLoading(rowsLoadingParent);
+  }, [rowsLoadingParent, rowsParent]);
+
+  useEffect(() => {
+    for (const row of rows) {
+      if (row.semestrePlanEstudio === 0) {
+        setDisabled(true);
+      } else {
+        setDisabled(false);
+      }
+    }
+  }, [rows]);
+
+  const agregarPlanDeEstudio = async () => {
+    // TODO agregar llamada a la API para agregar el plan de estudio
+    console.log(rows);
+    const res = await altaPlanEstudio(rows as Asignatura[], carreraId);
+    if (res.message === 'Creado con exito. 200') {
+      router.back();
+    }
+  };
+
+  const handleEditClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  const handleSaveClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
+
+  const handleCancelClick = (id: GridRowId) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    });
+    setRows(rows.filter((row) => row.id !== id));
+  };
+
+  const edit = async (docente: GridRowModel) => {
+    // const data: any = await editDocente(docente);
+    // return data;
+  };
+
+  const processRowUpdate = (newRow: GridRowModel) => {
+    const updatedRow = { ...newRow };
+    const data: any = edit(updatedRow);
+    if (data) {
+      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+      return updatedRow;
+    } else {
+      return rows;
+    }
+  };
+
+  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
+    setRowModesModel(newRowModesModel);
+  };
+
+  const columns: GridColDef[] = [
+    {
+      field: 'id',
+      type: 'number',
+      headerName: 'ID',
+      width: 90,
+      editable: false,
+    },
+    { field: 'nombre', headerName: 'Nombre', width: 180, editable: false },
+    {
+      field: 'descripcion',
+      headerName: 'Descripcion',
+      width: 180,
+      editable: false,
+    },
+    {
+      field: 'creditos',
+      headerName: 'Creditos',
+      width: 180,
+      editable: false,
+    },
+    {
+      field: 'semestrePlanEstudio',
+      headerName: 'Semestre',
+      width: 180,
+      type: 'number',
+      editable: true,
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      width: 150,
+      cellClassName: 'actions',
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon className='h-auto w-6 fill-garnet sm:w-8' />}
+              label='Save'
+              sx={{
+                color: '#802c2c',
+              }}
+              onClick={handleSaveClick(id)}
+              key={id}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon className='h-auto w-6 fill-garnet sm:w-8' />}
+              label='Cancel'
+              onClick={handleCancelClick(id)}
+              key={`${id}-cancel`}
+            />,
+          ];
+        }
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon className='h-auto w-6 fill-garnet sm:w-8 ' />}
+            label='Agregar semestre'
+            onClick={handleEditClick(id)}
+            key={id}
+            sx={{
+              color: '#802c2c',
+            }}
+          />,
+        ];
+      },
+    },
+  ];
+
+  return (
+    <div className='h-fit w-full p-4'>
+      <div className='my-4 box-content flex flex-row justify-end rounded-md bg-ivory p-4'>
+        <Button
+          onClick={agregarPlanDeEstudio}
+          disabled={disabled}
+          styling='primary'
+        >
+          Agregar Plan de Estudio
+        </Button>
       </div>
       <DataGrid
         rows={rows}

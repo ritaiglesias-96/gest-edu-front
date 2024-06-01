@@ -98,6 +98,13 @@ function NavbarAdmin() {
       </Link>
       <div className='flex flex-row gap-4'>
         <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/administrador/usuarios'
+        >
+          <Users className='h-6 w-auto self-center' />
+          <span>Usuarios</span>
+        </Link>
+        <Link
           className='flex flex-col  gap-1 text-wrap align-middle text-sm'
           href='/administrador/perfil'
         >

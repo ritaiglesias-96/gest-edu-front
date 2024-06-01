@@ -40,20 +40,34 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
     fetch().finally(() => setLoading(false));
   }, [params.id]);
 
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', height: '70vh' }}>
+        <CircularProgress sx={{ color: '#802c2c' }} />
+      </Box>
+    );
+  }
+
+  if (fallout && !loading) {
+    return (
+      <div className='mx-auto flex flex-col items-center justify-center text-ivory'>
+        <h1>Ha ocurrido un error</h1>
+        <Button onClick={() => router.back()} styling='primary'>
+          Regresar
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <>
       {edit && (
         <EditCarrera setOpen={setEdit} id={params.id} setCarrera={setCarrera} />
       )}
-      {loading && (
-        <Box sx={{ display: 'flex', alignItems: 'center', height: '70vh' }}>
-          <CircularProgress sx={{ color: '#802c2c' }} />
-        </Box>
-      )}
       <div className='relative box-border size-full justify-center overflow-auto md:w-5/6'>
         {!fallout && !loading && (
           <div className='h-fit w-full p-2'>
-            <div className='my-2 box-content flex flex-col items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+            <div className='my-2 box-content flex flex-col items-center justify-between gap-3 rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
               <div className='flex flex-col rounded-md text-center font-bold text-black md:text-left lg:max-w-md'>
                 <h3 className='m-0 p-0'>{carrera?.nombre}</h3>
                 <div className='flex flex-col'>
@@ -80,16 +94,14 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
                   <PencilIcon className='h-auto w-6 fill-garnet sm:w-8' />
                 </Button>
               </div>
-              <div className='flex w-fit max-w-52 flex-col justify-center rounded-md'>
-                {carrera?.existePlanEstudio && (
-                  <Link
-                    href={`/coordinador/carreras/${params.id}/agregarPlanEstudio`}
-                  >
-                    <Button className='w-full' styling='primary'>
-                      Registrar Plan de estudio
-                    </Button>
-                  </Link>
-                )}
+              <div className='flex w-full flex-col justify-center rounded-md md:max-w-52'>
+                <Link href={`/coordinador/carreras/${params.id}/plan-estudio`}>
+                  <Button className='w-full' styling='primary'>
+                    {!carrera?.existePlanEstudio
+                      ? 'Registrar Plan de estudio'
+                      : 'Ver Plan de estudio'}
+                  </Button>
+                </Link>
                 <Link href={`/coordinador/carreras/${params.id}/agregar`}>
                   <Button className='w-full' styling='primary'>
                     Agregar asignatura
@@ -102,14 +114,6 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
               rowsLoading={rowsLoading}
               columnsType='asignatura'
             />
-          </div>
-        )}
-        {fallout && !loading && (
-          <div className='mx-auto flex flex-col items-center justify-center text-ivory'>
-            <h1>Ha ocurrido un error</h1>
-            <Button onClick={() => router.back()} styling='primary'>
-              Regresar
-            </Button>
           </div>
         )}
       </div>
