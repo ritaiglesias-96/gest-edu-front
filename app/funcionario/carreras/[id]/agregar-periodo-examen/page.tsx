@@ -8,6 +8,7 @@ import { useFormState, useFormStatus } from 'react-dom';
 import { initialState } from '@/lib/definitions';
 import { registrarPeriodoExamen } from '@/lib/data/funcionario/actions';
 import InputField from '@/components/InputField/inputField';
+import { Alert } from '@mui/material';
 
 function Form({ carreraId }: any) {
   const [registro, dispatch] = useFormState(
@@ -16,8 +17,10 @@ function Form({ carreraId }: any) {
   );
   const router = useRouter();
 
-
   useEffect(() => {
+    if (registro.message) {
+      alert(registro.message.split('.')[0]);
+    }
     if (registro.message.includes('200')) {
       router.back();
     }

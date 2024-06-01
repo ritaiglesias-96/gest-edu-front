@@ -176,7 +176,8 @@ export async function registrarPeriodoExamen(
         };
       } else {
         return {
-          message: 'Error al registrar periodo de examen',
+          message:
+            'Error al registrar periodo de examen. Verifique que las no correspodan a un periodo ya existente y sean coherentes entre ellas. ',
         };
       }
     }
