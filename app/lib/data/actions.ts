@@ -264,3 +264,4 @@ export const obtenerDatosUsuarioFetch = async () => {
     return null;
   }
 };
+

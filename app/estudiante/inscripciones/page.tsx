@@ -3,8 +3,6 @@
 import List from "@/components/List/list";
 import { obtenerCarrerasInscriptoFetch } from "@/lib/data/estudiante/actions";
 import { useEffect, useState } from "react";
-import Link from 'next/link'
-import Button from "@/components/Button/button";
 
 export default function InscripcionesHome() {
 

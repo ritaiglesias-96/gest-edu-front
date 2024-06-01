@@ -137,4 +137,20 @@ export type Estudiante = {
   imagen?: string;
 };
 
+export type Examen = {
+  id: number;
+  fecha: Date;
+  diasPrevInsc: string;
+  estado: string;
+  asignatura: {
+    id: number;
+    nombre: string;
+    descripcion: string;
+    creditos: number;
+    semestrePlanEstudios: number;
+    carreraId: number;
+  };
+  docentes: [];
+};
+
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]

@@ -20,7 +20,6 @@ export const getCarreras = async () => {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       return data;
     } else {
       return null;
@@ -39,7 +38,6 @@ export const getAsignatura = async (id: string) => {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       return data;
     } else {
       return null;
@@ -253,3 +251,22 @@ export async function altaAsignatura(
     }
   }
 }
+
+
+export const obtenerExamenesVigentes = async (id: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/asignaturas/${id}/examenesVigentes`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  }
+};

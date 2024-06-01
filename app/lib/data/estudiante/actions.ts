@@ -127,3 +127,29 @@ export const obtenerAsignaturasPorCarreran = async (id: string) => {
     }
   }  
 };
+
+export const inscribirseExamenFetch = async (email: string, examenId: string) => {
+  const token = authToken();
+  if(token){
+    const response = await fetch(`${apiRoute}/examenes/inscribirse`,{
+      method: 'POST',
+      headers:{
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, examenId}),
+    }).then((res) =>{ 
+      return res.json();
+    });
+
+    if (response.status === 200) { 
+      return {
+        message: 'Insripcion exitosa.',
+      };
+    } else {
+      return {
+        message: response.message,
+      };
+    }
+  }
+}

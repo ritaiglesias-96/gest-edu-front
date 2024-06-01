@@ -1,6 +1,6 @@
 'use client'
 import List from "@/components/List/list";
-import { obtenerAsignaturasPorCarreran, obtenerInscripcionesVigentesExamen } from "@/lib/data/estudiante/actions";
+import { obtenerAsignaturasPorCarreran } from "@/lib/data/estudiante/actions";
 import { useState, useEffect } from "react";
 
 export default function ExamenesEstudiante() {
@@ -11,7 +11,6 @@ export default function ExamenesEstudiante() {
     useEffect(() => {
         let id = sessionStorage.getItem('carrera_id');
         if (id) {
-            console.log('id', id);
             setCarrera(id);
         }
     }, []);
@@ -19,7 +18,6 @@ export default function ExamenesEstudiante() {
     useEffect(() => {
         if (carreraId) {
             obtenerAsignaturasPorCarreran(carreraId).then((data) => {
-                console.log(data);
                 setRows(data.content ? data.content : []);
                 setRowsLoading(false);
             });
