@@ -370,9 +370,7 @@ export async function altaPlanEstudio(asignaturas: Asignatura[], id: string) {
 }
 
 export async function getEstudiantesInscriptos(id: string) {
-  console.log('getEstudiantesInscriptos' + id);
   const token = authToken();
-  log('url',`${apiRoute}/carreras/${id}/estudiantes-inscriptos` );
   const response = await fetch(`${apiRoute}/carreras/${id}/estudiantes-inscriptos`, {
     method: 'GET',
     headers: {
@@ -381,7 +379,6 @@ export async function getEstudiantesInscriptos(id: string) {
   });
   if (response.ok) {
     const data = await response.json();
-    console.log(data);
     
     return data;
   } else {
