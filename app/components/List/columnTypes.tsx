@@ -1,6 +1,7 @@
 import { GridColDef } from '@mui/x-data-grid';
 import EyeIcon from '@/assets/svg/visibility.svg';
 import School from '@/assets/svg/school.svg';
+import Enroll from '@/assets/svg/enroll-lesson.svg';
 import Link from 'next/link';
 import Button from '@/components/Button/button';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
@@ -213,5 +214,13 @@ export const periodosExamenColumns: GridColDef[] = [
   {
     field: 'fechaFin',
     headerName: 'Fecha de fin',
+  },
+];
+
+export const registroExamenColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'fecha',
+    headerName: 'Fecha',
   },
 ];
