@@ -220,7 +220,6 @@ export const estudianteColumns: GridColDef[] = [
   { field: 'domicilio', headerName: 'Domicilio' },
   { field: 'fechaNac', headerName: 'Fecha de Nacimiento' },
   { field: 'fechaNac', headerName: 'Fecha de Nacimiento' },
-
   {
     field: 'detalles',
     headerName: 'Detalles',
