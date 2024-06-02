@@ -4,7 +4,10 @@ import FormContainer from '@/components/FormContainer/formContainer';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { registrarFechaExamen } from '@/lib/data/funcionario/actions';
+import {
+  getDocentes,
+  registrarFechaExamen,
+} from '@/lib/data/funcionario/actions';
 import { Input, InputLabel } from '@mui/material';
 
 export default function FuncionarioHorariosExamenesAgregarHome({
@@ -16,6 +19,7 @@ export default function FuncionarioHorariosExamenesAgregarHome({
   const [fecha, setFecha] = useState('');
   const [diasPrevInsc, setDiasPrevInsc] = useState('');
   const [docenteIds, setDocentes] = useState([1, 2, 3]);
+  const [listaDocentes, setListaDocentes] = useState([]);
 
   const handleClick = () => {
     const asignaturaId = params.asignaturaId;
@@ -26,11 +30,20 @@ export default function FuncionarioHorariosExamenesAgregarHome({
       registrarFechaExamen(data).then((res) => {
         if (res) {
           alert(res.message);
+          if (res.message) {
+            alert('Fecha registrada con exito');
+            router.back();
+          }
         }
       });
     }
   };
 
+  useEffect(() => {
+    getDocentes().then((res) => {
+      setListaDocentes(res);
+    });
+  }, []);
   /*   useEffect(() => {
     if (registro.message.includes('200')) {
       router.back();
@@ -44,6 +57,9 @@ export default function FuncionarioHorariosExamenesAgregarHome({
         </h1>
         <InputLabel htmlFor='component-simple'>Fecha y Hora</InputLabel>
         <Input
+          className={
+            'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:underline focus:outline-none sm:text-base'
+          }
           type='datetime-local'
           name='fecha'
           onChange={(event) => setFecha(event.target.value)}
@@ -52,10 +68,28 @@ export default function FuncionarioHorariosExamenesAgregarHome({
           Dias previos para la inscripcion
         </InputLabel>
         <Input
+          className={
+            'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:underline focus:outline-none sm:text-base'
+          }
           type='number'
           name='diasPrevInsc'
           onChange={(event) => setDiasPrevInsc(event.target.value)}
         ></Input>
+        {/*  <ul>
+          {listaDocentes.map((docente) => (
+            <li key={docente.id}>
+              <input
+                type='checkbox'
+                checked={selectedTeachers.includes(docente.id)}
+                onChange={(e) =>
+                  handleCheckboxChange(docente.id, e.target.checked)
+                }
+                disabled={selectedTeachers.length === 3}
+              />
+              {docente.name}
+            </li>
+          ))}
+        </ul> */}
         <div className='flex w-2/3 flex-col justify-between gap-1 sm:w-full sm:flex-row'>
           <Button
             onClick={() => handleClick()}
