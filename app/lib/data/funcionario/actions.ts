@@ -136,59 +136,6 @@ export async function getEstudiante(ci: string) {
   }
 }
 
-export async function registrarFechaExamen(
-  prevState: FechaExamenState,
-  formData: FormData
-) {
-  const token = authToken();
-  if (token) {
-    const validatedFields = RegistrarFechaExamenFormSchema.safeParse({
-      fecha: formData.get('fecha'),
-      diasPrevInsc: formData.get('diasPrevInsc'),
-      asignaturaId: formData.get('asignaturaId'),
-      docentes: formData.get('docentes'),
-    });
-
-    if (!validatedFields.success) {
-      return {
-        errors: validatedFields.error.flatten().fieldErrors,
-        message: 'Missing Fields. Failed to Create Subject.',
-      };
-    } else {
-      const { fecha, diasPrevInsc, asignaturaId, stringArray /* docentes? */ } =
-        validatedFields.data;
-      const asigId = parseInt(asignaturaId);
-
-      const response = await fetch(`${apiRoute}/periodoExamen/registrar`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          fecha,
-          diasPrevInsc,
-          asignaturaId: asigId,
-          stringArray,
-        }),
-      });
-      if (response.ok) {
-        return {
-          message: 'Registrado con exito. 200',
-        };
-      } else {
-        return {
-          message: 'Error al registrar periodo de examen',
-        };
-      }
-    }
-  } else {
-    return {
-      message: 'Debe ser un funcionario para registrar periodos de examen',
-    };
-  }
-}
-
 export const getCarreras = async () => {
   const token = authToken();
   if (token) {
@@ -314,3 +261,25 @@ export const getExamenesAsignaturaVigentes = async (asignaturaId: string) => {
     }
   }
 };
+
+export async function registrarFechaExamen(data: any) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/examenes/crear`, {
+      method: 'POST',
+      headers: {
+        Authotization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fecha: data.fecha,
+        diasPrevInsc: data.diasPrevInsc,
+        asignaturaId: data.asignaturaId,
+        docenteIds: data.docenteIds,
+      }),
+    }).then((res) => {
+      return res.json();
+    });
+    return { message: response.message };
+  }
+}

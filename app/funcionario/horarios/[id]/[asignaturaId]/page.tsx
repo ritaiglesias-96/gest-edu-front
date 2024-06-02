@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import {
   getAsignatura,
-  getExamenesAsignaturaVigentes,
+  getPeriodosExamenCarrera,
 } from '@/lib/data/funcionario/actions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
@@ -38,25 +38,39 @@ export default function AsignaturaPage({
     fetch().finally(() => setLoading(false));
   }, [params.asignaturaId]);
 
+  function formatDate(dateString: string): string {
+    const parts = dateString.split('T');
+    if (parts.length !== 2) {
+      throw new Error('Invalid date format. Expected YYYY-MM-DDTHH:mm');
+    }
+
+    const datePart = parts[0];
+    const [year, month, day] = datePart.split('-');
+
+    // Ensure two-digit formatting for month and day
+    const formattedMonth = month.padStart(2, '0');
+    const formattedDay = day.padStart(2, '0');
+
+    return `${formattedDay}/${formattedMonth}/${year}`;
+  }
+
   useEffect(() => {
     const fetch = async () => {
-      const existenExamenes = await getExamenesAsignaturaVigentes(
-        params.asignaturaId
-      );
-      console.log(existenExamenes.content);
-
-      if (existenExamenes.content) {
-        existenExamenes.content.forEach((examen: any) => {
-          examen.fecha = formatDateHour(examen.fecha);
-        });
-        setRows(existenExamenes.content);
+      const existePeriodos = await getPeriodosExamenCarrera(params.id);
+      if (existePeriodos) {
+        const modifiedData = existePeriodos.periodos.map((item: any) => ({
+          ...item,
+          fechaInicio: formatDate(item.fechaInicio),
+          fechaFin: formatDate(item.fechaFin),
+        }));
+        setRows(modifiedData);
         setRowsLoading(false);
       } else {
         setFallout(true);
       }
     };
     fetch().finally(() => setLoading(false));
-  }, [params.asignaturaId]);
+  }, [params.id]);
 
   return (
     <>
@@ -99,11 +113,11 @@ export default function AsignaturaPage({
                 </Link>
               </div>
             </div>
-            <h3>Fechas de Examenes vigentes</h3>
+            <h3>Periodos de Examen</h3>
             <List
               rows={rows}
               rowsLoading={rowsLoading}
-              columnsType='registroExamen'
+              columnsType='periodosExamen'
             />
           </div>
         )}

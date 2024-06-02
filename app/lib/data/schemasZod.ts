@@ -102,12 +102,12 @@ export const AltaDocenteFormSchema = z.object({
 });
 
 export const RegistrarFechaExamenFormSchema = z.object({
-  fecha: z.string({
+  fecha: z.date({
     invalid_type_error: 'Ingrese una fecha valida',
     required_error: 'Campo requerido',
   }),
   diasPrevInsc: z.number({
-    invalid_type_error: 'Ingrese una fecha valida',
+    invalid_type_error: 'Ingrese una cantidad de dias validos',
     required_error: 'Campo requerido',
   }),
   asignaturaId: z.string(),

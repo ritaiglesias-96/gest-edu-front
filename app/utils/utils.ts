@@ -32,7 +32,7 @@ export const formatDateHour = (dateString: string) => {
   const [year, month, day] = datePart.split('-');
 
   // Extract time components (hours and minutes)
-  const [hours, minutes] = timePart.split(':');
+  const [minutes, hours] = timePart.split(':');
 
   // Ensure two-digit formatting for month, day, hours, and minutes
   const formattedMonth = month.padStart(2, '0');
