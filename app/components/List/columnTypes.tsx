@@ -166,9 +166,12 @@ export const previaturasColumns: GridColDef[] = [
 export const noPreviaturasColumns: GridColDef[] = [
   {
     field: 'idAsignatura',
-    headerName: 'ID Asignatura',
-    renderHeader: () => null,
-    renderCell: () => null,
+    headerName: '',
+    disableColumnMenu: true,
+    sortable: false,
+    resizable: false,
+    cellClassName: 'invisible', // hidden column
+    headerClassName: 'invisible', // hidden column
   },
   {
     field: 'id',
