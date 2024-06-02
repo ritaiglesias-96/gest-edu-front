@@ -25,7 +25,7 @@ export default function AsignaturaPage({
   useEffect(() => {
     const fetch = async () => {
       const existeAsignatura = await getAsignatura(params.asignaturaId);
-      console.log(existeAsignatura);
+      //console.log(existeAsignatura);
       if (existeAsignatura) {
         setAsignatura(existeAsignatura);
       } else {
