@@ -14,9 +14,9 @@ const publicRoutes = ['/ingresar', '/registrarse', '/resetPass', '/'];
 export default function middleware(req: NextRequest) {
   // req.cookies.delete('token');
   const rol = authRol();
-  console.log(rol);
+  //console.log(rol);
   const isLoggedIn = rol !== Role.public;
-  console.log(isLoggedIn);
+  //console.log(isLoggedIn);
 
   if (!isLoggedIn && !publicRoutes.includes(req.nextUrl.pathname)) {
     const absoluteURL = new URL('/', req.nextUrl.origin);
