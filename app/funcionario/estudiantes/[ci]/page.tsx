@@ -17,7 +17,6 @@ export default function EstudiantePage({ params }: { params: { ci: string } }) {
 
   useEffect(() => {
     const fetchEstudiante = async () => {
-        console.log("Entra al useEffect?");
       try {
         const data = await getEstudiante(params.ci);
         setEstudiante(data);
