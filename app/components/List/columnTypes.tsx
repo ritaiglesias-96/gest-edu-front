@@ -223,6 +223,7 @@ export const estudianteColumns: GridColDef[] = [
 ];
 
 export const inscriptoColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
   { field: 'ci', headerName: 'Cédula'},
   { field: 'nombre', headerName: 'Nombre'},
   { field: 'apellido', headerName: 'Apellido'},
@@ -230,4 +231,23 @@ export const inscriptoColumns: GridColDef[] = [
   { field: 'estado', headerName: 'Estado' },
   { field: 'fechaInscripcion', headerName: 'Fecha de Inscripción' },
   {field: 'creditosObtenidos', headerName: 'Creditos Obtenidos', type: 'number'},
+];
+
+export const cursosColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'estado', headerName: 'Estado'},
+  {
+    field: 'calificaciones',
+    headerName: 'Calificaciones',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/cursos/${params.row.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
 ];
