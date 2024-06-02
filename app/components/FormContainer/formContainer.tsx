@@ -14,7 +14,6 @@ export default function FormContainer({
   const pathname = usePathname();
   const finalSlashIndex = pathname.lastIndexOf('/');
   const previousPath = pathname.slice(0, finalSlashIndex);
-  console.log(previousPath);
   return (
     <>
       <Link
