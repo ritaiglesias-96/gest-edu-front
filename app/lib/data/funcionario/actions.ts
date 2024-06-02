@@ -133,3 +133,150 @@ export async function getEstudiante(ci: string) {
   }
 }
 
+export const getCarreras = async () => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/carreras`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } else {
+      return null;
+    }
+  }
+};
+
+export async function getPeriodosExamenCarrera(id: string) {
+  const token = authToken();
+  const carreraJson = await getCarrera(id);
+  if (token) {
+    const periodos = await fetch(`${apiRoute}/carreras/${id}/periodos-examen`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (periodos.ok) {
+      const periodosJson = await periodos.json();
+      return { carrera: carreraJson, periodos: periodosJson.content };
+    } else {
+      return { carrera: carreraJson, periodos: [] };
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function getCarrera(id: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/carreras/${id}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function getCarreraYAsignatura(id: string) {
+  const token = authToken();
+
+  if (token) {
+    const carreraJson = await getCarrera(id);
+
+    if (!carreraJson) return null;
+    const asignaturas = await fetch(`${apiRoute}/carreras/${id}/asignaturas`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (asignaturas.ok) {
+      const asignaturasJson = await asignaturas.json();
+
+      return { carrera: carreraJson, asignaturas: asignaturasJson.content };
+    } else {
+      return { carrera: carreraJson, asignaturas: [] };
+    }
+  } else {
+    return null;
+  }
+}
+
+export const getAsignatura = async (id: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/asignaturas/${id}`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } else {
+      return null;
+    }
+  }
+};
+
+export const getExamenesAsignaturaVigentes = async (asignaturaId: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/asignaturas/${asignaturaId}/examenesVigentes`,
+      {
+        method: 'GET',
+        headers: {
+          Authotization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } else {
+      return { message: 'Error al obtener los examenes vigentes' };
+    }
+  }
+};
+
+export async function registrarFechaExamen(data: any) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/examenes/crear`, {
+      method: 'POST',
+      headers: {
+        Authotization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fecha: data.fecha,
+        diasPrevInsc: data.diasPrevInsc,
+        asignaturaId: data.asignaturaId,
+        docenteIds: data.docenteIds,
+      }),
+    }).then((res) => {
+      return res.json();
+    });
+    return { message: response.message };
+  }
+}
