@@ -281,35 +281,30 @@ export async function registrarFechaExamen(data: any) {
   }
 }
 
-export async function registrarHorarioDiaCurso(horario: any, cursoId: any) {
-  console.log('🚀 ~ registrarHorarioDiaCurso ~ horario:', horario);
+export async function registrarHorarioDiaCurso(horario: any, cursoId: string) {
   const token = authToken();
-
   if (token) {
-    fetch(`${apiRoute}/cursos/${cursoId}/horarios`, {
-      method: 'POST', // Método HTTP
+    const response = await fetch(`${apiRoute}/cursos/${cursoId}/horarios`, {
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json', // Tipo de contenido
-        Authorization: `Bearer ${token}`, // Añade tu token de autenticación
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         dia: horario.dia,
         horaInicio: horario.horaInicio,
         horaFin: horario.horaFin,
-      }), // Convierte el objeto a una cadena JSON
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log('Success:', data); // Maneja la respuesta del servidor
-      })
-      .catch((error) => {
-        console.error('Error:', error); // Maneja los errores
-      });
+      }),
+    });
+    if (response.ok) {
+      return {
+        message: 'Registrada con exito. 201',
+      };
+    } else {
+      return {
+        message: 'Error al registrar horario',
+      };
+    }
   }
 }
 

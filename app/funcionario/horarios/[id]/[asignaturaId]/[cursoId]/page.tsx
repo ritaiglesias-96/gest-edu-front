@@ -29,7 +29,7 @@ function HorariosPorDia(cursoId: any) {
       }
     });
     if (data) {
-      registrarHorarioDiaCurso(data, cursoId);
+      registrarHorarioDiaCurso(data, cursoId.cursoId);
     }
   };
 
