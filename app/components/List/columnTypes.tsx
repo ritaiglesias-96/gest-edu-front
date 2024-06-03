@@ -235,6 +235,8 @@ export const inscriptoColumns: GridColDef[] = [
 
 export const cursosColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
+  { field: 'fechaInicio', headerName: 'Fecha Inicio'},
+  { field: 'fechaFin', headerName: 'Fecha Fin'},
   { field: 'estado', headerName: 'Estado'},
   {
     field: 'calificaciones',
@@ -243,7 +245,7 @@ export const cursosColumns: GridColDef[] = [
     headerAlign: 'center',
     renderCell: (params) => (
       <Link
-        href={`${window.location.pathname}/cursos/${params.row.id}`}
+        href={`${window.location.pathname}/cursos`}
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />

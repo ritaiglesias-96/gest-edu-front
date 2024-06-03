@@ -1,8 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { getCarreras } from '@/lib/data/coordinador/actions';
-import Button from '@/components/Button/button';
-import Link from 'next/link';
 import List from '@/components/List/list';
 
 export default function CarrerasPageCursos() {

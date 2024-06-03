@@ -190,7 +190,7 @@ function MenuCalificaciones() {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = (opcion: string) => {
-    window.location.href = `${window.location.pathname}/calificaciones/${opcion}`;
+    window.location.href = `/funcionario/calificaciones`;
     setAnchorEl(null);
   };
 
