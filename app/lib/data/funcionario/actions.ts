@@ -280,3 +280,37 @@ export async function registrarFechaExamen(data: any) {
     return { message: response.message };
   }
 }
+
+export async function registrarHorarioDiaCurso(horario: any, cursoId: any) {
+  const token = authToken();
+  console.log('🚀 ~ registrarHorarioDiaCurso ~ token:', token);
+  console.log('🚀 ~ tamo en vivo');
+  console.log('🚀 ~ registrarHorarioDiaCurso ~ horario:', horario);
+
+  if (token) {
+    fetch(`${apiRoute}/cursos/${cursoId}/horarios`, {
+      method: 'POST', // Método HTTP
+      headers: {
+        'Content-Type': 'application/json', // Tipo de contenido
+        Authorization: `Bearer ${token}`, // Añade tu token de autenticación
+      },
+      body: JSON.stringify({
+        dia: horario.dia,
+        horaInicio: horario.horaInicio,
+        horaFin: horario.horaFin,
+      }), // Convierte el objeto a una cadena JSON
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Success:', data); // Maneja la respuesta del servidor
+      })
+      .catch((error) => {
+        console.error('Error:', error); // Maneja los errores
+      });
+  }
+}

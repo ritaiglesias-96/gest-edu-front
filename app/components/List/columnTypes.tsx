@@ -2,6 +2,7 @@ import { GridColDef } from '@mui/x-data-grid';
 import EyeIcon from '@/assets/svg/visibility.svg';
 import School from '@/assets/svg/school.svg';
 import Enroll from '@/assets/svg/enroll-exam.svg';
+import Schedule from '@/assets/svg/schedule.svg';
 import Link from 'next/link';
 import Button from '@/components/Button/button';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
@@ -252,5 +253,25 @@ export const registroExamenColumns: GridColDef[] = [
   {
     field: 'fecha',
     headerName: 'Fecha',
+  },
+];
+
+export const cursosColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'fechaInicio', headerName: 'Fecha de Inicio' },
+  { field: 'fechaFin', headerName: 'Fecha de Fin' },
+  {
+    field: 'agregarHorarios',
+    headerName: 'Crear Horarios',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.row.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <Schedule className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
   },
 ];

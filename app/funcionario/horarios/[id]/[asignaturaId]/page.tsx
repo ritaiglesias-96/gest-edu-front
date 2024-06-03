@@ -18,8 +18,10 @@ export default function AsignaturaPage({
   params: { id: string; asignaturaId: string };
 }) {
   const router = useRouter();
-  const [rows, setRows] = useState<any[]>([]);
-  const [rowsLoading, setRowsLoading] = useState(true);
+  const [rowsExamen, setRowsExamen] = useState<any[]>([]);
+  const [rowsCurso, setRowsCurso] = useState<any[]>([]);
+  const [rowsExamenLoading, setRowsExamenLoading] = useState(true);
+  const [rowsCursoLoading, setRowsCursoLoading] = useState(true);
   const [asignatura, setAsignatura] = useState<Asignatura>();
   const [fallout, setFallout] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -62,8 +64,8 @@ export default function AsignaturaPage({
           fechaInicio: formatDate(item.fechaInicio),
           fechaFin: formatDate(item.fechaFin),
         }));
-        setRows(modifiedData);
-        setRowsLoading(false);
+        setRowsExamen(modifiedData);
+        setRowsExamenLoading(false);
       } else {
         setFallout(true);
       }
@@ -103,20 +105,19 @@ export default function AsignaturaPage({
                     Registrar Fecha de Examen
                   </Button>
                 </Link>
-                <Link
-                  href={`/funcionario/horarios/${params.id}/${params.asignaturaId}/cursos`}
-                >
-                  <Button className='w-full' styling='primary'>
-                    Agregar asignatura
-                  </Button>
-                </Link>
               </div>
             </div>
             <h3>Periodos de Examen</h3>
             <List
-              rows={rows}
-              rowsLoading={rowsLoading}
+              rows={rowsExamen}
+              rowsLoading={rowsExamenLoading}
               columnsType='periodosExamen'
+            />
+            <h3>Cursos</h3>
+            <List
+              rows={rowsExamen} //TODO cambiar a los cursos en vez de examen
+              rowsLoading={rowsExamenLoading} //esta tambien
+              columnsType='cursos'
             />
           </div>
         )}
