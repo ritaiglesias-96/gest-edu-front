@@ -155,4 +155,21 @@ export type Estudiante = {
   imagen?: string;
 };
 
+export type Curso = {
+  id: number;
+  fechaInicio: Date;
+  fechaFin: Date;
+  diasPrevInsc: number;
+  estado: string;
+  asignaturaId: number;
+  docenteId: number;
+};
+
+export type Docente = {
+  id: number;
+  documento: string;
+  nombre: string;
+  apellido: string;
+};
+
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
