@@ -21,12 +21,16 @@ function HorariosPorDia(cursoId: any) {
     });
   };
 
-  const handleClick = () => {
+  const handleClick = (dia: string) => {
+    let data = {};
     horarios.forEach((horario: any) => {
-      if (horario.horaInicio && horario.horaFin) {
-        registrarHorarioDiaCurso(horario, cursoId);
+      if (horario.dia == dia.toUpperCase()) {
+        data = horario;
       }
     });
+    if (data) {
+      registrarHorarioDiaCurso(data, cursoId);
+    }
   };
 
   return (
@@ -43,7 +47,6 @@ function HorariosPorDia(cursoId: any) {
               type='time'
               name='horaInicio'
               onChange={(event) => {
-                console.log(event.target.value);
                 handleChange(event?.target.value, event.target.name, dia);
               }}
             ></Input>
@@ -61,17 +64,15 @@ function HorariosPorDia(cursoId: any) {
               }
             ></Input>
           </div>
+          <Button
+            onClick={() => handleClick(dia)}
+            className='w-full'
+            styling='primary'
+          >
+            Registrar
+          </Button>
         </div>
       ))}
-      <div className='flex w-2/3 flex-col justify-between gap-1 sm:w-full sm:flex-row'>
-        <Button
-          onClick={() => handleClick()}
-          className='w-full'
-          styling='primary'
-        >
-          Registrar
-        </Button>
-      </div>
     </div>
   );
 }

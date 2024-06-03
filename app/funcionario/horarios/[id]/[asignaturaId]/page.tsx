@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import {
   getAsignatura,
   getPeriodosExamenCarrera,
+  getCursosAsignatura,
 } from '@/lib/data/funcionario/actions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
@@ -29,7 +30,6 @@ export default function AsignaturaPage({
   useEffect(() => {
     const fetch = async () => {
       const existeAsignatura = await getAsignatura(params.asignaturaId);
-      console.log(existeAsignatura);
       if (existeAsignatura) {
         setAsignatura(existeAsignatura);
       } else {
@@ -55,17 +55,46 @@ export default function AsignaturaPage({
     return `${formattedDay}/${formattedMonth}/${year}`;
   }
 
+  function formatDateCurso(dateString: string): string {
+    // Check for empty string input (optional)
+    if (!dateString) {
+      return '';
+    }
+
+    // Create a Date object from the string
+    const date = new Date(dateString);
+
+    // Check for invalid date format
+    if (isNaN(date.getTime())) {
+      throw new Error('Invalid date string provided: ' + dateString); // Throw an error for invalid format
+    }
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero for single-digit months
+    const day = String(date.getDate()).padStart(2, '0'); // Add leading zero for single-digit days
+
+    return `${day}/${month}/${year}`; // Format the date string
+  }
+
   useEffect(() => {
     const fetch = async () => {
       const existePeriodos = await getPeriodosExamenCarrera(params.id);
-      if (existePeriodos) {
-        const modifiedData = existePeriodos.periodos.map((item: any) => ({
+      const existeCursos = await getCursosAsignatura(params.asignaturaId);
+      if (existePeriodos && existeCursos) {
+        const periodos = existePeriodos.periodos.map((item: any) => ({
           ...item,
           fechaInicio: formatDate(item.fechaInicio),
           fechaFin: formatDate(item.fechaFin),
         }));
-        setRowsExamen(modifiedData);
+        setRowsExamen(periodos);
         setRowsExamenLoading(false);
+        const cursos = existeCursos.map((item: any) => ({
+          ...item,
+          fechaInicio: formatDateCurso(item.fechaInicio),
+          fechaFin: formatDateCurso(item.fechaFin),
+        }));
+        setRowsCurso(periodos);
+        setRowsCursoLoading(false);
       } else {
         setFallout(true);
       }
@@ -115,8 +144,8 @@ export default function AsignaturaPage({
             />
             <h3>Cursos</h3>
             <List
-              rows={rowsExamen} //TODO cambiar a los cursos en vez de examen
-              rowsLoading={rowsExamenLoading} //esta tambien
+              rows={rowsCurso} //TODO cambiar a los cursos en vez de examen
+              rowsLoading={rowsCursoLoading} //esta tambien
               columnsType='cursos'
             />
           </div>

@@ -282,10 +282,8 @@ export async function registrarFechaExamen(data: any) {
 }
 
 export async function registrarHorarioDiaCurso(horario: any, cursoId: any) {
-  const token = authToken();
-  console.log('🚀 ~ registrarHorarioDiaCurso ~ token:', token);
-  console.log('🚀 ~ tamo en vivo');
   console.log('🚀 ~ registrarHorarioDiaCurso ~ horario:', horario);
+  const token = authToken();
 
   if (token) {
     fetch(`${apiRoute}/cursos/${cursoId}/horarios`, {
@@ -312,5 +310,24 @@ export async function registrarHorarioDiaCurso(horario: any, cursoId: any) {
       .catch((error) => {
         console.error('Error:', error); // Maneja los errores
       });
+  }
+}
+
+export async function getCursosAsignatura(id: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/asignaturas/${id}/cursos`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } else {
+      return { message: 'Error al obtener los examenes vigentes' };
+    }
   }
 }
