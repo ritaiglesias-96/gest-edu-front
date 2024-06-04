@@ -137,24 +137,6 @@ export async function getEstudiante(ci: string) {
   }
 }
 
-export const getCarreras = async () => {
-  const token = authToken();
-  if (token) {
-    const response = await fetch(`${apiRoute}/carreras`, {
-      method: 'GET',
-      headers: {
-        Authotization: `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-      return data;
-    } else {
-      return null;
-    }
-  }
-};
 export async function registrarPeriodoExamen(
   prevState: PeriodoExamenState,
   formData: FormData
