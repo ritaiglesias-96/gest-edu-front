@@ -13,7 +13,7 @@ import List from '@/components/List/list';
 import Link from 'next/link';
 import { Asignatura } from '@/lib/definitions';
 import { useRouter } from 'next/navigation';
-import { formatDate } from '@/utils/utils';
+import { formatDate, formatDateCurso } from '@/utils/utils';
 
 export default function AsignaturaPage({
   params,
@@ -40,27 +40,6 @@ export default function AsignaturaPage({
     };
     fetch().finally(() => setLoading(false));
   }, [params.asignaturaId]);
-
-  function formatDateCurso(dateString: string): string {
-    // Check for empty string input (optional)
-    if (!dateString) {
-      return '';
-    }
-
-    // Create a Date object from the string
-    const date = new Date(dateString);
-
-    // Check for invalid date format
-    if (isNaN(date.getTime())) {
-      throw new Error('Invalid date string provided: ' + dateString); // Throw an error for invalid format
-    }
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero for single-digit months
-    const day = String(date.getDate()).padStart(2, '0'); // Add leading zero for single-digit days
-
-    return `${day}/${month}/${year}`; // Format the date string
-  }
 
   useEffect(() => {
     const fetch = async () => {
