@@ -5,6 +5,7 @@ import {
   getPeriodosExamenCarrera,
   getCursosAsignatura,
 } from '@/lib/data/funcionario/actions';
+import { Curso } from '@/lib/definitions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
 import Button from '@/components/Button/button';
@@ -80,6 +81,7 @@ export default function AsignaturaPage({
     const fetch = async () => {
       const existePeriodos = await getPeriodosExamenCarrera(params.id);
       const existeCursos = await getCursosAsignatura(params.asignaturaId);
+
       if (existePeriodos && existeCursos) {
         const periodos = existePeriodos.periodos.map((item: any) => ({
           ...item,
@@ -88,11 +90,14 @@ export default function AsignaturaPage({
         }));
         setRowsExamen(periodos);
         setRowsExamenLoading(false);
-        const cursos = existeCursos.map((item: any) => ({
+        const cursos = existeCursos.map(
+          (item: Curso) => console.log(item)
+          /* {
           ...item,
           fechaInicio: formatDateCurso(item.fechaInicio),
           fechaFin: formatDateCurso(item.fechaFin),
-        }));
+        } */
+        );
         setRowsCurso(periodos);
         setRowsCursoLoading(false);
       } else {

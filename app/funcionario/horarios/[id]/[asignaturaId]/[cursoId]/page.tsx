@@ -7,12 +7,13 @@ import { useRouter } from 'next/navigation';
 import { registrarHorarioDiaCurso } from '@/lib/data/funcionario/actions';
 import { Input, InputLabel } from '@mui/material';
 import { horarios } from './horarios';
+import { HorarioCurso } from '@/lib/definitions';
 
-function HorariosPorDia(cursoId: any) {
+function HorariosPorDia(cursoId: { cursoId: string }) {
   const dias = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
 
-  const handleChange = (horario: any, tipoHora: string, dia: any) => {
-    horarios.forEach((element: any) => {
+  const handleChange = (horario: string, tipoHora: string, dia: string) => {
+    horarios.forEach((element: HorarioCurso) => {
       if (element.dia == dia.toUpperCase() && tipoHora == 'horaInicio') {
         element.horaInicio = horario;
       } else if (element.dia == dia.toUpperCase() && tipoHora == 'horaFin') {
@@ -22,19 +23,17 @@ function HorariosPorDia(cursoId: any) {
   };
 
   const handleClick = (dia: string) => {
-    let data = {};
-    horarios.forEach((horario: any) => {
+    horarios.forEach((horario: HorarioCurso) => {
       if (horario.dia == dia.toUpperCase()) {
-        data = horario;
+        registrarHorarioDiaCurso(horario, cursoId.cursoId).then((res) => {
+          alert(res?.message);
+        });
       }
     });
-    if (data) {
-      registrarHorarioDiaCurso(data, cursoId.cursoId);
-    }
   };
 
   return (
-    <div>
+    <div className='space-y-2'>
       {dias.map((dia, index) => (
         <div key={index} className='flex justify-around space-x-40'>
           <h4 className='w-6 justify-center text-black'>{dia}</h4>
@@ -86,18 +85,6 @@ export default function FuncionarioHorariosCursoAgregarHome({
   const [fecha, setFecha] = useState('');
   const [diasPrevInsc, setDiasPrevInsc] = useState('');
   const [docenteIds, setDocentes] = useState([1, 2, 3]);
-
-  /*     if (params) {
-      registrarFechaExamen(data).then((res) => {
-        if (res) {
-          alert(res.message);
-          if (res.message) {
-            alert('Fecha registrada con exito');
-            router.back();
-          }
-        }
-      });
-    } */
 
   return (
     <FormContainer>

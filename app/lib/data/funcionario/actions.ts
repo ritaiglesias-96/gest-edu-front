@@ -4,6 +4,8 @@ import { authToken } from '@/utils/auth';
 import { AltaDocenteFormSchema } from '../schemasZod';
 import { DocenteState } from '@/lib/definitions';
 import { GridRowModel } from '@mui/x-data-grid/models/gridRows';
+import { HorarioCurso } from '@/lib/definitions';
+
 const apiRoute = process.env.BACK_API;
 
 export const getDocentes = async () => {
@@ -281,7 +283,11 @@ export async function registrarFechaExamen(data: any) {
   }
 }
 
-export async function registrarHorarioDiaCurso(horario: any, cursoId: string) {
+export async function registrarHorarioDiaCurso(
+  horario: HorarioCurso,
+  cursoId: string
+) {
+  console.log('🚀 ~ registrarHorarioDiaCurso ~ horario:', horario);
   const token = authToken();
   if (token) {
     const response = await fetch(`${apiRoute}/cursos/${cursoId}/horarios`, {
@@ -298,11 +304,11 @@ export async function registrarHorarioDiaCurso(horario: any, cursoId: string) {
     });
     if (response.ok) {
       return {
-        message: 'Registrada con exito. 201',
+        message: 'Registrada con exito.',
       };
     } else {
       return {
-        message: 'Error al registrar horario',
+        message: 'Error al registrar horario.',
       };
     }
   }
