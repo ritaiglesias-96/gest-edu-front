@@ -55,7 +55,7 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
             <List
               rows={rows}
               rowsLoading={rowsLoading}
-              columnsType='asignatura'
+              columnsType='asignaturaFuncionario'
             />
           </div>
         )}

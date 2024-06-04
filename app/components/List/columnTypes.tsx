@@ -275,3 +275,100 @@ export const cursosColumns: GridColDef[] = [
     ),
   },
 ];
+
+export const carreraFuncionarioColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+    cellClassName: 'w-full',
+  },
+  {
+    field: 'duracionAnios',
+    headerName: 'Duracion',
+    type: 'number',
+  },
+  {
+    field: 'creditos',
+    headerName: 'Creditos',
+    type: 'number',
+  },
+  {
+    field: 'detalles',
+    headerName: 'Detalles',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+  {
+    field: 'solicitudes',
+    headerName: 'Solicitudes',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.row.id}/solicitudes`}
+        className='mx-auto flex size-fit'
+      >
+        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
+export const asignaturaFuncionarioColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+  },
+  {
+    field: 'descripcion',
+    headerName: 'Descripcion',
+  },
+  {
+    field: 'creditos',
+    headerName: 'Creditos',
+    type: 'number',
+  },
+  {
+    field: 'semestrePlanEstudio',
+    headerName: 'Semestre',
+    type: 'number',
+  },
+  {
+    field: 'detalles',
+    headerName: 'Detalles',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+  {
+    field: 'examenes',
+    headerName: 'Examenes',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <School className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];

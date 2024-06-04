@@ -301,16 +301,10 @@ export async function registrarHorarioDiaCurso(
         horaInicio: horario.horaInicio,
         horaFin: horario.horaFin,
       }),
+    }).then((res) => {
+      return res.json();
     });
-    if (response.ok) {
-      return {
-        message: 'Registrada con exito.',
-      };
-    } else {
-      return {
-        message: 'Error al registrar horario.',
-      };
-    }
+    return { message: response.message };
   }
 }
 

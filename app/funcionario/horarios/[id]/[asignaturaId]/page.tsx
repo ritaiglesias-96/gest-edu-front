@@ -90,15 +90,12 @@ export default function AsignaturaPage({
         }));
         setRowsExamen(periodos);
         setRowsExamenLoading(false);
-        const cursos = existeCursos.map(
-          (item: Curso) => console.log(item)
-          /* {
+        const cursos = existeCursos.map((item: Curso) => ({
           ...item,
           fechaInicio: formatDateCurso(item.fechaInicio),
           fechaFin: formatDateCurso(item.fechaFin),
-        } */
-        );
-        setRowsCurso(periodos);
+        }));
+        setRowsCurso(cursos);
         setRowsCursoLoading(false);
       } else {
         setFallout(true);
@@ -149,8 +146,8 @@ export default function AsignaturaPage({
             />
             <h3>Cursos</h3>
             <List
-              rows={rowsCurso} //TODO cambiar a los cursos en vez de examen
-              rowsLoading={rowsCursoLoading} //esta tambien
+              rows={rowsCurso}
+              rowsLoading={rowsCursoLoading}
               columnsType='cursos'
             />
           </div>

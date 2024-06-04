@@ -24,10 +24,16 @@ function HorariosPorDia(cursoId: { cursoId: string }) {
 
   const handleClick = (dia: string) => {
     horarios.forEach((horario: HorarioCurso) => {
-      if (horario.dia == dia.toUpperCase()) {
+      if (
+        horario.dia == dia.toUpperCase() &&
+        horario.horaFin &&
+        horario.horaInicio
+      ) {
         registrarHorarioDiaCurso(horario, cursoId.cursoId).then((res) => {
           alert(res?.message);
         });
+      } else if (horario.dia == dia.toUpperCase()) {
+        alert('Seleccione horarios');
       }
     });
   };
