@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { getCarreras } from '@/lib/data/funcionario/actions';
+import { getCarreras } from '@/lib/data/actions';
 import List from '@/components/List/list';
 
 export default function CarrerasPage() {

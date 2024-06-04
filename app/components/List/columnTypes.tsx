@@ -222,7 +222,6 @@ export const estudianteColumns: GridColDef[] = [
   { field: 'telefono', headerName: 'Telefono' },
   { field: 'domicilio', headerName: 'Domicilio' },
   { field: 'fechaNac', headerName: 'Fecha de Nacimiento' },
-  { field: 'fechaNac', headerName: 'Fecha de Nacimiento' },
   {
     field: 'detalles',
     headerName: 'Detalles',
@@ -248,6 +247,14 @@ export const periodosExamenColumns: GridColDef[] = [
   {
     field: 'fechaFin',
     headerName: 'Fecha de fin',
+  },
+];
+
+export const registroExamenColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'fecha',
+    headerName: 'Fecha',
   },
 ];
 
