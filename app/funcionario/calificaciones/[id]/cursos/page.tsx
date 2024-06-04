@@ -149,10 +149,11 @@ export default function CursoPage({ params }: { params: { id: string } }) {
                       Ingrese las calificaciones para los estudiantes
                     </p>
                   </div>
-                  <List
+                  <List 
                     rows={rows}
                     rowsLoading={rowsLoading}
-                    columnsType='estudiante'
+                    columnsType='none'
+                    editarCalificacionCurso={true}
                   />
                   <div className='md:space-x-6 items-center'>
                     <div className='inline-block'>

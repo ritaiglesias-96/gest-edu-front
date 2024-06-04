@@ -32,6 +32,15 @@ import Link from 'next/link';
 import { Asignatura } from '@/lib/definitions';
 import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from '@mui/material';
+import React from 'react';
 
 type columnType =
   | 'carrera'
@@ -47,6 +56,7 @@ type columnType =
 interface ListProps {
   isEditableDocentes?: boolean;
   isEditableAsignaturas?: boolean;
+  editarCalificacionCurso?: boolean;
   rows: GridRowsProp[];
   rowsLoading: boolean;
   columnsType: columnType;
@@ -55,6 +65,7 @@ interface ListProps {
 export default function List({
   isEditableDocentes,
   isEditableAsignaturas,
+  editarCalificacionCurso,
   rows,
   rowsLoading,
   columnsType,
@@ -76,6 +87,12 @@ export default function List({
       )}
       {isEditableAsignaturas && (
         <EditableAsignaturasDataGrid
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
+      )}
+      {editarCalificacionCurso && (
+        <EditarCalificacionCursoDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
@@ -497,6 +514,77 @@ function EditableAsignaturasDataGrid({
         }}
         sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
       />
+    </div>
+  );
+}
+
+function EditarCalificacionCursoDataGrid({
+  rowsParent,
+  rowsLoadingParent,
+}: {
+  rowsParent: GridRowsProp;
+  rowsLoadingParent: boolean;
+}) {
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [opcion, setOpcion] = React.useState('');
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setOpcion(event.target.value as string);
+  };
+
+  useEffect(() => {
+    setRows(rowsParent);
+    setRowsLoading(rowsLoadingParent);
+  }, [rowsLoadingParent, rowsParent]);
+
+  const columns: GridColDef[] = [
+    { field: 'id', type: 'number', headerName: 'ID' },
+    { field: 'nombre', headerName: 'Nombre', flex: 1 },
+    { field: 'apellido', headerName: 'Apellido', flex: 1 },
+    { field: 'ci', headerName: 'Cedula', flex: 1 },
+    {
+      field: 'calificacion',
+      headerName: 'Calificación',
+      flex: 1,
+      renderCell: (params) => (
+        <div>
+          <FormControl
+            fullWidth
+            variant='standard'
+            sx={{ m: 1, minWidth: 120 }}
+          >
+            <InputLabel id='demo-simple-select-standard-label' sx={{ color: 'black' }}>
+              Calificación
+            </InputLabel>
+            <Select
+              labelId='demo-simple-select-standard-label'
+              id='demo-simple-select-standard'
+              onChange={handleChange}
+              label='Calificación'
+              sx={{
+                '&.MuiInputBase-root': {
+                  color: 'inherit',
+                },
+                '& .MuiSelect-select:focus': {
+                  backgroundColor: 'transparent',
+                },
+              }}
+            >
+              <MenuItem value='EXONERADO'>Exonerado</MenuItem>
+              <MenuItem value='AEXAMEN'>A Examen</MenuItem>
+              <MenuItem value='RECURSA'>Recursa</MenuItem>
+              <MenuItem value='PENDIENTE'>Pendiente</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div className='h-fit w-full p-4'>
+      <DataGrid rows={rows} loading={rowsLoading} columns={columns} />
     </div>
   );
 }
