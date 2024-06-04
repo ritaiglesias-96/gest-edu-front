@@ -1,11 +1,8 @@
 'use server';
 
 import { authToken } from '@/utils/auth';
-import {
-  AltaDocenteFormSchema,
-  RegistrarFechaExamenFormSchema,
-} from '../schemasZod';
-import { DocenteState, FechaExamenState } from '@/lib/definitions';
+import { AltaDocenteFormSchema } from '../schemasZod';
+import { DocenteState } from '@/lib/definitions';
 import { GridRowModel } from '@mui/x-data-grid/models/gridRows';
 const apiRoute = process.env.BACK_API;
 
@@ -20,7 +17,6 @@ export const getDocentes = async () => {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       return data;
     } else {
       return null;
