@@ -45,6 +45,7 @@ type columnType =
   | 'previtaturas'
   | 'noPrevitaturas'
   | 'registroExamen'
+  | 'periodosExamen'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -111,6 +112,7 @@ function NormalDataGrid({
       break;
     case 'noPrevitaturas':
       columns = noPreviaturasColumns;
+      break;
     case 'estudiante':
       columns = estudianteColumns;
       break;
@@ -122,6 +124,18 @@ function NormalDataGrid({
       break;
     case 'inscripto':
       columns = inscriptoColumns;
+      break;
+    case 'previtaturas':
+      columns = previaturasColumns;
+      break;
+    case 'noPrevitaturas':
+      columns = noPreviaturasColumns;
+    case 'estudiante':
+      columns = estudianteColumns;
+
+      break;
+    case 'periodosExamen':
+      columns = periodosExamenColumns;
       break;
     default:
       break;

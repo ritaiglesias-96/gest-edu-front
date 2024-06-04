@@ -5,6 +5,7 @@ import Enroll from '@/assets/svg/enroll-exam.svg';
 import Link from 'next/link';
 import Button from '@/components/Button/button';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
+import formatDate from '@/utils/dateFormatter';
 import type { Estudiante as e } from '@/lib/definitions';
 
 export const carreraColumns: GridColDef[] = [
@@ -35,6 +36,20 @@ export const carreraColumns: GridColDef[] = [
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+  {
+    field: 'inscriptos',
+    headerName: 'Inscriptos',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.row.id}/inscriptos`}
+        className='mx-auto flex size-fit'
+      >
+        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
@@ -151,9 +166,12 @@ export const previaturasColumns: GridColDef[] = [
 export const noPreviaturasColumns: GridColDef[] = [
   {
     field: 'idAsignatura',
-    headerName: 'ID Asignatura',
-    renderHeader: () => null,
-    renderCell: () => null,
+    headerName: '',
+    disableColumnMenu: true,
+    sortable: false,
+    resizable: false,
+    cellClassName: 'invisible', // hidden column
+    headerClassName: 'invisible', // hidden column
   },
   {
     field: 'id',

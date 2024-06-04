@@ -1,8 +1,11 @@
 'use server';
 
 import { authToken } from '@/utils/auth';
-import { AltaDocenteFormSchema } from '../schemasZod';
-import { DocenteState } from '@/lib/definitions';
+import {
+  AltaDocenteFormSchema,
+  RegistrarPeriopdoExamenFormSchema,
+} from '../schemasZod';
+import { DocenteState, PeriodoExamenState } from '@/lib/definitions';
 import { GridRowModel } from '@mui/x-data-grid/models/gridRows';
 const apiRoute = process.env.BACK_API;
 
@@ -129,6 +132,58 @@ export async function getEstudiante(ci: string) {
     return data;
   } else {
     return null;
+  }
+}
+
+export async function registrarPeriodoExamen(
+  prevState: PeriodoExamenState,
+  formData: FormData
+) {
+  const token = authToken();
+  if (token) {
+    const validatedFields = RegistrarPeriopdoExamenFormSchema.safeParse({
+      fechaInicio: formData.get('fechaInicio'),
+      fechaFin: formData.get('fechaFin'),
+      carreraId: formData.get('carreraId'),
+    });
+
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Create Subject.',
+      };
+    } else {
+      const { fechaInicio, fechaFin, carreraId } = validatedFields.data;
+      const carrId = parseInt(carreraId);
+
+      const response = await fetch(`${apiRoute}/periodoExamen/registrar`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          id: 0,
+          fechaInicio,
+          fechaFin,
+          carreraid: carrId,
+        }),
+      });
+      if (response.ok) {
+        return {
+          message: 'Registrado con exito. 200',
+        };
+      } else {
+        return {
+          message:
+            'Error al registrar periodo de examen. Verifique que las no correspodan a un periodo ya existente y sean coherentes entre ellas. ',
+        };
+      }
+    }
+  } else {
+    return {
+      message: 'Debe ser un funcionario para registrar periodos de examen',
+    };
   }
 }
 
