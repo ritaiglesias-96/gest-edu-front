@@ -29,7 +29,7 @@ import {
 } from '@mui/x-data-grid';
 import { editDocente, deleteDocente } from '@/lib/data/funcionario/actions';
 import Link from 'next/link';
-import { Asignatura } from '@/lib/definitions';
+import { Asignatura, Calificacion } from '@/lib/definitions';
 import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
 import {
@@ -527,11 +527,50 @@ function EditarCalificacionCursoDataGrid({
 }) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
+  const [calificaciones, setCalificaciones] = useState<Calificacion[]>([]);
   const [opcion, setOpcion] = React.useState('');
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setOpcion(event.target.value as string);
+  //TODO: Seguir con esta mi3rda
+  const handleChange = (
+    id: number,
+    nombre: string,
+    apellido: string,
+    event: SelectChangeEvent
+  ) => {
+    console.log(event.target.value);
+    
+    const nuevaCalificacion: Calificacion = {
+      estudianteId: id,
+      estudianteNombre: nombre,
+      estudianteApellido: apellido,
+      calificacionCurso: event.target.value,
+    };
+
+    console.log(nuevaCalificacion);
+
+    if (calificaciones.length == 0) {
+      calificaciones.push(nuevaCalificacion);
+      setCalificaciones(calificaciones);
+    } else {
+      const index = calificaciones.findIndex(
+        (calificacion) => calificacion.estudianteId === id
+      );
+
+      if (index !== -1) {
+        // Si ya existe una calificación para este estudiante, actualiza la calificación
+        const nuevasCalificaciones = [...calificaciones];
+        nuevasCalificaciones[index] = nuevaCalificacion;
+        setCalificaciones(nuevasCalificaciones);
+      } else {
+        // Si no existe una calificación para este estudiante, agrégala a la lista
+        setCalificaciones([...calificaciones, nuevaCalificacion]);
+      }
+    }
+
+    console.log(calificaciones);
   };
+
+  function handleClickCalifiaciones() {}
 
   useEffect(() => {
     setRows(rowsParent);
@@ -554,13 +593,24 @@ function EditarCalificacionCursoDataGrid({
             variant='standard'
             sx={{ m: 1, minWidth: 120 }}
           >
-            <InputLabel id='demo-simple-select-standard-label' sx={{ color: 'black' }}>
+            <InputLabel
+              id='demo-simple-select-standard-label'
+              sx={{ color: 'black' }}
+            >
               Calificación
             </InputLabel>
             <Select
               labelId='demo-simple-select-standard-label'
               id='demo-simple-select-standard'
-              onChange={handleChange}
+              value={opcion}
+              onChange={(event) =>
+                handleChange(
+                  params.row.id,
+                  params.row.nombre,
+                  params.row.apellido,
+                  event
+                )
+              }
               label='Calificación'
               sx={{
                 '&.MuiInputBase-root': {
