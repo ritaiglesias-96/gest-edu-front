@@ -13,6 +13,7 @@ import List from '@/components/List/list';
 import Link from 'next/link';
 import { Asignatura } from '@/lib/definitions';
 import { useRouter } from 'next/navigation';
+import { formatDate } from '@/utils/utils';
 
 export default function AsignaturaPage({
   params,

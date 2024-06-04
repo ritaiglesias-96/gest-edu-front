@@ -143,6 +143,14 @@ export type Asignatura = {
   semestrePlanEstudio: number;
 };
 
+export type PeriodoExamenState = {
+  errors?: {
+    fechaInicio?: string[];
+    fechaFin?: string[];
+    carreraId?: string[];
+  };
+  message?: string | null;
+};
 export type Estudiante = {
   id: number;
   ci: string;
@@ -168,6 +176,23 @@ export type HorarioCurso = {
   dia: string;
   horaFin: string;
   horaInicio: string;
+};
+
+export type FechaExamenState = {
+  errors?: {
+    fecha?: string[];
+    diasPrevInsc?: number;
+    asignaturaId?: string;
+    docentes?: number[];
+  };
+  message?: string | null;
+};
+
+export type Docente = {
+  id: number;
+  documento: string;
+  nombre: string;
+  apellido: string;
 };
 
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]

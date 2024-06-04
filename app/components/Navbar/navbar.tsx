@@ -7,6 +7,7 @@ import User from '@/assets/svg/user.svg';
 import Users from '@/assets/svg/people.svg';
 import Hat from '@/assets/svg/school.svg';
 import Pencil from '@/assets/svg/edit.svg';
+import Calendar from '@/assets/svg/calendar.svg';
 import Link from 'next/link';
 import { Role } from '@/lib/definitions';
 import { useContext, useEffect, useState } from 'react';
@@ -151,12 +152,26 @@ function NavbarFuncionario() {
         <GestEduIcon />
       </Link>
       <div className='flex flex-row gap-4'>
-      <Link
+        <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/funcionario/horarios'
+        >
+          <Calendar className='h-6 w-auto self-center' />
+          <span>Horarios</span>
+        </Link>
+        <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
           href='/funcionario/estudiantes'
         >
           <Users className='h-6 w-auto self-center' />
           <span>Estudiantes</span>
+        </Link>
+        <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/funcionario/carreras'
+        >
+          <Hat className='h-6 sm:w-auto' />
+          <span>Carreras</span>
         </Link>
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'

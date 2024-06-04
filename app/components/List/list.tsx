@@ -7,6 +7,7 @@ import {
   usuarioColumns,
   estudianteColumns,
   periodosExamenColumns,
+  registroExamenColumns,
   inscriptoColumns,
   cursosColumns,
   carreraFuncionarioColumns,
@@ -42,13 +43,14 @@ type columnType =
   | 'usuario'
   | 'docente'
   | 'estudiante'
-  | 'inscripto'
   | 'periodosExamen'
+  | 'inscripto'
   | 'previtaturas'
   | 'noPrevitaturas'
   | 'cursos'
   | 'carreraFuncionario'
   | 'asignaturaFuncionario'
+  | 'registroExamen'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -133,7 +135,11 @@ function NormalDataGrid({
       break;
     case 'cursos':
       columns = cursosColumns;
+    case 'registroExamen':
+      columns = registroExamenColumns;
       break;
+    case 'noPrevitaturas':
+      columns = noPreviaturasColumns;
     default:
       break;
   }
