@@ -8,6 +8,7 @@ import {
   estudianteColumns,
   periodosExamenColumns,
   registroExamenColumns,
+  inscriptoColumns,
 } from './columnTypes';
 import { useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -40,6 +41,7 @@ type columnType =
   | 'docente'
   | 'estudiante'
   | 'periodosExamen'
+  | 'inscripto'
   | 'previtaturas'
   | 'noPrevitaturas'
   | 'registroExamen'
@@ -117,6 +119,9 @@ function NormalDataGrid({
       break;
     case 'registroExamen':
       columns = registroExamenColumns;
+      break;
+    case 'inscripto':
+      columns = inscriptoColumns;
       break;
     default:
       break;
