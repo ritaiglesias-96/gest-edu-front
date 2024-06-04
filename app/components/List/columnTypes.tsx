@@ -5,7 +5,8 @@ import Enroll from '@/assets/svg/enroll-exam.svg';
 import Link from 'next/link';
 import Button from '@/components/Button/button';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
-import type { Estudiante as e} from '@/lib/definitions';
+import formatDate from '@/utils/dateFormatter';
+import type { Estudiante as e } from '@/lib/definitions';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -36,7 +37,20 @@ export const carreraColumns: GridColDef[] = [
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
-      
+    ),
+  },
+  {
+    field: 'inscriptos',
+    headerName: 'Inscriptos',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.row.id}/inscriptos`}
+        className='mx-auto flex size-fit'
+      >
+        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
     ),
   },
   {
@@ -149,20 +163,23 @@ export const previaturasColumns: GridColDef[] = [
   },
 ];
 
-export const noPreviaturasColumns: GridColDef[] = [  
-  { 
-    field: 'idAsignatura', 
-    headerName: 'ID Asignatura' ,
-    renderHeader: () => null,
-    renderCell: () => null
+export const noPreviaturasColumns: GridColDef[] = [
+  {
+    field: 'idAsignatura',
+    headerName: '',
+    disableColumnMenu: true,
+    sortable: false,
+    resizable: false,
+    cellClassName: 'invisible', // hidden column
+    headerClassName: 'invisible', // hidden column
   },
-  { 
-    field: 'id', 
-    headerName: 'ID' 
+  {
+    field: 'id',
+    headerName: 'ID',
   },
   {
     field: 'semestrePlanEstudio',
-    headerName: 'Semestre'
+    headerName: 'Semestre',
   },
   {
     field: 'nombre',
@@ -181,19 +198,19 @@ export const noPreviaturasColumns: GridColDef[] = [
     disableColumnMenu: true,
     renderCell: (params) => (
       <div className='my-2 box-content flex flex-col items-center justify-center rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
-        <Button           
-          className="w-full"
-          styling='primary' 
+        <Button
+          className='w-full'
+          styling='primary'
           onClick={() => {
             altaPreviaFetch(params.row.idAsignatura, params.row.id);
             location.reload();
-          }}          
-          >
+          }}
+        >
           Agregar
         </Button>
       </div>
     ),
-  }
+  },
 ];
 
 export const estudianteColumns: GridColDef[] = [
@@ -204,8 +221,8 @@ export const estudianteColumns: GridColDef[] = [
   { field: 'email', headerName: 'Email' },
   { field: 'telefono', headerName: 'Telefono' },
   { field: 'domicilio', headerName: 'Domicilio' },
-  { field: 'fechaNac', headerName: 'Fecha de Nacimiento'},
-
+  { field: 'fechaNac', headerName: 'Fecha de Nacimiento' },
+  { field: 'fechaNac', headerName: 'Fecha de Nacimiento' },
   {
     field: 'detalles',
     headerName: 'Detalles',
@@ -222,12 +239,28 @@ export const estudianteColumns: GridColDef[] = [
   },
 ];
 
+export const periodosExamenColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'fechaInicio',
+    headerName: 'Fecha de inicio',
+  },
+  {
+    field: 'fechaFin',
+    headerName: 'Fecha de fin',
+  },
+];
+
 export const inscriptoColumns: GridColDef[] = [
-  { field: 'ci', headerName: 'Cédula'},
-  { field: 'nombre', headerName: 'Nombre'},
-  { field: 'apellido', headerName: 'Apellido'},
-  { field: 'email', headerName: 'Email'},
+  { field: 'ci', headerName: 'Cédula' },
+  { field: 'nombre', headerName: 'Nombre' },
+  { field: 'apellido', headerName: 'Apellido' },
+  { field: 'email', headerName: 'Email' },
   { field: 'estado', headerName: 'Estado' },
   { field: 'fechaInscripcion', headerName: 'Fecha de Inscripción' },
-  {field: 'creditosObtenidos', headerName: 'Creditos Obtenidos', type: 'number'},
+  {
+    field: 'creditosObtenidos',
+    headerName: 'Creditos Obtenidos',
+    type: 'number',
+  },
 ];

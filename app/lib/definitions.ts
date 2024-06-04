@@ -143,6 +143,14 @@ export type Asignatura = {
   semestrePlanEstudio: number;
 };
 
+export type PeriodoExamenState = {
+  errors?: {
+    fechaInicio?: string[];
+    fechaFin?: string[];
+    carreraId?: string[];
+  };
+  message?: string | null;
+};
 export type Estudiante = {
   id: number;
   ci: string;

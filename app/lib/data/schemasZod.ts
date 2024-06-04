@@ -101,6 +101,17 @@ export const AltaDocenteFormSchema = z.object({
     }),
 });
 
+export const RegistrarPeriopdoExamenFormSchema = z.object({
+  fechaInicio: z.string({
+    invalid_type_error: 'Ingrese una fecha valida',
+    required_error: 'Campo requerido',
+  }),
+  fechaFin: z.string({
+    invalid_type_error: 'Ingrese una fecha valida',
+    required_error: 'Campo requerido',
+  }),
+  carreraId: z.string(),
+});
 export const RegisterUserFormSchema = z
   .object({
     nombre: z.string({
