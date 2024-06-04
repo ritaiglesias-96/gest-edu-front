@@ -287,7 +287,6 @@ export async function registrarHorarioDiaCurso(
   horario: HorarioCurso,
   cursoId: string
 ) {
-  console.log('🚀 ~ registrarHorarioDiaCurso ~ horario:', horario);
   const token = authToken();
   if (token) {
     const response = await fetch(`${apiRoute}/cursos/${cursoId}/horarios`, {
@@ -319,7 +318,6 @@ export async function getCursosAsignatura(id: string) {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       return data;
     } else {
       return { message: 'Error al obtener los examenes vigentes' };
