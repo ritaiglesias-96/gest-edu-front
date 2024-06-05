@@ -26,6 +26,7 @@ import {
   GridRowId,
   GridRowModel,
   GridRowEditStopReasons,
+  GridRenderCellParams,
 } from '@mui/x-data-grid';
 import { editDocente, deleteDocente } from '@/lib/data/funcionario/actions';
 import Link from 'next/link';
@@ -527,50 +528,21 @@ function EditarCalificacionCursoDataGrid({
 }) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
-  const [calificaciones, setCalificaciones] = useState<Calificacion[]>([]);
-  const [opcion, setOpcion] = React.useState('');
+  const [calificaciones, setCalificaciones] = useState<{
+    [key: number]: string;
+  }>({});
 
-  //TODO: Seguir con esta mi3rda
-  const handleChange = (
-    id: number,
-    nombre: string,
-    apellido: string,
-    event: SelectChangeEvent
-  ) => {
-    console.log(event.target.value);
+  const handleChange = (id: number) => (event: SelectChangeEvent) => {
     
-    const nuevaCalificacion: Calificacion = {
-      estudianteId: id,
-      estudianteNombre: nombre,
-      estudianteApellido: apellido,
-      calificacionCurso: event.target.value,
-    };
-
-    console.log(nuevaCalificacion);
-
-    if (calificaciones.length == 0) {
-      calificaciones.push(nuevaCalificacion);
-      setCalificaciones(calificaciones);
-    } else {
-      const index = calificaciones.findIndex(
-        (calificacion) => calificacion.estudianteId === id
-      );
-
-      if (index !== -1) {
-        // Si ya existe una calificación para este estudiante, actualiza la calificación
-        const nuevasCalificaciones = [...calificaciones];
-        nuevasCalificaciones[index] = nuevaCalificacion;
-        setCalificaciones(nuevasCalificaciones);
-      } else {
-        // Si no existe una calificación para este estudiante, agrégala a la lista
-        setCalificaciones([...calificaciones, nuevaCalificacion]);
-      }
-    }
-
-    console.log(calificaciones);
+    setCalificaciones((prev) => ({
+      ...prev,
+      [id]: event.target.value as string,
+    }));    
   };
 
-  function handleClickCalifiaciones() {}
+  useEffect(() => {
+    sessionStorage.setItem('calificaciones', JSON.stringify(calificaciones));
+  }, [calificaciones]);
 
   useEffect(() => {
     setRows(rowsParent);
@@ -586,49 +558,45 @@ function EditarCalificacionCursoDataGrid({
       field: 'calificacion',
       headerName: 'Calificación',
       flex: 1,
-      renderCell: (params) => (
-        <div>
-          <FormControl
-            fullWidth
-            variant='standard'
-            sx={{ m: 1, minWidth: 120 }}
-          >
-            <InputLabel
-              id='demo-simple-select-standard-label'
-              sx={{ color: 'black' }}
+      renderCell: (params: GridRenderCellParams<any>) => {
+        const id = params.id as number; // asegurarse de que params.id es un número
+        return (
+          <div>
+            <FormControl
+              fullWidth
+              variant='standard'
+              sx={{ m: 1, minWidth: 120 }}
             >
-              Calificación
-            </InputLabel>
-            <Select
-              labelId='demo-simple-select-standard-label'
-              id='demo-simple-select-standard'
-              value={opcion}
-              onChange={(event) =>
-                handleChange(
-                  params.row.id,
-                  params.row.nombre,
-                  params.row.apellido,
-                  event
-                )
-              }
-              label='Calificación'
-              sx={{
-                '&.MuiInputBase-root': {
-                  color: 'inherit',
-                },
-                '& .MuiSelect-select:focus': {
-                  backgroundColor: 'transparent',
-                },
-              }}
-            >
-              <MenuItem value='EXONERADO'>Exonerado</MenuItem>
-              <MenuItem value='AEXAMEN'>A Examen</MenuItem>
-              <MenuItem value='RECURSA'>Recursa</MenuItem>
-              <MenuItem value='PENDIENTE'>Pendiente</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-      ),
+              <InputLabel
+                id={`demo-simple-select-standard-label-${id}`}
+                sx={{ color: 'black' }}
+              >
+                Calificación
+              </InputLabel>
+              <Select
+                labelId={`demo-simple-select-label-${id}`}
+                id={`select-${id}`}
+                value={calificaciones[id] || ''}
+                label='Calificación'
+                onChange={handleChange(id)}
+                sx={{
+                  '&.MuiInputBase-root': {
+                    color: 'inherit',
+                  },
+                  '& .MuiSelect-select:focus': {
+                    backgroundColor: 'transparent',
+                  },
+                }}
+              >
+                <MenuItem value='EXONERADO'>Exonerado</MenuItem>
+                <MenuItem value='AEXAMEN'>A Examen</MenuItem>
+                <MenuItem value='RECURSA'>Recursa</MenuItem>
+                <MenuItem value='PENDIENTE'>Pendiente</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+        );
+      },
     },
   ];
 

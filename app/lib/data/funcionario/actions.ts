@@ -2,7 +2,7 @@
 
 import { authToken } from '@/utils/auth';
 import { AltaDocenteFormSchema } from '../schemasZod';
-import { DocenteState } from '@/lib/definitions';
+import { Calificacion, DocenteState } from '@/lib/definitions';
 import { GridRowModel } from '@mui/x-data-grid/models/gridRows';
 const apiRoute = process.env.BACK_API;
 
@@ -133,3 +133,28 @@ export async function getEstudiante(ci: string) {
   }
 }
 
+export async function calificarCursoFetch(id: number, califiaciones: Calificacion[]) {
+  const token = authToken();
+  if(token){
+    const response = await fetch(
+      `${apiRoute}/inscripcionCurso/${id}/calificar`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(califiaciones),
+      }
+    );
+    if (response.ok) {
+      return {
+        message: 'Calificaciones guardadas con exito. 200',
+      };
+    } else {
+      return {
+        message: 'Error al cargar calificaciones',
+      };
+    }
+  }
+}

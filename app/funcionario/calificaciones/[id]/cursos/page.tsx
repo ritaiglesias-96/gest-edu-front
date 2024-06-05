@@ -7,9 +7,16 @@ import {
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Link } from '@mui/material';
 import Button from '@/components/Button/button';
-import { Curso, Asignatura, Docente, Estudiante } from '@/lib/definitions';
+import {
+  Curso,
+  Asignatura,
+  Docente,
+  Estudiante,
+  Calificacion,
+} from '@/lib/definitions';
 import { useRouter } from 'next/navigation';
 import List from '@/components/List/list';
+import { calificarCursoFetch } from '@/lib/data/funcionario/actions';
 
 export default function CursoPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -98,6 +105,31 @@ export default function CursoPage({ params }: { params: { id: string } }) {
   }
 
   function handleClickCalifiaciones() {
+    const calificaciones = sessionStorage.getItem('calificaciones');
+
+    if (calificaciones && curso?.id) {
+      const parsedCalificaciones = JSON.parse(calificaciones);
+
+      const calififaciones: Calificacion[] = [];
+
+      for (var clave in parsedCalificaciones) {
+        if (parsedCalificaciones.hasOwnProperty(clave)) {
+          const calificacion: Calificacion = {
+            estudianteId: clave,
+            calificacionCurso: parsedCalificaciones[clave],
+          };
+          calififaciones.push(calificacion);
+          console.log(calificacion);
+        }
+      }
+
+      if (calificaciones) {
+        calificarCursoFetch(curso!.id, calififaciones).then((data) => {
+          console.log(data?.message);
+        });
+      }
+    }
+
     setOpen(false);
   }
 
@@ -149,7 +181,7 @@ export default function CursoPage({ params }: { params: { id: string } }) {
                       Ingrese las calificaciones para los estudiantes
                     </p>
                   </div>
-                  <List 
+                  <List
                     rows={rows}
                     rowsLoading={rowsLoading}
                     columnsType='none'

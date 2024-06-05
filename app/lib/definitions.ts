@@ -172,4 +172,9 @@ export type Docente = {
   apellido: string;
 };
 
+export type Calificacion = {
+  estudianteId: string,
+  calificacionCurso: string
+};
+
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
