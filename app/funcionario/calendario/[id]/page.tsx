@@ -109,6 +109,7 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
                 )}
               </div>
             </div>
+            <h3>Periodos de Examen</h3>
             <List
               rows={rowsPE}
               rowsLoading={rowsLoadingPE}

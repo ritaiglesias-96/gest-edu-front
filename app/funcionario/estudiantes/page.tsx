@@ -10,8 +10,6 @@ export default function EstudiantePage() {
   useEffect(() => {
     getEstudiantes().then((data) => {
       setRows(data.content ? data.content : []);
-      console.log('Estudiantes:' + rows);
-
       setRowsLoading(false);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,13 +1,11 @@
 import { GridColDef } from '@mui/x-data-grid';
 import EyeIcon from '@/assets/svg/visibility.svg';
-import School from '@/assets/svg/school.svg';
 import Enroll from '@/assets/svg/enroll-exam.svg';
 import Schedule from '@/assets/svg/schedule.svg';
 import Link from 'next/link';
 import Add from '@/assets/svg/add.svg';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
-import formatDate from '@/utils/dateFormatter';
-import type { Estudiante as e } from '@/lib/definitions';
+import Evaluate from '@/assets/svg/rule.svg';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -37,20 +35,6 @@ export const carreraColumns: GridColDef[] = [
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
-  },
-  {
-    field: 'inscriptos',
-    headerName: 'Inscriptos',
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.row.id}/inscriptos`}
-        className='mx-auto flex size-fit'
-      >
-        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
@@ -310,20 +294,6 @@ export const carreraFuncionarioColumns: GridColDef[] = [
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
-  },
-  {
-    field: 'solicitudes',
-    headerName: 'Solicitudes',
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.row.id}/solicitudes`}
-        className='mx-auto flex size-fit'
-      >
-        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },

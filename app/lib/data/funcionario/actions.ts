@@ -80,7 +80,6 @@ export async function editDocente(docentes: GridRowModel) {
     },
     body: JSON.stringify({ id, documento, nombre, apellido }),
   });
-  console.log(response);
   if (response.ok) {
     return response.json();
   } else {
@@ -97,7 +96,6 @@ export async function deleteDocente(id: string) {
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log(response);
   if (response.ok) {
     return response.status;
   } else {
@@ -266,7 +264,6 @@ export const getAsignatura = async (id: string) => {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       return data;
     } else {
       return null;
@@ -288,7 +285,6 @@ export const getExamenesAsignaturaVigentes = async (asignaturaId: string) => {
     );
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       return data;
     } else {
       return { message: 'Error al obtener los examenes vigentes' };
@@ -357,5 +353,76 @@ export async function getCursosAsignatura(id: string) {
     } else {
       return { message: 'Error al obtener los examenes vigentes' };
     }
+  }
+}
+
+export async function getSolicitudesInscripcionCarreras() {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/tramites/inscripcion-carrera-pendientes`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function aprobarSolicitudInscripcionCarrera(tramiteId: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/tramites/aprobar-tramite-solicitud-titulo/${tramiteId}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      return response.json();
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function rechazarSolicitudInscripcionCarrera(
+  tramiteId: string,
+  motivoRechazo: string
+) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/tramites/rechazar-tramite-solicitud-titulo/${tramiteId}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ motivoRechazo }),
+      }
+    );
+    if (response.ok) {
+      return response.json();
+    } else {
+      return null;
+    }
+  } else {
+    return null;
   }
 }

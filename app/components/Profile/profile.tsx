@@ -43,13 +43,10 @@ export default function Profile() {
       setError(error);
       setLoading(false);
     });
-    console.log(data);
-
     if (data.imagen === null)
       data.imagen = '../../../public/assets/images/default-user.png';
     setUsuario(data);
     setLoading(false);
-    console.log('USUARIO', data);
   };
 
   useEffect(() => {
@@ -139,7 +136,6 @@ export default function Profile() {
           // Progreso de la subida
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
         },
         (error) => {
           // Manejar errores
@@ -148,7 +144,6 @@ export default function Profile() {
         () => {
           // Subida completa, obtener URL de descarga
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL: any) => {
-            console.log('url: ', downloadURL);
             setUsuario({ ...datosUsuario, imagen: downloadURL });
           });
         }

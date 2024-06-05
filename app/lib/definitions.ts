@@ -199,3 +199,38 @@ export type Docente = {
 };
 
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
+export interface Usuario {
+  id: number;
+  ci: string;
+  nombre: string;
+  apellido: string;
+  email: string;
+}
+
+export interface InscripcionCarreraPendiente {
+  id: number;
+  motivoRechazo: string;
+  estado: string;
+  fechaActualizacion: string;
+  fechaCreacion: string;
+  tipo: string;
+  nombreCarrera: string;
+  usuarioSolicitante: Usuario;
+  usuarioResponsable: Usuario;
+}
+
+export interface InscripcionCarreraPendienteFlattened {
+  id: number;
+  motivoRechazo: string;
+  estado: string;
+  fechaActualizacion: string;
+  fechaCreacion: string;
+  tipo: string;
+  nombreCarrera: string;
+  usuarioSolicitanteId: number;
+  usuarioSolicitanteCi: string;
+  usuarioSolicitanteNombre: string;
+  usuarioSolicitanteApellido: string;
+  usuarioSolicitanteEmail: string;
+  usuarioResponsable: any;
+}

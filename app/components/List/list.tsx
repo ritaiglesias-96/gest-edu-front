@@ -31,11 +31,17 @@ import {
   GridRowModel,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
-import { editDocente, deleteDocente } from '@/lib/data/funcionario/actions';
+import {
+  editDocente,
+  deleteDocente,
+  rechazarSolicitudInscripcionCarrera,
+} from '@/lib/data/funcionario/actions';
 import Link from 'next/link';
 import { Asignatura } from '@/lib/definitions';
 import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
+import FormContainer from '../FormContainer/formContainer';
+import InputField from '../InputField/inputField';
 
 type columnType =
   | 'carrera'
@@ -55,6 +61,7 @@ type columnType =
 interface ListProps {
   isEditableDocentes?: boolean;
   isEditableAsignaturas?: boolean;
+  isApproveRejectCarrera?: boolean;
   rows: GridRowsProp[];
   rowsLoading: boolean;
   columnsType: columnType;
@@ -63,6 +70,7 @@ interface ListProps {
 export default function List({
   isEditableDocentes,
   isEditableAsignaturas,
+  isApproveRejectCarrera,
   rows,
   rowsLoading,
   columnsType,
@@ -84,6 +92,12 @@ export default function List({
       )}
       {isEditableAsignaturas && (
         <EditableAsignaturasDataGrid
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
+      )}
+      {isApproveRejectCarrera && (
+        <ApproveRejectDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
@@ -376,8 +390,6 @@ function EditableAsignaturasDataGrid({
   }, [rows]);
 
   const agregarPlanDeEstudio = async () => {
-    // TODO agregar llamada a la API para agregar el plan de estudio
-    console.log(rows);
     const res = await altaPlanEstudio(rows as Asignatura[], carreraId);
     if (res.message === 'Creado con exito. 200') {
       router.back();
@@ -400,20 +412,10 @@ function EditableAsignaturasDataGrid({
     setRows(rows.filter((row) => row.id !== id));
   };
 
-  const edit = async (docente: GridRowModel) => {
-    // const data: any = await editDocente(docente);
-    // return data;
-  };
-
   const processRowUpdate = (newRow: GridRowModel) => {
     const updatedRow = { ...newRow };
-    const data: any = edit(updatedRow);
-    if (data) {
-      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-      return updatedRow;
-    } else {
-      return rows;
-    }
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    return updatedRow;
   };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -517,6 +519,180 @@ function EditableAsignaturasDataGrid({
         }}
         sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
       />
+    </div>
+  );
+}
+
+function ApproveRejectDataGrid({
+  rowsParent,
+  rowsLoadingParent,
+}: {
+  rowsParent: GridRowsProp;
+  rowsLoadingParent: boolean;
+}) {
+  const router = useRouter();
+  const [disabled, setDisabled] = useState(true);
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
+  const [showModal, setShowModal] = useState(true);
+  const [motivoRechazo, setMotivoRechazo] = useState<string>('');
+
+  useEffect(() => {
+    setRows(rowsParent);
+    setRowsLoading(rowsLoadingParent);
+  }, [rowsLoadingParent, rowsParent]);
+
+  const handleSaveClick = (id: GridRowId) => () => {
+    //TODO aceptar solicitud
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
+
+  const handleCancelClick = (id: GridRowId) => () => {
+    setShowModal(true);
+    if (motivoRechazo === '' && !showModal) {
+      alert('Debe ingresar un motivo de rechazo');
+    } else {
+      const rechazarInscripcion = async () => {
+        return await rechazarSolicitudInscripcionCarrera(
+          `${id}`,
+          motivoRechazo
+        );
+      };
+      const data: any = rechazarInscripcion();
+      if (data) {
+        if (rows) setRows(rows.filter((row) => row.id !== id));
+      }
+    }
+  };
+
+  const processRowUpdate = (newRow: GridRowModel) => {
+    const updatedRow = { ...newRow };
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    return updatedRow;
+  };
+
+  const columns: GridColDef[] = [
+    {
+      field: 'id',
+      type: 'number',
+      headerName: 'ID',
+    },
+    {
+      field: 'usuarioSolicitanteNombre',
+      type: 'string',
+      headerName: 'Nombre',
+    },
+    {
+      field: 'usuarioSolicitanteApellido',
+      type: 'string',
+      headerName: 'Apelido',
+    },
+    {
+      field: 'usuarioSolicitanteEmail',
+      type: 'string',
+      headerName: 'Email',
+    },
+    {
+      field: 'usuarioSolicitanteCi',
+      type: 'string',
+      headerName: 'Cedula',
+    },
+    {
+      field: 'fechaCreacion',
+      type: 'string',
+      headerName: 'Fecha',
+      align: 'left',
+      valueGetter: (params) => {
+        return new Date(params).toLocaleDateString('es-UY');
+      },
+    },
+    {
+      field: 'nombreCarrera',
+      type: 'string',
+      headerName: 'Carrera',
+    },
+    {
+      field: 'estado',
+      type: 'string',
+      headerName: 'Estado',
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Aceptar | Rechazar',
+      cellClassName: 'actions',
+      getActions: (params) => {
+        return [
+          <GridActionsCellItem
+            icon={<SaveIcon className='h-auto w-6 fill-garnet sm:w-8' />}
+            label='Save'
+            sx={{
+              color: '#802c2c',
+            }}
+            onClick={handleSaveClick(params.row.id)}
+            key={params.row.id}
+          />,
+          <GridActionsCellItem
+            icon={<CancelIcon className='h-auto w-6 fill-garnet sm:w-8' />}
+            label='Cancel'
+            onClick={handleCancelClick(params.row.id)}
+            key={`${params.row.id}-cancel`}
+          />,
+        ];
+      },
+    },
+  ];
+
+  return (
+    <div className='relative size-full p-4'>
+      <DataGrid
+        rows={rows}
+        loading={rowsLoading}
+        columns={columns}
+        rowModesModel={rowModesModel}
+        autosizeOnMount={true}
+        autoHeight={true}
+        processRowUpdate={processRowUpdate}
+        slotProps={{
+          toolbar: { setRows, setRowModesModel },
+        }}
+        initialState={{
+          pagination: {
+            paginationModel: { page: 0, pageSize: 25 },
+          },
+        }}
+        pageSizeOptions={[25, 50, 100]}
+        rowSelection={false}
+        autosizeOptions={{ expand: true }}
+        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+      />
+      {showModal && (
+        <div className='absolute inset-x-1/3 top-0 z-20 flex size-fit flex-col rounded-xl bg-ivory p-6 shadow-lg shadow-garnet md:p-10'>
+          <button
+            className='right-0 block w-fit cursor-pointer self-end'
+            onClick={() => setShowModal(false)}
+          >
+            <CancelIcon className='self-end fill-garnet hover:fill-bittersweet sm:size-10' />
+          </button>
+          <h3 className='text-center text-black'>Motivo de rechazo</h3>
+          <form className='flex min-h-full w-full flex-col items-center justify-between gap-2 md:mx-auto md:h-full md:max-w-full md:gap-2 '>
+            <InputField
+              placeholder='De un motivo al estudiante...'
+              type='textarea'
+              name='motivo'
+              label='Motivo'
+              required={true}
+              onChange={(e) => setMotivoRechazo(e.target.value)}
+            ></InputField>
+            <div className='flex w-2/3 flex-col items-center gap-1 sm:w-full'>
+              <Button className='w-auto' styling='primary'>
+                Aceptar
+              </Button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
