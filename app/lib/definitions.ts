@@ -163,6 +163,21 @@ export type Estudiante = {
   imagen?: string;
 };
 
+export type Curso = {
+  asignaturaId: number;
+  diasPrevInsc: number;
+  docenteId: number;
+  estado: string;
+  fechaFin: string;
+  fechaInicio: string;
+};
+
+export type HorarioCurso = {
+  dia: string;
+  horaFin: string;
+  horaInicio: string;
+};
+
 export type FechaExamenState = {
   errors?: {
     fecha?: string[];
@@ -172,6 +187,7 @@ export type FechaExamenState = {
   };
   message?: string | null;
 };
+
 export type Docente = {
   id: number;
   documento: string;

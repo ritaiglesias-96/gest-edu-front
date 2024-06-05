@@ -7,6 +7,8 @@ import {
 } from '../schemasZod';
 import { DocenteState, PeriodoExamenState } from '@/lib/definitions';
 import { GridRowModel } from '@mui/x-data-grid/models/gridRows';
+import { HorarioCurso } from '@/lib/definitions';
+
 const apiRoute = process.env.BACK_API;
 
 export const getDocentes = async () => {
@@ -313,5 +315,47 @@ export async function registrarFechaExamen(data: any) {
       return res.json();
     });
     return { message: response.message };
+  }
+}
+
+export async function registrarHorarioDiaCurso(
+  horario: HorarioCurso,
+  cursoId: string
+) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/cursos/${cursoId}/horarios`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        dia: horario.dia,
+        horaInicio: horario.horaInicio,
+        horaFin: horario.horaFin,
+      }),
+    }).then((res) => {
+      return res.json();
+    });
+    return { message: response.message };
+  }
+}
+
+export async function getCursosAsignatura(id: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/asignaturas/${id}/cursos`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return { message: 'Error al obtener los examenes vigentes' };
+    }
   }
 }

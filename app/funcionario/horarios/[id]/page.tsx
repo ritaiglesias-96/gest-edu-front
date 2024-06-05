@@ -9,7 +9,7 @@ import List from '@/components/List/list';
 
 export default function CarreraPage({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const [rows, setRows] = useState<any[]>([]);
+  const [rows, setRows] = useState([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [carrera, setCarrera] = useState<Carrera>();
   const [fallout, setFallout] = useState(false);
@@ -55,7 +55,7 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
             <List
               rows={rows}
               rowsLoading={rowsLoading}
-              columnsType='asignatura'
+              columnsType='asignaturaFuncionario'
             />
           </div>
         )}
