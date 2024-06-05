@@ -158,3 +158,35 @@ export async function calificarCursoFetch(id: number, califiaciones: Calificacio
     }
   }
 }
+
+export async function getEstudiantesPorCurso(id: string) {
+  const token = authToken();
+  const response = await fetch(`${apiRoute}/cursos/${id}/estudiantes`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return null;
+  }
+}
+
+export async function getCurso(id: string) {
+  const token = authToken();
+  const response = await fetch(`${apiRoute}/cursos/${id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return null;
+  }
+}

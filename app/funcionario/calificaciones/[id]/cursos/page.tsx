@@ -16,7 +16,13 @@ import {
 } from '@/lib/definitions';
 import { useRouter } from 'next/navigation';
 import List from '@/components/List/list';
-import { calificarCursoFetch } from '@/lib/data/funcionario/actions';
+import {
+  calificarCursoFetch,
+  getCurso,
+  getEstudiantes,
+  getEstudiantesPorCurso,
+} from '@/lib/data/funcionario/actions';
+import { convertirFecha } from '@/utils/utils';
 
 export default function CursoPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -25,64 +31,51 @@ export default function CursoPage({ params }: { params: { id: string } }) {
   const [curso, setCurso] = useState<Curso>();
   const [asignatura, setAsignatura] = useState<Asignatura>();
   const [docente, setDocente] = useState<Docente>();
-  const [estudiantes, setEstudiantes] = useState<Estudiante[]>();
+  const [estudiantes, setEstudiantes] = useState<Estudiante[]>([]);
   const [fallout, setFallout] = useState(false);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
 
-  //Temporalmente se guarda un curso hasta tener pronto el back
-  const tempCurso: any = {
-    id: 1,
-    asignaturaId: 1,
-    diasPrevInsc: 30,
-    fechaInicio: '01/01/2024',
-    fechaFin: '31/12/2024',
-    docenteId: 1,
-    estado: 'ACTIVO',
-  };
-
-  //Temporalmente se guarda lista de estudiantes hasta tener el back
-  const array = [
-    {
-      id: 3,
-      ci: '3.333.333-3',
-      nombre: 'Nombreestudiante2InitData',
-      apellido: 'estudiante2',
-      email: 'estudiante2InitData@yahoo.com',
-      telefono: 12345678,
-      fechaNac: '01/01/2000',
-      domicilio: 'calle falsa 1234',
-    },
-    {
-      id: 4,
-      ci: '4.444.444-4',
-      nombre: 'Nombreestudiante3InitData',
-      apellido: 'estudiante3',
-      cursoId: 1,
-      email: 'estudiante3InitData@yahoo.com',
-      telefono: 12345678,
-      fechaNac: '02/02/3000',
-      domicilio: 'calle re falsa 4567',
-    },
-  ];
+  useEffect(() => {
+    if (params.id) {
+      getCurso(params.id).then((dataCurso) => {
+        setCurso(dataCurso);
+      });
+    }
+  }, []);
 
   useEffect(() => {
-    if (tempCurso) {
-      getAsignatura(tempCurso.asignaturaId.toString()).then(
+    if (curso?.id) {
+      curso.fechaInicio = convertirFecha(curso.fechaInicio);
+      curso.fechaFin = convertirFecha(curso.fechaFin);
+      getEstudiantesPorCurso(curso.id.toString()).then((arrayEstudiantes) => {
+        setEstudiantes(arrayEstudiantes);
+      });
+    }
+  }, [curso]);
+
+  useEffect(() => {
+    if (curso) {
+      getAsignatura(curso.asignaturaId.toString()).then(
         (dataAsignatura) => {
           setAsignatura(dataAsignatura);
         }
       );
     }
-  }, []);
+  }, [curso]);
 
   useEffect(() => {
-    //TODO obtener el curso
-    setCurso(tempCurso);
+    if (estudiantes) {
+      setRowsLoading(false);
+      setRows(estudiantes);
+    }
+  }, [estudiantes]);
+
+  useEffect(() => {
     setLoading(false);
     setFallout(false);
     setRowsLoading(false);
-    setRows(array); //TODO: luego reemplazar con la lista de estudiantes obtenida del back
+    setRows(estudiantes); 
   }, []);
 
   if (loading) {

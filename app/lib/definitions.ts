@@ -157,8 +157,8 @@ export type Estudiante = {
 
 export type Curso = {
   id: number;
-  fechaInicio: Date;
-  fechaFin: Date;
+  fechaInicio: string;
+  fechaFin: string;
   diasPrevInsc: number;
   estado: string;
   asignaturaId: number;
