@@ -10,15 +10,18 @@ const meta = {
     nextjs: {
       appDirectory: true,
     },
-    navigation: {
-      params: '1',
-    },
   },
 } satisfies Meta<typeof CarrerasPage>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Carrera: Story = {
-  args: { params: { id: '1' } },
+export const Carrera1: Story = {
+  render: () => (
+    <CarrerasPage
+      params={{
+        id: '1',
+      }}
+    />
+  ),
 };

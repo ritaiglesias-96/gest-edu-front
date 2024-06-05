@@ -4,7 +4,7 @@ import School from '@/assets/svg/school.svg';
 import Enroll from '@/assets/svg/enroll-exam.svg';
 import Schedule from '@/assets/svg/schedule.svg';
 import Link from 'next/link';
-import Add from '@/assets/svg/add.svg';
+import Button from '@/components/Button/button';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
 import formatDate from '@/utils/dateFormatter';
 import type { Estudiante as e } from '@/lib/definitions';
@@ -104,6 +104,20 @@ export const asignaturaColumns: GridColDef[] = [
       </Link>
     ),
   },
+  {
+    field: 'previas',
+    headerName: 'Previas',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/previas/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <School className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
 ];
 
 export const usuarioColumns: GridColDef[] = [
@@ -146,11 +160,7 @@ export const previaturasColumns: GridColDef[] = [
   {
     field: 'descripcion',
     headerName: 'Descripcion',
-  },
-  {
-    field: 'creditos',
-    headerName: 'Creditos',
-    type: 'number',
+    type: 'string',
   },
 ];
 
@@ -167,12 +177,10 @@ export const noPreviaturasColumns: GridColDef[] = [
   {
     field: 'id',
     headerName: 'ID',
-    align: 'left',
   },
   {
     field: 'semestrePlanEstudio',
     headerName: 'Semestre',
-    align: 'right',
   },
   {
     field: 'nombre',
@@ -184,20 +192,23 @@ export const noPreviaturasColumns: GridColDef[] = [
   },
   {
     field: 'agregar',
-    headerName: 'Agregar',
+    headerName: '',
     cellClassName: 'flex items-center ',
     headerAlign: 'center',
     sortable: false,
     disableColumnMenu: true,
     renderCell: (params) => (
-      <div className='mx-auto flex size-fit'>
-        <Add
+      <div className='my-2 box-content flex flex-col items-center justify-center rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+        <Button
+          className='w-full'
+          styling='primary'
           onClick={() => {
             altaPreviaFetch(params.row.idAsignatura, params.row.id);
             location.reload();
           }}
-          className='h-auto w-6 fill-garnet sm:w-8'
-        />
+        >
+          Agregar
+        </Button>
       </div>
     ),
   },
@@ -360,6 +371,20 @@ export const asignaturaFuncionarioColumns: GridColDef[] = [
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+  {
+    field: 'examenes',
+    headerName: 'Examenes',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <School className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
