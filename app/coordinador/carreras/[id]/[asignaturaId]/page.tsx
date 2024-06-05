@@ -34,7 +34,6 @@ export default function AsignaturaPage({
   useEffect(() => {
     const fetch = async () => {
       const existeAsignatura = await getAsignatura(params.asignaturaId);
-      //console.log(existeAsignatura);
       if (existeAsignatura) {
         setAsignatura(existeAsignatura);
       } else {
@@ -143,7 +142,6 @@ function EditAsignatura({
   const router = useRouter();
   const [editForm, dispatch] = useFormState(editAsignatura, initialState);
   useEffect(() => {
-    console.log(editForm.message);
     if (editForm.message.includes('200')) {
       const fetch = async () => {
         await getAsignatura(id).then((data) => {

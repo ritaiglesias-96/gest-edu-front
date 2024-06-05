@@ -19,12 +19,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <SessionProvider>
-        <body className={`${poppins.className} antialiased`}>
+      <body className={`${poppins.className} antialiased`}>
+        <SessionProvider>
           <Navbar />
           <main>{children}</main>
-        </body>
-      </SessionProvider>
+        </SessionProvider>
+      </body>
     </html>
   );
 }

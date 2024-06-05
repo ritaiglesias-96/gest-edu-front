@@ -3,20 +3,11 @@ import { authRol } from '@/utils/auth';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-// TODO: Add the routes for each role
-// const funcionarioPath = ['/funcionario', '/funcionario/*'];
-// const estudiantePath = ['/estudiante', '/estudiante/*'];
-// const administradorPath = ['/administrador', '/administrador/*'];
-// const coordinadorPath = ['/coordinador', 'coordinador/*'];
-
 const publicRoutes = ['/ingresar', '/registrarse', '/resetPass', '/'];
 
 export default function middleware(req: NextRequest) {
-  // req.cookies.delete('token');
   const rol = authRol();
-  //console.log(rol);
   const isLoggedIn = rol !== Role.public;
-  //console.log(isLoggedIn);
 
   if (!isLoggedIn && !publicRoutes.includes(req.nextUrl.pathname)) {
     const absoluteURL = new URL('/', req.nextUrl.origin);
@@ -34,8 +25,6 @@ export default function middleware(req: NextRequest) {
       rol === Role.coordinador &&
       !req.nextUrl.pathname.includes('coordinador')
     ) {
-      console.log('redirecting');
-
       const absoluteURL = new URL('/coordinador', req.nextUrl.origin);
       return NextResponse.redirect(absoluteURL.toString());
     } else if (
