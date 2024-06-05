@@ -363,18 +363,4 @@ export const asignaturaFuncionarioColumns: GridColDef[] = [
       </Link>
     ),
   },
-  {
-    field: 'examenes',
-    headerName: 'Examenes',
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.id}`}
-        className='mx-auto flex size-fit'
-      >
-        <School className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
-  },
 ];
