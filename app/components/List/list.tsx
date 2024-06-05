@@ -127,6 +127,9 @@ function NormalDataGrid({
     case 'asignaturaFuncionario':
       columns = asignaturaFuncionarioColumns;
       break;
+    case 'periodosExamen':
+      columns = periodosExamenColumns;
+      break;
     case 'inscripto':
       columns = inscriptoColumns;
       break;
@@ -136,9 +139,8 @@ function NormalDataGrid({
     case 'registroExamen':
       columns = registroExamenColumns;
       break;
-    case 'periodosExamen':
-      columns = periodosExamenColumns;
-      break;
+    case 'noPrevitaturas':
+      columns = noPreviaturasColumns;
     default:
       break;
   }

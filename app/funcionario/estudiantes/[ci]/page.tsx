@@ -1,18 +1,13 @@
 'use client';
+
 import { useEffect, useState } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
+import Button from '@/components/Button/button';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Estudiante } from '@/lib/definitions';
 import { getEstudiante } from '@/lib/data/funcionario/actions';
-import CircularProgress from '@mui/material/CircularProgress';
-import Image from 'next/image';
-import Button from '@/components/Button/button';
-import InputField from '@/components/InputField/inputField';
-import EmailIcon from '@/assets/svg/email.svg';
-import PhoneIcon from '@/assets/svg/phone.svg';
-import LocationIcon from '@/assets/svg/place.svg';
-import FingerprintIcon from '@/assets/svg/fingerprint.svg';
-import CalendarIcon from '@/assets/svg/calendar.svg';
 
 export default function EstudiantePage({ params }: { params: { ci: string } }) {
   const router = useRouter();
@@ -22,14 +17,14 @@ export default function EstudiantePage({ params }: { params: { ci: string } }) {
 
   useEffect(() => {
     const fetchEstudiante = async () => {
-      const data = await getEstudiante(params.ci);
-      if (data) {
-        if (!data.imagen) data.imagen = '/static/images/default-user-image.png';
+      try {
+        const data = await getEstudiante(params.ci);
         setEstudiante(data);
-        setLoading(false);
-      } else {
-        setLoading(false);
+        console.log(estudiante?.ci);      
+      } catch (error) {
         setFallout(true);
+      } finally {
+        setLoading(false);
       }
     };
     fetchEstudiante();
@@ -55,67 +50,33 @@ export default function EstudiantePage({ params }: { params: { ci: string } }) {
   }
 
   return (
-    <div className='relative box-border size-full justify-center overflow-auto md:w-1/3'>
+    <div className='relative box-border size-full justify-center overflow-auto md:w-auto'>
       <div className='h-fit w-full p-2'>
-        <div className='my-2 box-content flex flex-col items-center justify-between rounded-md bg-ivory p-6 text-black'>
-          <div className='mt-4 grid grid-cols-1 items-center gap-4 md:grid-cols-2'>
-            {estudiante?.imagen && (
-              <Image
-                src={estudiante?.imagen}
-                alt='imagen perfil'
-                width={200}
-                height={200}
-                className='rounded-full border-2 border-black object-cover'
-              />
-            )}
-            <h3 className='break-all text-center'>
-              {estudiante?.nombre} {estudiante?.apellido}
-            </h3>
-            <InputField
-              type='text'
-              name='ci'
-              label='Cedula de Identidad'
-              value={estudiante?.ci}
-            >
-              <FingerprintIcon className='h-auto w-6 fill-garnet sm:w-8' />
-            </InputField>
-            <InputField
-              type='text'
-              name='email'
-              label='Email'
-              value={estudiante?.email}
-            >
-              <EmailIcon className='h-auto w-6 fill-garnet sm:w-8' />
-            </InputField>
-            <InputField
-              type='text'
-              name='telefono'
-              label='Telefono'
-              value={estudiante?.telefono}
-            >
-              <PhoneIcon className='h-auto w-6 fill-garnet sm:w-8' />
-            </InputField>
-            <InputField
-              type='text'
-              name='domicilio'
-              label='Domicilio'
-              value={estudiante?.domicilio}
-            >
-              <LocationIcon className='h-auto w-6 fill-garnet sm:w-8' />
-            </InputField>
-            <InputField
-              type='text'
-              name='fechaNac'
-              label='Fecha de Nacimiento'
-              className='col-span-2 mx-auto w-fit'
-              value={
-                estudiante?.fechaNac
-                  ? new Date(estudiante.fechaNac).toLocaleDateString()
-                  : 'N/A'
-              }
-            >
-              <CalendarIcon className='h-auto w-6 fill-garnet sm:w-8' />
-            </InputField>
+        <div className='my-2 box-content flex flex-col items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+          <div className='flex flex-col rounded-md text-center font-bold text-black md:text-left lg:max-w-md'>
+            <h3 className='m-0 p-0 text-center'>{estudiante?.nombre} {estudiante?.apellido}</h3>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4'>
+              <div className='flex flex-col'>
+                <p className='font-bold'>Cedula:</p>
+                <p>{estudiante?.ci}</p>
+              </div>
+              <div className='flex flex-col'>
+                <p className='font-bold'>Email:</p>
+                <p>{estudiante?.email}</p>
+              </div>
+              <div className='flex flex-col'>
+                <p className='font-bold'>Teléfono:</p>
+                <p>{estudiante?.telefono}</p>
+              </div>
+              <div className='flex flex-col'>
+                <p className='font-bold'>Domicilio:</p>
+                <p>{estudiante?.domicilio}</p>
+              </div>
+              <div className='flex flex-col'>
+                <p className='font-bold'>Fecha de Nacimiento:</p>
+                <p>{estudiante?.fechaNac ? new Date(estudiante.fechaNac).toLocaleDateString() : 'N/A'}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

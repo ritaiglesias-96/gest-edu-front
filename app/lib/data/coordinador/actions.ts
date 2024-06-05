@@ -266,7 +266,6 @@ export async function getPrevituras(id: string) {
     });
     if (previas.ok) {
       const data = await previas.json();
-      console.log(data);
       return data;
     } else {
       return null;
@@ -287,7 +286,6 @@ export async function getNoPrevituras(id: string) {
     });
     if (noPrevias.ok) {
       const data = await noPrevias.json();
-      console.log(data);
       return data;
     } else {
       return null;
@@ -335,6 +333,7 @@ export async function altaPreviaFetch(asignaturaId: string, previaId: string) {
     );
     if (previaturas.ok) {
       console.log(previaturas);
+
       return {
         message: 'Previa creada con exito.',
       };
