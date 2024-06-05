@@ -19,6 +19,7 @@ import List from '@/components/List/list';
 import {
   calificarCursoFetch,
   getCurso,
+  getDocente,
   getEstudiantes,
   getEstudiantesPorCurso,
 } from '@/lib/data/funcionario/actions';
@@ -47,9 +48,17 @@ export default function CursoPage({ params }: { params: { id: string } }) {
   useEffect(() => {
     if (curso?.id) {
       curso.fechaInicio = convertirFecha(curso.fechaInicio);
-      curso.fechaFin = convertirFecha(curso.fechaFin);
+      curso.fechaFin = convertirFecha(curso.fechaFin);            
       getEstudiantesPorCurso(curso.id.toString()).then((arrayEstudiantes) => {
         setEstudiantes(arrayEstudiantes);
+      });
+    }
+  }, [curso]);
+
+  useEffect(() => {
+    if (curso?.docenteId) {
+        getDocente(curso.docenteId.toString()).then((dataDocente) => {
+        setDocente(dataDocente);
       });
     }
   }, [curso]);
@@ -146,6 +155,10 @@ export default function CursoPage({ params }: { params: { id: string } }) {
                 <div className='flex space-x-2'>
                   <p className='font-bold w-32'>Fecha de fin: </p>
                   <p>{curso?.fechaFin.toString()}</p>
+                </div>
+                <div className='flex space-x-2'>
+                  <p className='font-bold w-32'>Docente: </p>
+                  <p>{docente?.nombre + ' ' + docente?.apellido}</p>
                 </div>
               </div>
               <div className='my-4 box-content flex flex-row justify-end rounded-md bg-ivory p-4'>

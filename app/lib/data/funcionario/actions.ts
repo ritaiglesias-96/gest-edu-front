@@ -190,3 +190,19 @@ export async function getCurso(id: string) {
     return null;
   }
 }
+
+export async function getDocente(id: string) {
+  const token = authToken();
+  const response = await fetch(`${apiRoute}/docentes/${id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return null;
+  }
+}
