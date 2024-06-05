@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react';
 import {
   getAsignatura,
   getPeriodosExamenCarrera,
+  getCursosAsignatura,
 } from '@/lib/data/funcionario/actions';
+import { Curso } from '@/lib/definitions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
 import Button from '@/components/Button/button';
@@ -11,7 +13,7 @@ import List from '@/components/List/list';
 import Link from 'next/link';
 import { Asignatura } from '@/lib/definitions';
 import { useRouter } from 'next/navigation';
-import { formatDate } from '@/utils/utils';
+import { formatDate, formatDateCurso } from '@/utils/utils';
 
 export default function AsignaturaPage({
   params,
@@ -19,8 +21,10 @@ export default function AsignaturaPage({
   params: { id: string; asignaturaId: string };
 }) {
   const router = useRouter();
-  const [rows, setRows] = useState<any[]>([]);
-  const [rowsLoading, setRowsLoading] = useState(true);
+  const [rowsExamen, setRowsExamen] = useState<any[]>([]);
+  const [rowsCurso, setRowsCurso] = useState<any[]>([]);
+  const [rowsExamenLoading, setRowsExamenLoading] = useState(true);
+  const [rowsCursoLoading, setRowsCursoLoading] = useState(true);
   const [asignatura, setAsignatura] = useState<Asignatura>();
   const [fallout, setFallout] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -28,7 +32,6 @@ export default function AsignaturaPage({
   useEffect(() => {
     const fetch = async () => {
       const existeAsignatura = await getAsignatura(params.asignaturaId);
-      console.log(existeAsignatura);
       if (existeAsignatura) {
         setAsignatura(existeAsignatura);
       } else {
@@ -41,14 +44,23 @@ export default function AsignaturaPage({
   useEffect(() => {
     const fetch = async () => {
       const existePeriodos = await getPeriodosExamenCarrera(params.id);
-      if (existePeriodos) {
-        const modifiedData = existePeriodos.periodos.map((item: any) => ({
+      const existeCursos = await getCursosAsignatura(params.asignaturaId);
+
+      if (existePeriodos && existeCursos) {
+        const periodos = existePeriodos.periodos.map((item: any) => ({
           ...item,
           fechaInicio: formatDate(item.fechaInicio),
           fechaFin: formatDate(item.fechaFin),
         }));
-        setRows(modifiedData);
-        setRowsLoading(false);
+        setRowsExamen(periodos);
+        setRowsExamenLoading(false);
+        const cursos = existeCursos.map((item: Curso) => ({
+          ...item,
+          fechaInicio: formatDateCurso(item.fechaInicio),
+          fechaFin: formatDateCurso(item.fechaFin),
+        }));
+        setRowsCurso(cursos);
+        setRowsCursoLoading(false);
       } else {
         setFallout(true);
       }
@@ -88,20 +100,19 @@ export default function AsignaturaPage({
                     Registrar Fecha de Examen
                   </Button>
                 </Link>
-                <Link
-                  href={`/funcionario/horarios/${params.id}/${params.asignaturaId}/cursos`}
-                >
-                  <Button className='w-full' styling='primary'>
-                    Agregar asignatura
-                  </Button>
-                </Link>
               </div>
             </div>
             <h3>Periodos de Examen</h3>
             <List
-              rows={rows}
-              rowsLoading={rowsLoading}
+              rows={rowsExamen}
+              rowsLoading={rowsExamenLoading}
               columnsType='periodosExamen'
+            />
+            <h3>Cursos</h3>
+            <List
+              rows={rowsCurso}
+              rowsLoading={rowsCursoLoading}
+              columnsType='cursos'
             />
           </div>
         )}

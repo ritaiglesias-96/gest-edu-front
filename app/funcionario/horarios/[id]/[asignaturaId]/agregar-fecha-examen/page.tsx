@@ -109,9 +109,8 @@ export default function FuncionarioHorariosExamenesAgregarHome({
       if (params) {
         registrarFechaExamen(data).then((res) => {
           if (res) {
-            console.log(res);
             alert(res.message);
-            if (!res.message) {
+            if (res.message) {
               alert('Fecha registrada con exito');
               router.back();
             }
