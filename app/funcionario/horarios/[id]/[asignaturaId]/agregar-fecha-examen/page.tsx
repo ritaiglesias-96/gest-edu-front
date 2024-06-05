@@ -70,7 +70,7 @@ export default function FuncionarioHorariosExamenesAgregarHome({
             multiple
             value={docenteAux}
             onChange={handleChange}
-            input={<OutlinedInput label='Tag' />}
+            input={<OutlinedInput label='Docentes' />}
             renderValue={(selected) => selected.join(', ')}
             MenuProps={MenuProps}
           >

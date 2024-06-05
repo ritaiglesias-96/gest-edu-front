@@ -102,17 +102,17 @@ export default function AsignaturaPage({
                 </Link>
               </div>
             </div>
-            <h3>Periodos de Examen</h3>
-            <List
-              rows={rowsExamen}
-              rowsLoading={rowsExamenLoading}
-              columnsType='periodosExamen'
-            />
             <h3>Cursos</h3>
             <List
               rows={rowsCurso}
               rowsLoading={rowsCursoLoading}
               columnsType='cursos'
+            />
+            <h3>Periodos de Examen</h3>
+            <List
+              rows={rowsExamen}
+              rowsLoading={rowsExamenLoading}
+              columnsType='periodosExamen'
             />
           </div>
         )}
