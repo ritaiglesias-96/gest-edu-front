@@ -30,7 +30,11 @@ function HorariosPorDia(cursoId: { cursoId: string }) {
         horario.horaInicio
       ) {
         registrarHorarioDiaCurso(horario, cursoId.cursoId).then((res) => {
-          alert(res?.message);
+          if (res?.message) {
+            alert(res?.message);
+          } else {
+            alert('Horario registrado con exito');
+          }
         });
       } else if (horario.dia == dia.toUpperCase()) {
         alert('Seleccione horarios');

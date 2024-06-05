@@ -135,6 +135,7 @@ function NormalDataGrid({
       break;
     case 'cursos':
       columns = cursosColumns;
+      break;
     case 'registroExamen':
       columns = registroExamenColumns;
       break;
