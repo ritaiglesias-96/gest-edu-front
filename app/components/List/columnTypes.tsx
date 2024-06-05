@@ -1,8 +1,12 @@
 import { GridColDef } from '@mui/x-data-grid';
 import EyeIcon from '@/assets/svg/visibility.svg';
+import School from '@/assets/svg/school.svg';
+import Enroll from '@/assets/svg/enroll-exam.svg';
 import Link from 'next/link';
 import Add from '@/assets/svg/add.svg';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
+import formatDate from '@/utils/dateFormatter';
+import type { Estudiante as e } from '@/lib/definitions';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -32,6 +36,34 @@ export const carreraColumns: GridColDef[] = [
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+  {
+    field: 'inscriptos',
+    headerName: 'Inscriptos',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.row.id}/inscriptos`}
+        className='mx-auto flex size-fit'
+      >
+        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+  {
+    field: 'inscriptos',
+    headerName: 'Inscriptos',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.row.id}/inscriptos`}
+        className='mx-auto flex size-fit'
+      >
+        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
@@ -119,11 +151,6 @@ export const previaturasColumns: GridColDef[] = [
     headerName: 'Creditos',
     type: 'number',
   },
-  {
-    field: 'semestrePlanEstudio',
-    headerName: 'Semestre',
-    type: 'number',
-  },
 ];
 
 export const noPreviaturasColumns: GridColDef[] = [
@@ -197,5 +224,39 @@ export const estudianteColumns: GridColDef[] = [
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
+  },
+];
+
+export const periodosExamenColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'fechaInicio',
+    headerName: 'Fecha de inicio',
+  },
+  {
+    field: 'fechaFin',
+    headerName: 'Fecha de fin',
+  },
+];
+
+export const registroExamenColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'fecha',
+    headerName: 'Fecha',
+  },
+];
+
+export const inscriptoColumns: GridColDef[] = [
+  { field: 'ci', headerName: 'Cédula' },
+  { field: 'nombre', headerName: 'Nombre' },
+  { field: 'apellido', headerName: 'Apellido' },
+  { field: 'email', headerName: 'Email' },
+  { field: 'estado', headerName: 'Estado' },
+  { field: 'fechaInscripcion', headerName: 'Fecha de Inscripción' },
+  {
+    field: 'creditosObtenidos',
+    headerName: 'Creditos Obtenidos',
+    type: 'number',
   },
 ];

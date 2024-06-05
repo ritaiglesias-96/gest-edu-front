@@ -3,6 +3,7 @@ import { Asignatura, AsignaturaState, CarreraState } from '@/lib/definitions';
 import { authToken } from '@/utils/auth';
 import { revalidatePath } from 'next/cache';
 import { AltaAsignaturaFormSchema, CarreraFormSchema } from '../schemasZod';
+import { log } from 'console';
 const apiRoute = process.env.BACK_API;
 
 export const getCarreras = async () => {
@@ -16,7 +17,7 @@ export const getCarreras = async () => {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       return data;
     } else {
       return null;
@@ -35,7 +36,7 @@ export const getAsignatura = async (id: string) => {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       return data;
     } else {
       return null;
@@ -368,3 +369,21 @@ export async function altaPlanEstudio(asignaturas: Asignatura[], id: string) {
     };
   }
 }
+
+export async function getEstudiantesInscriptos(id: string) {
+  const token = authToken();
+  const response = await fetch(`${apiRoute}/carreras/${id}/estudiantes-inscriptos`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    
+    return data;
+  } else {
+    return null;
+  }
+}
+

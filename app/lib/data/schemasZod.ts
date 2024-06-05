@@ -101,6 +101,31 @@ export const AltaDocenteFormSchema = z.object({
     }),
 });
 
+export const RegistrarFechaExamenFormSchema = z.object({
+  fecha: z.date({
+    invalid_type_error: 'Ingrese una fecha valida',
+    required_error: 'Campo requerido',
+  }),
+  diasPrevInsc: z.number({
+    invalid_type_error: 'Ingrese una cantidad de dias validos',
+    required_error: 'Campo requerido',
+  }),
+  asignaturaId: z.string(),
+  stringArray: z.number().array(),
+});
+
+export const RegistrarPeriopdoExamenFormSchema = z.object({
+  fechaInicio: z.string({
+    invalid_type_error: 'Ingrese una fecha valida',
+    required_error: 'Campo requerido',
+  }),
+  fechaFin: z.string({
+    invalid_type_error: 'Ingrese una fecha valida',
+    required_error: 'Campo requerido',
+  }),
+  carreraId: z.string(),
+});
+
 export const RegisterUserFormSchema = z
   .object({
     nombre: z.string({

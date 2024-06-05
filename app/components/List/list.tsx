@@ -6,6 +6,9 @@ import {
   previaturasColumns,
   usuarioColumns,
   estudianteColumns,
+  periodosExamenColumns,
+  registroExamenColumns,
+  inscriptoColumns,
 } from './columnTypes';
 import { useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -37,8 +40,12 @@ type columnType =
   | 'usuario'
   | 'docente'
   | 'estudiante'
+  | 'periodosExamen'
+  | 'inscripto'
   | 'previtaturas'
   | 'noPrevitaturas'
+  | 'registroExamen'
+  | 'periodosExamen'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -108,6 +115,24 @@ function NormalDataGrid({
       break;
     case 'estudiante':
       columns = estudianteColumns;
+      break;
+    case 'periodosExamen':
+      columns = periodosExamenColumns;
+      break;
+    case 'registroExamen':
+      columns = registroExamenColumns;
+      break;
+    case 'inscripto':
+      columns = inscriptoColumns;
+      break;
+    case 'previtaturas':
+      columns = previaturasColumns;
+      break;
+    case 'estudiante':
+      columns = estudianteColumns;
+      break;
+    case 'periodosExamen':
+      columns = periodosExamenColumns;
       break;
     default:
       break;
