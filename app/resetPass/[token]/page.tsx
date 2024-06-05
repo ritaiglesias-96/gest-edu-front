@@ -87,7 +87,7 @@ function ModalConfirm() {
       <h1 className='text-center text-2xl font-bold text-black'>
         ¡Contraseña restablecida!
       </h1>
-      <p className='text-center text-md text-black py-5'>
+      <p className='py-5 text-center text-md text-black'>
         Tu contraseña ha sido restablecida con éxito
       </p>
       <Button className='w-full' styling='primary'>

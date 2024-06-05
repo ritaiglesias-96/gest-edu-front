@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { getCarreras } from '@/lib/data/actions';
 import List from '@/components/List/list';
 
-export default function HorariosPage() {
+export default function CarrerasPage() {
   const [rows, setRows] = useState([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   useEffect(() => {

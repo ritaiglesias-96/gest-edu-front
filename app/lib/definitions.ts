@@ -1,5 +1,8 @@
 export const initialState = { message: '', errors: {} };
 
+export const defaultImagen =
+  'https://firebasestorage.googleapis.com/v0/b/gestedu2024.appspot.com/o/defaultUserImage.png?alt=media&token=72b03305-8f00-4aff-bde0-7964ab3046c0';
+
 export enum Role {
   estudiante = 'ROL_ESTUDIANTE',
   funcionario = 'ROL_FUNCIONARIO',
@@ -163,6 +166,21 @@ export type Estudiante = {
   imagen?: string;
 };
 
+export type Curso = {
+  asignaturaId: number;
+  diasPrevInsc: number;
+  docenteId: number;
+  estado: string;
+  fechaFin: string;
+  fechaInicio: string;
+};
+
+export type HorarioCurso = {
+  dia: string;
+  horaFin: string;
+  horaInicio: string;
+};
+
 export type FechaExamenState = {
   errors?: {
     fecha?: string[];
@@ -172,6 +190,7 @@ export type FechaExamenState = {
   };
   message?: string | null;
 };
+
 export type Docente = {
   id: number;
   documento: string;
