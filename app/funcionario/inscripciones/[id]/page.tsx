@@ -1,9 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import {
-  getCarreraYAsignatura,
-  getPeriodosExamenCarrera,
-} from '@/lib/data/funcionario/actions';
+import { getPeriodosExamenCarrera } from '@/lib/data/funcionario/actions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
 import Button from '@/components/Button/button';
@@ -15,9 +12,7 @@ import List from '@/components/List/list';
 export default function CarreraPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [rows, setRows] = useState<any[]>([]);
-  const [rowsPE, setRowsPE] = useState<any[]>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
-  const [rowsLoadingPE, setRowsLoadingPE] = useState(true);
   const [carrera, setCarrera] = useState<Carrera>();
   const [fallout, setFallout] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -39,18 +34,6 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
   }
 
   useEffect(() => {
-    const fetchCarrera = async () => {
-      const existeCarrera = await getCarreraYAsignatura(params.id);
-      if (existeCarrera) {
-        setCarrera(existeCarrera.carrera);
-        setRows(existeCarrera.asignaturas);
-        setRowsLoading(false);
-      } else {
-        setFallout(true);
-      }
-    };
-
-    fetchCarrera().finally(() => setLoading(false));
     const fetch = async () => {
       const existePeriodos = await getPeriodosExamenCarrera(params.id);
       if (existePeriodos) {
@@ -60,8 +43,8 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
           fechaFin: formatDate(item.fechaFin),
         }));
         setCarrera(existePeriodos.carrera);
-        setRowsPE(modifiedData);
-        setRowsLoadingPE(false);
+        setRows(modifiedData);
+        setRowsLoading(false);
       } else {
         setFallout(true);
       }
@@ -78,7 +61,7 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
       )}
       <div className='relative box-border size-full justify-center overflow-auto md:w-5/6'>
         {!fallout && !loading && (
-          <div className='h-fit w-full gap-4 p-2'>
+          <div className='h-fit w-full p-2'>
             <div className='my-2 box-content flex flex-col items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
               <div className='flex flex-col rounded-md text-center font-bold text-black md:text-left lg:max-w-md'>
                 <h3 className='m-0 p-0'>{carrera?.nombre}</h3>
@@ -110,15 +93,9 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
               </div>
             </div>
             <List
-              rows={rowsPE}
-              rowsLoading={rowsLoadingPE}
-              columnsType='periodosExamen'
-            />
-            <br />
-            <List
               rows={rows}
               rowsLoading={rowsLoading}
-              columnsType='asignaturaFuncionario'
+              columnsType='periodosExamen'
             />
           </div>
         )}
