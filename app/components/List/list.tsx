@@ -104,10 +104,10 @@ function NormalDataGrid({
       columns = previaturasColumns;
       break;
     case 'noPrevitaturas':
-      columns = noPreviaturasColumns;  
+      columns = noPreviaturasColumns;
+      break;
     case 'estudiante':
       columns = estudianteColumns;
-
       break;
     default:
       break;
