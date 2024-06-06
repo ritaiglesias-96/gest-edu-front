@@ -268,48 +268,23 @@ export async function getPrevituras(id: string) {
   }
 }
 
-export async function getNoPrevituras(id: string) {
+export const obtenerExamenesVigentes = async (id: string) => {
   const token = authToken();
   if (token) {
-    const noPrevias = await fetch(`${apiRoute}/asignaturas/${id}/no-previas`, {
+    const response = await fetch(`${apiRoute}/asignaturas/${id}/examenesVigentes`, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authotization: `Bearer ${token}`,
       },
     });
-    if (noPrevias.ok) {
-      const data = await noPrevias.json();
+    if (response.ok) {
+      const data = await response.json();
       return data;
     } else {
       return null;
     }
-  } else {
-    return null;
   }
-}
-
-export async function getAsgignaturaYPrevituras(id: string) {
-  const token = authToken();
-
-  if (token) {
-    const asignaturaJson = await getAsignatura(id);
-    if (!asignaturaJson) return null;
-    const previaturas = await fetch(`${apiRoute}/asignatura/${id}/previas`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (previaturas.ok) {
-      const previaturasJson = await previaturas.json();
-      return { asignatura: asignaturaJson, previaturas: previaturasJson };
-    } else {
-      return { asignatura: asignaturaJson, asignaturas: [] };
-    }
-  } else {
-    return null;
-  }
-}
+};
 
 export async function altaPreviaFetch(asignaturaId: string, previaId: string) {
   const token = authToken();
@@ -335,6 +310,7 @@ export async function altaPreviaFetch(asignaturaId: string, previaId: string) {
     }
   }
 }
+
 export async function altaPlanEstudio(asignaturas: Asignatura[], id: string) {
   const token = authToken();
   const response = await fetch(
