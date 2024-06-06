@@ -85,7 +85,6 @@ export async function getUsuarios() {
   });
   if (response.ok) {
     const data = await response.json();
-    console.log(data);
     return data;
   } else {
     return null;
