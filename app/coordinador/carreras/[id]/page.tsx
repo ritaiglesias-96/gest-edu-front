@@ -133,7 +133,6 @@ function EditCarrera({
   const router = useRouter();
   const [editForm, dispatch] = useFormState(editCarrera, initialState);
   useEffect(() => {
-    console.log(editForm.message);
     if (editForm.message.includes('200')) {
       const fetch = async () => {
         await getCarrera(id).then((data) => {

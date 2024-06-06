@@ -9,6 +9,7 @@ import Hat from '@/assets/svg/school.svg';
 import Pencil from '@/assets/svg/edit.svg';
 import Calendar from '@/assets/svg/calendar.svg';
 import Link from 'next/link';
+import Enrollment from '@/assets/svg/enroll-lesson.svg';
 import { Role } from '@/lib/definitions';
 import { useContext, useEffect, useState } from 'react';
 import { SessionContext } from '../../../context/SessionContext';
@@ -154,10 +155,10 @@ function NavbarFuncionario() {
       <div className='flex flex-row gap-4'>
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
-          href='/funcionario/horarios'
+          href='/funcionario/calendario'
         >
           <Calendar className='h-6 w-auto self-center' />
-          <span>Horarios</span>
+          <span>Calendario</span>
         </Link>
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
@@ -172,6 +173,13 @@ function NavbarFuncionario() {
         >
           <Hat className='h-6 sm:w-auto' />
           <span>Carreras</span>
+        </Link>
+        <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/funcionario/inscripciones'
+        >
+          <Enrollment className='h-6 sm:w-auto' />
+          <span>Inscripciones</span>
         </Link>
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'

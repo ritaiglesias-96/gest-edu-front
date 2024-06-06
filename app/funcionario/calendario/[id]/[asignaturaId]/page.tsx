@@ -66,7 +66,7 @@ export default function AsignaturaPage({
       }
     };
     fetch().finally(() => setLoading(false));
-  }, [params.id]);
+  }, [params.asignaturaId, params.id]);
 
   return (
     <>
@@ -94,7 +94,7 @@ export default function AsignaturaPage({
               </div>
               <div className='flex w-full flex-col justify-center rounded-md md:max-w-52'>
                 <Link
-                  href={`/funcionario/horarios/${params.id}/${params.asignaturaId}/agregar-fecha-examen`}
+                  href={`/funcionario/calendario/${params.id}/${params.asignaturaId}/agregar-fecha-examen`}
                 >
                   <Button className='w-full' styling='primary'>
                     Registrar Fecha de Examen

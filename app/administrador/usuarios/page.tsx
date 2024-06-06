@@ -11,7 +11,6 @@ export default function AdministradorHome() {
   const [rowsLoading, setRowsLoading] = useState(true);
   useEffect(() => {
     getUsuarios().then((data) => {
-      console.log(data);
       setRows(data.content ? data.content : []);
       setRowsLoading(false);
     });
