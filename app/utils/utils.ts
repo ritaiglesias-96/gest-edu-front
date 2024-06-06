@@ -9,6 +9,8 @@ export function convertirFecha(fecha: string) {
 
   // Formatear la fecha en el formato "dd/MM/yyyy"
   return `${dia}/${mes}/${anio}`;
+}
+
 //Para las que vienen formato  yyyy-mm-ddThh:mm con la T en el medio
 export function formatDate(dateString: string): string {
   const parts = dateString.split('T');
