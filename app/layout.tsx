@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { poppins } from './styles/fonts';
 import './styles/globals.css';
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import Navbar from './components/Navbar/navbar';
 import { SessionProvider } from '../context/SessionContext';
 
@@ -20,14 +19,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <AppRouterCacheProvider>
+      <body className={`${poppins.className} antialiased`}>
         <SessionProvider>
-          <body className={`${poppins.className} antialiased`}>
-            <Navbar />
-            <main>{children}</main>
-          </body>
+          <Navbar />
+          <main>{children}</main>
         </SessionProvider>
-      </AppRouterCacheProvider>
+      </body>
     </html>
   );
 }

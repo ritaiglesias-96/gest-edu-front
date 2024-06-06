@@ -3,7 +3,7 @@ import VisibilityIcon from '@/assets/svg/visibility.svg';
 import VisibilityOffIcon from '@/assets/svg/visibility-off.svg';
 import clsx from 'clsx';
 
-interface InputFieldProps {
+interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
   children?: React.ReactNode;
   placeholder?: string;

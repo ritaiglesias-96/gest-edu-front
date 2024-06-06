@@ -57,7 +57,6 @@ export async function registerUser(
         'Content-Type': 'application/json',
       },
     }).then((res) => {
-      console.log(res);
       return res;
     });
 

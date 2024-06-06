@@ -33,14 +33,11 @@ export const loginFetch = async (data: { email: string; password: string }) => {
 };
 
 export const logoutFetch = async (token: string) => {
-  const response = await fetch(`https://localhost:8080/gest-edu/api/logout`, {
+  await fetch(`https://localhost:8080/gest-edu/api/logout`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  }).then((res) => {
-    console.log(res);
-    return res.status;
   });
   cookies().delete('token');
   redirect('/');
@@ -127,8 +124,6 @@ export const cambiarPassFetch = async (
     ).then((res) => {
       return res;
     });
-    console.log(response);
-
     if (response.status === 200) {
       return {
         message: 'La contraseña se a restaurado con exito. 200',
@@ -232,8 +227,6 @@ export const obtenerDatosUsuarioFetch = async () => {
   const token = authToken();
 
   if (token) {
-    console.log('tkn: ', token);
-
     try {
       const response = await fetch(
         'https://localhost:8080/gest-edu/api/usuario/perfil',
@@ -244,7 +237,6 @@ export const obtenerDatosUsuarioFetch = async () => {
           },
         }
       );
-
       if (!response.ok) {
         // Manejar errores HTTP
         console.error(`HTTP Error: ${response.status}`);
@@ -265,3 +257,20 @@ export const obtenerDatosUsuarioFetch = async () => {
   }
 };
 
+export const getCarreras = async () => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/carreras`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  }
+};

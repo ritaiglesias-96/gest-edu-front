@@ -63,7 +63,6 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
       };
     } else {
       const response = await loginFetch(validatedFields.data);
-      console.log(response);
       if (response.status === 401 || !response.status) {
         return {
           errors: { password: ['Correo o contraseña incorrectos'] },
@@ -82,12 +81,10 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logout = async () => {
     if (session === null) {
-      console.log('logout - no session');
       setSession(null);
     } else {
       const response = await logoutFetch(session.jwt);
       if (response === undefined || response === 204) {
-        console.log('logout');
         setSession(null);
       }
     }

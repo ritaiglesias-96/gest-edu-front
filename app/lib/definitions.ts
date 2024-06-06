@@ -1,5 +1,8 @@
 export const initialState = { message: '', errors: {} };
 
+export const defaultImagen =
+  'https://firebasestorage.googleapis.com/v0/b/gestedu2024.appspot.com/o/defaultUserImage.png?alt=media&token=72b03305-8f00-4aff-bde0-7964ab3046c0';
+
 export enum Role {
   estudiante = 'ROL_ESTUDIANTE',
   funcionario = 'ROL_FUNCIONARIO',
@@ -143,6 +146,14 @@ export type Asignatura = {
   semestrePlanEstudio: number;
 };
 
+export type PeriodoExamenState = {
+  errors?: {
+    fechaInicio?: string[];
+    fechaFin?: string[];
+    carreraId?: string[];
+  };
+  message?: string | null;
+};
 export type Estudiante = {
   id: number;
   ci: string;
@@ -170,5 +181,71 @@ export type Examen = {
   };
   docentes: [];
 };
+export type Curso = {
+  asignaturaId: number;
+  diasPrevInsc: number;
+  docenteId: number;
+  estado: string;
+  fechaFin: string;
+  fechaInicio: string;
+};
+
+export type HorarioCurso = {
+  dia: string;
+  horaFin: string;
+  horaInicio: string;
+};
+
+export type FechaExamenState = {
+  errors?: {
+    fecha?: string[];
+    diasPrevInsc?: number;
+    asignaturaId?: string;
+    docentes?: number[];
+  };
+  message?: string | null;
+};
+
+export type Docente = {
+  id: number;
+  documento: string;
+  nombre: string;
+  apellido: string;
+};
 
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
+export interface Usuario {
+  id: number;
+  ci: string;
+  nombre: string;
+  apellido: string;
+  email: string;
+}
+
+export interface InscripcionCarreraPendiente {
+  id: number;
+  motivoRechazo: string;
+  estado: string;
+  fechaActualizacion: string;
+  fechaCreacion: string;
+  tipo: string;
+  nombreCarrera: string;
+  usuarioSolicitante: Usuario;
+  usuarioResponsable: Usuario;
+}
+
+export interface InscripcionCarreraPendienteFlattened {
+  id: number;
+  motivoRechazo: string;
+  estado: string;
+  fechaActualizacion: string;
+  fechaCreacion: string;
+  tipo: string;
+  nombreCarrera: string;
+  usuarioSolicitanteId: number;
+  usuarioSolicitanteCi: string;
+  usuarioSolicitanteNombre: string;
+  usuarioSolicitanteApellido: string;
+  usuarioSolicitanteEmail: string;
+  usuarioResponsable: any;
+}
