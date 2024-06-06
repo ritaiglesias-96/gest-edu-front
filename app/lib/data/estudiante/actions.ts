@@ -1,7 +1,6 @@
 'use server';
 import { RegisterState } from '@/lib/definitions';
 import { RegisterFormSchema } from '../schemasZod';
-import { utils } from '@utils'
 import { authToken } from '@/utils/auth';
 
 const apiRoute = process.env.BACK_API;
@@ -75,73 +74,85 @@ export async function registerUser(
 
 export const obtenerCarrerasInscriptoFetch = async () => {
   const token = authToken();
-  if(token){
-    const response = await fetch(`https://localhost:8080/gest-edu/api/estudiantes/carreras-inscripto`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  if (token) {
+    const response = await fetch(
+      `https://localhost:8080/gest-edu/api/estudiantes/carreras-inscripto`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.ok) {
-      const carrerasJson = await response.json();      
+      const carrerasJson = await response.json();
       return carrerasJson;
     } else {
       return response.json();
     }
-  }  
+  }
 };
 
 export const obtenerInscripcionesVigentesExamen = async (id: string) => {
   const token = authToken();
-  if(token){
-    const response = await fetch(`https://localhost:8080/gest-edu/api/asignaturas/${id}/examenesVigentes`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  if (token) {
+    const response = await fetch(
+      `https://localhost:8080/gest-edu/api/asignaturas/${id}/examenesVigentes`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.ok) {
-      const carrerasJson = await response.json();      
+      const carrerasJson = await response.json();
       return carrerasJson;
     } else {
       return response.json();
     }
-  }  
+  }
 };
 
 export const obtenerAsignaturasPorCarreran = async (id: string) => {
   const token = authToken();
-  if(token){
-    const response = await fetch(`https://localhost:8080/gest-edu/api/carreras/${id}/asignaturas`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  if (token) {
+    const response = await fetch(
+      `https://localhost:8080/gest-edu/api/carreras/${id}/asignaturas`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.ok) {
-      const asignaturasJson = await response.json();      
+      const asignaturasJson = await response.json();
       return asignaturasJson;
     } else {
       return response.json();
     }
-  }  
+  }
 };
 
-export const inscribirseExamenFetch = async (email: string, examenId: string) => {
+export const inscribirseExamenFetch = async (
+  email: string,
+  examenId: string
+) => {
   const token = authToken();
-  if(token){
-    const response = await fetch(`${apiRoute}/examenes/inscribirse`,{
+  if (token) {
+    const response = await fetch(`${apiRoute}/examenes/inscribirse`, {
       method: 'POST',
-      headers:{
+      headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, examenId}),
-    }).then((res) =>{ 
+      body: JSON.stringify({ email, examenId }),
+    }).then((res) => {
       return res.json();
     });
 
-    if (response.status === 200) { 
+    if (response.status === 200) {
       return {
         message: 'Insripcion exitosa.',
       };
@@ -151,4 +162,51 @@ export const inscribirseExamenFetch = async (email: string, examenId: string) =>
       };
     }
   }
-}
+};
+
+export const obtenerCursosVigentes = async (id: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/asignaturas/${id}/cursos`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  }
+};
+
+export const inscribirseCursoFetch = async (
+  estudianteId: string,
+  cursoId: string
+) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/inscripcionCurso`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ estudianteId, cursoId }),
+    }).then((res) => {
+      return res.json();
+    });
+
+    if (response.status === 200) {
+      return {
+        message: 'Insripcion exitosa.',
+      };
+    } else {
+      return {
+        message: response.message,
+      };
+    }
+  }
+};

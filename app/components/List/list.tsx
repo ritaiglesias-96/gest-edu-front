@@ -1,4 +1,4 @@
-import styles from "./list.module.css";
+import styles from './list.module.css';
 import {
   asignaturaColumns,
   carreraColumns,
@@ -14,16 +14,17 @@ import {
   asignaturaFuncionarioColumns,
   carrerasEstudiante,
   asignaturaExamenColumns,
+  asignaturaCursoColumns,
   examenColumns,
-} from "./columnTypes";
-import { useContext, useEffect, useState } from "react";
-import Button from "@/components/Button/button";
-import EditIcon from "@/assets/svg/edit.svg";
-import DeleteIcon from "@/assets/svg/delete.svg";
-import SaveIcon from "@/assets/svg/done.svg";
-import CancelIcon from "@/assets/svg/close.svg";
-import Enroll from "@/assets/svg/enroll-lesson.svg";
-import CheckIcon from "@mui/icons-material/Check";
+} from './columnTypes';
+import { useContext, useEffect, useState } from 'react';
+import Button from '@/components/Button/button';
+import EditIcon from '@/assets/svg/edit.svg';
+import DeleteIcon from '@/assets/svg/delete.svg';
+import SaveIcon from '@/assets/svg/done.svg';
+import CancelIcon from '@/assets/svg/close.svg';
+import Enroll from '@/assets/svg/enroll-lesson.svg';
+import CheckIcon from '@mui/icons-material/Check';
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -35,31 +36,37 @@ import {
   GridRowId,
   GridRowModel,
   GridRowEditStopReasons,
-} from "@mui/x-data-grid";
-import {   
+} from '@mui/x-data-grid';
+import {
   editDocente,
   deleteDocente,
-  rechazarSolicitudInscripcionCarrera,} from "@/lib/data/funcionario/actions";
-import Link from "next/link";
-import { inscribirseExamenFetch } from "@/lib/data/estudiante/actions";
-import { SessionContext } from "../../../context/SessionContext";
-import { convertirFecha } from "@/utils/utils";
-import { Collapse, Alert } from "@mui/material";
+  rechazarSolicitudInscripcionCarrera,
+} from '@/lib/data/funcionario/actions';
+import Link from 'next/link';
+import {
+  inscribirseCursoFetch,
+  inscribirseExamenFetch,
+} from '@/lib/data/estudiante/actions';
+import { SessionContext } from '../../../context/SessionContext';
+import { convertirFecha } from '@/utils/utils';
+import { Collapse, Alert } from '@mui/material';
 import { Asignatura } from '@/lib/definitions';
 import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
 import FormContainer from '../FormContainer/formContainer';
 import InputField from '../InputField/inputField';
+import { obtenerDatosUsuarioFetch } from '@/lib/data/actions';
 
 type columnType =
-  | "carrera"
-  | "asignatura"
-  | "usuario"
-  | "docente"
-  | "estudiante"
-  | "carreras-estudiante"
-  | "asignatura-examenes"
-  | "examen"
+  | 'carrera'
+  | 'asignatura'
+  | 'usuario'
+  | 'docente'
+  | 'estudiante'
+  | 'carreras-estudiante'
+  | 'asignatura-examenes'
+  | 'asignatura-curso'
+  | 'examen'
   | 'inscripto'
   | 'previtaturas'
   | 'noPrevitaturas'
@@ -72,6 +79,7 @@ type columnType =
 interface ListProps {
   isEditableDocentes?: boolean;
   isInscripcionExamen?: boolean;
+  isInscripcionCurso?: boolean;
   isEditableAsignaturas?: boolean;
   isApproveRejectCarrera?: boolean;
   rows: GridRowsProp[];
@@ -82,6 +90,7 @@ interface ListProps {
 export default function List({
   isEditableDocentes,
   isInscripcionExamen,
+  isInscripcionCurso,
   isEditableAsignaturas,
   isApproveRejectCarrera,
   rows,
@@ -90,14 +99,14 @@ export default function List({
 }: ListProps) {
   return (
     <div className={styles.dataGridContainer}>
-      {!isEditableDocentes && !isInscripcionExamen && (
+      {!isEditableDocentes && !isInscripcionExamen && !isInscripcionCurso && (
         <NormalDataGrid
           rows={rows}
           columnsType={columnsType}
           rowsLoading={rowsLoading}
         />
       )}
-      {isEditableDocentes && !isInscripcionExamen && (
+      {isEditableDocentes && !isInscripcionExamen && !isInscripcionCurso && (
         <EditableDocentesDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
@@ -111,6 +120,12 @@ export default function List({
       )}
       {isApproveRejectCarrera && (
         <ApproveRejectDataGrid
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
+      )}{' '}
+      {isInscripcionCurso && (
+        <InscripcionCursoDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
@@ -130,25 +145,28 @@ function NormalDataGrid({
 }) {
   let columns: GridColDef[] = [];
   switch (columnsType) {
-    case "carrera":
+    case 'carrera':
       columns = carreraColumns;
       break;
-    case "asignatura":
+    case 'asignatura':
       columns = asignaturaColumns;
       break;
-    case "usuario":
+    case 'usuario':
       columns = usuarioColumns;
       break;
-    case "estudiante":
+    case 'estudiante':
       columns = estudianteColumns;
       break;
-    case "carreras-estudiante":
+    case 'carreras-estudiante':
       columns = carrerasEstudiante;
       break;
-    case "asignatura-examenes":
+    case 'asignatura-examenes':
       columns = asignaturaExamenColumns;
       break;
-    case "examen":
+    case 'asignatura-curso':
+      columns = asignaturaCursoColumns;
+      break;
+    case 'examen':
       columns = examenColumns;
       break;
     case 'previtaturas':
@@ -208,7 +226,7 @@ function EditableDocentesDataGrid({
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
-  const handleRowEditStop: GridEventListener<"rowEditStop"> = (
+  const handleRowEditStop: GridEventListener<'rowEditStop'> = (
     params,
     event
   ) => {
@@ -275,47 +293,47 @@ function EditableDocentesDataGrid({
 
   const columns: GridColDef[] = [
     {
-      field: "id",
-      type: "number",
-      headerName: "ID",
+      field: 'id',
+      type: 'number',
+      headerName: 'ID',
       width: 90,
       editable: false,
     },
-    { field: "nombre", headerName: "Nombre", width: 180, editable: true },
+    { field: 'nombre', headerName: 'Nombre', width: 180, editable: true },
     {
-      field: "apellido",
-      headerName: "Apellido",
+      field: 'apellido',
+      headerName: 'Apellido',
       width: 180,
       editable: true,
     },
     {
-      field: "documento",
-      headerName: "Cedula",
+      field: 'documento',
+      headerName: 'Cedula',
       width: 180,
       editable: true,
     },
     {
-      field: "actions",
-      type: "actions",
-      headerName: "Actions",
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
       width: 150,
-      cellClassName: "actions",
+      cellClassName: 'actions',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon className="h-auto w-6 fill-garnet sm:w-8" />}
-              label="Save"
+              icon={<SaveIcon className='h-auto w-6 fill-garnet sm:w-8' />}
+              label='Save'
               sx={{
-                color: "#802c2c",
+                color: '#802c2c',
               }}
               onClick={handleSaveClick(id)}
               key={id}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon className="h-auto w-6 fill-garnet sm:w-8" />}
-              label="Cancel"
+              icon={<CancelIcon className='h-auto w-6 fill-garnet sm:w-8' />}
+              label='Cancel'
               onClick={handleCancelClick(id)}
               key={`${id}-cancel`}
             />,
@@ -323,22 +341,22 @@ function EditableDocentesDataGrid({
         }
         return [
           <GridActionsCellItem
-            icon={<EditIcon className="h-auto w-6 fill-garnet sm:w-8 " />}
-            label="Edit"
+            icon={<EditIcon className='h-auto w-6 fill-garnet sm:w-8 ' />}
+            label='Edit'
             onClick={handleEditClick(id)}
             key={id}
             sx={{
-              color: "#802c2c",
+              color: '#802c2c',
             }}
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon className="h-auto w-6 fill-garnet sm:w-8" />}
-            label="Delete"
+            icon={<DeleteIcon className='h-auto w-6 fill-garnet sm:w-8' />}
+            label='Delete'
             onClick={handleDeleteClick(id)}
             key={`${id}-delete`}
             sx={{
-              color: "#802c2c",
-              height: "100%",
+              color: '#802c2c',
+              height: '100%',
             }}
           />,
         ];
@@ -347,17 +365,17 @@ function EditableDocentesDataGrid({
   ];
 
   return (
-    <div className="h-fit w-full p-4">
-      <div className="my-4 box-content flex flex-row justify-end rounded-md bg-ivory p-4">
-        <Link href="/funcionario/docentes/agregar">
-          <Button styling="primary">Agregar Docente</Button>
+    <div className='h-fit w-full p-4'>
+      <div className='my-4 box-content flex flex-row justify-end rounded-md bg-ivory p-4'>
+        <Link href='/funcionario/docentes/agregar'>
+          <Button styling='primary'>Agregar Docente</Button>
         </Link>
       </div>
       <DataGrid
         rows={rows}
         loading={rowsLoading}
         columns={columns}
-        editMode="row"
+        editMode='row'
         rowModesModel={rowModesModel}
         autosizeOnMount={true}
         autoHeight={true}
@@ -367,7 +385,7 @@ function EditableDocentesDataGrid({
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        sx={{ backgroundColor: "#f6f6e9", color: "black" }}
+        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
       />
     </div>
   );
@@ -554,13 +572,15 @@ function InscripcionExamenDataGrid({
 }) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
+  const [usuarioId, setUsuarioId] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const [examenId, setExamenId] = useState("");
+  const [isOpenCurso, setIsOpenCurso] = useState(false);
+  const [examenId, setExamenId] = useState('');
+  const [cursoId, setCursoId] = useState('');
   const [alertOk, setAlertOk] = useState(false);
   const [alertError, setAlertError] = useState(false);
   const [mensajeError, setMensajeError] = useState('');
-
 
   const session = useContext(SessionContext);
 
@@ -568,6 +588,12 @@ function InscripcionExamenDataGrid({
     if (session.session?.email) {
       setEmail(session.session.email);
     }
+  }, []);
+
+  useEffect(() => {
+    obtenerDatosUsuarioFetch().then((res) => {
+      setUsuarioId(res.id);
+    });
   }, []);
 
   useEffect(() => {
@@ -596,26 +622,43 @@ function InscripcionExamenDataGrid({
     setIsOpen(false);
   };
 
+  const handleClickConfirmarInscripcionCurso = () => {
+    if (usuarioId && cursoId) {
+      inscribirseCursoFetch(usuarioId, cursoId).then((data) => {
+        if (data?.message) {
+          setMensajeError(data.message);
+          setAlertError(true);
+          setAlertOk(false);
+        } else {
+          setMensajeError('');
+          setAlertError(false);
+          setAlertOk(true);
+        }
+      });
+    }
+    setIsOpen(false);
+  };
+
   const columns: GridColDef[] = [
     {
-      field: "id",
-      headerName: "ID",
-      cellClassName: "flex items-center self-end",
-      headerClassName: "header-center",
+      field: 'id',
+      headerName: 'ID',
+      cellClassName: 'flex items-center self-end',
+      headerClassName: 'header-center',
       flex: 1,
     },
     {
-      field: "fecha",
-      headerName: "Fecha",
-      cellClassName: "flex items-center self-end",
-      headerAlign: "center",
+      field: 'fecha',
+      headerName: 'Fecha',
+      cellClassName: 'flex items-center self-end',
+      headerAlign: 'center',
       flex: 1,
     },
     {
-      field: "inscribirse",
-      headerName: "Inscribirse",
-      cellClassName: "flex text-center self-end",
-      headerAlign: "center",
+      field: 'inscribirse',
+      headerName: 'Inscribirse',
+      cellClassName: 'flex text-center self-end',
+      headerAlign: 'center',
       flex: 1,
       renderCell: (params) => (
         <Link
@@ -623,9 +666,9 @@ function InscripcionExamenDataGrid({
           onClick={() => {
             setIsOpen(true), setExamenId(params.id.toString());
           }}
-          className="mx-auto flex size-fit"
+          className='mx-auto flex size-fit'
         >
-          <Enroll className="h-auto w-6 fill-garnet sm:w-8" />
+          <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
         </Link>
       ),
     },
@@ -635,39 +678,73 @@ function InscripcionExamenDataGrid({
     <>
       <div>
         <DataGrid
-          className="w-full"
+          className='w-full'
           rows={rows}
           loading={rowsLoading}
           columns={columns}
-          sx={{ backgroundColor: "#f6f6e9", color: "black" }}
+          sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
         />
       </div>
 
       {isOpen && (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-2xl shadow-lg shadow-garnet bg-ivory rounded-md px-4 py-2">
-          <div className="my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline">
-            <div className="rounded-md text-center font-bold text-black">
-              <h5 className="m-0 p-0">Inscripción a examen</h5>
-              <div className="flex flex-col">
-                <p className="font-bold">
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
+          <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+            <div className='rounded-md text-center font-bold text-black'>
+              <h5 className='m-0 p-0'>Inscripción a examen</h5>
+              <div className='flex flex-col'>
+                <p className='font-bold'>
                   ¿Desea confirmar inscripción al exámen?
                 </p>
               </div>
-              <div className="md:space-x-6 items-center">
-                <div className="inline-block">
+              <div className='items-center md:space-x-6'>
+                <div className='inline-block'>
                   <Button
-                    styling="primary"
-                    className="lg:w-20"
+                    styling='primary'
+                    className='lg:w-20'
                     onClick={handleClickConfirmarInscripcion}
                   >
                     Si
                   </Button>
                 </div>
-                <div className="inline-block">
+                <div className='inline-block'>
                   <Button
-                    styling="secondary"
+                    styling='secondary'
                     onClick={() => setIsOpen(false)}
-                    className="lg:w-20"
+                    className='lg:w-20'
+                  >
+                    No
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {isOpenCurso && (
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
+          <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+            <div className='rounded-md text-center font-bold text-black'>
+              <h5 className='m-0 p-0'>Inscripción a curso</h5>
+              <div className='flex flex-col'>
+                <p className='font-bold'>
+                  ¿Desea confirmar inscripción al curso?
+                </p>
+              </div>
+              <div className='items-center md:space-x-6'>
+                <div className='inline-block'>
+                  <Button
+                    styling='primary'
+                    className='lg:w-20'
+                    onClick={handleClickConfirmarInscripcionCurso}
+                  >
+                    Si
+                  </Button>
+                </div>
+                <div className='inline-block'>
+                  <Button
+                    styling='secondary'
+                    onClick={() => setIsOpenCurso(false)}
+                    className='lg:w-20'
                   >
                     No
                   </Button>
@@ -680,34 +757,34 @@ function InscripcionExamenDataGrid({
       {alertOk && (
         <Collapse
           in={alertOk}
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet"
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
         >
           <Alert
-            icon={<CheckIcon fontSize="inherit" />}
-            severity="success"
-            variant="filled"
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='success'
+            variant='filled'
             onClose={() => {
               setAlertOk(false);
             }}
           >
-            ¡Datos editados correctamente!            
+            ¡Datos editados correctamente!
           </Alert>
         </Collapse>
       )}
       {alertError && (
         <Collapse
           in={alertError}
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet"
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
         >
           <Alert
-            icon={<CheckIcon fontSize="inherit" />}
-            severity="error"
-            variant="filled"
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='error'
+            variant='filled'
             onClose={() => {
               setAlertError(false);
             }}
           >
-            {mensajeError}         
+            {mensajeError}
           </Alert>
         </Collapse>
       )}
@@ -886,5 +963,180 @@ function ApproveRejectDataGrid({
         </div>
       )}
     </div>
+  );
+}
+
+function InscripcionCursoDataGrid({
+  rowsParent,
+  rowsLoadingParent,
+}: {
+  rowsParent: GridRowsProp;
+  rowsLoadingParent: boolean;
+}) {
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [usuarioId, setUsuarioId] = useState('');
+  const [isOpenCurso, setIsOpenCurso] = useState(false);
+  const [cursoId, setCursoId] = useState('');
+  const [alertOk, setAlertOk] = useState(false);
+  const [alertError, setAlertError] = useState(false);
+  const [mensajeError, setMensajeError] = useState('');
+
+  const session = useContext(SessionContext);
+
+  useEffect(() => {
+    obtenerDatosUsuarioFetch().then((res) => {
+      setUsuarioId(res.id);
+    });
+  }, []);
+
+  useEffect(() => {
+    //Se convierte la fecha a formato dd/MM/yyyy
+    rowsParent.forEach((examen) => {
+      examen.fecha = convertirFecha(examen.fecha);
+    });
+    setRows(rowsParent);
+    setRowsLoading(rowsLoadingParent);
+  }, [rowsLoadingParent, rowsParent]);
+
+  const handleClickConfirmarInscripcionCurso = () => {
+    if (usuarioId && cursoId) {
+      inscribirseCursoFetch(usuarioId, cursoId).then((data) => {
+        if (data?.message) {
+          setMensajeError(data.message);
+          setAlertError(true);
+          setAlertOk(false);
+        } else {
+          setMensajeError('');
+          setAlertError(false);
+          setAlertOk(true);
+        }
+      });
+    }
+    setIsOpenCurso(false);
+  };
+
+  const columns: GridColDef[] = [
+    {
+      field: 'id',
+      headerName: 'ID',
+      cellClassName: 'flex items-center self-end',
+      headerClassName: 'header-center',
+      flex: 1,
+    },
+    {
+      field: 'fechaInicio',
+      headerName: 'Fecha de Inicio',
+      cellClassName: 'flex items-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+    },
+    {
+      field: 'fechaFin',
+      headerName: 'Fecha de Fin',
+      cellClassName: 'flex items-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+    },
+    {
+      field: 'inscribirse',
+      headerName: 'Inscribirse',
+      cellClassName: 'flex text-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+      renderCell: (params) => (
+        <Link
+          href={`${window.location.pathname}`}
+          onClick={() => {
+            setIsOpenCurso(true), setCursoId(params.id.toString());
+          }}
+          className='mx-auto flex size-fit'
+        >
+          <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
+        </Link>
+      ),
+    },
+  ];
+
+  return (
+    <>
+      <div>
+        <DataGrid
+          className='w-full'
+          rows={rows}
+          loading={rowsLoading}
+          columns={columns}
+          sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+        />
+      </div>
+      {isOpenCurso && (
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
+          <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+            <div className='rounded-md text-center font-bold text-black'>
+              <h5 className='m-0 p-0'>Inscripción a curso</h5>
+              <div className='flex flex-col'>
+                <p className='font-bold'>
+                  ¿Desea confirmar inscripción al curso?
+                </p>
+              </div>
+              <div className='items-center md:space-x-6'>
+                <div className='inline-block'>
+                  <Button
+                    styling='primary'
+                    className='lg:w-20'
+                    onClick={handleClickConfirmarInscripcionCurso}
+                  >
+                    Si
+                  </Button>
+                </div>
+                <div className='inline-block'>
+                  <Button
+                    styling='secondary'
+                    onClick={() => setIsOpenCurso(false)}
+                    className='lg:w-20'
+                  >
+                    No
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {alertOk && (
+        <Collapse
+          in={alertOk}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='success'
+            variant='filled'
+            onClose={() => {
+              setAlertOk(false);
+            }}
+          >
+            ¡Datos editados correctamente!
+          </Alert>
+        </Collapse>
+      )}
+      {alertError && (
+        <Collapse
+          in={alertError}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='error'
+            variant='filled'
+            onClose={() => {
+              setAlertError(false);
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
+    </>
   );
 }

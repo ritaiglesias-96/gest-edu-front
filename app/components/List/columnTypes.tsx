@@ -237,7 +237,9 @@ export const carrerasEstudiante: GridColDef[] = [
     renderCell: (params) => (
       <Link
         href={`${window.location.pathname}/${params.id}/cursos`}
-        onClick={() => sessionStorage.setItem('carrera_id', params.id.toString())}
+        onClick={() =>
+          sessionStorage.setItem('carrera_id', params.id.toString())
+        }
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
@@ -252,7 +254,9 @@ export const carrerasEstudiante: GridColDef[] = [
     renderCell: (params) => (
       <Link
         href={`${window.location.pathname}/${params.id}/examenes`}
-        onClick={() => sessionStorage.setItem('carrera_id', params.id.toString())}
+        onClick={() =>
+          sessionStorage.setItem('carrera_id', params.id.toString())
+        }
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
@@ -279,7 +283,9 @@ export const asignaturaExamenColumns: GridColDef[] = [
     renderCell: (params) => (
       <Link
         href={`${window.location.pathname}/confirmar-examen`}
-        onClick={() => sessionStorage.setItem('asignatura_id', params.id.toString())}
+        onClick={() =>
+          sessionStorage.setItem('asignatura_id', params.id.toString())
+        }
         className='mx-auto flex size-fit'
       >
         <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
@@ -307,7 +313,7 @@ export const registroExamenColumns: GridColDef[] = [
     headerName: 'Fecha',
   },
 ];
-  
+
 export const examenColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   {
@@ -324,7 +330,9 @@ export const examenColumns: GridColDef[] = [
     renderCell: (params) => (
       <Link
         href={`${window.location.pathname}`}
-        onClick={() => sessionStorage.setItem('examen_id', params.id.toString())}
+        onClick={() =>
+          sessionStorage.setItem('examen_id', params.id.toString())
+        }
         className='mx-auto flex size-fit'
       >
         <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
@@ -431,6 +439,35 @@ export const asignaturaFuncionarioColumns: GridColDef[] = [
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
+export const asignaturaCursoColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+  },
+  {
+    field: 'descripcion',
+    headerName: 'Descripcion',
+  },
+  {
+    field: 'inscribirse',
+    headerName: 'Inscribirse',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/confirmar-curso`}
+        onClick={() =>
+          sessionStorage.setItem('asignatura_id', params.id.toString())
+        }
+        className='mx-auto flex size-fit'
+      >
+        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
