@@ -165,6 +165,12 @@ export type Curso = {
   docenteId: number;
 };
 
+export type HorarioCurso = {
+  dia: string;
+  horaFin: string;
+  horaInicio: string;
+};
+
 export type Docente = {
   id: number;
   documento: string;

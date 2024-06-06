@@ -1,6 +1,12 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { editAsignatura, getAsignatura } from '@/lib/data/coordinador/actions';
+import {
+  getAsignatura,
+  getNoPrevituras,
+  getPrevituras,
+  editAsignatura,
+} from '@/lib/data/coordinador/actions';
+import List from '@/components/List/list';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
 import Button from '@/components/Button/button';
@@ -21,19 +27,27 @@ export default function AsignaturaPage({
   const [fallout, setFallout] = useState(false);
   const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [rows, setRows] = useState<any[]>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [noPrevias, setNoPrevias] = useState(false);
 
   useEffect(() => {
     const fetch = async () => {
       const existeAsignatura = await getAsignatura(params.asignaturaId);
-      //console.log(existeAsignatura);
       if (existeAsignatura) {
         setAsignatura(existeAsignatura);
       } else {
         setFallout(true);
       }
+      const previas = await getPrevituras(params.asignaturaId);
+      if (previas) {
+        setRows(previas);
+      }
+      setRowsLoading(false);
     };
     fetch().finally(() => setLoading(false));
-  }, [params.asignaturaId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -49,34 +63,59 @@ export default function AsignaturaPage({
           <CircularProgress sx={{ color: '#802c2c' }} />
         </Box>
       )}
-      <div className='relative box-border size-full w-3/6 justify-center overflow-auto'>
+      {noPrevias && (
+        <SeleccionarPreviatura
+          setOpen={setNoPrevias}
+          asignaturaId={params.asignaturaId}
+        />
+      )}
+      <div className='relative box-border size-full justify-center overflow-auto px-3 md:w-5/6'>
         {!fallout && !loading && (
-          <div className='my-2 box-content flex flex-col items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
-            <div className='flex flex-col rounded-md text-center font-bold text-black md:text-left lg:max-w-md'>
-              <h3 className='m-0 p-0'>{asignatura?.nombre}</h3>
-              <div className='flex flex-col'>
-                <p className='font-bold'>Descripcion:</p>
-                <p>{asignatura?.descripcion}</p>
+          <>
+            <div className='my-2 box-content flex flex-col items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+              <div className='flex flex-col rounded-md text-center font-bold text-black md:text-left lg:max-w-md'>
+                <h3 className='m-0 p-0'>{asignatura?.nombre}</h3>
+                <div className='flex flex-col'>
+                  <p className='font-bold'>Descripcion:</p>
+                  <p>{asignatura?.descripcion}</p>
+                </div>
+              </div>
+              <div className='flex w-full flex-row justify-evenly rounded-md text-black md:w-fit md:flex-col md:justify-center'>
+                <div className='flex flex-col'>
+                  <p className='font-bold'>Creditos:</p>
+                  <p>{asignatura?.creditos + ' creditos'}</p>
+                </div>
+              </div>
+              <div className='flex w-fit max-w-52 flex-col justify-center rounded-md'>
+                <Button
+                  className='w-full self-center'
+                  styling='pill'
+                  onClick={() => {
+                    setEdit(!edit);
+                  }}
+                >
+                  <PencilIcon className='h-auto w-6 fill-garnet sm:w-8' />
+                </Button>
               </div>
             </div>
-            <div className='flex w-full flex-row justify-evenly rounded-md text-black md:w-fit md:flex-col md:justify-center'>
-              <div className='flex flex-col'>
-                <p className='font-bold'>Creditos:</p>
-                <p>{asignatura?.creditos + ' creditos'}</p>
-              </div>
+            <div>
+              <List
+                rows={rows}
+                rowsLoading={rowsLoading}
+                columnsType='previtaturas'
+              />
             </div>
-            <div className='flex w-fit max-w-52 flex-col justify-center rounded-md'>
+            <div className='my-2 box-content flex flex-col items-center justify-center rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
               <Button
                 className='w-full self-center'
-                styling='pill'
                 onClick={() => {
-                  setEdit(!edit);
+                  setNoPrevias(!noPrevias);
                 }}
               >
-                <PencilIcon className='h-auto w-6 fill-garnet sm:w-8' />
+                Agregar previa
               </Button>
             </div>
-          </div>
+          </>
         )}
         {fallout && !loading && (
           <div className='mx-auto flex flex-col items-center justify-center text-ivory'>
@@ -103,7 +142,6 @@ function EditAsignatura({
   const router = useRouter();
   const [editForm, dispatch] = useFormState(editAsignatura, initialState);
   useEffect(() => {
-    console.log(editForm.message);
     if (editForm.message.includes('200')) {
       const fetch = async () => {
         await getAsignatura(id).then((data) => {
@@ -205,5 +243,54 @@ function EditButton() {
     <Button className='w-auto' styling='primary' disabled={pending}>
       {pending ? 'Editando...' : 'Aceptar'}
     </Button>
+  );
+}
+
+function SeleccionarPreviatura({
+  setOpen,
+  asignaturaId,
+}: {
+  setOpen: (open: boolean) => void;
+  asignaturaId: string;
+}) {
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [rows, setRows] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const data = await getNoPrevituras(asignaturaId);
+      if (data) {
+        for (let i = 0; i < data.length; i++) {
+          data[i].idAsignatura = asignaturaId;
+        }
+        setRows(data);
+        setRowsLoading(false);
+      }
+    };
+    fetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <>
+      <div
+        className='absolute z-10 size-full backdrop-blur-sm'
+        onClick={() => setOpen(false)}
+      />
+      <div className='absolute z-20 mx-auto my-6 flex h-fit w-10/12 flex-col rounded-xl bg-ivory p-6 shadow-lg shadow-garnet  md:w-2/3 md:p-8'>
+        <button
+          className='right-0 block w-fit cursor-pointer self-end'
+          onClick={() => setOpen(false)}
+        >
+          <Close className='self-end fill-garnet hover:fill-bittersweet sm:size-10' />
+        </button>
+        <h2 className='text-center text-black'>Seleccionar previatura</h2>
+        <List
+          rows={rows}
+          rowsLoading={rowsLoading}
+          columnsType='noPrevitaturas'
+        />
+      </div>
+    </>
   );
 }
