@@ -12,6 +12,7 @@ import {
   cursosColumns,
   carreraFuncionarioColumns,
   asignaturaFuncionarioColumns,
+  calificarCursosColumns,
 } from './columnTypes';
 import { useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -67,6 +68,7 @@ type columnType =
   | 'carreraFuncionario'
   | 'asignaturaFuncionario'
   | 'registroExamen'
+  | 'calficar-cursos'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -110,10 +112,10 @@ export default function List({
       )}
       {editarCalificacionCurso && (
         <EditarCalificacionCursoDataGrid
-        rowsParent={rows}
-        rowsLoadingParent={rowsLoading}
-      />
-    )}
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
+      )}
       {isApproveRejectCarrera && (
         <ApproveRejectDataGrid
           rowsParent={rows}
@@ -164,6 +166,9 @@ function NormalDataGrid({
       break;
     case 'cursos':
       columns = cursosColumns;
+      break;
+    case 'calficar-cursos':
+      columns = calificarCursosColumns;
       break;
     case 'registroExamen':
       columns = registroExamenColumns;
@@ -555,11 +560,10 @@ function EditarCalificacionCursoDataGrid({
   }>({});
 
   const handleChange = (id: number) => (event: SelectChangeEvent) => {
-    
     setCalificaciones((prev) => ({
       ...prev,
       [id]: event.target.value as string,
-    }));    
+    }));
   };
 
   useEffect(() => {

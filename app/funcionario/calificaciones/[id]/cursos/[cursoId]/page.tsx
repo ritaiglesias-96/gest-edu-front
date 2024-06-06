@@ -2,7 +2,6 @@
 import { SetStateAction, useEffect, useState } from 'react';
 import {
   getAsignatura,
-  getCarreraYAsignatura,
 } from '@/lib/data/coordinador/actions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Link } from '@mui/material';
@@ -25,7 +24,7 @@ import {
 } from '@/lib/data/funcionario/actions';
 import { convertirFecha } from '@/utils/utils';
 
-export default function CursoPage({ params }: { params: { id: string } }) {
+export default function CursoPage({ params }: { params: { cursoId: string } }) {
   const router = useRouter();
   const [rows, setRows] = useState<any[]>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
@@ -38,8 +37,8 @@ export default function CursoPage({ params }: { params: { id: string } }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (params.id) {
-      getCurso(params.id).then((dataCurso) => {
+    if (params.cursoId) {
+      getCurso(params.cursoId).then((dataCurso) => {
         setCurso(dataCurso);
       });
     }
@@ -121,13 +120,11 @@ export default function CursoPage({ params }: { params: { id: string } }) {
             calificacionCurso: parsedCalificaciones[clave],
           };
           calififaciones.push(calificacion);
-          console.log(calificacion);
         }
       }
 
       if (calificaciones) {
         calificarCursoFetch(curso!.id, calififaciones).then((data) => {
-          console.log(data?.message);
         });
       }
     }
