@@ -100,7 +100,7 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
               <div className='flex w-fit max-w-52 flex-col justify-center rounded-md'>
                 {carrera?.existePlanEstudio && (
                   <Link
-                    href={`/funcionario/carreras/${params.id}/agregar-periodo-examen`}
+                    href={`/funcionario/horarios/${params.id}/agregar-periodo-examen`}
                   >
                     <Button className='w-full' styling='primary'>
                       Registrar periodo de examen

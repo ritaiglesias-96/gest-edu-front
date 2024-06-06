@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   getDocentes,
+  getPeriodosExamenCarrera,
   registrarFechaExamen,
 } from '@/lib/data/funcionario/actions';
 import { Input, InputLabel } from '@mui/material';
@@ -18,6 +19,9 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Docente } from '@/lib/definitions';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
+import Box from '@mui/material/Box';
+import formatDate from '@/utils/dateFormatter';
+import { log } from 'console';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -32,6 +36,10 @@ export default function FuncionarioHorariosExamenesAgregarHome({
   const [diasPrevInsc, setDiasPrevInsc] = useState('');
   const [docenteAux, setDocenteAux] = useState<string[]>([]);
   const [listaDocentes, setListaDocentes] = useState<Docente[]>([]);
+  const [periodos, setPeriodos] = useState<any[]>([]);
+  const [periodosSelect, setPeriodosSelect] = useState<string[]>([]);
+  const [disabled, setDisabled] = useState(true);
+  const [selectedDate, setSelectedDate] = useState<string>('');
 
   const MenuProps = {
     PaperProps: {
@@ -48,6 +56,56 @@ export default function FuncionarioHorariosExamenesAgregarHome({
     });
   }, []);
 
+  useEffect(() => {
+    const fetch = async () => {
+      const existePeriodos = await getPeriodosExamenCarrera(params.id);
+
+      if (existePeriodos) {
+        const periodosAux = existePeriodos.periodos.map((item: any) => ({
+          ...item,
+          fechaInicio: formatDate(item.fechaInicio),
+          fechaFin: formatDate(item.fechaFin),
+        }));
+        setPeriodos(periodosAux);
+        const newFormattedData = periodosAux.map((item: any) => {
+          const startDate = item.fechaInicio;
+          const endDate = item.fechaFin;
+          return `${startDate} - ${endDate}`;
+        });
+        setPeriodosSelect(newFormattedData);
+      }
+    };
+    fetch();
+  }, [params.id]);
+
+  function BasicSelect() {
+    const handleChange = (event: SelectChangeEvent) => {
+      setDisabled(false);
+      setSelectedDate(event.target.value as string);
+    };
+
+    return (
+      <Box sx={{ minWidth: 120 }}>
+        <FormControl fullWidth>
+          <InputLabel id='demo-simple-select-label'>Periodo</InputLabel>
+          <Select
+            labelId='demo-simple-select-label'
+            id='demo-simple-select'
+            value={selectedDate}
+            label='Periodo'
+            onChange={handleChange}
+          >
+            {periodosSelect.map((periodo) => (
+              <MenuItem key={periodo} value={periodo}>
+                <ListItemText primary={periodo} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+    );
+  }
+
   function MultipleSelectCheckmarks() {
     const handleChange = (event: SelectChangeEvent<typeof docenteAux>) => {
       const {
@@ -63,16 +121,17 @@ export default function FuncionarioHorariosExamenesAgregarHome({
     return (
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id='demo-multiple-checkbox-label'>Tag</InputLabel>
+          <InputLabel id='demo-multiple-checkbox-label'>Docentes</InputLabel>
           <Select
             labelId='demo-multiple-checkbox-label'
             id={'demo-multiple-checkbox'}
             multiple
             value={docenteAux}
             onChange={handleChange}
-            input={<OutlinedInput label='Tag' />}
+            input={<OutlinedInput label='Docentes' />}
             renderValue={(selected) => selected.join(', ')}
             MenuProps={MenuProps}
+            disabled={disabled}
           >
             {listaDocentes.map((docente) => (
               <MenuItem
@@ -93,32 +152,50 @@ export default function FuncionarioHorariosExamenesAgregarHome({
   }
 
   const handleClick = () => {
-    const asignaturaId = params.asignaturaId;
-    const docenteIds = docenteAux
-      .filter((nombre) =>
-        listaDocentes.some((docente) => docente.nombre === nombre)
-      )
-      .map(
-        (nombre) =>
-          listaDocentes.find((docente) => docente.nombre === nombre)!.id
-      );
+    const [startDate, endDate] = selectedDate.split(' - ').map((date) => {
+      const [day, month, year] = date.split('/');
+      return new Date(parseInt(year), parseInt(month) - 1, parseInt(day)); // Adjust month (0-indexed)
+    });
 
-    if (docenteIds) {
-      const data = { fecha, diasPrevInsc, asignaturaId, docenteIds };
+    const checkDateObject = new Date(fecha);
+    const formattedCheckDate = `${checkDateObject.getFullYear()}-${checkDateObject.getMonth() + 1}-${checkDateObject.getDate()}T18:49`; // Adjust month (0-indexed)
 
-      if (params) {
-        registrarFechaExamen(data).then((res) => {
-          if (res) {
-            alert(res.message);
-            if (res.message) {
-              alert('Fecha registrada con exito');
-              router.back();
+    const isBetween =
+      checkDateObject >= startDate && checkDateObject <= endDate;
+
+    if (isBetween) {
+      const asignaturaId = params.asignaturaId;
+      const docenteIds = docenteAux
+        .filter((nombre) =>
+          listaDocentes.some((docente) => docente.nombre === nombre)
+        )
+        .map(
+          (nombre) =>
+            listaDocentes.find((docente) => docente.nombre === nombre)!.id
+        );
+
+      if (docenteIds) {
+        const data = { fecha, diasPrevInsc, asignaturaId, docenteIds };
+
+        if (params) {
+          registrarFechaExamen(data).then((res) => {
+            if (res) {
+              if (res.message) {
+                alert(res.message);
+              } else {
+                alert('Examen registrado');
+                router.back();
+              }
             }
-          }
-        });
+          });
+        }
+      } else {
+        alert('Debe seleccionar por lo menos un docente');
       }
     } else {
-      alert('Debe seleccionar por lo menos un docente');
+      alert(
+        'La fecha ingresada no esta por dentro del periodo de examen seleccionado'
+      );
     }
   };
 
@@ -128,6 +205,7 @@ export default function FuncionarioHorariosExamenesAgregarHome({
         <h1 className='pb-4 text-center text-2xl font-bold leading-snug text-black'>
           Agregar Fecha y hora de examen
         </h1>
+        <BasicSelect />
         <InputLabel htmlFor='component-simple'>Fecha y Hora</InputLabel>
         <Input
           className={
@@ -136,6 +214,7 @@ export default function FuncionarioHorariosExamenesAgregarHome({
           type='datetime-local'
           name='fecha'
           onChange={(event) => setFecha(event.target.value)}
+          disabled={disabled}
         ></Input>
         <InputLabel htmlFor='component-simple'>
           Dias previos para la inscripcion
@@ -147,6 +226,7 @@ export default function FuncionarioHorariosExamenesAgregarHome({
           type='number'
           name='diasPrevInsc'
           onChange={(event) => setDiasPrevInsc(event.target.value)}
+          disabled={disabled}
         ></Input>
         <MultipleSelectCheckmarks />
         <div className='flex w-2/3 flex-col justify-between gap-1 sm:w-full sm:flex-row'>

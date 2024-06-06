@@ -41,6 +41,7 @@ import {
   editDocente,
   deleteDocente,
   rechazarSolicitudInscripcionCarrera,
+  aprobarSolicitudInscripcionCarrera,
 } from '@/lib/data/funcionario/actions';
 import Link from 'next/link';
 import {
@@ -53,7 +54,6 @@ import { Collapse, Alert } from '@mui/material';
 import { Asignatura } from '@/lib/definitions';
 import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
-import FormContainer from '../FormContainer/formContainer';
 import InputField from '../InputField/inputField';
 import { obtenerDatosUsuarioFetch } from '@/lib/data/actions';
 
@@ -70,11 +70,11 @@ type columnType =
   | 'inscripto'
   | 'previtaturas'
   | 'noPrevitaturas'
+  | 'registroExamen'
   | 'periodosExamen'
   | 'cursos'
   | 'carreraFuncionario'
   | 'asignaturaFuncionario'
-  | 'registroExamen'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -175,6 +175,11 @@ function NormalDataGrid({
     case 'noPrevitaturas':
       columns = noPreviaturasColumns;
       break;
+    case 'periodosExamen':
+      columns = periodosExamenColumns;
+      break;
+    case 'registroExamen':
+      columns = registroExamenColumns;
     case 'carreraFuncionario':
       columns = carreraFuncionarioColumns;
       break;
@@ -186,12 +191,6 @@ function NormalDataGrid({
       break;
     case 'cursos':
       columns = cursosColumns;
-      break;
-    case 'registroExamen':
-      columns = registroExamenColumns;
-      break;
-    case 'periodosExamen':
-      columns = periodosExamenColumns;
       break;
     default:
       break;
@@ -249,14 +248,13 @@ function EditableDocentesDataGrid({
   };
 
   const handleDeleteClick = (id: GridRowId) => () => {
-    // TODO agregar llamada a la API para eliminar el docente
     const deleteD = async () => {
-      return await deleteDocente(`${id}`);
+      const data = await deleteDocente(`${id}`);
+      if (data) {
+        if (rows) setRows(rows.filter((row) => row.id !== id));
+      }
     };
-    const data: any = deleteD();
-    if (data) {
-      if (rows) setRows(rows.filter((row) => row.id !== id));
-    }
+    deleteD();
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -271,20 +269,18 @@ function EditableDocentesDataGrid({
     }
   };
 
-  const edit = async (docente: GridRowModel) => {
-    const data: any = await editDocente(docente);
-    return data;
-  };
-
   const processRowUpdate = (newRow: GridRowModel) => {
     const updatedRow = { ...newRow, isNew: false };
-    const data: any = edit(updatedRow);
-    if (data) {
-      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-      return updatedRow;
-    } else {
-      return rows;
-    }
+    const edit = async (docente: GridRowModel) => {
+      const data = await editDocente(docente);
+      if (data) {
+        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+        return updatedRow;
+      } else {
+        return rows;
+      }
+    };
+    return edit(updatedRow);
   };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -799,12 +795,12 @@ function ApproveRejectDataGrid({
   rowsParent: GridRowsProp;
   rowsLoadingParent: boolean;
 }) {
-  const router = useRouter();
   const [disabled, setDisabled] = useState(true);
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [tramiteId, setTramiteId] = useState<GridRowId>();
   const [motivoRechazo, setMotivoRechazo] = useState<string>('');
 
   useEffect(() => {
@@ -812,27 +808,37 @@ function ApproveRejectDataGrid({
     setRowsLoading(rowsLoadingParent);
   }, [rowsLoadingParent, rowsParent]);
 
-  const handleSaveClick = (id: GridRowId) => () => {
-    //TODO aceptar solicitud
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  useEffect(() => {
+    if (motivoRechazo !== '' && !showModal) {
+      const rechazarInscripcion = async () => {
+        const data = await rechazarSolicitudInscripcionCarrera(
+          `${tramiteId}`,
+          motivoRechazo
+        );
+        if (data) {
+          console.log(data);
+          if (rows) setRows(rows.filter((row) => row.id !== tramiteId));
+        }
+      };
+      rechazarInscripcion();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showModal]);
+
+  const handleSaveClick = (id: GridRowId) => async () => {
+    const aprobarInscripcion = async () => {
+      const data = await aprobarSolicitudInscripcionCarrera(`${id}`);
+      if (data) {
+        if (rows) setRows(rows.filter((row) => row.id !== id));
+      }
+      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    };
+    aprobarInscripcion();
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
     setShowModal(true);
-    if (motivoRechazo === '' && !showModal) {
-      alert('Debe ingresar un motivo de rechazo');
-    } else {
-      const rechazarInscripcion = async () => {
-        return await rechazarSolicitudInscripcionCarrera(
-          `${id}`,
-          motivoRechazo
-        );
-      };
-      const data: any = rechazarInscripcion();
-      if (data) {
-        if (rows) setRows(rows.filter((row) => row.id !== id));
-      }
-    }
+    setTramiteId(id);
   };
 
   const processRowUpdate = (newRow: GridRowModel) => {
@@ -945,17 +951,23 @@ function ApproveRejectDataGrid({
             <CancelIcon className='self-end fill-garnet hover:fill-bittersweet sm:size-10' />
           </button>
           <h3 className='text-center text-black'>Motivo de rechazo</h3>
-          <form className='flex min-h-full w-full flex-col items-center justify-between gap-2 md:mx-auto md:h-full md:max-w-full md:gap-2 '>
+          <form
+            className='flex min-h-full w-full flex-col items-center justify-between gap-2 md:mx-auto md:h-full md:max-w-full md:gap-2'
+            onSubmit={(e) => {
+              setShowModal(false);
+              e.preventDefault();
+              setMotivoRechazo(e.currentTarget.motivo.value);
+            }}
+          >
             <InputField
               placeholder='De un motivo al estudiante...'
               type='textarea'
               name='motivo'
               label='Motivo'
-              required={true}
-              onChange={(e) => setMotivoRechazo(e.target.value)}
-            ></InputField>
+              required
+            />
             <div className='flex w-2/3 flex-col items-center gap-1 sm:w-full'>
-              <Button className='w-auto' styling='primary'>
+              <Button className='w-auto' styling='primary' type='submit'>
                 Aceptar
               </Button>
             </div>

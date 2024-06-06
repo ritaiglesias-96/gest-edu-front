@@ -414,7 +414,7 @@ export async function rechazarSolicitudInscripcionCarrera(
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ motivoRechazo }),
+        body: JSON.stringify(motivoRechazo),
       }
     );
     if (response.ok) {
