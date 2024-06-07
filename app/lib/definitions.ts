@@ -89,6 +89,8 @@ export type AsignaturaState = {
     nombre?: string[];
     descripcion?: string[];
     creditos?: string[];
+    asignaturaId?: string[];
+    carreraId?: string[];
   };
   message?: string | null;
 };

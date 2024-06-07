@@ -28,6 +28,19 @@ export const CarreraFormSchema = z.object({
   carreraId: z.string(),
 });
 
+export const AsignaturaEditFormSchema = z.object({
+  nombre: z.string({
+    invalid_type_error: 'Ingrese un nombre valido',
+    required_error: 'Campo requerido',
+  }),
+  descripcion: z.string({
+    invalid_type_error: 'Ingrese un descripcion valida',
+    required_error: 'Campo requerido',
+  }),
+  asignaturaId: z.string(),
+  carreraId: z.string(),
+});
+
 export const SignInFormSchema = z.object({
   email: z
     .string({ required_error: 'Campo requerido' })

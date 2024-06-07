@@ -2,7 +2,11 @@
 import { Asignatura, AsignaturaState, CarreraState } from '@/lib/definitions';
 import { authToken } from '@/utils/auth';
 import { revalidatePath } from 'next/cache';
-import { AltaAsignaturaFormSchema, CarreraFormSchema } from '../schemasZod';
+import {
+  AltaAsignaturaFormSchema,
+  AsignaturaEditFormSchema,
+  CarreraFormSchema,
+} from '../schemasZod';
 const apiRoute = process.env.BACK_API;
 
 export const getCarreras = async () => {
@@ -165,10 +169,10 @@ export async function editAsignatura(
   formData: FormData
 ) {
   const token = authToken();
-  const validatedFields = CarreraFormSchema.safeParse({
+  const validatedFields = AsignaturaEditFormSchema.safeParse({
     nombre: formData.get('nombre'),
     descripcion: formData.get('descripcion'),
-    carreraId: formData.get('carreraId'),
+    asignaturaId: formData.get('asignaturaId'),
   });
   if (!validatedFields.success) {
     return {
@@ -176,20 +180,21 @@ export async function editAsignatura(
       message: 'Missing Fields. Failed to Create Career.',
     };
   } else {
-    const { nombre, descripcion, carreraId } = validatedFields.data;
+    const { nombre, descripcion, asignaturaId, carreraId } =
+      validatedFields.data;
 
-    // const response = await fetch(`${apiRoute}/carreras/${carreraId}`, {
-    //   method: 'PUT',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    //   body: JSON.stringify({
-    //     nombre,
-    //     descripcion,
-    //   }),
-    // });
-    if (false) {
+    const response = await fetch(`${apiRoute}/asignaturas/${asignaturaId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        nombre,
+        descripcion,
+      }),
+    });
+    if (response) {
       revalidatePath(`/coordinador/carreras/${carreraId}`);
       return {
         message: 'Editada con exito. 200',
@@ -271,12 +276,15 @@ export async function getPrevituras(id: string) {
 export const obtenerExamenesVigentes = async (id: string) => {
   const token = authToken();
   if (token) {
-    const response = await fetch(`${apiRoute}/asignaturas/${id}/examenesVigentes`, {
-      method: 'GET',
-      headers: {
-        Authotization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${apiRoute}/asignaturas/${id}/examenesVigentes`,
+      {
+        method: 'GET',
+        headers: {
+          Authotization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.ok) {
       const data = await response.json();
       return data;
@@ -350,6 +358,26 @@ export async function getEstudiantesInscriptos(id: string) {
     const data = await response.json();
 
     return data;
+  } else {
+    return null;
+  }
+}
+
+export async function getNoPrevituras(id: string) {
+  const token = authToken();
+  if (token) {
+    const noPrevias = await fetch(`${apiRoute}/asignaturas/${id}/no-previas`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (noPrevias.ok) {
+      const data = await noPrevias.json();
+      return data;
+    } else {
+      return null;
+    }
   } else {
     return null;
   }

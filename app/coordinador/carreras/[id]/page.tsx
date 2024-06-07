@@ -102,11 +102,13 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
                       : 'Ver Plan de estudio'}
                   </Button>
                 </Link>
-                <Link href={`/coordinador/carreras/${params.id}/agregar`}>
-                  <Button className='w-full' styling='primary'>
-                    Agregar asignatura
-                  </Button>
-                </Link>
+                {!carrera?.existePlanEstudio && (
+                  <Link href={`/coordinador/carreras/${params.id}/agregar`}>
+                    <Button className='w-full' styling='primary'>
+                      Agregar asignatura
+                    </Button>
+                  </Link>
+                )}
               </div>
             </div>
             <List
