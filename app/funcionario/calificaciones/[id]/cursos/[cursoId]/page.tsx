@@ -1,8 +1,6 @@
 'use client';
 import { SetStateAction, useEffect, useState } from 'react';
-import {
-  getAsignatura,
-} from '@/lib/data/coordinador/actions';
+import { getAsignatura } from '@/lib/data/coordinador/actions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Link } from '@mui/material';
 import Button from '@/components/Button/button';
@@ -47,28 +45,16 @@ export default function CursoPage({ params }: { params: { cursoId: string } }) {
   useEffect(() => {
     if (curso?.id) {
       curso.fechaInicio = convertirFecha(curso.fechaInicio);
-      curso.fechaFin = convertirFecha(curso.fechaFin);            
+      curso.fechaFin = convertirFecha(curso.fechaFin);
       getEstudiantesPorCurso(curso.id.toString()).then((arrayEstudiantes) => {
         setEstudiantes(arrayEstudiantes);
       });
-    }
-  }, [curso]);
-
-  useEffect(() => {
-    if (curso?.docenteId) {
-        getDocente(curso.docenteId.toString()).then((dataDocente) => {
+      getAsignatura(curso.asignaturaId.toString()).then((dataAsignatura) => {
+        setAsignatura(dataAsignatura);
+      });
+      getDocente(curso.docenteId.toString()).then((dataDocente) => {
         setDocente(dataDocente);
       });
-    }
-  }, [curso]);
-
-  useEffect(() => {
-    if (curso) {
-      getAsignatura(curso.asignaturaId.toString()).then(
-        (dataAsignatura) => {
-          setAsignatura(dataAsignatura);
-        }
-      );
     }
   }, [curso]);
 
@@ -76,15 +62,10 @@ export default function CursoPage({ params }: { params: { cursoId: string } }) {
     if (estudiantes) {
       setRowsLoading(false);
       setRows(estudiantes);
+      setLoading(false);
+      setFallout(false);
     }
   }, [estudiantes]);
-
-  useEffect(() => {
-    setLoading(false);
-    setFallout(false);
-    setRowsLoading(false);
-    setRows(estudiantes); 
-  }, []);
 
   if (loading) {
     return (
@@ -124,8 +105,7 @@ export default function CursoPage({ params }: { params: { cursoId: string } }) {
       }
 
       if (calificaciones) {
-        calificarCursoFetch(curso!.id, calififaciones).then((data) => {
-        });
+        calificarCursoFetch(curso!.id, calififaciones).then((data) => {});
       }
     }
 

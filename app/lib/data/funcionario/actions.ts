@@ -8,6 +8,7 @@ import {
 } from '../schemasZod';
 import { GridRowModel } from '@mui/x-data-grid/models/gridRows';
 import { HorarioCurso } from '@/lib/definitions';
+import { getCarrera } from '../coordinador/actions';
 
 const apiRoute = process.env.BACK_API;
 
@@ -326,6 +327,130 @@ export async function rechazarSolicitudInscripcionCarrera(
       return response.json();
     } else {
       return null;
+    }
+  } else {
+    return null;
+  }
+}
+
+export const getAsignatura = async (id: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/asignaturas/${id}`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  }
+};
+
+export const getExamenesAsignaturaVigentes = async (asignaturaId: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/asignaturas/${asignaturaId}/examenesVigentes`,
+      {
+        method: 'GET',
+        headers: {
+          Authotization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return { message: 'Error al obtener los examenes vigentes' };
+    }
+  }
+};
+
+export async function registrarFechaExamen(data: any) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/examenes/crear`, {
+      method: 'POST',
+      headers: {
+        Authotization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fecha: data.fecha,
+        diasPrevInsc: data.diasPrevInsc,
+        asignaturaId: data.asignaturaId,
+        docenteIds: data.docenteIds,
+      }),
+    }).then((res) => {
+      return res.json();
+    });
+    return { message: response.message };
+  }
+}
+
+export async function registrarHorarioDiaCurso(
+  horario: HorarioCurso,
+  cursoId: string
+) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/cursos/${cursoId}/horarios`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        dia: horario.dia,
+        horaInicio: horario.horaInicio,
+        horaFin: horario.horaFin,
+      }),
+    }).then((res) => {
+      return res.json();
+    });
+    return { message: response.message };
+  }
+}
+
+export async function getCursosAsignatura(id: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/asignaturas/${id}/cursos`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return { message: 'Error al obtener los examenes vigentes' };
+    }
+  }
+}
+
+export async function getPeriodosExamenCarrera(id: string) {
+  const token = authToken();
+  const carreraJson = await getCarrera(id);
+  if (token) {
+    const periodos = await fetch(`${apiRoute}/carreras/${id}/periodos-examen`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (periodos.ok) {
+      const periodosJson = await periodos.json();
+      return { carrera: carreraJson, periodos: periodosJson.content };
+    } else {
+      return { carrera: carreraJson, periodos: [] };
     }
   } else {
     return null;

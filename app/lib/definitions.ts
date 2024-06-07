@@ -180,6 +180,16 @@ export type HorarioCurso = {
   horaInicio: string;
 };
 
+export type FechaExamenState = {
+  errors?: {
+    fecha?: string[];
+    diasPrevInsc?: number;
+    asignaturaId?: string;
+    docentes?: number[];
+  };
+  message?: string | null;
+};
+
 export type Docente = {
   id: number;
   documento: string;
@@ -187,9 +197,45 @@ export type Docente = {
   apellido: string;
 };
 
+export interface Usuario {
+  id: number;
+  ci: string;
+  nombre: string;
+  apellido: string;
+  email: string;
+}
+
+export interface InscripcionCarreraPendiente {
+  id: number;
+  motivoRechazo: string;
+  estado: string;
+  fechaActualizacion: string;
+  fechaCreacion: string;
+  tipo: string;
+  nombreCarrera: string;
+  usuarioSolicitante: Usuario;
+  usuarioResponsable: Usuario;
+}
+
 export type Calificacion = {
   estudianteId: string,
   calificacionCurso: string
 };
+
+export interface InscripcionCarreraPendienteFlattened {
+  id: number;
+  motivoRechazo: string;
+  estado: string;
+  fechaActualizacion: string;
+  fechaCreacion: string;
+  tipo: string;
+  nombreCarrera: string;
+  usuarioSolicitanteId: number;
+  usuarioSolicitanteCi: string;
+  usuarioSolicitanteNombre: string;
+  usuarioSolicitanteApellido: string;
+  usuarioSolicitanteEmail: string;
+  usuarioResponsable: any;
+}
 
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
