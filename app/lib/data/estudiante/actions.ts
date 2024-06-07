@@ -198,3 +198,41 @@ export const inscribirseCursoFetch = async (
     }
   }
 };
+
+export const obtenerAsignaturasParaInscripcionFetch = async (id: string) => {
+  const token = authToken();
+  if(token){
+    const response = await fetch(`${apiRoute}/estudiantes/${id}/asignaturas-inscripcion`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const asignaturasJson = await response.json();            
+      return asignaturasJson;
+    } else {
+      return response.json();
+    }
+  }  
+};
+
+export const obtenerAsignaturasParaInscripcionExamenFetch = async (id: string) => {
+  const token = authToken();
+  if(token){
+    const response = await fetch(`${apiRoute}/estudiantes/${id}/asignaturas-a-examen`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const asignaturasJson = await response.json();            
+      return asignaturasJson;
+    } else {
+      return response.json();
+    }
+  }  
+};

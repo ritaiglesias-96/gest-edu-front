@@ -2,7 +2,6 @@
 import List from '@/components/List/list';
 import {
   getAsignatura,
-  obtenerExamenesVigentes,
 } from '@/lib/data/coordinador/actions';
 import { obtenerCursosVigentes } from '@/lib/data/estudiante/actions';
 import { Asignatura } from '@/lib/definitions';

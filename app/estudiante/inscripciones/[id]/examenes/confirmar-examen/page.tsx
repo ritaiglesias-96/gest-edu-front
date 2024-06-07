@@ -24,6 +24,8 @@ export default function ConfirmarInscripcionExamen() {
   useEffect(() => {
     let id = sessionStorage.getItem('asignatura_id');
     if (id) {
+      console.log(id);
+      
       setAsignaturaId(id);
     }
   }, []);
@@ -31,25 +33,31 @@ export default function ConfirmarInscripcionExamen() {
   useEffect(() => {
     let id = sessionStorage.getItem('examen_id');
     if (id) {
+      console.log('examen',id);
+      
       setExamenId(id);
     }
   }, []);
 
   useEffect(() => {
     getAsignatura(asignaturaId).then((data) => {
+      console.log(data);
+      
       setAsignatura(data);
     });
   }, [asignaturaId]);
 
   useEffect(() => {
+    console.log('siuuuuuuuuuu');
+    
     obtenerExamenesVigentes(asignaturaId).then((data) => {
-      if (data) {
+      if (data) {        
         setRows(data.content ? data.content : []);
         setRowsLoading(false);
         setExamenes(data);
       }
     });
-  }, [asignaturaId]);
+  }, [asignatura]);
 
   return (
     <div className='relative box-border size-full w-3/6 justify-center overflow-auto'>
