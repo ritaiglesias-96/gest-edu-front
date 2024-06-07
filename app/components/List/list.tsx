@@ -99,14 +99,14 @@ export default function List({
 }: ListProps) {
   return (
     <div className={styles.dataGridContainer}>
-      {!isEditableDocentes && !isInscripcionExamen && (
+      {!isEditableDocentes && !isInscripcionExamen && !isInscripcionCurso && (
         <NormalDataGrid
           rows={rows}
           columnsType={columnsType}
           rowsLoading={rowsLoading}
         />
       )}
-      {isEditableDocentes && !isInscripcionExamen && (
+      {isEditableDocentes && !isInscripcionExamen && isInscripcionCurso && (
         <EditableDocentesDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
