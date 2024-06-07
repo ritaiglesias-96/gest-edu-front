@@ -1,7 +1,6 @@
 'use server';
 import { RegisterState } from '@/lib/definitions';
 import { RegisterFormSchema } from '../schemasZod';
-import { utils } from '@utils'
 import { authToken } from '@/utils/auth';
 
 const apiRoute = process.env.BACK_API;
@@ -151,4 +150,51 @@ export const inscribirseExamenFetch = async (email: string, examenId: string) =>
       };
     }
   }
-}
+};
+
+export const obtenerCursosVigentes = async (id: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/asignaturas/${id}/cursos`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  }
+};
+
+export const inscribirseCursoFetch = async (
+  estudianteId: string,
+  cursoId: string
+) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/inscripcionCurso`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ estudianteId, cursoId }),
+    }).then((res) => {
+      return res.json();
+    });
+
+    if (response.status === 200) {
+      return {
+        message: 'Insripcion exitosa.',
+      };
+    } else {
+      return {
+        message: response.message,
+      };
+    }
+  }
+};

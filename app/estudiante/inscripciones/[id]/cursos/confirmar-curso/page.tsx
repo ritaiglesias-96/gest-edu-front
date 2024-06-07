@@ -4,22 +4,21 @@ import {
   getAsignatura,
   obtenerExamenesVigentes,
 } from '@/lib/data/coordinador/actions';
+import { obtenerCursosVigentes } from '@/lib/data/estudiante/actions';
 import { Asignatura } from '@/lib/definitions';
 import React from 'react';
 import { useEffect, useState } from 'react';
 
-export default function ConfirmarInscripcionExamen() {
+export default function ConfirmarInscripcionCurso() {
   const [asignatura, setAsignatura] = useState<Asignatura>();
   const [asignaturaId, setAsignaturaId] = useState('');
-  const [examenId, setExamenId] = useState(
-    sessionStorage.getItem('examen_id') || ''
+  const [cursoId, setCursoId] = useState(
+    sessionStorage.getItem('curso_id') || ''
   );
-  const [examenes, setExamenes] = useState([]);
+  const [cursos, setCursos] = useState([]);
   const [rows, setRows] = useState([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     let id = sessionStorage.getItem('asignatura_id');
@@ -29,9 +28,9 @@ export default function ConfirmarInscripcionExamen() {
   }, []);
 
   useEffect(() => {
-    let id = sessionStorage.getItem('examen_id');
+    let id = sessionStorage.getItem('curso_id');
     if (id) {
-      setExamenId(id);
+      setCursoId(id);
     }
   }, []);
 
@@ -42,18 +41,19 @@ export default function ConfirmarInscripcionExamen() {
   }, [asignaturaId]);
 
   useEffect(() => {
-    obtenerExamenesVigentes(asignaturaId).then((data) => {
+    obtenerCursosVigentes(asignaturaId).then((data) => {
       if (data) {
-        setRows(data.content ? data.content : []);
+        setRows(data ? data : []);
         setRowsLoading(false);
-        setExamenes(data);
+        setCursos(data);
       }
     });
   }, [asignaturaId]);
 
+  console.log(rows);
   return (
     <div className='relative box-border size-full w-3/6 justify-center overflow-auto'>
-      <h1 className='text-center font-bold'>Confirmar inscripción a examen</h1>
+      <h1 className='text-center font-bold'>Confirmar inscripción a curso</h1>
 
       {asignatura && (
         <div>
@@ -79,8 +79,8 @@ export default function ConfirmarInscripcionExamen() {
           <List
             rows={rows}
             rowsLoading={rowsLoading}
-            columnsType='examen'
-            isInscripcionExamen={true}
+            columnsType='none'
+            isInscripcionCurso={true}
           />
         </div>
       )}
