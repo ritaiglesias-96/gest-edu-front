@@ -311,6 +311,29 @@ export async function altaPreviaFetch(asignaturaId: string, previaId: string) {
   }
 }
 
+export async function getAsgignaturaYPrevituras(id: string) {
+  const token = authToken();
+
+  if (token) {
+    const asignaturaJson = await getAsignatura(id);
+    if (!asignaturaJson) return null;
+    const previaturas = await fetch(`${apiRoute}/asignatura/${id}/previas`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (previaturas.ok) {
+      const previaturasJson = await previaturas.json();
+      return { asignatura: asignaturaJson, previaturas: previaturasJson };
+    } else {
+      return { asignatura: asignaturaJson, asignaturas: [] };
+    }
+  } else {
+    return null;
+  }
+}
+
 export async function altaPlanEstudio(asignaturas: Asignatura[], id: string) {
   const token = authToken();
   const response = await fetch(
