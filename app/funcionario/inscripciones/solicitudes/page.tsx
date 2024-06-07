@@ -2,10 +2,7 @@
 
 import List from '@/components/List/list';
 import { getSolicitudesInscripcionCarreras } from '@/lib/data/funcionario/actions';
-import {
-  InscripcionCarreraPendiente,
-  InscripcionCarreraPendienteFlattened,
-} from '@/lib/definitions';
+import { InscripcionCarreraPendiente } from '@/lib/definitions';
 import { useEffect, useState } from 'react';
 
 export default function SolicitudesPage() {

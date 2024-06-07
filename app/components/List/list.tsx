@@ -99,14 +99,14 @@ export default function List({
 }: ListProps) {
   return (
     <div className={styles.dataGridContainer}>
-      {!isEditableDocentes && !isInscripcionExamen && !isInscripcionCurso && (
+      {columnsType !== 'none' && (
         <NormalDataGrid
           rows={rows}
           columnsType={columnsType}
           rowsLoading={rowsLoading}
         />
       )}
-      {isEditableDocentes && !isInscripcionExamen && !isInscripcionCurso && (
+      {isEditableDocentes && (
         <EditableDocentesDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
@@ -114,6 +114,12 @@ export default function List({
       )}
       {isInscripcionExamen && (
         <InscripcionExamenDataGrid
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
+      )}
+      {isEditableAsignaturas && (
+        <EditableAsignaturasDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
@@ -180,6 +186,7 @@ function NormalDataGrid({
       break;
     case 'registroExamen':
       columns = registroExamenColumns;
+      break;
     case 'carreraFuncionario':
       columns = carreraFuncionarioColumns;
       break;
@@ -584,6 +591,7 @@ function InscripcionExamenDataGrid({
     if (session.session?.email) {
       setEmail(session.session.email);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -795,7 +803,6 @@ function ApproveRejectDataGrid({
   rowsParent: GridRowsProp;
   rowsLoadingParent: boolean;
 }) {
-  const [disabled, setDisabled] = useState(true);
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});

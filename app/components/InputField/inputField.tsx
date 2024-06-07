@@ -26,15 +26,24 @@ interface TextAreaFieldProps
 export default function InputField(
   props: InputFieldProps | TextAreaFieldProps
 ) {
+  const { children, ...otherProps } = props;
   const [showPassword, setShowPassword] = useState(false);
+
   function isTextAreaFieldProps(
-    props: InputFieldProps | TextAreaFieldProps
-  ): props is TextAreaFieldProps {
-    return (props as TextAreaFieldProps).type === 'textarea';
+    otherProps: InputFieldProps | TextAreaFieldProps
+  ): otherProps is TextAreaFieldProps {
+    return (otherProps as TextAreaFieldProps).type === 'textarea';
   }
+
+  function isInputFieldProps(
+    otherProps: InputFieldProps | TextAreaFieldProps
+  ): otherProps is InputFieldProps {
+    return (otherProps as InputFieldProps).type !== 'textarea';
+  }
+
   return (
     <>
-      {isTextAreaFieldProps(props) ? (
+      {isTextAreaFieldProps(otherProps) && (
         <div className={clsx('inputBox', props.className)}>
           <div className='flex w-full flex-row'>
             {props.children}
@@ -58,12 +67,13 @@ export default function InputField(
                 placeholder={props.placeholder}
                 aria-describedby={`${props.name}-error`}
                 id={props.name}
-                {...props}
+                {...otherProps}
               />
             </div>
           </div>
         </div>
-      ) : (
+      )}
+      {isInputFieldProps(otherProps) && (
         <div className={clsx('inputBox', props.className)}>
           <div className='flex w-full flex-row'>
             {props.children}
@@ -98,7 +108,7 @@ export default function InputField(
                 required={props.required}
                 value={props.value}
                 readOnly={props.value ? true : false}
-                {...props}
+                {...otherProps}
               />
             </div>
           </div>
