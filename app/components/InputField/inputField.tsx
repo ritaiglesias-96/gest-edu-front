@@ -7,92 +7,112 @@ interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
   children?: React.ReactNode;
   placeholder?: string;
-  type: string;
-  name: string;
   label: string;
-  required?: boolean;
   pattern?: string;
   value?: string | number;
 }
 
-export default function InputField({
-  children,
-  placeholder,
-  type,
-  label,
-  name,
-  required,
-  className,
-  pattern,
-  value,
-}: InputFieldProps) {
+interface TextAreaFieldProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  className?: string;
+  children?: React.ReactNode;
+  placeholder?: string;
+  label: string;
+  type: string;
+  pattern?: string;
+  value?: string | number;
+}
+
+export default function InputField(
+  props: InputFieldProps | TextAreaFieldProps
+) {
+  const { children, ...otherProps } = props;
   const [showPassword, setShowPassword] = useState(false);
+
+  function isTextAreaFieldProps(
+    otherProps: InputFieldProps | TextAreaFieldProps
+  ): otherProps is TextAreaFieldProps {
+    return (otherProps as TextAreaFieldProps).type === 'textarea';
+  }
+
+  function isInputFieldProps(
+    otherProps: InputFieldProps | TextAreaFieldProps
+  ): otherProps is InputFieldProps {
+    return (otherProps as InputFieldProps).type !== 'textarea';
+  }
 
   return (
     <>
-      {type === 'textarea' ? (
-        <div className={clsx('inputBox', className)}>
+      {isTextAreaFieldProps(otherProps) && (
+        <div className={clsx('inputBox', props.className)}>
           <div className='flex w-full flex-row'>
-            {children}
+            {props.children}
             <div className='flex w-full flex-col text-black'>
               <label
-                htmlFor={name}
+                htmlFor={props.name}
                 className={
                   'px-3 py-0 text-sm font-semibold sm:text-base' +
-                  (required ? 'after:content-["*"] after:text-garnet' : '')
+                  (props.required
+                    ? 'after:content-["*"] after:text-garnet'
+                    : '')
                 }
               >
-                {label}
+                {props.label}
               </label>
               <textarea
                 className={
                   'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:underline focus:outline-none sm:text-base'
                 }
-                name={name}
-                placeholder={placeholder}
-                aria-describedby={`${name}-error`}
-                id={name}
+                name={props.name}
+                placeholder={props.placeholder}
+                aria-describedby={`${props.name}-error`}
+                id={props.name}
+                {...otherProps}
               />
             </div>
           </div>
         </div>
-      ) : (
-        <div className={clsx('inputBox', className)}>
+      )}
+      {isInputFieldProps(otherProps) && (
+        <div className={clsx('inputBox', props.className)}>
           <div className='flex w-full flex-row'>
-            {children}
+            {props.children}
             <div className='flex w-full flex-col text-black'>
               <label
-                htmlFor={name}
+                htmlFor={props.name}
                 className={
                   'px-3 py-0 text-sm font-semibold sm:text-base' +
-                  (required ? 'after:content-["*"] after:text-garnet' : '')
+                  (props.required
+                    ? 'after:content-["*"] after:text-garnet'
+                    : '')
                 }
               >
-                {label}
+                {props.label}
               </label>
               <input
                 className={
                   'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:underline focus:outline-none sm:text-base'
                 }
-                pattern={pattern}
-                id={name}
+                pattern={props.pattern}
+                id={props.name}
                 type={
-                  type === 'password'
+                  props.type === 'password'
                     ? showPassword
                       ? 'text'
                       : 'password'
-                    : type
+                    : props.type
                 }
-                name={name}
-                placeholder={placeholder}
+                name={props.name}
+                placeholder={props.placeholder}
                 aria-describedby={`${name}-error`}
-                required={required}
-                value={value}
-                readOnly={value ? true : false}
+                required={props.required}
+                value={props.value}
+                readOnly={props.value ? true : false}
+                {...otherProps}
               />
             </div>
           </div>
-          {type === 'password' && (
+          {props.type === 'password' && (
             <button
               type='button'
               onClick={() => setShowPassword(!showPassword)}

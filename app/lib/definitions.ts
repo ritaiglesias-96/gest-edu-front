@@ -86,6 +86,8 @@ export type AsignaturaState = {
     nombre?: string[];
     descripcion?: string[];
     creditos?: string[];
+    asignaturaId?: string[];
+    carreraId?: string[];
   };
   message?: string | null;
 };
@@ -164,6 +166,21 @@ export type Estudiante = {
   imagen?: string;
 };
 
+export type Examen = {
+  id: number;
+  fecha: Date;
+  diasPrevInsc: string;
+  estado: string;
+  asignatura: {
+    id: number;
+    nombre: string;
+    descripcion: string;
+    creditos: number;
+    semestrePlanEstudios: number;
+    carreraId: number;
+  };
+  docentes: [];
+};
 export type Curso = {
   id: number;
   fechaInicio: string;

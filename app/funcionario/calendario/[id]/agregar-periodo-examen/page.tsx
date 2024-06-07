@@ -8,7 +8,6 @@ import { useFormState, useFormStatus } from 'react-dom';
 import { initialState } from '@/lib/definitions';
 import { registrarPeriodoExamen } from '@/lib/data/funcionario/actions';
 import InputField from '@/components/InputField/inputField';
-import { Alert } from '@mui/material';
 
 function Form({ carreraId }: any) {
   const [registro, dispatch] = useFormState(

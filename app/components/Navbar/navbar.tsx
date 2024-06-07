@@ -167,13 +167,6 @@ function NavbarFuncionario() {
         </Link>
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
-          href='/funcionario/carreras'
-        >
-          <Hat className='h-6 sm:w-auto' />
-          <span>Carreras</span>
-        </Link>
-        <Link
-          className='flex flex-col gap-1  text-wrap align-middle text-sm'
           href='/funcionario/inscripciones'
         >
           <Enrollment className='h-6 sm:w-auto' />

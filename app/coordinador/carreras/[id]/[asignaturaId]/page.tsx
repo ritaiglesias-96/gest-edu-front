@@ -213,21 +213,6 @@ function EditAsignatura({
                 </p>
               ))}
           </div>
-          <InputField
-            type='number'
-            name='carreraId'
-            label='Carrera ID'
-            className='hidden'
-            value={parseInt(id)}
-          />
-          <div id='carreraId-error' aria-live='polite' aria-atomic='true'>
-            {editForm?.errors?.carreraId &&
-              editForm.errors.carreraId.map((error: string) => (
-                <p className='mt-2 text-sm text-garnet' key={error}>
-                  {error}
-                </p>
-              ))}
-          </div>
           <div className='flex w-2/3 flex-col items-center gap-1 sm:w-full'>
             <EditButton />
           </div>

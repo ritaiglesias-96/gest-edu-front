@@ -13,13 +13,19 @@ import {
   carreraFuncionarioColumns,
   asignaturaFuncionarioColumns,
   calificarCursosColumns,
+  carrerasEstudiante,
+  asignaturaExamenColumns,
+  asignaturaCursoColumns,
+  examenColumns,
 } from './columnTypes';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
 import EditIcon from '@/assets/svg/edit.svg';
 import DeleteIcon from '@/assets/svg/delete.svg';
 import SaveIcon from '@/assets/svg/done.svg';
 import CancelIcon from '@/assets/svg/close.svg';
+import Enroll from '@/assets/svg/enroll-lesson.svg';
+import CheckIcon from '@mui/icons-material/Check';
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -37,6 +43,7 @@ import {
   editDocente,
   deleteDocente,
   rechazarSolicitudInscripcionCarrera,
+  aprobarSolicitudInscripcionCarrera,
 } from '@/lib/data/funcionario/actions';
 import Link from 'next/link';
 import { Asignatura, Calificacion } from '@/lib/definitions';
@@ -52,7 +59,15 @@ import {
 } from '@mui/material';
 import React from 'react';
 import FormContainer from '../FormContainer/formContainer';
+import {
+  inscribirseCursoFetch,
+  inscribirseExamenFetch,
+} from '@/lib/data/estudiante/actions';
+import { SessionContext } from '../../../context/SessionContext';
+import { convertirFecha } from '@/utils/utils';
+import { Collapse, Alert } from '@mui/material';
 import InputField from '../InputField/inputField';
+import { obtenerDatosUsuarioFetch } from '@/lib/data/actions';
 
 type columnType =
   | 'carrera'
@@ -60,10 +75,15 @@ type columnType =
   | 'usuario'
   | 'docente'
   | 'estudiante'
-  | 'periodosExamen'
+  | 'carreras-estudiante'
+  | 'asignatura-examenes'
+  | 'asignatura-curso'
+  | 'examen'
   | 'inscripto'
   | 'previtaturas'
   | 'noPrevitaturas'
+  | 'registroExamen'
+  | 'periodosExamen'
   | 'cursos'
   | 'carreraFuncionario'
   | 'asignaturaFuncionario'
@@ -72,6 +92,8 @@ type columnType =
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
+  isInscripcionExamen?: boolean;
+  isInscripcionCurso?: boolean;
   isEditableAsignaturas?: boolean;
   editarCalificacionCurso?: boolean;
   isApproveRejectCarrera?: boolean;
@@ -82,6 +104,8 @@ interface ListProps {
 
 export default function List({
   isEditableDocentes,
+  isInscripcionExamen,
+  isInscripcionCurso,
   isEditableAsignaturas,
   editarCalificacionCurso,
   isApproveRejectCarrera,
@@ -104,6 +128,12 @@ export default function List({
           rowsLoadingParent={rowsLoading}
         />
       )}
+      {isInscripcionExamen && (
+        <InscripcionExamenDataGrid
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
+      )}
       {isEditableAsignaturas && (
         <EditableAsignaturasDataGrid
           rowsParent={rows}
@@ -118,6 +148,12 @@ export default function List({
       )}
       {isApproveRejectCarrera && (
         <ApproveRejectDataGrid
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
+      )}{' '}
+      {isInscripcionCurso && (
+        <InscripcionCursoDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
@@ -146,14 +182,32 @@ function NormalDataGrid({
     case 'usuario':
       columns = usuarioColumns;
       break;
+    case 'estudiante':
+      columns = estudianteColumns;
+      break;
+    case 'carreras-estudiante':
+      columns = carrerasEstudiante;
+      break;
+    case 'asignatura-examenes':
+      columns = asignaturaExamenColumns;
+      break;
+    case 'asignatura-curso':
+      columns = asignaturaCursoColumns;
+      break;
+    case 'examen':
+      columns = examenColumns;
+      break;
     case 'previtaturas':
       columns = previaturasColumns;
       break;
     case 'noPrevitaturas':
       columns = noPreviaturasColumns;
       break;
-    case 'estudiante':
-      columns = estudianteColumns;
+    case 'periodosExamen':
+      columns = periodosExamenColumns;
+      break;
+    case 'registroExamen':
+      columns = registroExamenColumns;
       break;
     case 'carreraFuncionario':
       columns = carreraFuncionarioColumns;
@@ -232,14 +286,13 @@ function EditableDocentesDataGrid({
   };
 
   const handleDeleteClick = (id: GridRowId) => () => {
-    // TODO agregar llamada a la API para eliminar el docente
     const deleteD = async () => {
-      return await deleteDocente(`${id}`);
+      const data = await deleteDocente(`${id}`);
+      if (data) {
+        if (rows) setRows(rows.filter((row) => row.id !== id));
+      }
     };
-    const data: any = deleteD();
-    if (data) {
-      if (rows) setRows(rows.filter((row) => row.id !== id));
-    }
+    deleteD();
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -254,20 +307,18 @@ function EditableDocentesDataGrid({
     }
   };
 
-  const edit = async (docente: GridRowModel) => {
-    const data: any = await editDocente(docente);
-    return data;
-  };
-
   const processRowUpdate = (newRow: GridRowModel) => {
     const updatedRow = { ...newRow, isNew: false };
-    const data: any = edit(updatedRow);
-    if (data) {
-      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-      return updatedRow;
-    } else {
-      return rows;
-    }
+    const edit = async (docente: GridRowModel) => {
+      const data = await editDocente(docente);
+      if (data) {
+        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+        return updatedRow;
+      } else {
+        return rows;
+      }
+    };
+    return edit(updatedRow);
   };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -633,6 +684,236 @@ function EditarCalificacionCursoDataGrid({
   );
 }
 
+function InscripcionExamenDataGrid({
+  rowsParent,
+  rowsLoadingParent,
+}: {
+  rowsParent: GridRowsProp;
+  rowsLoadingParent: boolean;
+}) {
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [email, setEmail] = useState('');
+  const [usuarioId, setUsuarioId] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenCurso, setIsOpenCurso] = useState(false);
+  const [examenId, setExamenId] = useState('');
+  const [cursoId, setCursoId] = useState('');
+  const [alertOk, setAlertOk] = useState(false);
+  const [alertError, setAlertError] = useState(false);
+  const [mensajeError, setMensajeError] = useState('');
+
+  const session = useContext(SessionContext);
+
+  useEffect(() => {
+    if (session.session?.email) {
+      setEmail(session.session.email);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    obtenerDatosUsuarioFetch().then((res) => {
+      setUsuarioId(res.id);
+    });
+  }, []);
+
+  useEffect(() => {
+    //Se convierte la fecha a formato dd/MM/yyyy
+    rowsParent.forEach((examen) => {
+      examen.fecha = convertirFecha(examen.fecha);
+    });
+    setRows(rowsParent);
+    setRowsLoading(rowsLoadingParent);
+  }, [rowsLoadingParent, rowsParent]);
+
+  const handleClickConfirmarInscripcion = () => {
+    if (email && examenId) {
+      inscribirseExamenFetch(email, examenId).then((data) => {
+        if (data?.message) {
+          setMensajeError(data.message);
+          setAlertError(true);
+          setAlertOk(false);
+        } else {
+          setMensajeError('');
+          setAlertError(false);
+          setAlertOk(true);
+        }
+      });
+    }
+    setIsOpen(false);
+  };
+
+  const handleClickConfirmarInscripcionCurso = () => {
+    if (usuarioId && cursoId) {
+      inscribirseCursoFetch(usuarioId, cursoId).then((data) => {
+        if (data?.message) {
+          setMensajeError(data.message);
+          setAlertError(true);
+          setAlertOk(false);
+        } else {
+          setMensajeError('');
+          setAlertError(false);
+          setAlertOk(true);
+        }
+      });
+    }
+    setIsOpen(false);
+  };
+
+  const columns: GridColDef[] = [
+    {
+      field: 'id',
+      headerName: 'ID',
+      cellClassName: 'flex items-center self-end',
+      headerClassName: 'header-center',
+      flex: 1,
+    },
+    {
+      field: 'fecha',
+      headerName: 'Fecha',
+      cellClassName: 'flex items-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+    },
+    {
+      field: 'inscribirse',
+      headerName: 'Inscribirse',
+      cellClassName: 'flex text-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+      renderCell: (params) => (
+        <Link
+          href={`${window.location.pathname}`}
+          onClick={() => {
+            setIsOpen(true), setExamenId(params.id.toString());
+          }}
+          className='mx-auto flex size-fit'
+        >
+          <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
+        </Link>
+      ),
+    },
+  ];
+
+  return (
+    <>
+      <div>
+        <DataGrid
+          className='w-full'
+          rows={rows}
+          loading={rowsLoading}
+          columns={columns}
+          sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+        />
+      </div>
+
+      {isOpen && (
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
+          <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+            <div className='rounded-md text-center font-bold text-black'>
+              <h5 className='m-0 p-0'>Inscripción a examen</h5>
+              <div className='flex flex-col'>
+                <p className='font-bold'>
+                  ¿Desea confirmar inscripción al exámen?
+                </p>
+              </div>
+              <div className='items-center md:space-x-6'>
+                <div className='inline-block'>
+                  <Button
+                    styling='primary'
+                    className='lg:w-20'
+                    onClick={handleClickConfirmarInscripcion}
+                  >
+                    Si
+                  </Button>
+                </div>
+                <div className='inline-block'>
+                  <Button
+                    styling='secondary'
+                    onClick={() => setIsOpen(false)}
+                    className='lg:w-20'
+                  >
+                    No
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {isOpenCurso && (
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
+          <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+            <div className='rounded-md text-center font-bold text-black'>
+              <h5 className='m-0 p-0'>Inscripción a curso</h5>
+              <div className='flex flex-col'>
+                <p className='font-bold'>
+                  ¿Desea confirmar inscripción al curso?
+                </p>
+              </div>
+              <div className='items-center md:space-x-6'>
+                <div className='inline-block'>
+                  <Button
+                    styling='primary'
+                    className='lg:w-20'
+                    onClick={handleClickConfirmarInscripcionCurso}
+                  >
+                    Si
+                  </Button>
+                </div>
+                <div className='inline-block'>
+                  <Button
+                    styling='secondary'
+                    onClick={() => setIsOpenCurso(false)}
+                    className='lg:w-20'
+                  >
+                    No
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {alertOk && (
+        <Collapse
+          in={alertOk}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='success'
+            variant='filled'
+            onClose={() => {
+              setAlertOk(false);
+            }}
+          >
+            ¡Datos editados correctamente!
+          </Alert>
+        </Collapse>
+      )}
+      {alertError && (
+        <Collapse
+          in={alertError}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='error'
+            variant='filled'
+            onClose={() => {
+              setAlertError(false);
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
+    </>
+  );
+}
+
 function ApproveRejectDataGrid({
   rowsParent,
   rowsLoadingParent,
@@ -640,12 +921,11 @@ function ApproveRejectDataGrid({
   rowsParent: GridRowsProp;
   rowsLoadingParent: boolean;
 }) {
-  const router = useRouter();
-  const [disabled, setDisabled] = useState(true);
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [tramiteId, setTramiteId] = useState<GridRowId>();
   const [motivoRechazo, setMotivoRechazo] = useState<string>('');
 
   useEffect(() => {
@@ -653,27 +933,37 @@ function ApproveRejectDataGrid({
     setRowsLoading(rowsLoadingParent);
   }, [rowsLoadingParent, rowsParent]);
 
-  const handleSaveClick = (id: GridRowId) => () => {
-    //TODO aceptar solicitud
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  useEffect(() => {
+    if (motivoRechazo !== '' && !showModal) {
+      const rechazarInscripcion = async () => {
+        const data = await rechazarSolicitudInscripcionCarrera(
+          `${tramiteId}`,
+          motivoRechazo
+        );
+        if (data) {
+          console.log(data);
+          if (rows) setRows(rows.filter((row) => row.id !== tramiteId));
+        }
+      };
+      rechazarInscripcion();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showModal]);
+
+  const handleSaveClick = (id: GridRowId) => async () => {
+    const aprobarInscripcion = async () => {
+      const data = await aprobarSolicitudInscripcionCarrera(`${id}`);
+      if (data) {
+        if (rows) setRows(rows.filter((row) => row.id !== id));
+      }
+      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    };
+    aprobarInscripcion();
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
     setShowModal(true);
-    if (motivoRechazo === '' && !showModal) {
-      alert('Debe ingresar un motivo de rechazo');
-    } else {
-      const rechazarInscripcion = async () => {
-        return await rechazarSolicitudInscripcionCarrera(
-          `${id}`,
-          motivoRechazo
-        );
-      };
-      const data: any = rechazarInscripcion();
-      if (data) {
-        if (rows) setRows(rows.filter((row) => row.id !== id));
-      }
-    }
+    setTramiteId(id);
   };
 
   const processRowUpdate = (newRow: GridRowModel) => {
@@ -786,17 +1076,23 @@ function ApproveRejectDataGrid({
             <CancelIcon className='self-end fill-garnet hover:fill-bittersweet sm:size-10' />
           </button>
           <h3 className='text-center text-black'>Motivo de rechazo</h3>
-          <form className='flex min-h-full w-full flex-col items-center justify-between gap-2 md:mx-auto md:h-full md:max-w-full md:gap-2 '>
+          <form
+            className='flex min-h-full w-full flex-col items-center justify-between gap-2 md:mx-auto md:h-full md:max-w-full md:gap-2'
+            onSubmit={(e) => {
+              setShowModal(false);
+              e.preventDefault();
+              setMotivoRechazo(e.currentTarget.motivo.value);
+            }}
+          >
             <InputField
               placeholder='De un motivo al estudiante...'
               type='textarea'
               name='motivo'
               label='Motivo'
-              required={true}
-              onChange={(e) => setMotivoRechazo(e.target.value)}
-            ></InputField>
+              required
+            />
             <div className='flex w-2/3 flex-col items-center gap-1 sm:w-full'>
-              <Button className='w-auto' styling='primary'>
+              <Button className='w-auto' styling='primary' type='submit'>
                 Aceptar
               </Button>
             </div>
@@ -804,5 +1100,180 @@ function ApproveRejectDataGrid({
         </div>
       )}
     </div>
+  );
+}
+
+function InscripcionCursoDataGrid({
+  rowsParent,
+  rowsLoadingParent,
+}: {
+  rowsParent: GridRowsProp;
+  rowsLoadingParent: boolean;
+}) {
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [usuarioId, setUsuarioId] = useState('');
+  const [isOpenCurso, setIsOpenCurso] = useState(false);
+  const [cursoId, setCursoId] = useState('');
+  const [alertOk, setAlertOk] = useState(false);
+  const [alertError, setAlertError] = useState(false);
+  const [mensajeError, setMensajeError] = useState('');
+
+  const session = useContext(SessionContext);
+
+  useEffect(() => {
+    obtenerDatosUsuarioFetch().then((res) => {
+      setUsuarioId(res.id);
+    });
+  }, []);
+
+  useEffect(() => {
+    //Se convierte la fecha a formato dd/MM/yyyy
+    rowsParent.forEach((examen) => {
+      examen.fecha = convertirFecha(examen.fecha);
+    });
+    setRows(rowsParent);
+    setRowsLoading(rowsLoadingParent);
+  }, [rowsLoadingParent, rowsParent]);
+
+  const handleClickConfirmarInscripcionCurso = () => {
+    if (usuarioId && cursoId) {
+      inscribirseCursoFetch(usuarioId, cursoId).then((data) => {
+        if (data?.message) {
+          setMensajeError(data.message);
+          setAlertError(true);
+          setAlertOk(false);
+        } else {
+          setMensajeError('');
+          setAlertError(false);
+          setAlertOk(true);
+        }
+      });
+    }
+    setIsOpenCurso(false);
+  };
+
+  const columns: GridColDef[] = [
+    {
+      field: 'id',
+      headerName: 'ID',
+      cellClassName: 'flex items-center self-end',
+      headerClassName: 'header-center',
+      flex: 1,
+    },
+    {
+      field: 'fechaInicio',
+      headerName: 'Fecha de Inicio',
+      cellClassName: 'flex items-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+    },
+    {
+      field: 'fechaFin',
+      headerName: 'Fecha de Fin',
+      cellClassName: 'flex items-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+    },
+    {
+      field: 'inscribirse',
+      headerName: 'Inscribirse',
+      cellClassName: 'flex text-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+      renderCell: (params) => (
+        <Link
+          href={`${window.location.pathname}`}
+          onClick={() => {
+            setIsOpenCurso(true), setCursoId(params.id.toString());
+          }}
+          className='mx-auto flex size-fit'
+        >
+          <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
+        </Link>
+      ),
+    },
+  ];
+
+  return (
+    <>
+      <div>
+        <DataGrid
+          className='w-full'
+          rows={rows}
+          loading={rowsLoading}
+          columns={columns}
+          sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+        />
+      </div>
+      {isOpenCurso && (
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
+          <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+            <div className='rounded-md text-center font-bold text-black'>
+              <h5 className='m-0 p-0'>Inscripción a curso</h5>
+              <div className='flex flex-col'>
+                <p className='font-bold'>
+                  ¿Desea confirmar inscripción al curso?
+                </p>
+              </div>
+              <div className='items-center md:space-x-6'>
+                <div className='inline-block'>
+                  <Button
+                    styling='primary'
+                    className='lg:w-20'
+                    onClick={handleClickConfirmarInscripcionCurso}
+                  >
+                    Si
+                  </Button>
+                </div>
+                <div className='inline-block'>
+                  <Button
+                    styling='secondary'
+                    onClick={() => setIsOpenCurso(false)}
+                    className='lg:w-20'
+                  >
+                    No
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {alertOk && (
+        <Collapse
+          in={alertOk}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='success'
+            variant='filled'
+            onClose={() => {
+              setAlertOk(false);
+            }}
+          >
+            ¡Datos editados correctamente!
+          </Alert>
+        </Collapse>
+      )}
+      {alertError && (
+        <Collapse
+          in={alertError}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='error'
+            variant='filled'
+            onClose={() => {
+              setAlertError(false);
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
+    </>
   );
 }
