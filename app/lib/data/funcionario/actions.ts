@@ -1,13 +1,14 @@
 'use server';
 
 import { authToken } from '@/utils/auth';
+import { Calificacion, DocenteState, PeriodoExamenState } from '@/lib/definitions';
 import {
   AltaDocenteFormSchema,
   RegistrarPeriopdoExamenFormSchema,
 } from '../schemasZod';
-import { DocenteState, PeriodoExamenState } from '@/lib/definitions';
 import { GridRowModel } from '@mui/x-data-grid/models/gridRows';
 import { HorarioCurso } from '@/lib/definitions';
+import { getCarrera } from '../coordinador/actions';
 
 const apiRoute = process.env.BACK_API;
 
@@ -135,6 +136,80 @@ export async function getEstudiante(ci: string) {
   }
 }
 
+export async function calificarCursoFetch(id: number, califiaciones: Calificacion[]) {
+  const token = authToken();
+  if(token){
+    const response = await fetch(
+      `${apiRoute}/inscripcionCurso/${id}/calificar`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(califiaciones),
+      }
+    );
+    if (response.ok) {
+      return {
+        message: 'Calificaciones guardadas con exito. 200',
+      };
+    } else {
+      return {
+        message: 'Error al cargar calificaciones',
+      };
+    }
+  }
+}
+
+export async function getEstudiantesPorCurso(id: string) {
+  const token = authToken();
+  const response = await fetch(`${apiRoute}/cursos/${id}/estudiantes`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return null;
+  }
+}
+
+export async function getCurso(id: string) {
+  const token = authToken();
+  const response = await fetch(`${apiRoute}/cursos/${id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return null;
+  }
+}
+
+export async function getDocente(id: string) {
+  const token = authToken();
+  const response = await fetch(`${apiRoute}/docentes/${id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return null;
+  }
+}
+
 export async function registrarPeriodoExamen(
   prevState: PeriodoExamenState,
   formData: FormData
@@ -187,36 +262,18 @@ export async function registrarPeriodoExamen(
   }
 }
 
-export async function getPeriodosExamenCarrera(id: string) {
-  const token = authToken();
-  const carreraJson = await getCarrera(id);
-  if (token) {
-    const periodos = await fetch(`${apiRoute}/carreras/${id}/periodos-examen`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (periodos.ok) {
-      const periodosJson = await periodos.json();
-      return { carrera: carreraJson, periodos: periodosJson.content };
-    } else {
-      return { carrera: carreraJson, periodos: [] };
-    }
-  } else {
-    return null;
-  }
-}
-
-export async function getCarrera(id: string) {
+export async function getSolicitudesInscripcionCarreras() {
   const token = authToken();
   if (token) {
-    const response = await fetch(`${apiRoute}/carreras/${id}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${apiRoute}/tramites/inscripcion-carrera-pendientes`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.ok) {
       const data = await response.json();
       return data;
@@ -228,25 +285,48 @@ export async function getCarrera(id: string) {
   }
 }
 
-export async function getCarreraYAsignatura(id: string) {
+export async function aprobarSolicitudInscripcionCarrera(tramiteId: string) {
   const token = authToken();
-
   if (token) {
-    const carreraJson = await getCarrera(id);
-
-    if (!carreraJson) return null;
-    const asignaturas = await fetch(`${apiRoute}/carreras/${id}/asignaturas`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (asignaturas.ok) {
-      const asignaturasJson = await asignaturas.json();
-
-      return { carrera: carreraJson, asignaturas: asignaturasJson.content };
+    const response = await fetch(
+      `${apiRoute}/tramites/aprobar-tramite-solicitud-titulo/${tramiteId}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      return response.json();
     } else {
-      return { carrera: carreraJson, asignaturas: [] };
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function rechazarSolicitudInscripcionCarrera(
+  tramiteId: string,
+  motivoRechazo: string
+) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/tramites/rechazar-tramite-solicitud-titulo/${tramiteId}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ motivoRechazo }),
+      }
+    );
+    if (response.ok) {
+      return response.json();
+    } else {
+      return null;
     }
   } else {
     return null;
@@ -356,71 +436,21 @@ export async function getCursosAsignatura(id: string) {
   }
 }
 
-export async function getSolicitudesInscripcionCarreras() {
+export async function getPeriodosExamenCarrera(id: string) {
   const token = authToken();
+  const carreraJson = await getCarrera(id);
   if (token) {
-    const response = await fetch(
-      `${apiRoute}/tramites/inscripcion-carrera-pendientes`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (response.ok) {
-      const data = await response.json();
-      return data;
+    const periodos = await fetch(`${apiRoute}/carreras/${id}/periodos-examen`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (periodos.ok) {
+      const periodosJson = await periodos.json();
+      return { carrera: carreraJson, periodos: periodosJson.content };
     } else {
-      return null;
-    }
-  } else {
-    return null;
-  }
-}
-
-export async function aprobarSolicitudInscripcionCarrera(tramiteId: string) {
-  const token = authToken();
-  if (token) {
-    const response = await fetch(
-      `${apiRoute}/tramites/aprobar-tramite-solicitud-titulo/${tramiteId}`,
-      {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (response.ok) {
-      return response.json();
-    } else {
-      return null;
-    }
-  } else {
-    return null;
-  }
-}
-
-export async function rechazarSolicitudInscripcionCarrera(
-  tramiteId: string,
-  motivoRechazo: string
-) {
-  const token = authToken();
-  if (token) {
-    const response = await fetch(
-      `${apiRoute}/tramites/rechazar-tramite-solicitud-titulo/${tramiteId}`,
-      {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(motivoRechazo),
-      }
-    );
-    if (response.ok) {
-      return response.json();
-    } else {
-      return null;
+      return { carrera: carreraJson, periodos: [] };
     }
   } else {
     return null;

@@ -342,10 +342,11 @@ export const examenColumns: GridColDef[] = [
 ];
 
 export const inscriptoColumns: GridColDef[] = [
-  { field: 'ci', headerName: 'Cédula' },
-  { field: 'nombre', headerName: 'Nombre' },
-  { field: 'apellido', headerName: 'Apellido' },
-  { field: 'email', headerName: 'Email' },
+  { field: 'id', headerName: 'ID' },
+  { field: 'ci', headerName: 'Cédula'},
+  { field: 'nombre', headerName: 'Nombre'},
+  { field: 'apellido', headerName: 'Apellido'},
+  { field: 'email', headerName: 'Email'},
   { field: 'estado', headerName: 'Estado' },
   { field: 'fechaInscripcion', headerName: 'Fecha de Inscripción' },
   {
@@ -370,6 +371,25 @@ export const cursosColumns: GridColDef[] = [
         className='mx-auto flex size-fit'
       >
         <Schedule className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
+export const calificarCursosColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'estado', headerName: 'Estado'},
+  {
+    field: 'calificaciones',
+    headerName: 'Calificaciones',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/cursos/${params.row.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },

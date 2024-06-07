@@ -12,6 +12,7 @@ import {
   cursosColumns,
   carreraFuncionarioColumns,
   asignaturaFuncionarioColumns,
+  calificarCursosColumns,
   carrerasEstudiante,
   asignaturaExamenColumns,
   asignaturaCursoColumns,
@@ -36,6 +37,7 @@ import {
   GridRowId,
   GridRowModel,
   GridRowEditStopReasons,
+  GridRenderCellParams,
 } from '@mui/x-data-grid';
 import {
   editDocente,
@@ -44,6 +46,19 @@ import {
   aprobarSolicitudInscripcionCarrera,
 } from '@/lib/data/funcionario/actions';
 import Link from 'next/link';
+import { Asignatura, Calificacion } from '@/lib/definitions';
+import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
+import { useRouter } from 'next/navigation';
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from '@mui/material';
+import React from 'react';
+import FormContainer from '../FormContainer/formContainer';
 import {
   inscribirseCursoFetch,
   inscribirseExamenFetch,
@@ -51,9 +66,6 @@ import {
 import { SessionContext } from '../../../context/SessionContext';
 import { convertirFecha } from '@/utils/utils';
 import { Collapse, Alert } from '@mui/material';
-import { Asignatura } from '@/lib/definitions';
-import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
-import { useRouter } from 'next/navigation';
 import InputField from '../InputField/inputField';
 import { obtenerDatosUsuarioFetch } from '@/lib/data/actions';
 
@@ -75,12 +87,15 @@ type columnType =
   | 'cursos'
   | 'carreraFuncionario'
   | 'asignaturaFuncionario'
+  | 'registroExamen'
+  | 'calficar-cursos'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
   isInscripcionExamen?: boolean;
   isInscripcionCurso?: boolean;
   isEditableAsignaturas?: boolean;
+  editarCalificacionCurso?: boolean;
   isApproveRejectCarrera?: boolean;
   rows: GridRowsProp[];
   rowsLoading: boolean;
@@ -92,6 +107,7 @@ export default function List({
   isInscripcionExamen,
   isInscripcionCurso,
   isEditableAsignaturas,
+  editarCalificacionCurso,
   isApproveRejectCarrera,
   rows,
   rowsLoading,
@@ -120,6 +136,12 @@ export default function List({
       )}
       {isEditableAsignaturas && (
         <EditableAsignaturasDataGrid
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
+      )}
+      {editarCalificacionCurso && (
+        <EditarCalificacionCursoDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
@@ -198,6 +220,15 @@ function NormalDataGrid({
       break;
     case 'cursos':
       columns = cursosColumns;
+      break;
+    case 'calficar-cursos':
+      columns = calificarCursosColumns;
+      break;
+    case 'registroExamen':
+      columns = registroExamenColumns;
+      break;
+    case 'periodosExamen':
+      columns = periodosExamenColumns;
       break;
     default:
       break;
@@ -562,6 +593,93 @@ function EditableAsignaturasDataGrid({
         }}
         sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
       />
+    </div>
+  );
+}
+
+function EditarCalificacionCursoDataGrid({
+  rowsParent,
+  rowsLoadingParent,
+}: {
+  rowsParent: GridRowsProp;
+  rowsLoadingParent: boolean;
+}) {
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [calificaciones, setCalificaciones] = useState<{
+    [key: number]: string;
+  }>({});
+
+  const handleChange = (id: number) => (event: SelectChangeEvent) => {
+    setCalificaciones((prev) => ({
+      ...prev,
+      [id]: event.target.value as string,
+    }));
+  };
+
+  useEffect(() => {
+    sessionStorage.setItem('calificaciones', JSON.stringify(calificaciones));
+  }, [calificaciones]);
+
+  useEffect(() => {
+    setRows(rowsParent);
+    setRowsLoading(rowsLoadingParent);
+  }, [rowsLoadingParent, rowsParent]);
+
+  const columns: GridColDef[] = [
+    { field: 'id', type: 'number', headerName: 'ID' },
+    { field: 'nombre', headerName: 'Nombre', flex: 1 },
+    { field: 'apellido', headerName: 'Apellido', flex: 1 },
+    { field: 'ci', headerName: 'Cedula', flex: 1 },
+    {
+      field: 'calificacion',
+      headerName: 'Calificación',
+      flex: 1,
+      renderCell: (params: GridRenderCellParams<any>) => {
+        const id = params.id as number; // asegurarse de que params.id es un número
+        return (
+          <div>
+            <FormControl
+              fullWidth
+              variant='standard'
+              sx={{ m: 1, minWidth: 120 }}
+            >
+              <InputLabel
+                id={`demo-simple-select-standard-label-${id}`}
+                sx={{ color: 'black' }}
+              >
+                Calificación
+              </InputLabel>
+              <Select
+                labelId={`demo-simple-select-label-${id}`}
+                id={`select-${id}`}
+                value={calificaciones[id] || ''}
+                label='Calificación'
+                onChange={handleChange(id)}
+                sx={{
+                  '&.MuiInputBase-root': {
+                    color: 'inherit',
+                  },
+                  '& .MuiSelect-select:focus': {
+                    backgroundColor: 'transparent',
+                  },
+                }}
+              >
+                <MenuItem value='EXONERADO'>Exonerado</MenuItem>
+                <MenuItem value='AEXAMEN'>A Examen</MenuItem>
+                <MenuItem value='RECURSA'>Recursa</MenuItem>
+                <MenuItem value='PENDIENTE'>Pendiente</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+        );
+      },
+    },
+  ];
+
+  return (
+    <div className='h-fit w-full p-4'>
+      <DataGrid rows={rows} loading={rowsLoading} columns={columns} />
     </div>
   );
 }

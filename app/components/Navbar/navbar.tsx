@@ -7,12 +7,16 @@ import User from '@/assets/svg/user.svg';
 import Users from '@/assets/svg/people.svg';
 import Hat from '@/assets/svg/school.svg';
 import Pencil from '@/assets/svg/edit.svg';
+import Lessons from '@/assets/svg/enroll-lesson.svg';
 import Calendar from '@/assets/svg/calendar.svg';
 import Link from 'next/link';
 import Enrollment from '@/assets/svg/enroll-lesson.svg';
 import { Role } from '@/lib/definitions';
 import { useContext, useEffect, useState } from 'react';
 import { SessionContext } from '../../../context/SessionContext';
+import Button from '../Button/button';
+import { Menu, MenuItem } from '@mui/material';
+import React from 'react';
 
 export default function Navbar() {
   const session = useContext(SessionContext);
@@ -153,13 +157,7 @@ function NavbarFuncionario() {
         <GestEduIcon />
       </Link>
       <div className='flex flex-row gap-4'>
-        <Link
-          className='flex flex-col gap-1  text-wrap align-middle text-sm'
-          href='/funcionario/calendario'
-        >
-          <Calendar className='h-6 w-auto self-center' />
-          <span>Calendario</span>
-        </Link>
+        <MenuCalificaciones />
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
           href='/funcionario/estudiantes'
@@ -191,5 +189,38 @@ function NavbarFuncionario() {
         <LogoutButton />
       </div>
     </nav>
+  );
+}
+
+function MenuCalificaciones() {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (opcion: string) => {
+    window.location.href = `/funcionario/calificaciones`;
+    setAnchorEl(null);
+  };
+
+  return (
+    <>
+      <Button styling='link' onClick={handleClick}>
+        <Lessons className='h-6 sm:w-auto self-center' />
+        <span className='text-sm'>Calificaciones</span>
+      </Button>
+      <Menu
+        id='basic-menu'
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={() => handleClose('cursos')}>Cursos</MenuItem>
+        <MenuItem onClick={() => handleClose('examenes')}>Examenes</MenuItem>
+      </Menu>
+    </>
   );
 }

@@ -1,23 +1,16 @@
-export const convertirFecha = (fecha: string) => {
-  if (fecha !== null) {
-    // Crear un objeto Date a partir de la cadena de entrada
-    const date = new Date(fecha);
+export function convertirFecha(fecha: string) {
+  // Crear un objeto Date a partir de la cadena de fecha
+  const fechaObj = new Date(fecha);
 
-    // Obtener el día, mes y año de la fecha
-    const day = date.getDate();
-    const month = date.getMonth() + 1; // Los meses en JavaScript son 0-indexed (0 = Enero, 11 = Diciembre)
-    const year = date.getFullYear();
+  // Obtener el día, mes y año de la fecha
+  const dia = fechaObj.getDate().toString().padStart(2, '0');
+  const mes = (fechaObj.getMonth() + 1).toString().padStart(2, '0'); // Los meses en JavaScript son de 0 a 11
+  const anio = fechaObj.getFullYear();
 
-    // Formatear el día y el mes para que tengan siempre dos dígitos
-    const formattedDay = day < 10 ? '0' + day : day;
-    const formattedMonth = month < 10 ? '0' + month : month;
-
-    // Devolver la fecha formateada
-    return `${formattedDay}/${formattedMonth}/${year}`;
-  }
-
-  return '';
+  // Formatear la fecha en el formato "dd/MM/yyyy"
+  return `${dia}/${mes}/${anio}`;
 }
+
 //Para las que vienen formato  yyyy-mm-ddThh:mm con la T en el medio
 export function formatDate(dateString: string): string {
   const parts = dateString.split('T');

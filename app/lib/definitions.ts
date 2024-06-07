@@ -1,8 +1,5 @@
 export const initialState = { message: '', errors: {} };
 
-export const defaultImagen =
-  'https://firebasestorage.googleapis.com/v0/b/gestedu2024.appspot.com/o/defaultUserImage.png?alt=media&token=72b03305-8f00-4aff-bde0-7964ab3046c0';
-
 export enum Role {
   estudiante = 'ROL_ESTUDIANTE',
   funcionario = 'ROL_FUNCIONARIO',
@@ -156,6 +153,7 @@ export type PeriodoExamenState = {
   };
   message?: string | null;
 };
+
 export type Estudiante = {
   id: number;
   ci: string;
@@ -184,12 +182,13 @@ export type Examen = {
   docentes: [];
 };
 export type Curso = {
-  asignaturaId: number;
-  diasPrevInsc: number;
-  docenteId: number;
-  estado: string;
-  fechaFin: string;
+  id: number;
   fechaInicio: string;
+  fechaFin: string;
+  diasPrevInsc: number;
+  estado: string;
+  asignaturaId: number;
+  docenteId: number;
 };
 
 export type HorarioCurso = {
@@ -215,7 +214,6 @@ export type Docente = {
   apellido: string;
 };
 
-//Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
 export interface Usuario {
   id: number;
   ci: string;
@@ -236,6 +234,11 @@ export interface InscripcionCarreraPendiente {
   usuarioResponsable: Usuario;
 }
 
+export type Calificacion = {
+  estudianteId: string,
+  calificacionCurso: string
+};
+
 export interface InscripcionCarreraPendienteFlattened {
   id: number;
   motivoRechazo: string;
@@ -251,3 +254,5 @@ export interface InscripcionCarreraPendienteFlattened {
   usuarioSolicitanteEmail: string;
   usuarioResponsable: any;
 }
+
+//Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
