@@ -1,6 +1,6 @@
 'use client'
 import List from "@/components/List/list";
-import { obtenerAsignaturasPorCarreran } from "@/lib/data/estudiante/actions";
+import { obtenerAsignaturasParaInscripcionExamenFetch } from "@/lib/data/estudiante/actions";
 import { useState, useEffect } from "react";
 
 export default function ExamenesEstudiante() {
@@ -17,7 +17,7 @@ export default function ExamenesEstudiante() {
 
     useEffect(() => {
         if (carreraId) {
-            obtenerAsignaturasPorCarreran(carreraId).then((data) => {
+          obtenerAsignaturasParaInscripcionExamenFetch(carreraId).then((data) => {
                 setRows(data.content ? data.content : []);
                 setRowsLoading(false);
             });

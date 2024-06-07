@@ -276,15 +276,12 @@ export async function getPrevituras(id: string) {
 export const obtenerExamenesVigentes = async (id: string) => {
   const token = authToken();
   if (token) {
-    const response = await fetch(
-      `${apiRoute}/asignaturas/${id}/examenesVigentes`,
-      {
-        method: 'GET',
-        headers: {
-          Authotization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${apiRoute}/asignaturas/${id}/examenesVigentes`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
     if (response.ok) {
       const data = await response.json();
       return data;
@@ -317,7 +314,7 @@ export async function altaPreviaFetch(asignaturaId: string, previaId: string) {
       };
     }
   }
-}
+};
 
 export async function altaPlanEstudio(asignaturas: Asignatura[], id: string) {
   const token = authToken();
