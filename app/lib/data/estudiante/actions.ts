@@ -283,6 +283,31 @@ export const bajaExamenFetch = async (examenId: string) => {
   }
 };
 
+export const bajaExamenFetch = async (examenId: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/examenes/${examenId}/baja`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    }).then((res) => {
+      return res.json();
+    });
+
+    if (response.status === 200) {
+      return {
+        message: 'Se dio de baja exitosamente.',
+      };
+    } else {
+      return {
+        message: response.message,
+      };
+    }
+  }
+};
+
 export const obtenerCursosInscriptoFetch = async () => {
   const token = authToken();
   if (token) {
