@@ -237,7 +237,9 @@ export const carrerasEstudiante: GridColDef[] = [
     renderCell: (params) => (
       <Link
         href={`${window.location.pathname}/${params.id}/cursos`}
-        onClick={() => sessionStorage.setItem('carrera_id', params.id.toString())}
+        onClick={() =>
+          sessionStorage.setItem('carrera_id', params.id.toString())
+        }
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
@@ -252,7 +254,9 @@ export const carrerasEstudiante: GridColDef[] = [
     renderCell: (params) => (
       <Link
         href={`${window.location.pathname}/${params.id}/examenes`}
-        onClick={() => sessionStorage.setItem('carrera_id', params.id.toString())}
+        onClick={() =>
+          sessionStorage.setItem('carrera_id', params.id.toString())
+        }
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
@@ -272,17 +276,19 @@ export const asignaturaExamenColumns: GridColDef[] = [
     headerName: 'Descripcion',
   },
   {
-    field: 'inscribirse',
-    headerName: 'Inscribirse',
+    field: 'inscripcion',
+    headerName: 'Inscripcion',
     cellClassName: 'flex items-center self-end',
     headerAlign: 'center',
     renderCell: (params) => (
       <Link
         href={`${window.location.pathname}/confirmar-examen`}
-        onClick={() => sessionStorage.setItem('asignatura_id', params.id.toString())}
+        onClick={() =>
+          sessionStorage.setItem('asignatura_id', params.id.toString())
+        }
         className='mx-auto flex size-fit'
       >
-        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
@@ -307,7 +313,7 @@ export const registroExamenColumns: GridColDef[] = [
     headerName: 'Fecha',
   },
 ];
-  
+
 export const examenColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   {
@@ -317,8 +323,8 @@ export const examenColumns: GridColDef[] = [
     headerAlign: 'center',
   },
   {
-    field: 'inscribirse',
-    headerName: 'Inscribirse',
+    field: 'inscripcion',
+    headerName: 'Inscripcion',
     cellClassName: 'flex items-center self-end',
     headerAlign: 'center',
     renderCell: (params) => (
@@ -337,10 +343,10 @@ export const examenColumns: GridColDef[] = [
 
 export const inscriptoColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
-  { field: 'ci', headerName: 'Cédula'},
-  { field: 'nombre', headerName: 'Nombre'},
-  { field: 'apellido', headerName: 'Apellido'},
-  { field: 'email', headerName: 'Email'},
+  { field: 'ci', headerName: 'Cédula' },
+  { field: 'nombre', headerName: 'Nombre' },
+  { field: 'apellido', headerName: 'Apellido' },
+  { field: 'email', headerName: 'Email' },
   { field: 'estado', headerName: 'Estado' },
   { field: 'fechaInscripcion', headerName: 'Fecha de Inscripción' },
   {
@@ -372,7 +378,7 @@ export const cursosColumns: GridColDef[] = [
 
 export const calificarCursosColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
-  { field: 'estado', headerName: 'Estado'},
+  { field: 'estado', headerName: 'Estado' },
   {
     field: 'calificaciones',
     headerName: 'Calificaciones',
