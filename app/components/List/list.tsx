@@ -24,6 +24,7 @@ import {
   ExamenFuncionarioColumns,
   InscriptosExamenFuncionarioColumns,
   asignaturaBajaCursoColumns,
+  solicitudTituloColumns,
 } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -109,6 +110,7 @@ type columnType =
   | 'examenFuncionario'
   | 'inscriptosExamenFuncionario'
   | 'asignaturaBajaCurso'
+  | 'solicitudTitulo'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -211,24 +213,6 @@ export default function List({
     case 'solicitudTitulo':
       columns = solicitudTituloColumns;
       break;
-    case 'carreraInscripcionFuncionario':
-      columns = carreraInscripcionFuncionarioColumns;
-      break;
-    case 'asignaturaExamenFuncionario':
-      columns = asignaturaExamenFuncionarioColumns;
-      break;
-    case 'examenFuncionario':
-      columns = ExamenFuncionarioColumns;
-      break;
-    case 'inscriptosExamenFuncionario':
-      columns = InscriptosExamenFuncionarioColumns;
-      break;
-    case 'asignaturaBajaCurso':
-      columns = asignaturaBajaCursoColumns;
-      break;
-    case 'solicitudTitulo':
-      columns = solicitudTituloColumns;
-      break;
     default:
       break;
   }
@@ -290,7 +274,7 @@ export default function List({
       )}
       {isHorarioCursoConsulta && (
         <HorariosCursosEstudiante
-        rowsParent={rows}
+          rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
       )}
@@ -1475,15 +1459,25 @@ function HorariosCursosEstudiante({
               {horarios.length > 0 ? (
                 <div>
                   {horarios.map((h, index) => (
-                    <TableContainer key={`${h.dia}-${h.horaInicio}-${h.horaFin}-${index}`}>
+                    <TableContainer
+                      key={`${h.dia}-${h.horaInicio}-${h.horaFin}-${index}`}
+                    >
                       <Table aria-label='simple table'>
                         <TableBody>
                           <TableRow
-                              key={h.dia}
-                              sx={{ '&:last-child td, &:last-child th': { border: 0 }, py: 1 }}
-                            >
-                          <TableCell align="right"><span className='font-bold text-black'>{h.dia}</span>: {h.horaInicio} - {h.horaFin}</TableCell>
-                        </TableRow>
+                            key={h.dia}
+                            sx={{
+                              '&:last-child td, &:last-child th': { border: 0 },
+                              py: 1,
+                            }}
+                          >
+                            <TableCell align='right'>
+                              <span className='font-bold text-black'>
+                                {h.dia}
+                              </span>
+                              : {h.horaInicio} - {h.horaFin}
+                            </TableCell>
+                          </TableRow>
                         </TableBody>
                       </Table>
                     </TableContainer>

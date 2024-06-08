@@ -226,8 +226,8 @@ function MenuCalificaciones() {
   return (
     <>
       <Button styling='link' onClick={handleClick}>
-        <Enrollment className='h-6 sm:w-auto' />
-        <span>Calificaciones</span>
+        <Lessons className='h-6 self-center sm:w-auto' />
+        <span className='text-sm'>Calificaciones</span>
       </Button>
       <Menu
         id='basic-menu'
@@ -255,7 +255,7 @@ function MenuConsulta() {
     if (opcion === 'pendientes') {
       window.location.href = `/estudiante/pendientes`;
     }
-    if(opcion === 'horarios'){
+    if (opcion === 'horarios') {
       window.location.href = `/estudiante/horarios`;
     }
     setAnchorEl(null);
