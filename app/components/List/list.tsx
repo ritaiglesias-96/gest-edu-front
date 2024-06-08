@@ -25,6 +25,7 @@ import {
   InscriptosExamenFuncionarioColumns,
   asignaturaBajaCursoColumns,
   solicitudTituloColumns,
+  carrerasFuncionario,
 } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -111,6 +112,7 @@ type columnType =
   | 'inscriptosExamenFuncionario'
   | 'asignaturaBajaCurso'
   | 'solicitudTitulo'
+  | 'carreras-funcionario'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
