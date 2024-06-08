@@ -39,12 +39,11 @@ export default function AltaDocentePage() {
           <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
         </InputField>
         <div id='nombre-error' aria-live='polite' aria-atomic='true'>
-          {alta?.errors?.nombre &&
-            alta.errors.nombre.map((error: string) => (
-              <p className='mt-2 text-sm text-garnet' key={error}>
-                {error}
-              </p>
-            ))}
+          {alta?.errors?.nombre?.map((error: string) => (
+            <p className='mt-2 text-sm text-garnet' key={error}>
+              {error}
+            </p>
+          ))}
         </div>
         <InputField
           placeholder='Apellido'
@@ -55,12 +54,11 @@ export default function AltaDocentePage() {
           <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
         </InputField>
         <div id='apellido-error' aria-live='polite' aria-atomic='true'>
-          {alta?.errors?.apellido &&
-            alta.errors.apellido.map((error: string) => (
-              <p className='mt-2 text-sm text-garnet' key={error}>
-                {error}
-              </p>
-            ))}
+          {alta?.errors?.apellido?.map((error: string) => (
+            <p className='mt-2 text-sm text-garnet' key={error}>
+              {error}
+            </p>
+          ))}
         </div>
         <InputField
           placeholder='12347890 (sin puntos ni guiones)'
@@ -72,12 +70,11 @@ export default function AltaDocentePage() {
           <FingerprintIcon className='h-auto w-6 fill-garnet sm:w-8' />
         </InputField>
         <div id='ci-error' aria-live='polite' aria-atomic='true'>
-          {alta?.errors?.documento &&
-            alta.errors.documento.map((error: string) => (
-              <p className='mt-2 text-sm text-garnet' key={error}>
-                {error}
-              </p>
-            ))}
+          {alta?.errors?.documento?.map((error: string) => (
+            <p className='mt-2 text-sm text-garnet' key={error}>
+              {error}
+            </p>
+          ))}
         </div>
         <div className='flex w-2/3 flex-col justify-between gap-1 sm:w-full sm:flex-row'>
           <AltaDocenteButton />
