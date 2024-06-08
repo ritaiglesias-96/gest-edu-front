@@ -14,6 +14,9 @@ import { Grade } from '@mui/icons-material';
 import Button from '../Button/button';
 import { bajaCursoFetch } from '@/lib/data/estudiante/actions';
 import { School } from '@mui/icons-material';
+import Grading from '@/assets/svg/grading.svg';
+import Evaluate from '@/assets/svg/rule.svg';
+import { Grade } from '@mui/icons-material';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -625,6 +628,29 @@ export const asignaturaExamenFuncionarioColumns: GridColDef[] = [
         className='mx-auto flex size-fit'
       >
         <Subject className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
+export const solicitudTituloColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'fechaCreacion',
+    headerName: 'Fecha de creacion',
+    cellClassName: 'w-full',
+  },
+  {
+    field: 'resolver',
+    headerName: 'Resolver',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <Grading className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },

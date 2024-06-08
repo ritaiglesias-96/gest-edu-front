@@ -226,8 +226,8 @@ function MenuCalificaciones() {
   return (
     <>
       <Button styling='link' onClick={handleClick}>
-        <Enrollment className='h-6 sm:w-auto' />
-        <span>Calificaciones</span>
+        <Lessons className='h-6 self-center sm:w-auto' />
+        <span className='text-sm'>Calificaciones</span>
       </Button>
       <Menu
         id='basic-menu'
