@@ -14,7 +14,9 @@ import LocationIcon from '@/assets/svg/place.svg';
 import FingerprintIcon from '@/assets/svg/fingerprint.svg';
 import CalendarIcon from '@/assets/svg/calendar.svg';
 
-export default function EstudiantePage({ params }: { params: { ci: string } }) {
+export default function EstudiantePage({
+  params,
+}: Readonly<{ params: { ci: string } }>) {
   const router = useRouter();
   const [estudiante, setEstudiante] = useState<Estudiante>();
   const [loading, setLoading] = useState(true);

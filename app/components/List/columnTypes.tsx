@@ -1,5 +1,6 @@
 import { GridColDef } from '@mui/x-data-grid';
 import EyeIcon from '@/assets/svg/visibility.svg';
+import Enter from '@/assets/svg/chevron-right.svg';
 import Enroll from '@/assets/svg/enroll-exam.svg';
 import Schedule from '@/assets/svg/schedule.svg';
 import Grading from '@/assets/svg/grading.svg';
@@ -51,6 +52,43 @@ export const carreraColumns: GridColDef[] = [
         className='mx-auto flex size-fit'
       >
         <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
+export const carrerasFuncionario: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+    cellClassName: 'w-full',
+  },
+  {
+    field: 'duracionAnios',
+    headerName: 'Duracion',
+    type: 'number',
+  },
+  {
+    field: 'creditos',
+    headerName: 'Creditos',
+    type: 'number',
+  },
+  {
+    field: '',
+    headerName: '',
+    filterable: false,
+    sortable: false,
+    disableColumnMenu: true,
+    resizable: false,
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <Enter className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },

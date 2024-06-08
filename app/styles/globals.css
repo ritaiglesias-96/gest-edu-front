@@ -139,6 +139,10 @@
       @apply fill-ivory;
     }
   }
+
+  .btn-link {
+    @apply flex flex-col gap-1 items-center justify-center text-sm;
+  }
 }
 
 /* TODO: add differetn styles for different buttons */

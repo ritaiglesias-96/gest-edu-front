@@ -1,5 +1,4 @@
 'use client';
-
 import { getEstudiantes } from '@/lib/data/funcionario/actions';
 import { useEffect, useState } from 'react';
 import List from '@/components/List/list';
