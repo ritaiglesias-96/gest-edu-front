@@ -117,6 +117,7 @@ type columnType =
   | 'examenFuncionario'
   | 'inscriptosExamenFuncionario'
   | 'asignaturaBajaCurso'
+  | 'solicitudTitulo'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -233,6 +234,9 @@ export default function List({
     case 'asignaturaBajaCurso':
       columns = asignaturaBajaCursoColumns;
       break;
+    case 'solicitudTitulo':
+      columns = solicitudTituloColumns;
+      break;
     default:
       break;
   }
@@ -300,6 +304,12 @@ export default function List({
       )}
       {isSolicitudTramite && (
         <SolicitudTramiteDataGrid
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
+      )}
+      {isHorarioCursoConsulta && (
+        <HorariosCursosEstudiante
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
