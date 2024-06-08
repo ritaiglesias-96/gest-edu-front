@@ -525,3 +525,34 @@ export const carreraCalificacionesColumns: GridColDef[] = [
     ),
   }
 ];
+
+export const calificarExamenesColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'fecha', headerName: 'Fecha' },
+  { field: 'nombreAsignatura', headerName: 'Asignatura' },
+  {
+    field: 'calificaciones',
+    headerName: 'Calificaciones',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.row.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
+export const datosEstudianteColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'ci', headerName: 'Cedula' },
+  { field: 'nombre', headerName: 'Nombre' },
+  { field: 'apellido', headerName: 'Apellido' },
+  { field: 'email', headerName: 'Email' },
+  { field: 'telefono', headerName: 'Telefono' },
+  { field: 'domicilio', headerName: 'Domicilio' },
+  { field: 'fechaNac', headerName: 'Fecha de Nacimiento' }
+];

@@ -255,4 +255,18 @@ export interface InscripcionCarreraPendienteFlattened {
   usuarioResponsable: any;
 }
 
+export interface ExamenFlattened {
+  id: number;
+  fecha: string;
+  diasPrevInsc: string;
+  estado: string;
+  idAsignatura: number;
+  nombreAsignatura: string;
+  descripcionAsignatura: string;
+  creditos: number;
+  semestrePlanEstudios: number;
+  carreraId: number;
+  docentes: [];
+}
+
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]

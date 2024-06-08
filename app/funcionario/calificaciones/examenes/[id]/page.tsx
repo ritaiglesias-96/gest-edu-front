@@ -1,15 +1,20 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { getCarrera } from '@/lib/data/coordinador/actions';
+import List from '@/components/List/list';
+import Button from '@/components/Button/button';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
-import Button from '@/components/Button/button';
-import { Carrera } from '@/lib/definitions';
+import { getCarrera } from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
-import List from '@/components/List/list';
-import { getCursosAsignatura } from '@/lib/data/funcionario/actions';
+import { convertirFecha } from '@/utils/utils';
+import { useEffect, useState } from 'react';
+import { Carrera, Examen, ExamenFlattened } from '@/lib/definitions';
+import { geExamenesPendientesCalificacion } from '@/lib/data/funcionario/actions';
 
-export default function CarreraPage({ params }: { params: { id: string } }) {
+export default function ExamenesPendientesPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const router = useRouter();
   const [rows, setRows] = useState<any[]>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
@@ -18,19 +23,42 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetch = async () => {
-      const existeCarrera = await getCarrera(params.id);
-      if (existeCarrera) {
-        getCursosAsignatura
-        setCarrera(existeCarrera.carrera);
-        setRows(existeCarrera.asignaturas);
-        setRowsLoading(false);
-      } else {
-        setFallout(true);
-      }
-    };
-    fetch().finally(() => setLoading(false));
+    getCarrera(params.id).then((data) => {
+      setCarrera(data);
+    });
   }, [params.id]);
+
+  useEffect(() => {
+    geExamenesPendientesCalificacion().then((data) => {
+      if (data) {
+        const arrayExamenesCarrera: ExamenFlattened[] = [];
+        if (data.examenes) {
+          data.examenes.forEach((element: Examen) => {
+            if (element.asignatura.carreraId.toString() === params.id) {
+              arrayExamenesCarrera.push({
+                id: element.id,
+                fecha: convertirFecha(element.fecha.toString()),
+                diasPrevInsc: element.diasPrevInsc,
+                estado: element.estado,
+                idAsignatura: element.asignatura.id,
+                nombreAsignatura: element.asignatura.nombre,
+                descripcionAsignatura: element.asignatura.descripcion,
+                creditos: element.asignatura.creditos,
+                semestrePlanEstudios: element.asignatura.semestrePlanEstudios,
+                carreraId: element.asignatura.carreraId,
+                docentes: [],
+              });
+            }
+          });
+        }
+
+        setRows(arrayExamenesCarrera);
+        setLoading(false);
+        setFallout(false);
+        setRowsLoading(false);
+      }
+    });
+  }, [carrera]);
 
   if (loading) {
     return (
@@ -75,8 +103,12 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
                 </div>
               </div>
             </div>
-            <h3>Cursos</h3>
-            <List rows={rows} rowsLoading={rowsLoading} columnsType='calficar-cursos' />
+            <h3>Examenes</h3>
+            <List
+              rows={rows}
+              rowsLoading={rowsLoading}
+              columnsType='calficar-examenes'
+            />
           </div>
         )}
       </div>

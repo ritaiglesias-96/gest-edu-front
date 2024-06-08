@@ -178,6 +178,22 @@ export async function getEstudiantesPorCurso(id: string) {
   }
 }
 
+export async function getEstudiantesInscriptosExamen(id: string) {
+  const token = authToken();
+  const estudiantes = await fetch(`${apiRoute}/examenes/${id}/estudiantes-inscriptos`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (estudiantes.ok) {
+    const estudiantesJson = await estudiantes.json();      
+    return { estudiantes: estudiantesJson };
+  } else {
+    return { estudiantesJson: [] };
+  }
+}
+
 export async function getCurso(id: string) {
   const token = authToken();
   const response = await fetch(`${apiRoute}/cursos/${id}`, {
@@ -451,6 +467,26 @@ export async function getPeriodosExamenCarrera(id: string) {
       return { carrera: carreraJson, periodos: periodosJson.content };
     } else {
       return { carrera: carreraJson, periodos: [] };
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function geExamenesPendientesCalificacion() {
+  const token = authToken();
+  if (token) {
+    const examenes = await fetch(`${apiRoute}/examenes/examenes-pendientes`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (examenes.ok) {
+      const examenesJson = await examenes.json();      
+      return { examenes: examenesJson.content };
+    } else {
+      return { examenesJson: [] };
     }
   } else {
     return null;
