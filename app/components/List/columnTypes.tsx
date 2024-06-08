@@ -278,8 +278,8 @@ export const asignaturaExamenColumns: GridColDef[] = [
     headerName: 'Descripcion',
   },
   {
-    field: 'inscribirse',
-    headerName: 'Inscribirse',
+    field: 'inscripcion',
+    headerName: 'Inscripcion',
     cellClassName: 'flex items-center self-end',
     headerAlign: 'center',
     renderCell: (params) => (
@@ -290,7 +290,7 @@ export const asignaturaExamenColumns: GridColDef[] = [
         }
         className='mx-auto flex size-fit'
       >
-        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
@@ -325,8 +325,8 @@ export const examenColumns: GridColDef[] = [
     headerAlign: 'center',
   },
   {
-    field: 'inscribirse',
-    headerName: 'Inscribirse',
+    field: 'inscripcion',
+    headerName: 'Inscripcion',
     cellClassName: 'flex items-center self-end',
     headerAlign: 'center',
     renderCell: (params) => (
