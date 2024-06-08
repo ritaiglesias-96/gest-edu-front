@@ -226,6 +226,7 @@ export default function List({
       break;
     case 'solicitudTitulo':
       columns = solicitudTituloColumns;
+      break;
     default:
       break;
   }
