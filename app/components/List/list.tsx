@@ -17,6 +17,7 @@ import {
   asignaturaExamenColumns,
   asignaturaCursoColumns,
   examenColumns,
+  carreraCalificacionesColumns,
 } from './columnTypes';
 import { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -90,6 +91,7 @@ type columnType =
   | 'carreraFuncionario'
   | 'asignaturaFuncionario'
   | 'registroExamen'
+  | 'carrera-calificaciones'
   | 'calficar-cursos'
   | 'none';
 interface ListProps {
@@ -117,14 +119,14 @@ export default function List({
 }: ListProps) {
   return (
     <div className={styles.dataGridContainer}>
-      {!isEditableDocentes && !isInscripcionExamen && !isInscripcionCurso && (
+      {columnsType !== 'none' && (
         <NormalDataGrid
           rows={rows}
           columnsType={columnsType}
           rowsLoading={rowsLoading}
         />
       )}
-      {isEditableDocentes && !isInscripcionExamen && isInscripcionCurso && (
+      {isEditableDocentes && (
         <EditableDocentesDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
@@ -153,7 +155,7 @@ export default function List({
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
-      )}{' '}
+      )}
       {isInscripcionCurso && (
         <InscripcionCursoDataGrid
           rowsParent={rows}
@@ -223,6 +225,9 @@ function NormalDataGrid({
     case 'cursos':
       columns = cursosColumns;
       break;
+    case 'carrera-calificaciones':
+        columns = carreraCalificacionesColumns;
+        break;
     case 'calficar-cursos':
       columns = calificarCursosColumns;
       break;

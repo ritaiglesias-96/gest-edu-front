@@ -386,7 +386,7 @@ export const calificarCursosColumns: GridColDef[] = [
     headerAlign: 'center',
     renderCell: (params) => (
       <Link
-        href={`${window.location.pathname}/cursos/${params.row.id}`}
+        href={`${window.location.pathname}/${params.row.id}`}
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
@@ -491,4 +491,37 @@ export const asignaturaCursoColumns: GridColDef[] = [
       </Link>
     ),
   },
+];
+
+export const carreraCalificacionesColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+    cellClassName: 'w-full',
+  },
+  {
+    field: 'duracionAnios',
+    headerName: 'Duracion',
+    type: 'number',
+  },
+  {
+    field: 'creditos',
+    headerName: 'Creditos',
+    type: 'number',
+  },
+  {
+    field: 'detalles',
+    headerName: 'Detalles',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  }
 ];
