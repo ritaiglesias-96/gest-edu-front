@@ -17,6 +17,7 @@ import {
   asignaturaExamenColumns,
   asignaturaCursoColumns,
   examenColumns,
+  solicitudTituloColumns,
 } from './columnTypes';
 import { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -89,6 +90,7 @@ type columnType =
   | 'asignaturaFuncionario'
   | 'registroExamen'
   | 'calficar-cursos'
+  | 'solicitudTitulo'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -229,6 +231,9 @@ function NormalDataGrid({
       break;
     case 'periodosExamen':
       columns = periodosExamenColumns;
+      break;
+    case 'solicitudTitulo':
+      columns = solicitudTituloColumns;
       break;
     default:
       break;
@@ -809,7 +814,7 @@ function InscripcionExamenDataGrid({
       </div>
 
       {isOpen && (
-        <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-2xl shadow-lg shadow-garnet bg-ivory rounded-md px-4 py-2'>
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
           <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
             <div className='rounded-md text-center font-bold text-black'>
               <h5 className='m-0 p-0'>Inscripción a examen</h5>
@@ -818,7 +823,7 @@ function InscripcionExamenDataGrid({
                   ¿Desea confirmar inscripción al exámen?
                 </p>
               </div>
-              <div className='md:space-x-6 items-center'>
+              <div className='items-center md:space-x-6'>
                 <div className='inline-block'>
                   <Button
                     styling='primary'
@@ -879,7 +884,7 @@ function InscripcionExamenDataGrid({
       {alertOk && (
         <Collapse
           in={alertOk}
-          className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
         >
           <Alert
             icon={<CheckIcon fontSize='inherit' />}
@@ -896,7 +901,7 @@ function InscripcionExamenDataGrid({
       {alertError && (
         <Collapse
           in={alertError}
-          className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
         >
           <Alert
             icon={<CheckIcon fontSize='inherit' />}

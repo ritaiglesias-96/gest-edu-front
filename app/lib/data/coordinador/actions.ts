@@ -276,12 +276,15 @@ export async function getPrevituras(id: string) {
 export const obtenerExamenesVigentes = async (id: string) => {
   const token = authToken();
   if (token) {
-    const response = await fetch(`${apiRoute}/asignaturas/${id}/examenesVigentes`, {
-      method: 'GET',
-      headers: {
-        Authotization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${apiRoute}/asignaturas/${id}/examenesVigentes`,
+      {
+        method: 'GET',
+        headers: {
+          Authotization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.ok) {
       const data = await response.json();
       return data;
@@ -314,7 +317,7 @@ export async function altaPreviaFetch(asignaturaId: string, previaId: string) {
       };
     }
   }
-};
+}
 
 export async function altaPlanEstudio(asignaturas: Asignatura[], id: string) {
   const token = authToken();
@@ -371,6 +374,29 @@ export async function getNoPrevituras(id: string) {
     });
     if (noPrevias.ok) {
       const data = await noPrevias.json();
+      return data;
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function getSolicitudesTituloPendientes() {
+  const token = authToken();
+  if (token) {
+    const solicitudes = await fetch(
+      `${apiRoute}/tramites/solicitud-titulo-pendientes`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (solicitudes.ok) {
+      const data = await solicitudes.json();
       return data;
     } else {
       return null;

@@ -11,6 +11,7 @@ import Lessons from '@/assets/svg/enroll-lesson.svg';
 import Calendar from '@/assets/svg/calendar.svg';
 import Link from 'next/link';
 import Enrollment from '@/assets/svg/enroll-lesson.svg';
+import Rule from '@/assets/svg/rule.svg';
 import { Role } from '@/lib/definitions';
 import { useContext, useEffect, useState } from 'react';
 import { SessionContext } from '../../../context/SessionContext';
@@ -132,6 +133,13 @@ function NavbarCoordinador() {
       <div className='flex flex-row gap-4'>
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/coordinador/tramites'
+        >
+          <Rule className='h-6 sm:w-auto' />
+          <span>Tramites</span>
+        </Link>
+        <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
           href='/coordinador/carreras'
         >
           <Hat className='h-6 sm:w-auto' />
@@ -206,7 +214,7 @@ function MenuCalificaciones() {
   return (
     <>
       <Button styling='link' onClick={handleClick}>
-        <Lessons className='h-6 sm:w-auto self-center' />
+        <Lessons className='h-6 self-center sm:w-auto' />
         <span className='text-sm'>Calificaciones</span>
       </Button>
       <Menu

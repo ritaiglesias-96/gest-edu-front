@@ -235,8 +235,8 @@ export interface InscripcionCarreraPendiente {
 }
 
 export type Calificacion = {
-  estudianteId: string,
-  calificacionCurso: string
+  estudianteId: string;
+  calificacionCurso: string;
 };
 
 export interface InscripcionCarreraPendienteFlattened {
@@ -253,6 +253,24 @@ export interface InscripcionCarreraPendienteFlattened {
   usuarioSolicitanteApellido: string;
   usuarioSolicitanteEmail: string;
   usuarioResponsable: any;
+}
+
+export interface SolicitudTitulo {
+  id: number;
+  motivoRechazo: string;
+  estado: string;
+  fechaActualizacion: string;
+  fechaCreacion: string;
+  tipo: string;
+  nombreCarrera: string;
+  usuarioResponsable: any;
+  usuarioSolicitante: {
+    id: number;
+    ci: string;
+    nombre: string;
+    apellido: string;
+    email: string;
+  };
 }
 
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
