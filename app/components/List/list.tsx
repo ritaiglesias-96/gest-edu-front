@@ -111,6 +111,7 @@ type columnType =
   | 'inscriptosExamenFuncionario'
   | 'asignaturaBajaCurso'
   | 'solicitudTitulo'
+  | 'carreras-funcionario'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
