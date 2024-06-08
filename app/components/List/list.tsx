@@ -931,7 +931,7 @@ function InscripcionExamenDataGrid({
               setAlertOk(false);
             }}
           >
-            ¡Datos editados correctamente!
+            ¡Inscripcion editados correctamente!
           </Alert>
         </Collapse>
       )}
