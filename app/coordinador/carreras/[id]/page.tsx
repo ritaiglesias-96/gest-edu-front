@@ -115,6 +115,7 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
               rows={rows}
               rowsLoading={rowsLoading}
               columnsType='asignatura'
+              isNormalDataGrid={true}
             />
           </div>
         )}

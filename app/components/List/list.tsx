@@ -91,6 +91,7 @@ type columnType =
   | 'calficar-cursos'
   | 'none';
 interface ListProps {
+  isNormalDataGrid?: boolean;
   isEditableDocentes?: boolean;
   isInscripcionExamen?: boolean;
   isInscripcionCurso?: boolean;
@@ -103,6 +104,7 @@ interface ListProps {
 }
 
 export default function List({
+  isNormalDataGrid,
   isEditableDocentes,
   isInscripcionExamen,
   isInscripcionCurso,
@@ -115,14 +117,14 @@ export default function List({
 }: ListProps) {
   return (
     <div className={styles.dataGridContainer}>
-      {!isEditableDocentes && !isInscripcionExamen && !isInscripcionCurso && (
+      { isNormalDataGrid && (
         <NormalDataGrid
           rows={rows}
           columnsType={columnsType}
           rowsLoading={rowsLoading}
         />
       )}
-      {isEditableDocentes && !isInscripcionExamen && isInscripcionCurso && (
+      {isEditableDocentes && (
         <EditableDocentesDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}

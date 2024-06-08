@@ -103,6 +103,7 @@ export default function AsignaturaPage({
                 rows={rows}
                 rowsLoading={rowsLoading}
                 columnsType='previtaturas'
+                isNormalDataGrid={true}
               />
             </div>
             <div className='my-2 box-content flex flex-col items-center justify-center rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
@@ -274,6 +275,7 @@ function SeleccionarPreviatura({
           rows={rows}
           rowsLoading={rowsLoading}
           columnsType='noPrevitaturas'
+          isNormalDataGrid={true}
         />
       </div>
     </>

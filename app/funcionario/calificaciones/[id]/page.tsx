@@ -82,7 +82,7 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
               </div>
             </div>
             <h3>Cursos</h3>
-            <List rows={rows} rowsLoading={rowsLoading} columnsType='calficar-cursos' />
+            <List rows={rows} rowsLoading={rowsLoading} columnsType='calficar-cursos' isNormalDataGrid={true}/>
           </div>
         )}
       </div>

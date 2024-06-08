@@ -114,12 +114,14 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
               rows={rowsPE}
               rowsLoading={rowsLoadingPE}
               columnsType='periodosExamen'
+              isNormalDataGrid={true}
             />
             <br />
             <List
               rows={rows}
               rowsLoading={rowsLoading}
               columnsType='asignaturaFuncionario'
+              isNormalDataGrid={true}
             />
           </div>
         )}

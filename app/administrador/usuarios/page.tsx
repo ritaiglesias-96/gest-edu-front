@@ -25,7 +25,7 @@ export default function AdministradorHome() {
             <Button styling='primary'>Agregar usuario</Button>
           </Link>
         </div>
-        <List rows={rows} rowsLoading={rowsLoading} columnsType='usuario' />
+        <List rows={rows} rowsLoading={rowsLoading} columnsType='usuario' isNormalDataGrid={true}/>
       </div>
     </div>
   );

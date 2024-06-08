@@ -33,6 +33,7 @@ export default function CursosEstudiante() {
           rows={rows}
           rowsLoading={rowsLoading}
           columnsType='asignatura-curso'
+          isNormalDataGrid={true}
         />
       </div>
     </div>

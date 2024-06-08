@@ -107,12 +107,14 @@ export default function AsignaturaPage({
               rows={rowsCurso}
               rowsLoading={rowsCursoLoading}
               columnsType='cursos'
+              isNormalDataGrid={true}
             />
             <h3>Periodos de Examen</h3>
             <List
               rows={rowsExamen}
               rowsLoading={rowsExamenLoading}
               columnsType='periodosExamen'
+              isNormalDataGrid={true}
             />
           </div>
         )}

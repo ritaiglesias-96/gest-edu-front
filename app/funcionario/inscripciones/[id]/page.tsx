@@ -96,6 +96,7 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
               rows={rows}
               rowsLoading={rowsLoading}
               columnsType='periodosExamen'
+              isNormalDataGrid={true}
             />
           </div>
         )}

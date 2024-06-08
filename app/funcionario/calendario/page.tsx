@@ -20,6 +20,7 @@ export default function HorariosPage() {
           rows={rows}
           rowsLoading={rowsLoading}
           columnsType='carreraFuncionario'
+          isNormalDataGrid={true}
         />
       </div>
     </div>

@@ -29,7 +29,7 @@ export default function ExamenesEstudiante() {
             <h1 className='text-center font-bold'>Inscripciones a examen</h1>
             <h6 className='text-center font-bold'>Seleccione una asignatura</h6>
             <div className='h-fit w-full p-4'>
-                <List rows={rows} rowsLoading={rowsLoading} columnsType='asignatura-examenes' />
+                <List rows={rows} rowsLoading={rowsLoading} columnsType='asignatura-examenes' isNormalDataGrid={true}/>
             </div>
         </div>
     )

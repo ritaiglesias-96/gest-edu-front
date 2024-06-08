@@ -456,3 +456,25 @@ export async function getPeriodosExamenCarrera(id: string) {
     return null;
   }
 }
+
+export async function getCarreraYAsignatura(id: string) {
+  const token = authToken();
+  if (token) {
+    const carreraJson = await getCarrera(id);
+    if (!carreraJson) return null;
+    const asignaturas = await fetch(`${apiRoute}/carreras/${id}/asignaturas`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (asignaturas.ok) {
+      const asignaturasJson = await asignaturas.json();
+      return { carrera: carreraJson, asignaturas: asignaturasJson.content };
+    } else {
+      return { carrera: carreraJson, asignaturas: [] };
+    }
+  } else {
+    return null;
+  }
+}

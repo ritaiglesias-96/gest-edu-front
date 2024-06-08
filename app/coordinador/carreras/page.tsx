@@ -23,7 +23,7 @@ export default function CarrerasPage() {
             <Button styling='primary'>Agregar Carrera</Button>
           </Link>
         </div>
-        <List rows={rows} rowsLoading={rowsLoading} columnsType='carrera' />
+        <List rows={rows} rowsLoading={rowsLoading} columnsType='carrera' isNormalDataGrid={true}/>
       </div>
     </div>
   );

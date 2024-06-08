@@ -29,6 +29,7 @@ export default function CarrerasPage() {
           rows={rows}
           rowsLoading={rowsLoading}
           columnsType='carreraFuncionario'
+          isNormalDataGrid={true}
         />
       </div>
     </div>

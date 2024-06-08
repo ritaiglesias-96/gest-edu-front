@@ -19,7 +19,7 @@ export default function InscripcionesHome() {
     <div className='relative box-border size-full justify-center overflow-auto md:w-2/3'>
       <h1 className='text-center font-bold'>Carreras del estudiante</h1>
       <div className='h-fit w-full p-4'>        
-        <List rows={rows} rowsLoading={rowsLoading} columnsType='carreras-estudiante' />
+        <List rows={rows} rowsLoading={rowsLoading} columnsType='carreras-estudiante' isNormalDataGrid={true}/>
       </div>
     </div>    
   );

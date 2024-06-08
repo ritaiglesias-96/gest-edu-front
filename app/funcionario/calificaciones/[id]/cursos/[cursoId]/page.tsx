@@ -149,6 +149,7 @@ export default function CursoPage({ params }: { params: { cursoId: string } }) {
               rows={rows}
               rowsLoading={rowsLoading}
               columnsType='estudiante'
+              isNormalDataGrid={true}
             />
           </div>
         )}
