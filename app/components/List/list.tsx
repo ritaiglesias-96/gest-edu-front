@@ -25,6 +25,7 @@ import DeleteIcon from '@/assets/svg/delete.svg';
 import SaveIcon from '@/assets/svg/done.svg';
 import CancelIcon from '@/assets/svg/close.svg';
 import Enroll from '@/assets/svg/enroll-lesson.svg';
+import Close from '@/assets/svg/close.svg';
 import CheckIcon from '@mui/icons-material/Check';
 import {
   GridRowsProp,
@@ -60,6 +61,7 @@ import {
 import React from 'react';
 import FormContainer from '../FormContainer/formContainer';
 import {
+  bajaExamenFetch,
   inscribirseCursoFetch,
   inscribirseExamenFetch,
 } from '@/lib/data/estudiante/actions';
@@ -696,6 +698,7 @@ function InscripcionExamenDataGrid({
   const [email, setEmail] = useState('');
   const [usuarioId, setUsuarioId] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [isBajaExamen, setIsBajaExamen] = useState(false);
   const [isOpenCurso, setIsOpenCurso] = useState(false);
   const [examenId, setExamenId] = useState('');
   const [cursoId, setCursoId] = useState('');
@@ -744,6 +747,24 @@ function InscripcionExamenDataGrid({
     setIsOpen(false);
   };
 
+  const handleClickConfirmarBaja = () => {
+    if (examenId) {
+      bajaExamenFetch(examenId).then((data) => {
+        if (data?.message) {
+          setMensajeError(data.message);
+          setAlertError(true);
+          setAlertOk(false);
+        } else {
+          setMensajeError('');
+          setAlertError(false);
+          setAlertOk(true);
+        }
+      });
+    }
+    setIsOpen(false);
+    setIsBajaExamen(false);
+  };
+
   const handleClickConfirmarInscripcionCurso = () => {
     if (usuarioId && cursoId) {
       inscribirseCursoFetch(usuarioId, cursoId).then((data) => {
@@ -777,21 +798,34 @@ function InscripcionExamenDataGrid({
       flex: 1,
     },
     {
-      field: 'inscribirse',
-      headerName: 'Inscribirse',
+      field: 'inscripcion',
+      headerName: 'Inscripcion',
       cellClassName: 'flex text-center self-end',
       headerAlign: 'center',
       flex: 1,
       renderCell: (params) => (
-        <Link
-          href={`${window.location.pathname}`}
-          onClick={() => {
-            setIsOpen(true), setExamenId(params.id.toString());
-          }}
-          className='mx-auto flex size-fit'
-        >
-          <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
-        </Link>
+        <>
+          <Link
+            href={`${window.location.pathname}`}
+            onClick={() => {
+              setIsOpen(true), setExamenId(params.id.toString());
+            }}
+            className='mx-auto flex size-fit'
+          >
+            <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
+          </Link>
+          <Link
+            href={`${window.location.pathname}`}
+            onClick={() => {
+              setIsOpen(true),
+                setIsBajaExamen(true),
+                setExamenId(params.id.toString());
+            }}
+            className='mx-auto flex size-fit'
+          >
+            <Close className='h-auto w-6 fill-garnet sm:w-8' />
+          </Link>
+        </>
       ),
     },
   ];
@@ -809,21 +843,29 @@ function InscripcionExamenDataGrid({
       </div>
 
       {isOpen && (
-        <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-2xl shadow-lg shadow-garnet bg-ivory rounded-md px-4 py-2'>
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
           <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
             <div className='rounded-md text-center font-bold text-black'>
-              <h5 className='m-0 p-0'>Inscripción a examen</h5>
+              <h5 className='m-0 p-0'>
+                {isBajaExamen ? 'Darse de baja' : 'Inscripción a examen'}
+              </h5>
               <div className='flex flex-col'>
                 <p className='font-bold'>
-                  ¿Desea confirmar inscripción al exámen?
+                  {isBajaExamen
+                    ? '¿Desea darse de baja al exámen?'
+                    : '¿Desea confirmar inscripción al exámen?'}
                 </p>
               </div>
-              <div className='md:space-x-6 items-center'>
+              <div className='items-center md:space-x-6'>
                 <div className='inline-block'>
                   <Button
                     styling='primary'
                     className='lg:w-20'
-                    onClick={handleClickConfirmarInscripcion}
+                    onClick={
+                      isBajaExamen
+                        ? handleClickConfirmarBaja
+                        : handleClickConfirmarInscripcion
+                    }
                   >
                     Si
                   </Button>
@@ -879,7 +921,7 @@ function InscripcionExamenDataGrid({
       {alertOk && (
         <Collapse
           in={alertOk}
-          className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
         >
           <Alert
             icon={<CheckIcon fontSize='inherit' />}
@@ -896,7 +938,7 @@ function InscripcionExamenDataGrid({
       {alertError && (
         <Collapse
           in={alertError}
-          className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
         >
           <Alert
             icon={<CheckIcon fontSize='inherit' />}
