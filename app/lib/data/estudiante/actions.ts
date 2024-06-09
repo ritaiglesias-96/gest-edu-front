@@ -375,7 +375,6 @@ export const bajaCursoFetch = async (id: string) => {
 };
 
 export const solicitarTituloFetch = async (id: string) => {
-  console.log('🚀 ~ solicitarTituloFetch ~ id:', id);
   const token = authToken();
   if (token) {
     const response = await fetch(
