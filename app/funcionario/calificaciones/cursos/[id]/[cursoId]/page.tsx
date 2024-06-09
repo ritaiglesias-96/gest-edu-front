@@ -87,12 +87,12 @@ export default function CursoPage({ params }: { params: { cursoId: string } }) {
   }
 
   function handleClickCalifiaciones() {
-    const calificaciones = sessionStorage.getItem('calificaciones');
+    const calificacionesSession = sessionStorage.getItem('calificaciones');
 
-    if (calificaciones && curso?.id) {
-      const parsedCalificaciones = JSON.parse(calificaciones);
+    if (calificacionesSession && curso?.id) {
+      const parsedCalificaciones = JSON.parse(calificacionesSession);
 
-      const calififaciones: Calificacion[] = [];
+      const calificaciones: Calificacion[] = [];
 
       for (var clave in parsedCalificaciones) {
         if (parsedCalificaciones.hasOwnProperty(clave)) {
@@ -100,12 +100,14 @@ export default function CursoPage({ params }: { params: { cursoId: string } }) {
             estudianteId: clave,
             calificacionCurso: parsedCalificaciones[clave],
           };
-          calififaciones.push(calificacion);
+          calificaciones.push(calificacion);
         }
       }
 
       if (calificaciones) {
-        calificarCursoFetch(curso!.id, calififaciones).then((data) => {});
+        calificarCursoFetch(curso!.id, calificaciones).then((data) => {
+          //TODO mostrar mensaje de confirmacion
+        });
       }
     }
 

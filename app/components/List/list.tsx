@@ -104,6 +104,7 @@ interface ListProps {
   isInscripcionCurso?: boolean;
   isEditableAsignaturas?: boolean;
   editarCalificacionCurso?: boolean;
+  editarCalificacionExamen?: boolean;
   isApproveRejectCarrera?: boolean;
   rows: GridRowsProp[];
   rowsLoading: boolean;
@@ -116,6 +117,7 @@ export default function List({
   isInscripcionCurso,
   isEditableAsignaturas,
   editarCalificacionCurso,
+  editarCalificacionExamen,
   isApproveRejectCarrera,
   rows,
   rowsLoading,
@@ -162,6 +164,12 @@ export default function List({
       )}
       {isInscripcionCurso && (
         <InscripcionCursoDataGrid
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
+      )}
+      {editarCalificacionExamen && (
+        <EditarCalificacionExamenDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
@@ -1332,5 +1340,91 @@ function InscripcionCursoDataGrid({
         </Collapse>
       )}
     </>
+  );
+}
+
+function EditarCalificacionExamenDataGrid({
+  rowsParent,
+  rowsLoadingParent,
+}: {
+  rowsParent: GridRowsProp;
+  rowsLoadingParent: boolean;
+}) {
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [calificaciones, setCalificaciones] = useState<{
+    [key: number]: string;
+  }>({});
+
+  const handleChange = (id: number) => (event: SelectChangeEvent) => {
+    setCalificaciones((prev) => ({
+      ...prev,
+      [id]: event.target.value as string,
+    }));
+  };
+
+  useEffect(() => {
+    sessionStorage.setItem('calificaciones', JSON.stringify(calificaciones));
+  }, [calificaciones]);
+
+  useEffect(() => {
+    setRows(rowsParent);
+    setRowsLoading(rowsLoadingParent);
+  }, [rowsLoadingParent, rowsParent]);
+
+  const columns: GridColDef[] = [
+    { field: 'id', type: 'number', headerName: 'ID' },
+    { field: 'nombre', headerName: 'Nombre', flex: 1 },
+    { field: 'apellido', headerName: 'Apellido', flex: 1 },
+    { field: 'ci', headerName: 'Cedula', flex: 1 },
+    {
+      field: 'calificacion',
+      headerName: 'Calificación',
+      flex: 1,
+      renderCell: (params: GridRenderCellParams<any>) => {
+        const id = params.id as number; // asegurarse de que params.id es un número
+        return (
+          <div>
+            <FormControl
+              fullWidth
+              variant='standard'
+              sx={{ m: 1, minWidth: 120 }}
+            >
+              <InputLabel
+                id={`demo-simple-select-standard-label-${id}`}
+                sx={{ color: 'black' }}
+              >
+                Calificación
+              </InputLabel>
+              <Select
+                labelId={`demo-simple-select-label-${id}`}
+                id={`select-${id}`}
+                value={calificaciones[id] || ''}
+                label='Calificación'
+                onChange={handleChange(id)}
+                sx={{
+                  '&.MuiInputBase-root': {
+                    color: 'inherit',
+                  },
+                  '& .MuiSelect-select:focus': {
+                    backgroundColor: 'transparent',
+                  },
+                }}
+              >
+                <MenuItem value='APROBADO'>Aprobado</MenuItem>
+                <MenuItem value='REPROBADO'>Reprobado</MenuItem>
+                <MenuItem value='PENDIENTE'>Pendiente</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+        );
+      },
+    },
+  ];
+
+  return (
+    <div className='h-fit w-full p-4'>
+      <DataGrid rows={rows} loading={rowsLoading} columns={columns} />
+    </div>
   );
 }

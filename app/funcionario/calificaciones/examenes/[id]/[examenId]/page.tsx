@@ -1,27 +1,21 @@
 'use client';
-import { SetStateAction, useEffect, useState } from 'react';
-import { getAsignatura } from '@/lib/data/coordinador/actions';
+import { useEffect, useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Box, Link } from '@mui/material';
+import { Box } from '@mui/material';
 import Button from '@/components/Button/button';
 import {
-  Curso,
   Asignatura,
   Docente,
   Estudiante,
-  Calificacion,
-  ExamenFlattened,
   Examen,
+  CalificacionExamen,
 } from '@/lib/definitions';
 import { useRouter } from 'next/navigation';
 import List from '@/components/List/list';
 import {
-  calificarCursoFetch,
+  calificarExamenFetch,
   geExamenesPendientesCalificacion,
-  getCurso,
-  getDocente,
   getEstudiantesInscriptosExamen,
-  getEstudiantesPorCurso,
 } from '@/lib/data/funcionario/actions';
 import { convertirFecha } from '@/utils/utils';
 
@@ -59,20 +53,18 @@ export default function CursoPage({
     if (examen?.id) {
       const arrayEstudiantes: Estudiante[] = [];
 
-      getEstudiantesInscriptosExamen(examen.id.toString()).then(
-        (data) => {
-          if(data.estudiantes){
-            data.estudiantes.forEach((element: any) => {             
-              arrayEstudiantes.push(element.estudiante);
-            });
-          }
-          setEstudiantes(arrayEstudiantes);          
-          setRows(arrayEstudiantes);
-          setRowsLoading(false);
-          setLoading(false);
-          setFallout(false);
+      getEstudiantesInscriptosExamen(examen.id.toString()).then((data) => {
+        if (data.estudiantes) {
+          data.estudiantes.forEach((element: any) => {
+            arrayEstudiantes.push(element.estudiante);
+          });
         }
-      );
+        setEstudiantes(arrayEstudiantes);
+        setRows(arrayEstudiantes);
+        setRowsLoading(false);
+        setLoading(false);
+        setFallout(false);
+      });
     }
   }, [examen]);
 
@@ -96,25 +88,27 @@ export default function CursoPage({
   }
 
   function handleClickCalifiaciones() {
-    const calificaciones = sessionStorage.getItem('calificaciones');
+    const calificacionesSession = sessionStorage.getItem('calificaciones');
 
-    if (calificaciones && examen?.id) {
-      const parsedCalificaciones = JSON.parse(calificaciones);
+    if (calificacionesSession && examen?.id) {
+      const parsedCalificaciones = JSON.parse(calificacionesSession);
 
-      const calififaciones: Calificacion[] = [];
+      const calificaciones: CalificacionExamen[] = [];
 
       for (var clave in parsedCalificaciones) {
         if (parsedCalificaciones.hasOwnProperty(clave)) {
-          const calificacion: Calificacion = {
+          const calificacion: CalificacionExamen = {
             estudianteId: clave,
-            calificacionCurso: parsedCalificaciones[clave],
+            calificacion: parsedCalificaciones[clave],
           };
-          calififaciones.push(calificacion);
+          calificaciones.push(calificacion);
         }
       }
 
       if (calificaciones) {
-        calificarCursoFetch(examen!.id, calififaciones).then((data) => {});
+        calificarExamenFetch(examen!.id, calificaciones).then((data) => {
+          //TODO: mostrar mensaje de confirmacion
+        });
       }
     }
 
@@ -136,7 +130,11 @@ export default function CursoPage({
                 </div>
                 <div className='flex space-x-2'>
                   <p className='font-bold w-32'>Fecha de inicio: </p>
-                  <p>{examen?.fecha ? convertirFecha(examen?.fecha.toString()) : ''}</p>
+                  <p>
+                    {examen?.fecha
+                      ? convertirFecha(examen?.fecha.toString())
+                      : ''}
+                  </p>
                 </div>
                 <div className='flex space-x-2'>
                   <p className='font-bold w-32'>Docentes: </p>
@@ -173,7 +171,7 @@ export default function CursoPage({
                     rows={rows}
                     rowsLoading={rowsLoading}
                     columnsType='none'
-                    editarCalificacionCurso={true}
+                    editarCalificacionExamen={true}
                   />
                   <div className='md:space-x-6 items-center'>
                     <div className='inline-block'>

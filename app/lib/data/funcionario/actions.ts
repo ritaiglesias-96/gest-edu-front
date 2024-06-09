@@ -1,7 +1,7 @@
 'use server';
 
 import { authToken } from '@/utils/auth';
-import { Calificacion, DocenteState, PeriodoExamenState } from '@/lib/definitions';
+import { Calificacion, CalificacionExamen, DocenteState, PeriodoExamenState } from '@/lib/definitions';
 import {
   AltaDocenteFormSchema,
   RegistrarPeriopdoExamenFormSchema,
@@ -141,6 +141,32 @@ export async function calificarCursoFetch(id: number, califiaciones: Calificacio
   if(token){
     const response = await fetch(
       `${apiRoute}/inscripcionCurso/${id}/calificar`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(califiaciones),
+      }
+    );
+    if (response.ok) {
+      return {
+        message: 'Calificaciones guardadas con exito. 200',
+      };
+    } else {
+      return {
+        message: 'Error al cargar calificaciones',
+      };
+    }
+  }
+}
+
+export async function calificarExamenFetch(id: number, califiaciones: CalificacionExamen[]) {
+  const token = authToken();
+  if(token){
+    const response = await fetch(
+      `${apiRoute}/examenes/${id}/calificar`,
       {
         method: 'PUT',
         headers: {

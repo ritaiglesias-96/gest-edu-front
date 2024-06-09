@@ -239,6 +239,11 @@ export type Calificacion = {
   calificacionCurso: string
 };
 
+export type CalificacionExamen = {
+  estudianteId: string,
+  calificacion: string
+};
+
 export interface InscripcionCarreraPendienteFlattened {
   id: number;
   motivoRechazo: string;
