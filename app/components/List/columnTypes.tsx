@@ -6,7 +6,6 @@ import Schedule from '@/assets/svg/schedule.svg';
 import Grading from '@/assets/svg/grading.svg';
 import Subject from '@/assets/svg/subject.svg';
 import Close from '@/assets/svg/close.svg';
-import Grading from '@/assets/svg/grading.svg';
 import Link from 'next/link';
 import Add from '@/assets/svg/add.svg';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
@@ -562,29 +561,6 @@ export const solicitudTituloColumns: GridColDef[] = [
   },
 ];
 
-export const solicitudTituloColumns: GridColDef[] = [
-  { field: 'id', headerName: 'ID' },
-  {
-    field: 'fechaCreacion',
-    headerName: 'Fecha de creacion',
-    cellClassName: 'w-full',
-  },
-  {
-    field: 'resolver',
-    headerName: 'Resolver',
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.id}`}
-        className='mx-auto flex size-fit'
-      >
-        <Grading className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
-  },
-];
-
 export const ExamenFuncionarioColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   {
@@ -654,9 +630,16 @@ export const asignaturaBajaCursoColumns: GridColDef[] = [
       <Button
         styling='outline'
         onClick={async () => {
-          const response = await bajaCursoFetch(params.id.toString());
-          if (response) {
-            alert(response.message);
+          const baja = confirm('¿Desea darse de baja del curso?');
+          if (baja) {
+            bajaCursoFetch(params.id.toString()).then((response) => {
+              if (!response) {
+                alert('Se ha dado de baja exitosamente.');
+                location.reload();
+              } else {
+                alert(response.message);
+              }
+            });
           }
         }}
         className='mx-auto flex size-fit'
