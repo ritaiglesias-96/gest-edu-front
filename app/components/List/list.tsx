@@ -112,6 +112,10 @@ type columnType =
   | 'asignaturaBajaCurso'
   | 'solicitudTitulo'
   | 'carreras-funcionario'
+  | 'carreraInscripcionFuncionario'
+  | 'asignaturaExamenFuncionario'
+  | 'examenFuncionario'
+  | 'inscriptosExamenFuncionario'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -213,6 +217,17 @@ export default function List({
       break;
     case 'solicitudTitulo':
       columns = solicitudTituloColumns;
+    case 'carreraInscripcionFuncionario':
+      columns = carreraInscripcionFuncionarioColumns;
+      break;
+    case 'asignaturaExamenFuncionario':
+      columns = asignaturaExamenFuncionarioColumns;
+      break;
+    case 'examenFuncionario':
+      columns = ExamenFuncionarioColumns;
+      break;
+    case 'inscriptosExamenFuncionario':
+      columns = InscriptosExamenFuncionarioColumns;
       break;
     default:
       break;
