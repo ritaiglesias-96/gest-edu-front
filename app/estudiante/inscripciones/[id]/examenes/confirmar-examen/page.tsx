@@ -44,10 +44,12 @@ export default function ConfirmarInscripcionExamen() {
   useEffect(() => {
     obtenerExamenesVigentes(asignaturaId).then((data) => {
       if (data) {
-        setRows(data.content ? data.content : []);
-        setRowsLoading(false);
-        setExamenes(data);
+        console.log(data);
+        
+        setRows(data.exmanes ? data.exmanes : []);
+        setExamenes(data.exmanes);        
       }
+      setRowsLoading(false);
     });
   }, [asignatura]);
 
@@ -79,7 +81,7 @@ export default function ConfirmarInscripcionExamen() {
           <List
             rows={rows}
             rowsLoading={rowsLoading}
-            columnsType='examen'
+            columnsType='none'
             isInscripcionExamen={true}
           />
         </div>

@@ -226,9 +226,9 @@ export const obtenerAsignaturasParaInscripcionFetch = async (id: string) => {
 
     if (response.ok) {
       const asignaturasJson = await response.json();
-      return asignaturasJson;
+      return { asignaturas: asignaturasJson.content };
     } else {
-      return response.json();
+      return { asignauras: [] };
     }
   }
 };
