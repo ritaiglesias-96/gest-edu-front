@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { getCarrera } from '@/lib/data/coordinador/actions';
+import { getCarrera, getCarreraYAsignatura } from '@/lib/data/coordinador/actions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
 import Button from '@/components/Button/button';
@@ -19,9 +19,9 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const fetch = async () => {
-      const existeCarrera = await getCarrera(params.id);
-      if (existeCarrera) {
-        getCursosAsignatura
+      //TODO: Se debe traer los cursos, no las asignaaturas
+      const existeCarrera = await getCarreraYAsignatura(params.id);
+      if (existeCarrera) {        
         setCarrera(existeCarrera.carrera);
         setRows(existeCarrera.asignaturas);
         setRowsLoading(false);
@@ -76,7 +76,7 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
               </div>
             </div>
             <h3>Cursos</h3>
-            <List rows={rows} rowsLoading={rowsLoading} columnsType='calficar-cursos' />
+            <List rows={rows} rowsLoading={rowsLoading} columnsType='asignatura' />
           </div>
         )}
       </div>
