@@ -14,9 +14,6 @@ import { bajaCursoFetch } from '@/lib/data/estudiante/actions';
 import Evaluate from '@/assets/svg/rule.svg';
 import { Grade } from '@mui/icons-material';
 import { School } from '@mui/icons-material';
-import Grading from '@/assets/svg/grading.svg';
-import Evaluate from '@/assets/svg/rule.svg';
-import { Grade } from '@mui/icons-material';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -559,6 +556,75 @@ export const solicitudTituloColumns: GridColDef[] = [
         className='mx-auto flex size-fit'
       >
         <Grading className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
+export const carreraInscripcionFuncionarioColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+    cellClassName: 'w-full',
+  },
+  {
+    field: 'duracionAnios',
+    headerName: 'Duracion',
+    type: 'number',
+  },
+  {
+    field: 'creditos',
+    headerName: 'Creditos',
+    type: 'number',
+  },
+  {
+    field: 'examenes',
+    headerName: 'Examenes',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}/asignatura-examen`}
+        className='mx-auto flex size-fit'
+      >
+        <Subject className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
+export const asignaturaExamenFuncionarioColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+  },
+  {
+    field: 'descripcion',
+    headerName: 'Descripcion',
+  },
+  {
+    field: 'creditos',
+    headerName: 'Creditos',
+    type: 'number',
+  },
+  {
+    field: 'semestrePlanEstudio',
+    headerName: 'Semestre',
+    type: 'number',
+  },
+  {
+    field: 'examenes',
+    headerName: 'Examenes',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <Subject className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
