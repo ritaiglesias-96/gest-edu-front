@@ -76,6 +76,7 @@ function NavbarEstudiante() {
         <GestEduIcon />
       </Link>
       <div className='flex flex-row gap-6'>
+        <MenuConsulta />
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
           href='/estudiante/inscripciones'
@@ -220,6 +221,39 @@ function MenuCalificaciones() {
       >
         <MenuItem onClick={() => handleClose('cursos')}>Cursos</MenuItem>
         <MenuItem onClick={() => handleClose('examenes')}>Examenes</MenuItem>
+      </Menu>
+    </>
+  );
+}
+
+function MenuConsulta() {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (opcion: string) => {
+    if(opcion === 'pendientes'){
+      window.location.href = `/estudiante/pendientes`;
+    }
+    setAnchorEl(null);
+  };
+
+  return (
+    <>
+      <Button styling='link' onClick={handleClick}>
+        <Lessons className='h-6 sm:w-auto self-center' />
+        <span className='text-sm'>Consultar</span>
+      </Button>
+      <Menu
+        id='basic-menu'
+        anchorEl={anchorEl}
+        open={open}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={() => handleClose('pendientes')}>Asignaturas pendientes</MenuItem>
       </Menu>
     </>
   );
