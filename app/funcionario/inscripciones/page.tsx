@@ -28,7 +28,7 @@ export default function CarrerasPage() {
         <List
           rows={rows}
           rowsLoading={rowsLoading}
-          columnsType='carreraFuncionario'
+          columnsType='carreraInscripcionFuncionario'
         />
       </div>
     </div>

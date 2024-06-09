@@ -234,3 +234,11 @@ export interface InscripcionCarreraPendienteFlattened {
   usuarioSolicitanteEmail: string;
   usuarioResponsable: any;
 }
+export type Examen = {
+  id: number;
+  fecha: string;
+  diasPrevInsc: number;
+  asignaturaNombre: string;
+  asignatura: Asignatura;
+  docentes: Docente[];
+}

@@ -9,7 +9,7 @@ import { Carrera } from '@/lib/definitions';
 import { useRouter } from 'next/navigation';
 import List from '@/components/List/list';
 
-export default function CarreraPage({ params }: { params: { id: string } }) {
+export default function InscripcionesPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [rows, setRows] = useState<any[]>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
