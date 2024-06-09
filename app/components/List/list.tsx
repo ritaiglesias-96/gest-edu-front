@@ -189,6 +189,7 @@ export default function List({
       break;
     case 'solicitudTitulo':
       columns = solicitudTituloColumns;
+      break;
     case 'carreraInscripcionFuncionario':
       columns = carreraInscripcionFuncionarioColumns;
       break;

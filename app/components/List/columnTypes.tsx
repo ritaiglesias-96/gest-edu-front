@@ -699,12 +699,12 @@ export const asignaturaBajaCursoColumns: GridColDef[] = [
         styling='outline'
         onClick={async () => {
           const baja = confirm('¿Desea darse de baja del curso?');
-          if(baja){
-            bajaCursoFetch(params.id.toString()).then((response)=>{         
-              if (!response) {                         
+          if (baja) {
+            bajaCursoFetch(params.id.toString()).then((response) => {
+              if (!response) {
                 alert('Se ha dado de baja exitosamente.');
                 location.reload();
-              }else{
+              } else {
                 alert(response.message);
               }
             });
