@@ -69,11 +69,13 @@ import {
   bajaExamenFetch,
   inscribirseCursoFetch,
   inscribirseExamenFetch,
+  solicitarTituloFetch,
 } from '@/lib/data/estudiante/actions';
 import { SessionContext } from '../../../context/SessionContext';
 import { convertirFecha } from '@/utils/utils';
 import InputField from '../InputField/inputField';
 import { obtenerDatosUsuarioFetch } from '@/lib/data/actions';
+import { School } from '@mui/icons-material';
 
 type columnType =
   | 'carrera'
@@ -109,6 +111,7 @@ interface ListProps {
   isEditableAsignaturas?: boolean;
   editarCalificacionCurso?: boolean;
   isApproveRejectCarrera?: boolean;
+  isSolicitudTramite?: boolean;
   rows: GridRowsProp[];
   rowsLoading: boolean;
   columnsType: columnType;
@@ -121,6 +124,7 @@ export default function List({
   isEditableAsignaturas,
   editarCalificacionCurso,
   isApproveRejectCarrera,
+  isSolicitudTramite,
   rows,
   rowsLoading,
   columnsType,
@@ -260,6 +264,12 @@ export default function List({
       )}
       {isInscripcionCurso && (
         <InscripcionCursoDataGrid
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
+      )}
+      {isSolicitudTramite && (
+        <SolicitudTramiteDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
@@ -1309,6 +1319,160 @@ function InscripcionCursoDataGrid({
             }}
           >
             ¡Datos editados correctamente!
+          </Alert>
+        </Collapse>
+      )}
+      {alertError && (
+        <Collapse
+          in={alertError}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='error'
+            variant='filled'
+            onClose={() => {
+              setAlertError(false);
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
+    </>
+  );
+}
+
+function SolicitudTramiteDataGrid({
+  rowsParent,
+  rowsLoadingParent,
+}: Readonly<{
+  rowsParent: GridRowsProp;
+  rowsLoadingParent: boolean;
+}>) {
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [isOpenTitulo, setIsOpenTitulo] = useState(false);
+  const [carreraId, setCarreraId] = useState('');
+  const [alertOk, setAlertOk] = useState(false);
+  const [alertError, setAlertError] = useState(false);
+  const [mensajeError, setMensajeError] = useState('');
+
+  useEffect(() => {
+    setRows(rowsParent);
+    setRowsLoading(rowsLoadingParent);
+  }, [rowsLoadingParent, rowsParent]);
+
+  const handleClickSolicitudTitulo = () => {
+    if (carreraId) {
+      solicitarTituloFetch(carreraId).then((data) => {
+        if (data?.message) {
+          setMensajeError(data.message);
+          setAlertError(true);
+          setAlertOk(false);
+        } else {
+          setMensajeError('');
+          setAlertError(false);
+          setAlertOk(true);
+        }
+      });
+    }
+    setIsOpenTitulo(false);
+  };
+
+  const columns: GridColDef[] = [
+    { field: 'id', headerName: 'ID' },
+    {
+      field: 'nombre',
+      headerName: 'Nombre',
+      cellClassName: 'w-full',
+    },
+    {
+      field: 'duracionAnios',
+      headerName: 'Duracion',
+      type: 'number',
+    },
+    {
+      field: 'creditos',
+      headerName: 'Creditos',
+      type: 'number',
+    },
+    {
+      field: 'solicitudTitulo',
+      headerName: 'Solicitar Titulo',
+      cellClassName: 'flex items-center self-end',
+      headerAlign: 'center',
+      renderCell: (params) => (
+        <button
+          onClick={() => {
+            setIsOpenTitulo(true);
+            setCarreraId(params.id.toString());
+          }}
+          className='mx-auto flex size-fit'
+        >
+          <School className='h-auto w-6 fill-garnet sm:w-8' />
+        </button>
+      ),
+    },
+  ];
+
+  return (
+    <>
+      <div>
+        <DataGrid
+          className='w-full'
+          rows={rows}
+          loading={rowsLoading}
+          columns={columns}
+          sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+        />
+      </div>
+      {isOpenTitulo && (
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
+          <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+            <div className='rounded-md text-center font-bold text-black'>
+              <h5 className='m-0 p-0'>Solicitud de Titulo</h5>
+              <div className='flex flex-col'>
+                <p className='font-bold'>¿Desea solicitar el titulo?</p>
+              </div>
+              <div className='items-center md:space-x-6'>
+                <div className='inline-block'>
+                  <Button
+                    styling='primary'
+                    className='lg:w-20'
+                    onClick={handleClickSolicitudTitulo}
+                  >
+                    Si
+                  </Button>
+                </div>
+                <div className='inline-block'>
+                  <Button
+                    styling='secondary'
+                    onClick={() => setIsOpenTitulo(false)}
+                    className='lg:w-20'
+                  >
+                    No
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {alertOk && (
+        <Collapse
+          in={alertOk}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='success'
+            variant='filled'
+            onClose={() => {
+              setAlertOk(false);
+            }}
+          >
+            ¡Titulo Solicitado!
           </Alert>
         </Collapse>
       )}

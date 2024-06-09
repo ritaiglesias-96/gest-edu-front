@@ -77,6 +77,13 @@ function NavbarEstudiante() {
         <MenuConsulta />
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/estudiante/solicitudes'
+        >
+          <Enrollment className='h-6 self-center sm:w-auto' />
+          <span>Solicitudes</span>
+        </Link>
+        <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
           href='/estudiante/inscripciones'
         >
           <Pencil className='h-6 self-center sm:w-auto' />

@@ -13,6 +13,7 @@ import Evaluate from '@/assets/svg/rule.svg';
 import { Grade } from '@mui/icons-material';
 import Button from '../Button/button';
 import { bajaCursoFetch } from '@/lib/data/estudiante/actions';
+import { School } from '@mui/icons-material';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
