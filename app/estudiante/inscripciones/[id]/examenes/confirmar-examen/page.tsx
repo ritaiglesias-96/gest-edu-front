@@ -44,8 +44,6 @@ export default function ConfirmarInscripcionExamen() {
   useEffect(() => {
     obtenerExamenesVigentes(asignaturaId).then((data) => {
       if (data) {
-        console.log(data);
-        
         setRows(data.exmanes ? data.exmanes : []);
         setExamenes(data.exmanes);        
       }
