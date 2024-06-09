@@ -8,30 +8,17 @@ import Link from 'next/link';
 import { Carrera } from '@/lib/definitions';
 import { useRouter } from 'next/navigation';
 import List from '@/components/List/list';
+import { formatDate } from '@/utils/utils';
 
-export default function CarreraPage({ params }: { params: { id: string } }) {
+export default function CarreraPage({
+  params,
+}: Readonly<{ params: { id: string } }>) {
   const router = useRouter();
   const [rows, setRows] = useState<any[]>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [carrera, setCarrera] = useState<Carrera>();
   const [fallout, setFallout] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  function formatDate(dateString: string): string {
-    const parts = dateString.split('T');
-    if (parts.length !== 2) {
-      throw new Error('Invalid date format. Expected YYYY-MM-DDTHH:mm');
-    }
-
-    const datePart = parts[0];
-    const [year, month, day] = datePart.split('-');
-
-    // Ensure two-digit formatting for month and day
-    const formattedMonth = month.padStart(2, '0');
-    const formattedDay = day.padStart(2, '0');
-
-    return `${formattedDay}/${formattedMonth}/${year}`;
-  }
 
   useEffect(() => {
     const fetch = async () => {

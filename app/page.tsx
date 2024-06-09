@@ -1,4 +1,3 @@
-'use client';
 import GestEduLogo from './assets/svg/logo-light-vertical.svg';
 
 export default function Home() {
