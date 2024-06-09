@@ -1,7 +1,11 @@
 'use server';
 
 import { authToken } from '@/utils/auth';
-import { Calificacion, DocenteState, PeriodoExamenState } from '@/lib/definitions';
+import {
+  Calificacion,
+  DocenteState,
+  PeriodoExamenState,
+} from '@/lib/definitions';
 import {
   AltaDocenteFormSchema,
   RegistrarPeriopdoExamenFormSchema,
@@ -136,9 +140,12 @@ export async function getEstudiante(ci: string) {
   }
 }
 
-export async function calificarCursoFetch(id: number, califiaciones: Calificacion[]) {
+export async function calificarCursoFetch(
+  id: number,
+  califiaciones: Calificacion[]
+) {
   const token = authToken();
-  if(token){
+  if (token) {
     const response = await fetch(
       `${apiRoute}/inscripcionCurso/${id}/calificar`,
       {
@@ -454,5 +461,69 @@ export async function getPeriodosExamenCarrera(id: string) {
     }
   } else {
     return null;
+  }
+}
+
+export async function getAsignaturasConExamenActivo(carreraId: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/carreras/${carreraId}/asignaturas-con-examenes-activos`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return { message: 'Error al obtener las asignaturas' };
+    }
+  }
+}
+
+export async function getExamenesAsignatura(asignaturaId: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/asignaturas/${asignaturaId}/examenesSinCalificar`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return { message: 'Error al obtener los examenes' };
+    }
+  }
+}
+
+export async function getInscriptosAExamen(examenId: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/examenes/${examenId}/estudiantes-inscriptos`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } else {
+      return { message: 'Error al obtener los inscriptos' };
+    }
   }
 }
