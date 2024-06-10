@@ -8,6 +8,7 @@ import Users from '@/assets/svg/people.svg';
 import Hat from '@/assets/svg/school.svg';
 import Pencil from '@/assets/svg/edit.svg';
 import Calendar from '@/assets/svg/calendar.svg';
+import Lessons from '@/assets/svg/enroll-lesson.svg';
 import Link from 'next/link';
 import Enrollment from '@/assets/svg/enroll-lesson.svg';
 import { Role } from '@/lib/definitions';
