@@ -1363,6 +1363,11 @@ function SolicitudTramiteDataGrid({
     setRowsLoading(rowsLoadingParent);
   }, [rowsLoadingParent, rowsParent]);
 
+  const setAlertHelper = () => {
+    setAlertOk(false);
+    setAlertError(false);
+  };
+
   const handleClickSolicitudTitulo = () => {
     if (carreraId) {
       solicitarTituloFetch(carreraId).then((data) => {
@@ -1378,6 +1383,8 @@ function SolicitudTramiteDataGrid({
       });
     }
     setIsOpenTitulo(false);
+    setAlertOk(false);
+    setTimeout(setAlertHelper, 5000);
   };
 
   const columns: GridColDef[] = [
