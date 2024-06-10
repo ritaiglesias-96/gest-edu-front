@@ -9,56 +9,34 @@ import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Asignatura, Carrera, CarreraAsignaturas } from '@/lib/definitions';
-import { previaturasColumns } from '@/components/List/columnTypes';
 
 export default function ConsultarCarreras() {
   const [carrerasIncripto, setCarreras] = useState<Carrera[]>([]);
+  const [cargarPendientes, setCargarPendientes] = useState(false);
   const [carrerasAsignaturas, setCarrerasAsignaturas] = useState<CarreraAsignaturas[]>([]);
 
   useEffect(() => {
     obtenerCarrerasInscriptoFetch().then((data) => {
       setCarreras(data.content); 
+      setCargarPendientes(true);
     });
   }, []);
 
   useEffect(() => {
     carrerasIncripto.map((carrera) => {
       getCarreraYAsignaturaPendientes(carrera.id.toString()).then((data) => { 
-        const prevCarreras = carrerasAsignaturas;
         const carrera: Carrera = data?.carrera; 
         const asignaturas: Asignatura[] = data?.asignaturas; 
         const carreraAsignaturas: CarreraAsignaturas = { carrera, asignaturas };
         //TODO: Hacer if para que no agrege mas de una vez la carrera
-        prevCarreras.push(carreraAsignaturas);
-        setCarrerasAsignaturas(prevCarreras);
-        console.log(prevCarreras);
-        
+        //prevCarreras.push(carreraAsignaturas);
+        setCarrerasAsignaturas(
+          (prevCarreras: CarreraAsignaturas[]) => 
+            [...prevCarreras, carreraAsignaturas]
+        );    
       });
     })
-  }, [carrerasIncripto]);
-
-  // useEffect(() => {
-  //   if (carreras.length > 0) {
-  //     carreras.forEach((carrera) => {
-  //       obtenerAsignaturasPendientes(carrera.id)
-  //         .then((data) => {
-  //           if (data?.asignaturas) {
-  //             const pendientes = data.asignaturas;
-  //             setAsignaturas((prevAsignaturas) => ({
-  //               ...prevAsignaturas,
-  //               pendientes,
-  //             }));
-  //           }
-  //         })
-  //         .catch((error) => {
-  //           console.error(
-  //             `Error fetching asignaturas for carrera ${carrera.id}:`,
-  //             error
-  //           );
-  //         });
-  //     });
-  //   }
-  // }, [carreras]);
+  }, [cargarPendientes]);  
 
   return (
     <div className='relative box-border size-full justify-center overflow-auto md:w-3/4'>
