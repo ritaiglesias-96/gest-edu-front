@@ -7,10 +7,10 @@ import clsx from 'clsx';
 export default function FormContainer({
   children,
   className,
-}: {
+}: Readonly<{
   children: React.ReactNode;
   className?: string;
-}) {
+}>) {
   const pathname = usePathname();
   const finalSlashIndex = pathname.lastIndexOf('/');
   const previousPath = pathname.slice(0, finalSlashIndex);

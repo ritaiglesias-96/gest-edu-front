@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import VisibilityIcon from '@/assets/svg/visibility.svg';
 import VisibilityOffIcon from '@/assets/svg/visibility-off.svg';
 import clsx from 'clsx';
@@ -6,21 +6,15 @@ import clsx from 'clsx';
 interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
   children?: React.ReactNode;
-  placeholder?: string;
   label: string;
-  pattern?: string;
-  value?: string | number;
 }
 
 interface TextAreaFieldProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   className?: string;
   children?: React.ReactNode;
-  placeholder?: string;
-  label: string;
   type: string;
-  pattern?: string;
-  value?: string | number;
+  label: string;
 }
 
 export default function InputField(
@@ -28,6 +22,7 @@ export default function InputField(
 ) {
   const { children, ...otherProps } = props;
   const [showPassword, setShowPassword] = useState(false);
+  const [pass, setPass] = useState('password');
 
   function isTextAreaFieldProps(
     otherProps: InputFieldProps | TextAreaFieldProps
@@ -41,6 +36,15 @@ export default function InputField(
     return (otherProps as InputFieldProps).type !== 'textarea';
   }
 
+  useEffect(() => {
+    if (!showPassword) {
+      setPass('password');
+    }
+    if (showPassword) {
+      setPass('text');
+    }
+  }, [showPassword]);
+
   return (
     <>
       {isTextAreaFieldProps(otherProps) && (
@@ -49,24 +53,24 @@ export default function InputField(
             {props.children}
             <div className='flex w-full flex-col text-black'>
               <label
-                htmlFor={props.name}
+                htmlFor={otherProps.name}
                 className={
                   'px-3 py-0 text-sm font-semibold sm:text-base' +
-                  (props.required
+                  (otherProps.required
                     ? 'after:content-["*"] after:text-garnet'
                     : '')
                 }
               >
-                {props.label}
+                {otherProps.label}
               </label>
               <textarea
                 className={
                   'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:underline focus:outline-none sm:text-base'
                 }
-                name={props.name}
-                placeholder={props.placeholder}
-                aria-describedby={`${props.name}-error`}
-                id={props.name}
+                name={otherProps.name}
+                placeholder={otherProps.placeholder}
+                aria-describedby={`${otherProps.name}-error`}
+                id={otherProps.name}
                 {...otherProps}
               />
             </div>
@@ -79,40 +83,34 @@ export default function InputField(
             {props.children}
             <div className='flex w-full flex-col text-black'>
               <label
-                htmlFor={props.name}
+                htmlFor={otherProps.name}
                 className={
                   'px-3 py-0 text-sm font-semibold sm:text-base' +
-                  (props.required
+                  (otherProps.required
                     ? 'after:content-["*"] after:text-garnet'
                     : '')
                 }
               >
-                {props.label}
+                {otherProps.label}
               </label>
               <input
                 className={
                   'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:underline focus:outline-none sm:text-base'
                 }
-                pattern={props.pattern}
-                id={props.name}
-                type={
-                  props.type === 'password'
-                    ? showPassword
-                      ? 'text'
-                      : 'password'
-                    : props.type
-                }
-                name={props.name}
-                placeholder={props.placeholder}
-                aria-describedby={`${name}-error`}
-                required={props.required}
-                value={props.value}
-                readOnly={props.value ? true : false}
-                {...otherProps}
+                pattern={otherProps.pattern}
+                id={otherProps.name}
+                name={otherProps.name}
+                placeholder={otherProps.placeholder}
+                type={otherProps.type === 'password' ? pass : otherProps.type}
+                aria-describedby={`${otherProps.name}-error`}
+                required={otherProps.required}
+                value={otherProps.value}
+                readOnly={!!otherProps.value}
+                onChange={otherProps.onChange}
               />
             </div>
           </div>
-          {props.type === 'password' && (
+          {otherProps.type === 'password' && (
             <button
               type='button'
               onClick={() => setShowPassword(!showPassword)}
