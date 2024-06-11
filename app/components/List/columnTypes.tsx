@@ -7,6 +7,7 @@ import Subject from '@/assets/svg/subject.svg';
 import Link from 'next/link';
 import Add from '@/assets/svg/add.svg';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
+import { School } from '@mui/icons-material';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -653,4 +654,3 @@ export const InscriptosExamenFuncionarioColumns: GridColDef[] = [
     headerName: 'Direccion',
   },
 ];
-
