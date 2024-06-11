@@ -325,29 +325,6 @@ export const obtenerAsignaturasPendientes = async (id: number) => {
   }
 };
 
-export const bajaCursoFetch = async (id: string) => {
-  const token = authToken();
-  if (token) {
-    const response = await fetch(
-      `${apiRoute}/inscripcionCurso/${id}/eliminar`,
-      {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    ).then((res) => {
-      return res.json();
-    });
-
-    if (response.ok) {
-      return {
-        message: response.message,
-      };
-    }
-  }
-};
 export async function getCarreraYAsignaturaPendientes(id: string) {
   const token = authToken();
   if (token) {
@@ -372,3 +349,27 @@ export async function getCarreraYAsignaturaPendientes(id: string) {
     return null;
   }
 }
+
+export const bajaCursoFetch = async (id: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/inscripcionCurso/${id}/eliminar`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    ).then((res) => {
+      return res.json();
+    });
+
+    if (response.ok) {
+      return {
+        message: response.message,
+      };
+    }
+  }
+};

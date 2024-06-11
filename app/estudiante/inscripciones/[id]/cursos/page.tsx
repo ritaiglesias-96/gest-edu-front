@@ -41,8 +41,6 @@ export default function CursosEstudiante() {
           const id = curso.cursoId;
           return { ...curso, id };
         });
-        console.log(cursos);
-
         setRowsBaja(cursos.filter((curso: any) => curso.estado === 'ACTIVO'));
         setRowsLoadingBaja(false);
       }
