@@ -79,7 +79,7 @@ export default function ConfirmarInscripcionExamen() {
           <List
             rows={rows}
             rowsLoading={rowsLoading}
-            columnsType='examen'
+            columnsType='none'
             isInscripcionExamen={true}
           />
         </div>
