@@ -2,7 +2,7 @@
 import { RegisterState } from '@/lib/definitions';
 import { RegisterFormSchema } from '../schemasZod';
 import { authToken } from '@/utils/auth';
-import { identifierToKeywordKind } from 'typescript';
+import { getCarrera } from '../coordinador/actions';
 
 const apiRoute = process.env.BACK_API;
 
@@ -304,6 +304,27 @@ export const obtenerCursosInscriptoFetch = async () => {
   }
 };
 
+export const obtenerAsignaturasPendientes = async (id: number) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/estudiantes/${id}/asignaturas-pendientes`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const asignaturasJson = await response.json();
+      return { asignaturas: asignaturasJson.content };
+    } else {
+      return { asignaturas: [] };
+    }
+  }
+};
+
 export const bajaCursoFetch = async (id: string) => {
   const token = authToken();
   if (token) {
@@ -327,3 +348,27 @@ export const bajaCursoFetch = async (id: string) => {
     }
   }
 };
+export async function getCarreraYAsignaturaPendientes(id: string) {
+  const token = authToken();
+  if (token) {
+    const carreraJson = await getCarrera(id);
+    if (!carreraJson) return null;
+    const asignaturasPendientes = await fetch(
+      `${apiRoute}/estudiantes/${id}/asignaturas-pendientes`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (asignaturasPendientes.ok) {
+      const asignaturasJson = await asignaturasPendientes.json();
+      return { carrera: carreraJson, asignaturas: asignaturasJson.content };
+    } else {
+      return { carrera: carreraJson, asignaturas: [] };
+    }
+  } else {
+    return null;
+  }
+}
