@@ -5,11 +5,14 @@ import Enroll from '@/assets/svg/enroll-exam.svg';
 import Schedule from '@/assets/svg/schedule.svg';
 import Grading from '@/assets/svg/grading.svg';
 import Subject from '@/assets/svg/subject.svg';
+import Close from '@/assets/svg/Close.svg';
 import Link from 'next/link';
 import Add from '@/assets/svg/add.svg';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
 import Evaluate from '@/assets/svg/rule.svg';
 import { Grade } from '@mui/icons-material';
+import Button from '../Button/button';
+import { bajaCursoFetch } from '@/lib/data/estudiante/actions';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -678,5 +681,31 @@ export const InscriptosExamenFuncionarioColumns: GridColDef[] = [
   {
     field: 'domicilio',
     headerName: 'Direccion',
+  },
+];
+
+export const asignaturaBajaCursoColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'fechaInicio', headerName: 'Fecha de Inicio' },
+  { field: 'fechaFin', headerName: 'Fecha de Fin' },
+  {
+    field: 'baja',
+    headerName: 'Baja',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Button
+        styling='outline'
+        onClick={async () => {
+          const response = await bajaCursoFetch(params.id.toString());
+          if (response) {
+            alert(response.message);
+          }
+        }}
+        className='mx-auto flex size-fit'
+      >
+        <Close className='h-auto w-6 fill-garnet sm:w-8' />
+      </Button>
+    ),
   },
 ];
