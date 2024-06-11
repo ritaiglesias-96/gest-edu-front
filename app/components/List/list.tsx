@@ -63,6 +63,11 @@ import {
   SelectChangeEvent,
   Collapse,
   Alert,
+  Table,
+  TableBody,
+  TableContainer,
+  TableCell,
+  TableRow,
 } from '@mui/material';
 import {
   bajaExamenFetch,
@@ -1429,29 +1434,33 @@ function HorariosCursosEstudiante({
           <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
             <div className='rounded-md text-center font-bold text-black'>
               <h5 className='m-0 p-0'>Horarios</h5>
-              {
-                horarios.length > 0 ? 
-                (
-                  <p>
-                    {
-                      horarios.map( h => 
-                        <div>
-                          {h.dia} {h.horaInicio} {h.horaFin}
-                        </div>
-                      )
-                    }
-                  </p>
-                ) 
-                :
-                (
-                  <h1>no hay...</h1>
-                )
-              }
+              {horarios.length > 0 ? (
+                <div>
+                  {horarios.map((h, index) => (
+                    <TableContainer key={`${h.dia}-${h.horaInicio}-${h.horaFin}-${index}`}>
+                      <Table aria-label='simple table'>
+                        <TableBody>
+                          <TableRow
+                              key={h.dia}
+                              sx={{ '&:last-child td, &:last-child th': { border: 0 }, py: 1 }}
+                            >
+                          <TableCell align="left" ><p className='font-bold text-black'>{h.dia}</p></TableCell>
+                          <TableCell align="right">{h.horaInicio}</TableCell>
+                          <TableCell align="right">{h.horaFin}</TableCell>
+                        </TableRow>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  ))}
+                </div>
+              ) : (
+                <p className='text-black'>No hay horarios ingresados para la asignatura</p>
+              )}
               <div className='items-center md:space-x-6'>
                 <div className='inline-block'>
                   <Button
                     onClick={() => setIsOpen(false)}
-                    className='lg:w-20'
+                    className='lg:w-200'
                     styling='primary'
                   >
                     Cerrar
