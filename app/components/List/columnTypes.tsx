@@ -4,7 +4,7 @@ import Enter from '@/assets/svg/chevron-right.svg';
 import Enroll from '@/assets/svg/enroll-exam.svg';
 import Schedule from '@/assets/svg/schedule.svg';
 import Subject from '@/assets/svg/subject.svg';
-import Close from '@/assets/svg/Close.svg';
+import Close from '@/assets/svg/close.svg';
 import Link from 'next/link';
 import Add from '@/assets/svg/add.svg';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
@@ -660,6 +660,7 @@ export const InscriptosExamenFuncionarioColumns: GridColDef[] = [
 
 export const asignaturaBajaCursoColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
+  { field: 'asignaturaNombre', headerName: 'Nombre' },
   { field: 'fechaInicio', headerName: 'Fecha de Inicio' },
   { field: 'fechaFin', headerName: 'Fecha de Fin' },
   {
@@ -672,6 +673,7 @@ export const asignaturaBajaCursoColumns: GridColDef[] = [
         styling='outline'
         onClick={async () => {
           const response = await bajaCursoFetch(params.id.toString());
+          console.log(response);
           if (response) {
             alert(response.message);
           }
