@@ -252,7 +252,10 @@ export default function List({
         />
       )}
       {isHorarioCursoConsulta && (
-        <
+        <HorariosCursosEstudiante
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
       )}
     </div>
   );
@@ -987,7 +990,6 @@ function ApproveRejectDataGrid({
           motivoRechazo
         );
         if (data) {
-          console.log(data);
           if (rows) setRows(rows.filter((row) => row.id !== tramiteId));
         }
       };
@@ -1332,10 +1334,32 @@ function HorariosCursosEstudiante({
 }>) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [horarios, setHorarios] = useState([]);
+
+  useEffect(() => {
+    //Se convierte la fecha a formato dd/MM/yyyy
+    rowsParent.forEach((curso) => {
+      curso.fechaInicio = convertirFecha(curso.fechaInicio);
+      curso.fechaFin = convertirFecha(curso.fechaFin);
+    });
+    setRows(rowsParent);
+    setRowsLoading(rowsLoadingParent);
+  }, [rowsLoadingParent, rowsParent]);
+
+  const handleHorario = (id: string) => {
+    if (rows) {
+      const cursoEncontrados = rows.find((c) => c.id.toString() === id);
+      if (cursoEncontrados) {
+        const horarioEncontrado = cursoEncontrados.horarios;
+        setHorarios(horarioEncontrado);
+      }
+    }
+  };
 
   const columns: GridColDef[] = [
     {
-      field: 'cursoId',
+      field: 'id',
       headerName: 'ID',
       cellClassName: 'flex items-center self-end',
       headerClassName: 'header-center',
@@ -1343,44 +1367,101 @@ function HorariosCursosEstudiante({
     },
     {
       field: 'asignaturaNombre',
-      headerName: 'Asingatura',
-      cellClassName: 'flex items-center self-end',
+      headerName: 'Asignatura',
+      align: 'center',
       headerAlign: 'center',
       flex: 1,
     },
     {
       field: 'docente',
       headerName: 'Docente',
-      cellClassName: 'flex items-center self-end',
+      align: 'center',
       headerAlign: 'center',
       flex: 1,
     },
     {
       field: 'fechaInicio',
-      headerName: 'Fecha de inicio',
-      cellClassName: 'flex items-center self-end',
+      headerName: 'Fecha de Inicio',
+      align: 'center',
       headerAlign: 'center',
       flex: 1,
     },
     {
       field: 'fechaFin',
-      headerName: 'Fecha de fin',
-      cellClassName: 'flex items-center self-end',
+      headerName: 'Fecha de Fin',
+      align: 'center',
       headerAlign: 'center',
       flex: 1,
     },
     {
-      field: 'inscribirse',
-      headerName: 'Inscribirse',
-      cellClassName: 'flex text-center self-end',
+      field: 'horarios',
+      headerName: 'Horarios',
+      align: 'center',
       headerAlign: 'center',
       flex: 1,
       renderCell: (params) => (
-        <Button
-        styling='outline'>
-            <Schedule/>
-        </Button>
+        <Link
+          href={`${window.location.pathname}`}
+          onClick={() => {
+            setIsOpen(true), handleHorario(params.id.toString());
+          }}
+          className='mx-auto flex size-fit'
+        >
+          <Schedule className='h-auto w-6 fill-garnet sm:w-8' />
+        </Link>
       ),
     },
   ];
+
+  return (
+    <>
+      <div>
+        <DataGrid
+          className='w-full'
+          rows={rows}
+          loading={rowsLoading}
+          columns={columns}
+          sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+        />
+      </div>
+      {isOpen && (
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
+          <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+            <div className='rounded-md text-center font-bold text-black'>
+              <h5 className='m-0 p-0'>Horarios</h5>
+              {
+                horarios.length > 0 ? 
+                (
+                  <p>
+                    {
+                      horarios.map( h => 
+                        <div>
+                          {h.dia} {h.horaInicio} {h.horaFin}
+                        </div>
+                      )
+                    }
+                  </p>
+                ) 
+                :
+                (
+                  <h1>no hay...</h1>
+                )
+              }
+              <div className='items-center md:space-x-6'>
+                <div className='inline-block'>
+                  <Button
+                    onClick={() => setIsOpen(false)}
+                    className='lg:w-20'
+                    styling='primary'
+                  >
+                    Cerrar
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
