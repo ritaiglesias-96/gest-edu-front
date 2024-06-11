@@ -631,6 +631,7 @@ export const asignaturaBajaCursoColumns: GridColDef[] = [
         styling='outline'
         onClick={async () => {
           const response = await bajaCursoFetch(params.id.toString());
+          console.log(response);
           if (response) {
             alert(response.message);
           }
