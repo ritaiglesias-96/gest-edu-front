@@ -415,9 +415,9 @@ export async function getHorariosCursosEstudiante() {
     );
     if (response.ok) {
       const cursosJson = await response.json();
-      return { cursosHorarios: cursosJson };
+      return cursosJson;
     } else {
-      return { cursosHorarios: [] };
+      return [];
     }
   }
 }
