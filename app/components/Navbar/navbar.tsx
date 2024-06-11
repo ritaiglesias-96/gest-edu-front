@@ -252,7 +252,7 @@ function MenuConsulta() {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = (opcion: string) => {
-    if(opcion === 'pendientes'){
+    if (opcion === 'pendientes') {
       window.location.href = `/estudiante/pendientes`;
     }
     setAnchorEl(null);
@@ -261,7 +261,7 @@ function MenuConsulta() {
   return (
     <>
       <Button styling='link' onClick={handleClick}>
-        <Lessons className='h-6 sm:w-auto self-center' />
+        <Lessons className='h-6 self-center sm:w-auto' />
         <span className='text-sm'>Consultar</span>
       </Button>
       <Menu
@@ -273,7 +273,9 @@ function MenuConsulta() {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleClose('pendientes')}>Asignaturas pendientes</MenuItem>
+        <MenuItem onClick={() => handleClose('pendientes')}>
+          Asignaturas pendientes
+        </MenuItem>
       </Menu>
     </>
   );
