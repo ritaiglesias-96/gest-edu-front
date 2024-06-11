@@ -654,16 +654,9 @@ export const asignaturaBajaCursoColumns: GridColDef[] = [
       <Button
         styling='outline'
         onClick={async () => {
-          const baja = confirm('¿Desea darse de baja del curso?');
-          if (baja) {
-            bajaCursoFetch(params.id.toString()).then((response) => {
-              if (!response) {
-                alert('Se ha dado de baja exitosamente.');
-                location.reload();
-              } else {
-                alert(response.message);
-              }
-            });
+          const response = await bajaCursoFetch(params.id.toString());
+          if (response) {
+            alert(response.message);
           }
         }}
         className='mx-auto flex size-fit'
