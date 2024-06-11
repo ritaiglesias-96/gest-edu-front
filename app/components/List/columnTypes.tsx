@@ -624,7 +624,7 @@ export const asignaturaExamenFuncionarioColumns: GridColDef[] = [
         href={`${window.location.pathname}/${params.id}`}
         className='mx-auto flex size-fit'
       >
-        <Subject className='h-auto w-6 fill-garnet sm:w-8' />
+        <Grading className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
@@ -699,16 +699,9 @@ export const asignaturaBajaCursoColumns: GridColDef[] = [
       <Button
         styling='outline'
         onClick={async () => {
-          const baja = confirm('¿Desea darse de baja del curso?');
-          if (baja) {
-            bajaCursoFetch(params.id.toString()).then((response) => {
-              if (!response) {
-                alert('Se ha dado de baja exitosamente.');
-                location.reload();
-              } else {
-                alert(response.message);
-              }
-            });
+          const response = await bajaCursoFetch(params.id.toString());
+          if (response) {
+            alert(response.message);
           }
         }}
         className='mx-auto flex size-fit'

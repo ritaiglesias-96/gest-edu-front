@@ -230,6 +230,9 @@ export default function List({
     case 'inscriptosExamenFuncionario':
       columns = InscriptosExamenFuncionarioColumns;
       break;
+    case 'asignaturaBajaCurso':
+      columns = asignaturaBajaCursoColumns;
+      break;
     default:
       break;
   }
