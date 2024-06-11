@@ -64,7 +64,7 @@ export default function ConsultarCarreras() {
     <div className='relative box-border size-full justify-center overflow-auto md:w-3/4'>
       <h1 className='text-center font-bold'>Carreras del estudiante</h1>
       <h5 className='text-center font-bold'>
-        Puede visulaizar las asignaturas pendientes expandiendo cada carrera.
+        Asignaturas pendientes para finalizar una carrera.
       </h5>
       <div>
         {carrerasAsignaturas.map((carrera) => (
