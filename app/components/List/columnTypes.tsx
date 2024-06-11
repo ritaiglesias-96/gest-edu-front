@@ -561,75 +561,6 @@ export const solicitudTituloColumns: GridColDef[] = [
   },
 ];
 
-export const carreraInscripcionFuncionarioColumns: GridColDef[] = [
-  { field: 'id', headerName: 'ID' },
-  {
-    field: 'nombre',
-    headerName: 'Nombre',
-    cellClassName: 'w-full',
-  },
-  {
-    field: 'duracionAnios',
-    headerName: 'Duracion',
-    type: 'number',
-  },
-  {
-    field: 'creditos',
-    headerName: 'Creditos',
-    type: 'number',
-  },
-  {
-    field: 'examenes',
-    headerName: 'Examenes',
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.id}/asignatura-examen`}
-        className='mx-auto flex size-fit'
-      >
-        <Subject className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
-  },
-];
-
-export const asignaturaExamenFuncionarioColumns: GridColDef[] = [
-  { field: 'id', headerName: 'ID' },
-  {
-    field: 'nombre',
-    headerName: 'Nombre',
-  },
-  {
-    field: 'descripcion',
-    headerName: 'Descripcion',
-  },
-  {
-    field: 'creditos',
-    headerName: 'Creditos',
-    type: 'number',
-  },
-  {
-    field: 'semestrePlanEstudio',
-    headerName: 'Semestre',
-    type: 'number',
-  },
-  {
-    field: 'examenes',
-    headerName: 'Examenes',
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.id}`}
-        className='mx-auto flex size-fit'
-      >
-        <Subject className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
-  },
-];
-
 export const ExamenFuncionarioColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   {
@@ -699,16 +630,9 @@ export const asignaturaBajaCursoColumns: GridColDef[] = [
       <Button
         styling='outline'
         onClick={async () => {
-          const baja = confirm('¿Desea darse de baja del curso?');
-          if (baja) {
-            bajaCursoFetch(params.id.toString()).then((response) => {
-              if (!response) {
-                alert('Se ha dado de baja exitosamente.');
-                location.reload();
-              } else {
-                alert(response.message);
-              }
-            });
+          const response = await bajaCursoFetch(params.id.toString());
+          if (response) {
+            alert(response.message);
           }
         }}
         className='mx-auto flex size-fit'

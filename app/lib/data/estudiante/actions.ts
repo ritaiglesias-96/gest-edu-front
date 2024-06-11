@@ -3,6 +3,7 @@ import { RegisterState } from '@/lib/definitions';
 import { RegisterFormSchema } from '../schemasZod';
 import { authToken } from '@/utils/auth';
 import { getCarrera } from '../coordinador/actions';
+import { identifierToKeywordKind } from 'typescript';
 
 const apiRoute = process.env.BACK_API;
 
@@ -254,31 +255,6 @@ export const obtenerAsignaturasParaInscripcionExamenFetch = async (
       return asignaturasJson;
     } else {
       return response.json();
-    }
-  }
-};
-
-export const bajaExamenFetch = async (examenId: string) => {
-  const token = authToken();
-  if (token) {
-    const response = await fetch(`${apiRoute}/examenes/${examenId}/baja`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    }).then((res) => {
-      return res.json();
-    });
-
-    if (response.status === 200) {
-      return {
-        message: 'Se dio de baja exitosamente.',
-      };
-    } else {
-      return {
-        message: response.message,
-      };
     }
   }
 };
