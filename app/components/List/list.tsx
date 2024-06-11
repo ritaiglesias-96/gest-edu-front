@@ -32,6 +32,7 @@ import DeleteIcon from '@/assets/svg/delete.svg';
 import SaveIcon from '@/assets/svg/done.svg';
 import Enroll from '@/assets/svg/enroll-lesson.svg';
 import Close from '@/assets/svg/close.svg';
+import Schedule from '@/assets/svg/schedule.svg';
 import CheckIcon from '@mui/icons-material/Check';
 import {
   GridRowsProp,
@@ -112,6 +113,7 @@ interface ListProps {
   editarCalificacionCurso?: boolean;
   isApproveRejectCarrera?: boolean;
   isSolicitudTramite?: boolean;
+  isHorarioCursoConsulta?: boolean;
   rows: GridRowsProp[];
   rowsLoading: boolean;
   columnsType: columnType;
@@ -125,6 +127,7 @@ export default function List({
   editarCalificacionCurso,
   isApproveRejectCarrera,
   isSolicitudTramite,
+  isHorarioCursoConsulta,
   rows,
   rowsLoading,
   columnsType,
@@ -1502,4 +1505,65 @@ function SolicitudTramiteDataGrid({
       )}
     </>
   );
+}
+
+function HorariosCursosEstudiante({
+  rowsParent,
+  rowsLoadingParent,
+}: Readonly<{
+  rowsParent: GridRowsProp;
+  rowsLoadingParent: boolean;
+}>) {
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+
+  const columns: GridColDef[] = [
+    {
+      field: 'cursoId',
+      headerName: 'ID',
+      cellClassName: 'flex items-center self-end',
+      headerClassName: 'header-center',
+      flex: 1,
+    },
+    {
+      field: 'asignaturaNombre',
+      headerName: 'Asingatura',
+      cellClassName: 'flex items-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+    },
+    {
+      field: 'docente',
+      headerName: 'Docente',
+      cellClassName: 'flex items-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+    },
+    {
+      field: 'fechaInicio',
+      headerName: 'Fecha de inicio',
+      cellClassName: 'flex items-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+    },
+    {
+      field: 'fechaFin',
+      headerName: 'Fecha de fin',
+      cellClassName: 'flex items-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+    },
+    {
+      field: 'inscribirse',
+      headerName: 'Inscribirse',
+      cellClassName: 'flex text-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+      renderCell: (params) => (
+        <Button styling='outline'>
+          <Schedule />
+        </Button>
+      ),
+    },
+  ];
 }
