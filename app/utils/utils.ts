@@ -49,3 +49,10 @@ export function formatDateCurso(dateString: string): string {
 
   return `${day}/${month}/${year}`; // Format the date string
 }
+
+export function convertirHora(hora: string) {
+  // Divide la cadena en partes utilizando ':' como delimitador
+  const partes = hora.split(':');
+  // Devuelve las dos primeras partes (HH y MM) unidas por ':'
+  return `${partes[0]}:${partes[1]}`;
+}
