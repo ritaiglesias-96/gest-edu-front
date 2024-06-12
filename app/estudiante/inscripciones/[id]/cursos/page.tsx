@@ -24,8 +24,10 @@ export default function CursosEstudiante() {
   useEffect(() => {
     if (carreraId) {
       obtenerAsignaturasParaInscripcionFetch(carreraId).then((data) => {
-        setRows(data.content ? data.content : []);
-        setRowsLoading(false);
+        if (data) {
+          setRows(data.content ? data.content : []);
+          setRowsLoading(false);
+        }
       });
     }
   }, [carreraId]);

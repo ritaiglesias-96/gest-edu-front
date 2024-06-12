@@ -401,3 +401,24 @@ export const bajaCursoFetch = async (id: string) => {
     }
   }
 };
+
+export async function getHorariosCursosEstudiante() {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/inscripcionCurso/cursos-inscripto`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const cursosJson = await response.json();
+      return cursosJson;
+    } else {
+      return [];
+    }
+  }
+}

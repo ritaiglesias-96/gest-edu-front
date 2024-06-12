@@ -247,6 +247,9 @@ function MenuConsulta() {
     if (opcion === 'pendientes') {
       window.location.href = `/estudiante/pendientes`;
     }
+    if(opcion === 'horarios'){
+      window.location.href = `/estudiante/horarios`;
+    }
     setAnchorEl(null);
   };
 
@@ -265,9 +268,8 @@ function MenuConsulta() {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleClose('pendientes')}>
-          Asignaturas pendientes
-        </MenuItem>
+        <MenuItem onClick={() => handleClose('pendientes')}>Asignaturas pendientes</MenuItem>
+        <MenuItem onClick={() => handleClose('horarios')}>Horarios</MenuItem>
       </Menu>
     </>
   );
