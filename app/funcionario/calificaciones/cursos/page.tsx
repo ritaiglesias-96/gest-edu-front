@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { getCarreras } from '@/lib/data/coordinador/actions';
 import List from '@/components/List/list';
 
-export default function CarrerasPageCursos() {
+export default function CalificacionesPage() {
   const [rows, setRows] = useState([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   useEffect(() => {

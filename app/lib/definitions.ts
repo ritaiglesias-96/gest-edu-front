@@ -243,6 +243,10 @@ export type CalificacionExamen = {
   estudianteId: string,
   calificacion: string
 };
+export type CarreraAsignaturas = {
+  carrera: Carrera;
+  asignaturas: Asignatura[];
+}
 
 export interface InscripcionCarreraPendienteFlattened {
   id: number;

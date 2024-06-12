@@ -5,7 +5,7 @@ import List from '@/components/List/list';
 import Link from 'next/link';
 import Button from '@/components/Button/button';
 
-export default function CarrerasPage() {
+export default function InscripcionesPage() {
   const [rows, setRows] = useState([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function CarrerasPage() {
         <List
           rows={rows}
           rowsLoading={rowsLoading}
-          columnsType='carreraFuncionario'
+          columnsType='carreraInscripcionFuncionario'
         />
       </div>
     </div>
