@@ -52,7 +52,7 @@ import {
   aprobarSolicitudInscripcionCarrera,
 } from '@/lib/data/funcionario/actions';
 import Link from 'next/link';
-import { Asignatura } from '@/lib/definitions';
+import { Asignatura, HorarioCurso } from '@/lib/definitions';
 import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
 import {
@@ -1340,7 +1340,7 @@ function HorariosCursosEstudiante({
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const [horarios, setHorarios] = useState([]);
+  const [horarios, setHorarios] = useState<HorarioCurso[]>([]);
 
   useEffect(() => {
     //Se convierte la fecha a formato dd/MM/yyyy
@@ -1444,9 +1444,7 @@ function HorariosCursosEstudiante({
                               key={h.dia}
                               sx={{ '&:last-child td, &:last-child th': { border: 0 }, py: 1 }}
                             >
-                          <TableCell align="left" ><p className='font-bold text-black'>{h.dia}</p></TableCell>
-                          <TableCell align="right">{h.horaInicio}</TableCell>
-                          <TableCell align="right">{h.horaFin}</TableCell>
+                          <TableCell align="right"><span className='font-bold text-black'>{h.dia}</span>: {h.horaInicio} - {h.horaFin}</TableCell>
                         </TableRow>
                         </TableBody>
                       </Table>
@@ -1454,7 +1452,7 @@ function HorariosCursosEstudiante({
                   ))}
                 </div>
               ) : (
-                <p className='text-black'>No hay horarios ingresados para la asignatura</p>
+                <p className='text-black'>No hay horarios ingresados para el curso</p>
               )}
               <div className='items-center md:space-x-6'>
                 <div className='inline-block'>
