@@ -171,7 +171,7 @@ export const obtenerCursosVigentes = async (id: string) => {
     const response = await fetch(`${apiRoute}/asignaturas/${id}/cursos`, {
       method: 'GET',
       headers: {
-        Authotization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     if (response.ok) {
@@ -283,6 +283,27 @@ export const bajaExamenFetch = async (examenId: string) => {
   }
 };
 
+export const obtenerCursosInscriptoFetch = async () => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/inscripcionCurso/cursos-inscripto`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  }
+};
+
 export const solicitarTituloFetch = async (id: string) => {
   const token = authToken();
   if (token) {
@@ -310,6 +331,7 @@ export const solicitarTituloFetch = async (id: string) => {
     }
   }
 };
+
 export const obtenerAsignaturasPendientes = async (id: number) => {
   const token = authToken();
   if (token) {
@@ -355,6 +377,30 @@ export async function getCarreraYAsignaturaPendientes(id: string) {
     return null;
   }
 }
+
+export const bajaCursoFetch = async (id: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/inscripcionCurso/${id}/eliminar`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    ).then((res) => {
+      return res.json();
+    });
+
+    if (response.ok) {
+      return {
+        message: response.message,
+      };
+    }
+  }
+};
 
 export async function getHorariosCursosEstudiante() {
   const token = authToken();
