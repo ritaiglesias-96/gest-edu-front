@@ -577,10 +577,30 @@ export async function getInscriptosAExamen(examenId: string) {
     );
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       return data;
     } else {
       return { message: 'Error al obtener los inscriptos' };
+    }
+  }
+}
+
+export async function getCursosCarrera(id: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/carreras/${id}/cursos-activos`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const cursosJson = await response.json();
+      return {cursos: cursosJson};
+    } else {
+      return { cursos: [] };
     }
   }
 }

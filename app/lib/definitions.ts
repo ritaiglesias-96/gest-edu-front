@@ -191,6 +191,17 @@ export type Curso = {
   docenteId: number;
 };
 
+export type CursoAsignatura = {
+  id: number;
+  fechaInicio: string;
+  fechaFin: string;
+  diasPrevInsc: number;
+  estado: string;
+  asignaturaId: number;
+  nombreAsignatura: string;
+  docenteId: number;
+};
+
 export type HorarioCurso = {
   dia: string;
   horaFin: string;
