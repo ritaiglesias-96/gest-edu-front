@@ -4,9 +4,12 @@ import Enter from '@/assets/svg/chevron-right.svg';
 import Enroll from '@/assets/svg/enroll-exam.svg';
 import Schedule from '@/assets/svg/schedule.svg';
 import Subject from '@/assets/svg/subject.svg';
+import Close from '@/assets/svg/close.svg';
 import Link from 'next/link';
 import Add from '@/assets/svg/add.svg';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
+import Button from '../Button/button';
+import { bajaCursoFetch } from '@/lib/data/estudiante/actions';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -706,6 +709,40 @@ export const ExamenFuncionarioColumns: GridColDef[] = [
       >
         <Subject className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
+    ),
+  },
+];
+
+export const asignaturaBajaCursoColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'asignaturaNombre', headerName: 'Nombre' },
+  { field: 'fechaInicio', headerName: 'Fecha de Inicio' },
+  { field: 'fechaFin', headerName: 'Fecha de Fin' },
+  {
+    field: 'baja',
+    headerName: 'Baja',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Button
+        styling='outline'
+        onClick={async () => {
+          const baja = confirm('¿Desea darse de baja del curso?');
+          if(baja){
+            bajaCursoFetch(params.id.toString()).then((response)=>{         
+              if (!response) {                         
+                alert('Se ha dado de baja exitosamente.');
+                location.reload();
+              }else{
+                alert(response.message);
+              }
+            });
+          }
+        }}
+        className='mx-auto flex size-fit'
+      >
+        <Close className='h-auto w-6 fill-garnet sm:w-8' />
+      </Button>
     ),
   },
 ];
