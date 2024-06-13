@@ -304,6 +304,34 @@ export const obtenerCursosInscriptoFetch = async () => {
   }
 };
 
+export const solicitarTituloFetch = async (id: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/tramites/nuevo-tramite?carreraId=${id}&tipoTramite=SOLICITUD_DE_TITULO`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    ).then((res) => {
+      return res.json();
+    });
+
+    if (response.status === 200) {
+      return {
+        message: 'Se ha realizado la solicitud del titulo',
+      };
+    } else {
+      return {
+        message: response.message,
+      };
+    }
+  }
+};
+
 export const obtenerAsignaturasPendientes = async (id: number) => {
   const token = authToken();
   if (token) {
@@ -374,33 +402,6 @@ export const bajaCursoFetch = async (id: string) => {
   }
 };
 
-export const solicitarTituloFetch = async (id: string) => {
-  const token = authToken();
-  if (token) {
-    const response = await fetch(
-      `${apiRoute}/tramites/nuevo-tramite?carreraId=${id}&tipoTramite=SOLICITUD_DE_TITULO`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    ).then((res) => {
-      return res.json();
-    });
-
-    if (response.status === 200) {
-      return {
-        message: 'Se ha realizado la solicitud del titulo',
-      };
-    } else {
-      return {
-        message: response.message,
-      };
-    }
-  }
-};
 export async function getHorariosCursosEstudiante() {
   const token = authToken();
   if (token) {

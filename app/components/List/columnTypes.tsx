@@ -630,29 +630,6 @@ export const asignaturaExamenFuncionarioColumns: GridColDef[] = [
   },
 ];
 
-export const solicitudTituloColumns: GridColDef[] = [
-  { field: 'id', headerName: 'ID' },
-  {
-    field: 'fechaCreacion',
-    headerName: 'Fecha de creacion',
-    cellClassName: 'w-full',
-  },
-  {
-    field: 'resolver',
-    headerName: 'Resolver',
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.id}`}
-        className='mx-auto flex size-fit'
-      >
-        <Grading className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
-  },
-];
-
 export const ExamenFuncionarioColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   {
