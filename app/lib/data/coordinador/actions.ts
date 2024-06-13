@@ -405,3 +405,51 @@ export async function getSolicitudesTituloPendientes() {
     return null;
   }
 }
+
+export async function aprobarSolicitud(id: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/tramites/aprobar-tramite-inscripcion-carrera/${id}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
+
+export async function rechazarSolicitud(id: string, motivoRechazo: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/tramites/rechazar-tramite-solicitud-titulo/${id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(motivoRechazo),
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+}

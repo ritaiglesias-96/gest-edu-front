@@ -262,6 +262,8 @@ export interface InscripcionCarreraPendienteFlattened {
 
 export interface SolicitudTitulo {
   id: number;
+  carreraId: string;
+  creditosAprobados: string;
   motivoRechazo: string;
   estado: string;
   fechaActualizacion: string;
