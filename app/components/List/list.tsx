@@ -35,7 +35,11 @@ import SaveIcon from '@/assets/svg/done.svg';
 import Enroll from '@/assets/svg/enroll-lesson.svg';
 import Close from '@/assets/svg/close.svg';
 import Schedule from '@/assets/svg/schedule.svg';
+import Grading from '@/assets/svg/grading.svg';
+import School from '@/assets/svg/school.svg';
+import Download from '@/assets/svg/download.svg';
 import CheckIcon from '@mui/icons-material/Check';
+import CertificadoPDF from '../DocumentosPDF/CertificadoPDF';
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -56,7 +60,7 @@ import {
   aprobarSolicitudInscripcionCarrera,
 } from '@/lib/data/funcionario/actions';
 import Link from 'next/link';
-import { Asignatura, HorarioCurso } from '@/lib/definitions';
+import { Asignatura, HorarioCurso, Certificado } from '@/lib/definitions';
 import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
 import {
@@ -77,13 +81,13 @@ import {
   bajaExamenFetch,
   inscribirseCursoFetch,
   inscribirseExamenFetch,
+  solicitarCertificadoFetch,
   solicitarTituloFetch,
 } from '@/lib/data/estudiante/actions';
 import { SessionContext } from '../../../context/SessionContext';
 import { convertirFecha } from '@/utils/utils';
 import InputField from '../InputField/inputField';
 import { obtenerDatosUsuarioFetch } from '@/lib/data/actions';
-import { School } from '@mui/icons-material';
 
 type columnType =
   | 'carrera'
@@ -286,7 +290,7 @@ export default function List({
       )}
       {isHorarioCursoConsulta && (
         <HorariosCursosEstudiante
-        rowsParent={rows}
+          rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
       )}
@@ -1497,22 +1501,34 @@ function HorariosCursosEstudiante({
               {horarios.length > 0 ? (
                 <div>
                   {horarios.map((h, index) => (
-                    <TableContainer key={`${h.dia}-${h.horaInicio}-${h.horaFin}-${index}`}>
+                    <TableContainer
+                      key={`${h.dia}-${h.horaInicio}-${h.horaFin}-${index}`}
+                    >
                       <Table aria-label='simple table'>
                         <TableBody>
                           <TableRow
-                              key={h.dia}
-                              sx={{ '&:last-child td, &:last-child th': { border: 0 }, py: 1 }}
-                            >
-                          <TableCell align="right"><span className='font-bold text-black'>{h.dia}</span>: {h.horaInicio} - {h.horaFin}</TableCell>
-                        </TableRow>
+                            key={h.dia}
+                            sx={{
+                              '&:last-child td, &:last-child th': { border: 0 },
+                              py: 1,
+                            }}
+                          >
+                            <TableCell align='right'>
+                              <span className='font-bold text-black'>
+                                {h.dia}
+                              </span>
+                              : {h.horaInicio} - {h.horaFin}
+                            </TableCell>
+                          </TableRow>
                         </TableBody>
                       </Table>
                     </TableContainer>
                   ))}
                 </div>
               ) : (
-                <p className='text-black'>No hay horarios ingresados para el curso</p>
+                <p className='text-black'>
+                  No hay horarios ingresados para el curso
+                </p>
               )}
               <div className='items-center md:space-x-6'>
                 <div className='inline-block'>
@@ -1543,10 +1559,13 @@ function SolicitudTramiteDataGrid({
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [isOpenTitulo, setIsOpenTitulo] = useState(false);
+  const [isOpenCertificado, setIsOpenCertificado] = useState(false);
   const [carreraId, setCarreraId] = useState('');
   const [alertOk, setAlertOk] = useState(false);
   const [alertError, setAlertError] = useState(false);
+  const [modalCertificado, setModalCertificado] = useState(false);
   const [mensajeError, setMensajeError] = useState('');
+  const [certificado, setCertificado] = useState<Certificado>();
 
   useEffect(() => {
     setRows(rowsParent);
@@ -1577,28 +1596,58 @@ function SolicitudTramiteDataGrid({
     setTimeout(setAlertHelper, 5000);
   };
 
+  const handleClickSolicitudCertificado = () => {
+    if (carreraId) {
+      solicitarCertificadoFetch(carreraId).then((data) => {
+        if (data?.message) {
+          setMensajeError(data.message);
+          setAlertError(true);
+          setAlertOk(false);
+        } else {
+          setModalCertificado(true);
+          setMensajeError('');
+          setAlertError(false);
+          setCertificado(data);
+        }
+      });
+    }
+    setIsOpenCertificado(false);
+    setAlertOk(false);
+    setTimeout(setAlertHelper, 5000);
+  };
+
+  const downloadCertificado = () => {};
+
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID' },
     {
       field: 'nombre',
       headerName: 'Nombre',
       cellClassName: 'w-full',
+      flex: 1,
     },
     {
       field: 'duracionAnios',
       headerName: 'Duracion',
       type: 'number',
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
     },
     {
       field: 'creditos',
       headerName: 'Creditos',
       type: 'number',
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
     },
     {
       field: 'solicitudTitulo',
       headerName: 'Solicitar Titulo',
       cellClassName: 'flex items-center self-end',
       headerAlign: 'center',
+      flex: 1,
       renderCell: (params) => (
         <button
           onClick={() => {
@@ -1608,6 +1657,24 @@ function SolicitudTramiteDataGrid({
           className='mx-auto flex size-fit'
         >
           <School className='h-auto w-6 fill-garnet sm:w-8' />
+        </button>
+      ),
+    },
+    {
+      field: 'solicitarCertificado',
+      headerName: 'Solicitar Certificado',
+      cellClassName: 'flex items-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+      renderCell: (params) => (
+        <button
+          onClick={() => {
+            setIsOpenCertificado(true);
+            setCarreraId(params.id.toString());
+          }}
+          className='mx-auto flex size-fit'
+        >
+          <Grading className='h-auto w-6 fill-garnet sm:w-8' />
         </button>
       ),
     },
@@ -1649,6 +1716,61 @@ function SolicitudTramiteDataGrid({
                     className='lg:w-20'
                   >
                     No
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {isOpenCertificado && (
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
+          <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+            <div className='rounded-md text-center font-bold text-black'>
+              <h5 className='m-0 p-0'>Solicitud de Certificado</h5>
+              <div className='flex flex-col'>
+                <p className='font-bold'>¿Desea solicitar el Certificado?</p>
+              </div>
+              <div className='items-center md:space-x-6'>
+                <div className='inline-block'>
+                  <Button
+                    styling='primary'
+                    className='lg:w-20'
+                    onClick={handleClickSolicitudCertificado}
+                  >
+                    Si
+                  </Button>
+                </div>
+                <div className='inline-block'>
+                  <Button
+                    styling='secondary'
+                    onClick={() => setIsOpenCertificado(false)}
+                    className='lg:w-20'
+                  >
+                    No
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {modalCertificado && (
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-8 py-8 shadow-lg shadow-garnet'>
+          <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+            <div className='rounded-md text-center font-bold text-black'>
+              <h5 className='m-0 p-0 mb-6'>¿Descargar certificado?</h5>
+              <div className='flex items-center space-x-2'>
+                <div>
+                  <CertificadoPDF certificado={certificado!} />
+                </div>
+                <div>
+                  <Button
+                    styling='secondary'
+                    onClick={() => setModalCertificado(false)}
+                    className='lg:w-200'
+                  >
+                    Cerrar
                   </Button>
                 </div>
               </div>
