@@ -4,7 +4,7 @@ import { getAsignatura } from '@/lib/data/coordinador/actions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
 import Button from '@/components/Button/button';
-import { Curso, Asignatura, Docente, Calificacion } from '@/lib/definitions';
+import { Curso, Asignatura, Docente, Calificacion, Estudiante } from '@/lib/definitions';
 import { useRouter } from 'next/navigation';
 import List from '@/components/List/list';
 import {
@@ -27,6 +27,7 @@ export default function CursoPage({
   const [fallout, setFallout] = useState(false);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     if (params.cursoId) {
@@ -40,8 +41,12 @@ export default function CursoPage({
     if (curso?.id) {
       curso.fechaInicio = convertirFecha(curso.fechaInicio);
       curso.fechaFin = convertirFecha(curso.fechaFin);
-      getEstudiantesPorCurso(curso.id.toString()).then((arrayEstudiantes) => {
+      getEstudiantesPorCurso(curso.id.toString()).then((arrayEstudiantes:any) => {
         if (arrayEstudiantes) {
+          arrayEstudiantes.forEach((element: Estudiante) => {
+            element.fechaNac = convertirFecha(element.fechaNac!);
+          });
+          setDisabled(arrayEstudiantes.length === 0);                    
           setRows(arrayEstudiantes);
           setRowsLoading(false);
           setLoading(false);
@@ -77,12 +82,12 @@ export default function CursoPage({
   }
 
   function handleClickCalifiaciones() {
-    const calificaciones = sessionStorage.getItem('calificaciones');
+    const calificacionesSession = sessionStorage.getItem('calificaciones');
 
-    if (calificaciones && curso?.id) {
-      const parsedCalificaciones = JSON.parse(calificaciones);
+    if (calificacionesSession && curso?.id) {
+      const parsedCalificaciones = JSON.parse(calificacionesSession);
 
-      const calififaciones: Calificacion[] = [];
+      const calificaciones: Calificacion[] = [];
 
       for (let clave in parsedCalificaciones) {
         if (parsedCalificaciones.hasOwnProperty(clave)) {
@@ -90,12 +95,14 @@ export default function CursoPage({
             estudianteId: clave,
             calificacionCurso: parsedCalificaciones[clave],
           };
-          calififaciones.push(calificacion);
+          calificaciones.push(calificacion);
         }
       }
 
       if (calificaciones) {
-        calificarCursoFetch(curso.id, calififaciones).then((data) => {});
+        calificarCursoFetch(curso!.id, calificaciones).then((data) => {
+          //TODO mostrar mensaje de confirmacion
+        });
       }
     }
 
@@ -123,7 +130,7 @@ export default function CursoPage({
 
   return (
     <div className='relative box-border size-full justify-center overflow-auto md:w-5/6'>
-      <h1 className='text-center'>Curso</h1>
+      <h1 className='text-center'>Calificar curso</h1>
       <div className='h-fit w-full p-2'>
         <div className='my-2 box-content flex flex-col items-center justify-between gap-3 rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
           <div className='flex flex-col rounded-md text-center font-bold text-black md:text-left lg:max-w-md'>
@@ -146,13 +153,13 @@ export default function CursoPage({
             </div>
           </div>
           <div className='my-4 box-content flex flex-row justify-end rounded-md bg-ivory p-4'>
-            <Button styling='primary' onClick={() => setOpen(true)}>
+            <Button disabled={disabled} styling='primary' onClick={() => setOpen(true)}>
               Ingresar calificaciones
             </Button>
           </div>
         </div>
         <h3>Estudiantes inscriptos al curso</h3>
-        <List rows={rows} rowsLoading={rowsLoading} columnsType='estudiante' />
+        <List rows={rows} rowsLoading={rowsLoading} columnsType='datos-estudiante' />
       </div>
       {open && (
         <>

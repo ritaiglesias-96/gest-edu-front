@@ -211,8 +211,11 @@ function MenuCalificaciones() {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = (opcion: string) => {
-    window.location.href = `/funcionario/calificaciones`;
-    setAnchorEl(null);
+    if(opcion === 'cursos')
+      window.location.href = `/funcionario/calificaciones/cursos`;
+    else if(opcion === 'examenes')
+      window.location.href = `/funcionario/calificaciones/examenes`;
+      setAnchorEl(null);
   };
 
   return (

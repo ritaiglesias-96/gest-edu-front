@@ -17,6 +17,9 @@ import {
   asignaturaExamenColumns,
   asignaturaCursoColumns,
   examenColumns,
+  carreraCalificacionesColumns,
+  calificarExamenesColumns,
+  datosEstudianteColumns,
   carrerasFuncionario,
   carreraInscripcionFuncionarioColumns,
   asignaturaExamenFuncionarioColumns,
@@ -93,6 +96,7 @@ type columnType =
   | 'docente'
   | 'estudiante'
   | 'carreras-estudiante'
+  | 'datos-estudiante'
   | 'asignatura-examenes'
   | 'asignatura-curso'
   | 'examen'
@@ -104,6 +108,8 @@ type columnType =
   | 'cursos'
   | 'carreraFuncionario'
   | 'asignaturaFuncionario'
+  | 'carrera-calificaciones'
+  | 'calficar-examenes'
   | 'calficar-cursos'
   | 'carreras-funcionario'
   | 'carreraInscripcionFuncionario'
@@ -118,6 +124,7 @@ interface ListProps {
   isInscripcionCurso?: boolean;
   isEditableAsignaturas?: boolean;
   editarCalificacionCurso?: boolean;
+  editarCalificacionExamen?: boolean;
   isApproveRejectCarrera?: boolean;
   isHorarioCursoConsulta?: boolean;
   isSolicitudTramite?: boolean;
@@ -132,6 +139,7 @@ export default function List({
   isInscripcionCurso,
   isEditableAsignaturas,
   editarCalificacionCurso,
+  editarCalificacionExamen,
   isApproveRejectCarrera,
   isHorarioCursoConsulta,
   isSolicitudTramite,
@@ -152,6 +160,9 @@ export default function List({
       break;
     case 'estudiante':
       columns = estudianteColumns;
+      break;
+    case 'datos-estudiante':
+      columns = datosEstudianteColumns;
       break;
     case 'carreras-estudiante':
       columns = carrerasEstudiante;
@@ -192,9 +203,17 @@ export default function List({
     case 'cursos':
       columns = cursosColumns;
       break;
+    case 'carrera-calificaciones':
+        columns = carreraCalificacionesColumns;
+        break;
     case 'calficar-cursos':
       columns = calificarCursosColumns;
       break;
+    case 'calficar-examenes':
+      columns = calificarExamenesColumns;
+      break;
+    case 'registroExamen':
+      columns = registroExamenColumns;
     case 'carreraInscripcionFuncionario':
       columns = carreraInscripcionFuncionarioColumns;
       break;
@@ -726,17 +745,14 @@ function InscripcionExamenDataGrid({
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [email, setEmail] = useState('');
-  const [usuarioId, setUsuarioId] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [isBajaExamen, setIsBajaExamen] = useState(false);
-  const [isOpenCurso, setIsOpenCurso] = useState(false);
   const [examenId, setExamenId] = useState('');
-  const [cursoId, setCursoId] = useState('');
   const [alertOk, setAlertOk] = useState(false);
   const [alertError, setAlertError] = useState(false);
   const [mensajeError, setMensajeError] = useState('');
 
-  const session = useContext(SessionContext);
+  const session = useContext(SessionContext);  
 
   useEffect(() => {
     if (session.session?.email) {
@@ -746,16 +762,10 @@ function InscripcionExamenDataGrid({
   }, []);
 
   useEffect(() => {
-    obtenerDatosUsuarioFetch().then((res) => {
-      setUsuarioId(res.id);
-    });
-  }, []);
-
-  useEffect(() => {
     //Se convierte la fecha a formato dd/MM/yyyy
     rowsParent.forEach((examen) => {
       examen.fecha = convertirFecha(examen.fecha);
-    });
+    });   
     setRows(rowsParent);
     setRowsLoading(rowsLoadingParent);
   }, [rowsLoadingParent, rowsParent]);
@@ -775,7 +785,7 @@ function InscripcionExamenDataGrid({
       });
     }
     setIsOpen(false);
-  };
+  };    
 
   const handleClickConfirmarBaja = () => {
     if (examenId) {
@@ -795,23 +805,6 @@ function InscripcionExamenDataGrid({
     setIsBajaExamen(false);
   };
 
-  const handleClickConfirmarInscripcionCurso = () => {
-    if (usuarioId && cursoId) {
-      inscribirseCursoFetch(usuarioId, cursoId).then((data) => {
-        if (data?.message) {
-          setMensajeError(data.message);
-          setAlertError(true);
-          setAlertOk(false);
-        } else {
-          setMensajeError('');
-          setAlertError(false);
-          setAlertOk(true);
-        }
-      });
-    }
-    setIsOpen(false);
-  };
-
   const columns: GridColDef[] = [
     {
       field: 'id',
@@ -823,7 +816,7 @@ function InscripcionExamenDataGrid({
     {
       field: 'fecha',
       headerName: 'Fecha',
-      cellClassName: 'flex items-center self-end',
+      cellClassName: 'flex justify-center self-end',
       headerAlign: 'center',
       flex: 1,
     },
@@ -905,40 +898,6 @@ function InscripcionExamenDataGrid({
                   <Button
                     styling='secondary'
                     onClick={() => setIsOpen(false)}
-                    className='lg:w-20'
-                  >
-                    No
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {isOpenCurso && (
-        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
-          <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
-            <div className='rounded-md text-center font-bold text-black'>
-              <h5 className='m-0 p-0'>Inscripción a curso</h5>
-              <div className='flex flex-col'>
-                <p className='font-bold'>
-                  ¿Desea confirmar inscripción al curso?
-                </p>
-              </div>
-              <div className='items-center md:space-x-6'>
-                <div className='inline-block'>
-                  <Button
-                    styling='primary'
-                    className='lg:w-20'
-                    onClick={handleClickConfirmarInscripcionCurso}
-                  >
-                    Si
-                  </Button>
-                </div>
-                <div className='inline-block'>
-                  <Button
-                    styling='secondary'
-                    onClick={() => setIsOpenCurso(false)}
                     className='lg:w-20'
                   >
                     No
@@ -1346,6 +1305,92 @@ function InscripcionCursoDataGrid({
         </Collapse>
       )}
     </>
+  );
+}
+
+function EditarCalificacionExamenDataGrid({
+  rowsParent,
+  rowsLoadingParent,
+}: {
+  rowsParent: GridRowsProp;
+  rowsLoadingParent: boolean;
+}) {
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [calificaciones, setCalificaciones] = useState<{
+    [key: number]: string;
+  }>({});
+
+  const handleChange = (id: number) => (event: SelectChangeEvent) => {
+    setCalificaciones((prev) => ({
+      ...prev,
+      [id]: event.target.value as string,
+    }));
+  };
+
+  useEffect(() => {
+    sessionStorage.setItem('calificaciones', JSON.stringify(calificaciones));
+  }, [calificaciones]);
+
+  useEffect(() => {
+    setRows(rowsParent);
+    setRowsLoading(rowsLoadingParent);
+  }, [rowsLoadingParent, rowsParent]);
+
+  const columns: GridColDef[] = [
+    { field: 'id', type: 'number', headerName: 'ID' },
+    { field: 'nombre', headerName: 'Nombre', flex: 1 },
+    { field: 'apellido', headerName: 'Apellido', flex: 1 },
+    { field: 'ci', headerName: 'Cedula', flex: 1 },
+    {
+      field: 'calificacion',
+      headerName: 'Calificación',
+      flex: 1,
+      renderCell: (params: GridRenderCellParams<any>) => {
+        const id = params.id as number; // asegurarse de que params.id es un número
+        return (
+          <div>
+            <FormControl
+              fullWidth
+              variant='standard'
+              sx={{ m: 1, minWidth: 120 }}
+            >
+              <InputLabel
+                id={`demo-simple-select-standard-label-${id}`}
+                sx={{ color: 'black' }}
+              >
+                Calificación
+              </InputLabel>
+              <Select
+                labelId={`demo-simple-select-label-${id}`}
+                id={`select-${id}`}
+                value={calificaciones[id] || ''}
+                label='Calificación'
+                onChange={handleChange(id)}
+                sx={{
+                  '&.MuiInputBase-root': {
+                    color: 'inherit',
+                  },
+                  '& .MuiSelect-select:focus': {
+                    backgroundColor: 'transparent',
+                  },
+                }}
+              >
+                <MenuItem value='APROBADO'>Aprobado</MenuItem>
+                <MenuItem value='REPROBADO'>Reprobado</MenuItem>
+                <MenuItem value='PENDIENTE'>Pendiente</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+        );
+      },
+    },
+  ];
+
+  return (
+    <div className='h-fit w-full p-4'>
+      <DataGrid rows={rows} loading={rowsLoading} columns={columns} />
+    </div>
   );
 }
 

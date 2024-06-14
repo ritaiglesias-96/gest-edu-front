@@ -191,6 +191,17 @@ export type Curso = {
   docenteId: number;
 };
 
+export type CursoAsignatura = {
+  id: number;
+  fechaInicio: string;
+  fechaFin: string;
+  diasPrevInsc: number;
+  estado: string;
+  asignaturaId: number;
+  nombreAsignatura: string;
+  docenteId: number;
+};
+
 export type HorarioCurso = {
   dia: string;
   horaFin: string;
@@ -239,6 +250,10 @@ export type Calificacion = {
   calificacionCurso: string
 };
 
+export type CalificacionExamen = {
+  estudianteId: string,
+  calificacion: string
+};
 export type CarreraAsignaturas = {
   carrera: Carrera;
   asignaturas: Asignatura[];
@@ -258,6 +273,20 @@ export interface InscripcionCarreraPendienteFlattened {
   usuarioSolicitanteApellido: string;
   usuarioSolicitanteEmail: string;
   usuarioResponsable: any;
+}
+
+export interface ExamenFlattened {
+  id: number;
+  fecha: string;
+  diasPrevInsc: string;
+  estado: string;
+  idAsignatura: number;
+  nombreAsignatura: string;
+  descripcionAsignatura: string;
+  creditos: number;
+  semestrePlanEstudios: number;
+  carreraId: number;
+  docentes: [];
 }
 
 export type Certificado = {
