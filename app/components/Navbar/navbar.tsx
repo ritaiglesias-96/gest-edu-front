@@ -11,6 +11,7 @@ import Calendar from '@/assets/svg/calendar.svg';
 import Lessons from '@/assets/svg/enroll-lesson.svg';
 import Link from 'next/link';
 import Enrollment from '@/assets/svg/enroll-lesson.svg';
+import Rule from '@/assets/svg/rule.svg';
 import { Role } from '@/lib/definitions';
 import React, { useContext, useEffect, useState } from 'react';
 import { SessionContext } from '../../../context/SessionContext';
@@ -137,6 +138,13 @@ function NavbarCoordinador() {
       <div className='flex flex-row gap-4'>
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/coordinador/tramites'
+        >
+          <Rule className='h-6 sm:w-auto' />
+          <span>Tramites</span>
+        </Link>
+        <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
           href='/coordinador/carreras'
         >
           <Hat className='h-6 sm:w-auto' />
@@ -221,8 +229,8 @@ function MenuCalificaciones() {
   return (
     <>
       <Button styling='link' onClick={handleClick}>
-        <Enrollment className='h-6 sm:w-auto' />
-        <span>Calificaciones</span>
+        <Lessons className='h-6 self-center sm:w-auto' />
+        <span className='text-sm'>Calificaciones</span>
       </Button>
       <Menu
         id='basic-menu'
@@ -250,7 +258,7 @@ function MenuConsulta() {
     if (opcion === 'pendientes') {
       window.location.href = `/estudiante/pendientes`;
     }
-    if(opcion === 'horarios'){
+    if (opcion === 'horarios') {
       window.location.href = `/estudiante/horarios`;
     }
     setAnchorEl(null);
@@ -271,7 +279,9 @@ function MenuConsulta() {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleClose('pendientes')}>Asignaturas pendientes</MenuItem>
+        <MenuItem onClick={() => handleClose('pendientes')}>
+          Asignaturas pendientes
+        </MenuItem>
         <MenuItem onClick={() => handleClose('horarios')}>Horarios</MenuItem>
       </Menu>
     </>
