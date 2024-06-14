@@ -423,7 +423,9 @@ export const cursosColumns: GridColDef[] = [
 
 export const calificarCursosColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
-  { field: 'estado', headerName: 'Estado' },
+  { field: 'nombreAsignatura', headerName: 'Asignatura'},
+  { field: 'fechaInicio', headerName: 'Fecha de Inicio' },
+  { field: 'fechaFin', headerName: 'Fecha de Fin' },
   {
     field: 'calificaciones',
     headerName: 'Calificaciones',
@@ -431,7 +433,7 @@ export const calificarCursosColumns: GridColDef[] = [
     headerAlign: 'center',
     renderCell: (params) => (
       <Link
-        href={`${window.location.pathname}/cursos/${params.row.id}`}
+        href={`${window.location.pathname}/${params.row.id}`}
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
@@ -561,6 +563,40 @@ export const solicitudTituloColumns: GridColDef[] = [
   },
 ];
 
+
+export const carreraCalificacionesColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+    cellClassName: 'w-full',
+  },
+  {
+    field: 'duracionAnios',
+    headerName: 'Duracion',
+    type: 'number',
+  },
+  {
+    field: 'creditos',
+    headerName: 'Creditos',
+    type: 'number',
+  },
+  {
+    field: 'detalles',
+    headerName: 'Detalles',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  }
+];
+
 export const carreraInscripcionFuncionarioColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   {
@@ -630,27 +666,21 @@ export const asignaturaExamenFuncionarioColumns: GridColDef[] = [
   },
 ];
 
-export const ExamenFuncionarioColumns: GridColDef[] = [
+export const calificarExamenesColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
+  { field: 'fecha', headerName: 'Fecha' },
+  { field: 'nombreAsignatura', headerName: 'Asignatura' },
   {
-    field: 'fecha',
-    headerName: 'Fecha',
-  },
-  {
-    field: 'asignaturaNombre',
-    headerName: 'Asignatura',
-  },
-  {
-    field: 'inscriptos',
-    headerName: 'Inscriptos',
+    field: 'calificaciones',
+    headerName: 'Calificaciones',
     cellClassName: 'flex items-center self-end',
     headerAlign: 'center',
     renderCell: (params) => (
       <Link
-        href={`${window.location.pathname}/${params.id}`}
+        href={`${window.location.pathname}/${params.row.id}`}
         className='mx-auto flex size-fit'
       >
-        <Subject className='h-auto w-6 fill-garnet sm:w-8' />
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
@@ -685,6 +715,32 @@ export const InscriptosExamenFuncionarioColumns: GridColDef[] = [
   },
 ];
 
+export const ExamenFuncionarioColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'fecha',
+    headerName: 'Fecha',
+  },
+  {
+    field: 'asignaturaNombre',
+    headerName: 'Asignatura',
+  },
+  {
+    field: 'inscriptos',
+    headerName: 'Inscriptos',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <Subject className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
 export const asignaturaBajaCursoColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   { field: 'asignaturaNombre', headerName: 'Nombre' },
@@ -710,4 +766,15 @@ export const asignaturaBajaCursoColumns: GridColDef[] = [
       </Button>
     ),
   },
+];
+
+export const datosEstudianteColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'ci', headerName: 'Cedula' },
+  { field: 'nombre', headerName: 'Nombre' },
+  { field: 'apellido', headerName: 'Apellido' },
+  { field: 'email', headerName: 'Email' },
+  { field: 'telefono', headerName: 'Telefono' },
+  { field: 'domicilio', headerName: 'Domicilio' },
+  { field: 'fechaNac', headerName: 'Fecha de Nacimiento' }
 ];

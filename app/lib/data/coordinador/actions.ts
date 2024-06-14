@@ -286,10 +286,10 @@ export const obtenerExamenesVigentes = async (id: string) => {
       }
     );
     if (response.ok) {
-      const data = await response.json();
-      return data;
+      const examenesJson = await response.json();
+      return {exmanes: examenesJson.content};
     } else {
-      return null;
+      return { exmanes: [] }
     }
   }
 };

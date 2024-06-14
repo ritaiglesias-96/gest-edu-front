@@ -228,9 +228,9 @@ export const obtenerAsignaturasParaInscripcionFetch = async (id: string) => {
 
     if (response.ok) {
       const asignaturasJson = await response.json();
-      return asignaturasJson;
+      return { asignaturas: asignaturasJson.content };
     } else {
-      return response.json();
+      return { asignauras: [] };
     }
   }
 };
@@ -420,6 +420,27 @@ export async function getHorariosCursosEstudiante() {
       return cursosJson;
     } else {
       return [];
+    }
+  }
+}
+
+export async function solicitarCertificadoFetch(id: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/estudiantes/${id}/certificado`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const certificadoJson = await response.json();
+      return certificadoJson;
+    } else {
+      return { message: 'No se pudo obtener certificado.'};
     }
   }
 }

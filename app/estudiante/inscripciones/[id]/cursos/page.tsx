@@ -25,7 +25,7 @@ export default function CursosEstudiante() {
     if (carreraId) {
       obtenerAsignaturasParaInscripcionFetch(carreraId).then((data) => {
         if (data) {
-          setRows(data.content ? data.content : []);
+          setRows(data.asignaturas);
           setRowsLoading(false);
         }
       });
