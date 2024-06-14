@@ -1,8 +1,8 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import List from '@/components/List/list';
 import { obtenerCarrerasInscriptoFetch } from '@/lib/data/estudiante/actions';
-import { useEffect, useState } from 'react';
 
 export default function InscripcionesHome() {
   const [rows, setRows] = useState([]);
@@ -16,7 +16,7 @@ export default function InscripcionesHome() {
 
   return (
     <div className='relative box-border size-full justify-center overflow-auto md:w-2/3'>
-      <h1 className='text-center font-bold'>Carreras del estudiante</h1>
+      <h1 className='text-center font-bold'>Carreras</h1>
       <div className='h-fit w-full p-4'>
         <List
           rows={rows}
