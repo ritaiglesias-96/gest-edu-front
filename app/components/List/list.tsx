@@ -459,7 +459,7 @@ function EditableDocentesDataGrid({
   ];
 
   return (
-    <div className='h-fit w-full p-4'>
+    <div className='m-4 h-fit w-full'>
       <div className='my-4 box-content flex flex-row justify-end rounded-md bg-ivory p-4'>
         <Link href='/funcionario/docentes/agregar'>
           <Button styling='primary'>Agregar Docente</Button>
@@ -1085,7 +1085,7 @@ function ApproveRejectDataGrid({
   ];
 
   return (
-    <div className='relative size-full p-4'>
+    <div className='relative size-full'>
       <DataGrid
         rows={rows}
         loading={rowsLoading}
@@ -1108,14 +1108,14 @@ function ApproveRejectDataGrid({
         sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
       />
       {showModal && (
-        <div className='absolute inset-x-1/3 top-0 z-20 flex size-fit flex-col rounded-xl bg-ivory p-6 shadow-lg shadow-garnet md:p-10'>
+        <div className='absolute inset-0 z-20 m-auto flex h-fit max-w-fit flex-col rounded-xl bg-ivory  p-4 shadow-lg shadow-garnet md:p-6'>
           <button
             className='right-0 block w-fit cursor-pointer self-end'
             onClick={() => setShowModal(false)}
           >
             <Close className='self-end fill-garnet hover:fill-bittersweet sm:size-10' />
           </button>
-          <h3 className='text-center text-black'>Motivo de rechazo</h3>
+          <h4 className='text-center text-black'>Motivo de rechazo</h4>
           <form
             className='flex min-h-full w-full flex-col items-center justify-between gap-2 md:mx-auto md:h-full md:max-w-full md:gap-2'
             onSubmit={(e) => {

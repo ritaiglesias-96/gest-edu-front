@@ -3,6 +3,7 @@ import { poppins } from './styles/fonts';
 import './styles/globals.css';
 import Navbar from './components/Navbar/navbar';
 import { SessionProvider } from '../context/SessionContext';
+import { StyledEngineProvider } from '@mui/material/styles';
 
 export const metadata: Metadata = {
   title: {
