@@ -55,12 +55,17 @@ export default function ResolverSolicitudPage({
   };
 
   const handleAprobar = () => {
-    if (solicitud?.id) {
-      aprobarSolicitud(solicitud?.id.toString()).then(() => {
-        setIsOpen(false);
-        setAlertOk(true);
-        setTimeout(setAlertHelper, 4000);
-      });
+    if (isAprobar) {
+      if (solicitud?.id) {
+        aprobarSolicitud(solicitud?.id.toString()).then(() => {
+          setIsOpen(false);
+          setAlertOk(true);
+          setTimeout(setAlertHelper, 4000);
+        });
+      }
+    } else {
+      setIsModalRechazo(true);
+      setIsOpen(false);
     }
   };
 
@@ -154,10 +159,7 @@ export default function ResolverSolicitudPage({
                     <Button
                       styling='primary'
                       className='lg:w-20'
-                      onClick={() => {
-                        isAprobar ? handleAprobar : setIsModalRechazo(true);
-                        setIsOpen(false);
-                      }}
+                      onClick={handleAprobar}
                     >
                       Si
                     </Button>
@@ -182,19 +184,19 @@ export default function ResolverSolicitudPage({
               <div className='rounded-md text-center font-bold text-black'>
                 <h5 className='m-0 p-0'>Ingrese la razon del rechazo</h5>
                 <div className='items-center md:space-x-6'>
-                  <div className='inline-block'>
+                  <div >
                     <textarea
                       value={motivoRechazo}
                       onChange={(event) => {
                         setMotivoRechazo(event.target.value);
                       }}
-                      placeholder='Enter your text here'
+                      placeholder='Enter your text here'                      
                     />
                   </div>
-                  <div className='inline-block'>
+                  <div >
                     <Button
                       styling='primary'
-                      className='lg:w-20'
+                      className='lg:w-200'
                       onClick={handleRechazar}
                     >
                       Enviar
