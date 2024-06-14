@@ -422,3 +422,24 @@ export async function getHorariosCursosEstudiante() {
     }
   }
 }
+
+export async function solicitarCertificadoFetch(id: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/estudiantes/${id}/certificado`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const certificadoJson = await response.json();
+      return certificadoJson;
+    } else {
+      return { message: 'No se pudo obtener certificado.'};
+    }
+  }
+}
