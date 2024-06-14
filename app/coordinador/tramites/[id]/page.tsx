@@ -184,16 +184,16 @@ export default function ResolverSolicitudPage({
               <div className='rounded-md text-center font-bold text-black'>
                 <h5 className='m-0 p-0'>Ingrese la razon del rechazo</h5>
                 <div className='items-center md:space-x-6'>
-                  <div >
+                  <div>
                     <textarea
                       value={motivoRechazo}
                       onChange={(event) => {
                         setMotivoRechazo(event.target.value);
                       }}
-                      placeholder='Enter your text here'                      
+                      placeholder='Enter your text here'
                     />
                   </div>
-                  <div >
+                  <div>
                     <Button
                       styling='primary'
                       className='lg:w-200'
