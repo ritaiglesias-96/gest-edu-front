@@ -260,5 +260,12 @@ export interface InscripcionCarreraPendienteFlattened {
   usuarioResponsable: any;
 }
 
+export type Certificado = {
+  id: number;
+  carrera: string;
+  codigoValidacion: string;
+  fecha: string;
+  estudiante: Estudiante;
+}
 
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]

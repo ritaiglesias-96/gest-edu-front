@@ -36,6 +36,7 @@ import Grading from '@/assets/svg/grading.svg';
 import School from '@/assets/svg/school.svg';
 import Download from '@/assets/svg/download.svg';
 import CheckIcon from '@mui/icons-material/Check';
+import CertificadoPDF from '../DocumentosPDF/CertificadoPDF';
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -56,7 +57,7 @@ import {
   aprobarSolicitudInscripcionCarrera,
 } from '@/lib/data/funcionario/actions';
 import Link from 'next/link';
-import { Asignatura, HorarioCurso } from '@/lib/definitions';
+import { Asignatura, HorarioCurso, Certificado } from '@/lib/definitions';
 import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
 import {
@@ -270,7 +271,7 @@ export default function List({
       )}
       {isHorarioCursoConsulta && (
         <HorariosCursosEstudiante
-        rowsParent={rows}
+          rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
       )}
@@ -1455,22 +1456,34 @@ function HorariosCursosEstudiante({
               {horarios.length > 0 ? (
                 <div>
                   {horarios.map((h, index) => (
-                    <TableContainer key={`${h.dia}-${h.horaInicio}-${h.horaFin}-${index}`}>
+                    <TableContainer
+                      key={`${h.dia}-${h.horaInicio}-${h.horaFin}-${index}`}
+                    >
                       <Table aria-label='simple table'>
                         <TableBody>
                           <TableRow
-                              key={h.dia}
-                              sx={{ '&:last-child td, &:last-child th': { border: 0 }, py: 1 }}
-                            >
-                          <TableCell align="right"><span className='font-bold text-black'>{h.dia}</span>: {h.horaInicio} - {h.horaFin}</TableCell>
-                        </TableRow>
+                            key={h.dia}
+                            sx={{
+                              '&:last-child td, &:last-child th': { border: 0 },
+                              py: 1,
+                            }}
+                          >
+                            <TableCell align='right'>
+                              <span className='font-bold text-black'>
+                                {h.dia}
+                              </span>
+                              : {h.horaInicio} - {h.horaFin}
+                            </TableCell>
+                          </TableRow>
                         </TableBody>
                       </Table>
                     </TableContainer>
                   ))}
                 </div>
               ) : (
-                <p className='text-black'>No hay horarios ingresados para el curso</p>
+                <p className='text-black'>
+                  No hay horarios ingresados para el curso
+                </p>
               )}
               <div className='items-center md:space-x-6'>
                 <div className='inline-block'>
@@ -1507,7 +1520,7 @@ function SolicitudTramiteDataGrid({
   const [alertError, setAlertError] = useState(false);
   const [modalCertificado, setModalCertificado] = useState(false);
   const [mensajeError, setMensajeError] = useState('');
-  const [certificado, setCertificado] = useState();
+  const [certificado, setCertificado] = useState<Certificado>();
 
   useEffect(() => {
     setRows(rowsParent);
@@ -1549,19 +1562,16 @@ function SolicitudTramiteDataGrid({
           setModalCertificado(true);
           setMensajeError('');
           setAlertError(false);
+          setCertificado(data);
         }
-        console.log(data);
-        
       });
     }
     setIsOpenCertificado(false);
     setAlertOk(false);
     setTimeout(setAlertHelper, 5000);
-  }
+  };
 
-  const downloadCertificado = () => {
-    
-  }
+  const downloadCertificado = () => {};
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID' },
@@ -1569,7 +1579,7 @@ function SolicitudTramiteDataGrid({
       field: 'nombre',
       headerName: 'Nombre',
       cellClassName: 'w-full',
-      flex: 1
+      flex: 1,
     },
     {
       field: 'duracionAnios',
@@ -1577,7 +1587,7 @@ function SolicitudTramiteDataGrid({
       type: 'number',
       headerAlign: 'center',
       align: 'center',
-      flex: 1
+      flex: 1,
     },
     {
       field: 'creditos',
@@ -1585,7 +1595,7 @@ function SolicitudTramiteDataGrid({
       type: 'number',
       headerAlign: 'center',
       align: 'center',
-      flex: 1
+      flex: 1,
     },
     {
       field: 'solicitudTitulo',
@@ -1701,21 +1711,15 @@ function SolicitudTramiteDataGrid({
         </div>
       )}
       {modalCertificado && (
-        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-8 py-8 shadow-lg shadow-garnet'>
           <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
             <div className='rounded-md text-center font-bold text-black'>
-              <h5 className='m-0 p-0 my-5'>¿Descargar certificado?</h5>
-              <div className='items-center md:space-x-6'>
-                <div className='inline-block'>
-                  <Button
-                    styling='primary'
-                    className='lg:w-200'
-                    onClick={downloadCertificado}
-                  >
-                    <Download className='lg:w-10'/>
-                  </Button>
+              <h5 className='m-0 p-0 mb-6'>¿Descargar certificado?</h5>
+              <div className='flex items-center space-x-2'>
+                <div>
+                  <CertificadoPDF certificado={certificado!} />
                 </div>
-                <div className='inline-block'>
+                <div>
                   <Button
                     styling='secondary'
                     onClick={() => setModalCertificado(false)}
