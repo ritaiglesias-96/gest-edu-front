@@ -328,4 +328,16 @@ export type TramiteEstudiante = {
   fechaActualizacion: string;
 }
 
+export type CursoHorario = {
+  id: number;
+  fechaInicio: string;
+  fechaFin: string
+  diasPrevInsc: number;
+  estado: string;
+  asignaturaNombre: string;
+  docenteNombre: string;
+  docenteApellido: string;
+  horarios: HorarioCurso[];
+}
+
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]

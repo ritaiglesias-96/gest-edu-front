@@ -584,11 +584,11 @@ export async function getInscriptosAExamen(examenId: string) {
   }
 }
 
-export async function getCursosCarrera(id: string) {
+export async function getCursosCarrera(carreraId: string) {
   const token = authToken();
   if (token) {
     const response = await fetch(
-      `${apiRoute}/carreras/${id}/cursos-activos`,
+      `${apiRoute}/carreras/${carreraId}/cursos-activos`,
       {
         method: 'GET',
         headers: {
@@ -597,10 +597,32 @@ export async function getCursosCarrera(id: string) {
       }
     );
     if (response.ok) {
-      const cursosJson = await response.json();
-      return {cursos: cursosJson};
+      const data = await response.json();
+      return data;
     } else {
-      return { cursos: [] };
+      return { message: 'Error al obtener los cursos' };
     }
   }
+}
+
+export async function getCursosHorariosCarrera(carreraId: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/carreras/${carreraId}/horarios-cursos`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data.content || []; // Devolvemos el contenido o un array vacío
+    } else {
+      return []; // Devolvemos un array vacío en caso de error
+    }
+  }
+  return []; // Devolvemos un array vacío si no hay token
 }
