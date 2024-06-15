@@ -444,3 +444,24 @@ export async function solicitarCertificadoFetch(id: string) {
     }
   }
 }
+
+export async function getTramitesEstudiantes() {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/tramites/tramites-estudiante`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const tramitesJson = await response.json();
+      return tramitesJson;
+    } else {
+      return { message: 'Error al obtener trámites.'};
+    }
+  }
+}

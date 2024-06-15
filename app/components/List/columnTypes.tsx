@@ -423,7 +423,7 @@ export const cursosColumns: GridColDef[] = [
 
 export const calificarCursosColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
-  { field: 'nombreAsignatura', headerName: 'Asignatura'},
+  { field: 'nombreAsignatura', headerName: 'Asignatura' },
   { field: 'fechaInicio', headerName: 'Fecha de Inicio' },
   { field: 'fechaFin', headerName: 'Fecha de Fin' },
   {
@@ -594,7 +594,7 @@ export const carreraCalificacionesColumns: GridColDef[] = [
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
-  }
+  },
 ];
 
 export const carreraInscripcionFuncionarioColumns: GridColDef[] = [
@@ -776,5 +776,21 @@ export const datosEstudianteColumns: GridColDef[] = [
   { field: 'email', headerName: 'Email' },
   { field: 'telefono', headerName: 'Telefono' },
   { field: 'domicilio', headerName: 'Domicilio' },
-  { field: 'fechaNac', headerName: 'Fecha de Nacimiento' }
+  { field: 'fechaNac', headerName: 'Fecha de Nacimiento' },
+];
+
+export const consultaTramitesEstudiante: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'carreraId', headerName: 'Carrera' },
+  { field: 'tipo', headerName: 'Tipo' },
+  { field: 'motivoRechazo', headerName: 'Respuesta' },
+  {
+    field: 'estado',
+    headerName: 'Estado',
+    renderCell: (params) => (
+      <span>{params.row.estado}</span>
+    )       
+  },
+  { field: 'fechaCreacion', headerName: 'Fecha' },
+  { field: 'fechaActualizacion', headerName: 'Actualizado' },
 ];

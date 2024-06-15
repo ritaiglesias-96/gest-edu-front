@@ -26,6 +26,7 @@ import {
   ExamenFuncionarioColumns,
   InscriptosExamenFuncionarioColumns,
   asignaturaBajaCursoColumns,
+  consultaTramitesEstudiante,
   solicitudTituloColumns,
 } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
@@ -118,6 +119,7 @@ type columnType =
   | 'examenFuncionario'
   | 'inscriptosExamenFuncionario'
   | 'asignaturaBajaCurso'
+  | 'consultaTramitesEstudiante'
   | 'solicitudTitulo'
   | 'none';
 interface ListProps {
@@ -231,6 +233,8 @@ export default function List({
     case 'asignaturaBajaCurso':
       columns = asignaturaBajaCursoColumns;
       break;
+    case 'consultaTramitesEstudiante':
+      columns = consultaTramitesEstudiante;
     case 'solicitudTitulo':
       columns = solicitudTituloColumns;
       break;
