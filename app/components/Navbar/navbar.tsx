@@ -10,6 +10,8 @@ import Pencil from '@/assets/svg/edit.svg';
 import Calendar from '@/assets/svg/calendar.svg';
 import Lessons from '@/assets/svg/enroll-lesson.svg';
 import Link from 'next/link';
+import Enrollment from '@/assets/svg/enroll-lesson.svg';
+import List from '@/assets/svg/list.svg';
 import Rule from '@/assets/svg/rule.svg';
 import Subject from '@/assets/svg/subject.svg';
 import { Role } from '@/lib/definitions';
@@ -174,7 +176,7 @@ function NavbarFuncionario() {
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
           href='/funcionario/actas'
         >
-          <Subject className='h-6 sm:w-auto' />
+          <List className='h-6 sm:w-auto ' style={{ fill: 'black' }} />
           <span>Actas</span>
         </Link>
         <MenuCalificaciones />
