@@ -7,15 +7,26 @@ import {
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import { Accordion, AccordionSummary, AccordionDetails, Paper, Table, TableBody, TableContainer } from '@mui/material';
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Paper,
+  Table,
+  TableBody,
+  TableContainer,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Asignatura, Carrera, CarreraAsignaturas } from '@/lib/definitions';
+import { Heading3 } from '@/styles/typography.stories';
 
 export default function ConsultarCarreras() {
   const [carrerasIncripto, setCarreras] = useState<Carrera[]>([]);
   const [cargarPendientes, setCargarPendientes] = useState(false);
-  const [carrerasAsignaturas, setCarrerasAsignaturas] = useState<CarreraAsignaturas[]>([]);
+  const [carrerasAsignaturas, setCarrerasAsignaturas] = useState<
+    CarreraAsignaturas[]
+  >([]);
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -26,7 +37,7 @@ export default function ConsultarCarreras() {
       fontSize: 14,
     },
   }));
-  
+
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.action.hover,
@@ -67,6 +78,14 @@ export default function ConsultarCarreras() {
         Asignaturas pendientes para finalizar una carrera.
       </h5>
       <div>
+        {carrerasAsignaturas.length <= 0 && (
+
+          <div className='my-8 box-content items-center rounded-md bg-ivory py-8 '>
+            <div className='items-center rounded-md text-center text-black '>
+              <h3 className='m-0 p-0'>No se encontraron inscripciones a carreras.</h3>              
+            </div>
+          </div>
+        )}
         {carrerasAsignaturas.map((carrera) => (
           <Accordion key={carrera.carrera.id}>
             <AccordionSummary
@@ -78,21 +97,30 @@ export default function ConsultarCarreras() {
             </AccordionSummary>
             <AccordionDetails>
               {carrera.asignaturas.length > 0 ? (
-                <TableContainer >
-                  <Table sx={{ minWidth: 700, width: '100%' }} aria-label='customized table'>
+                <TableContainer>
+                  <Table
+                    sx={{ minWidth: 700, width: '100%' }}
+                    aria-label='customized table'
+                  >
                     <TableBody>
                       {carrera.asignaturas.map((asignatura) => (
-                       <StyledTableRow key={asignatura.nombre}>
-                       <StyledTableCell component="th" scope="row">{asignatura.nombre}</StyledTableCell>
-                       <StyledTableCell align="right">Creditos: {asignatura.creditos}</StyledTableCell>
-                       <StyledTableCell align="right">Semestre: {asignatura.semestrePlanEstudio}</StyledTableCell>
+                        <StyledTableRow key={asignatura.nombre}>
+                          <StyledTableCell component='th' scope='row'>
+                            {asignatura.nombre}
+                          </StyledTableCell>
+                          <StyledTableCell align='right'>
+                            Creditos: {asignatura.creditos}
+                          </StyledTableCell>
+                          <StyledTableCell align='right'>
+                            Semestre: {asignatura.semestrePlanEstudio}
+                          </StyledTableCell>
                         </StyledTableRow>
                       ))}
                     </TableBody>
                   </Table>
                 </TableContainer>
               ) : (
-                <p>Cargando asignaturas...</p>
+                <p>No tiene asignaturas pendientes</p>
               )}
             </AccordionDetails>
           </Accordion>
