@@ -22,7 +22,7 @@ export default function CursosEstudiante() {
       }
     });
   }, []);
-  
+
   return (
     <div className='relative box-border size-full justify-center overflow-auto md:w-2/3'>
       <h1 className='text-center font-bold'>Horarios de cursos</h1>

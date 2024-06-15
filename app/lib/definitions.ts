@@ -246,8 +246,8 @@ export interface InscripcionCarreraPendiente {
 }
 
 export type Calificacion = {
-  estudianteId: string,
-  calificacionCurso: string
+  estudianteId: string;
+  calificacionCurso: string;
 };
 
 export type CalificacionExamen = {
@@ -257,7 +257,7 @@ export type CalificacionExamen = {
 export type CarreraAsignaturas = {
   carrera: Carrera;
   asignaturas: Asignatura[];
-}
+};
 
 export interface InscripcionCarreraPendienteFlattened {
   id: number;
@@ -274,6 +274,26 @@ export interface InscripcionCarreraPendienteFlattened {
   usuarioSolicitanteEmail: string;
   usuarioResponsable: any;
 }
+
+export interface SolicitudTitulo {
+  id: number;
+  carreraId: string;
+  creditosAprobados: string;
+  motivoRechazo: string;
+  estado: string;
+  fechaActualizacion: string;
+  fechaCreacion: string;
+  tipo: string;
+  nombreCarrera: string;
+  usuarioResponsable: any;
+  usuarioSolicitante: {
+    id: number;
+    ci: string;
+    nombre: string;
+    apellido: string;
+    email: string;
+  }
+};
 
 export interface ExamenFlattened {
   id: number;

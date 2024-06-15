@@ -3,6 +3,7 @@ import { RegisterState } from '@/lib/definitions';
 import { RegisterFormSchema } from '../schemasZod';
 import { authToken } from '@/utils/auth';
 import { getCarrera } from '../coordinador/actions';
+import { identifierToKeywordKind } from 'typescript';
 
 const apiRoute = process.env.BACK_API;
 
