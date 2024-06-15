@@ -297,4 +297,15 @@ export type Certificado = {
   estudiante: Estudiante;
 }
 
+export type TramiteEstudiante = {
+  id: string;
+  carreraId: string;
+  nombreCarrera: string;
+  tipo: string;
+  motivoRechazo: string;
+  estado: string;
+  fechaCreacion: string;
+  fechaActualizacion: string;
+}
+
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]

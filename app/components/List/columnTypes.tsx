@@ -757,3 +757,13 @@ export const datosEstudianteColumns: GridColDef[] = [
   { field: 'domicilio', headerName: 'Domicilio' },
   { field: 'fechaNac', headerName: 'Fecha de Nacimiento' }
 ];
+
+export const consultaTramitesEstudiante: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'carreraId', headerName: 'Carrera' },
+  { field: 'tipo', headerName: 'Tipo' },
+  { field: 'motivoRechazo', headerName: 'Respuesta' },
+  { field: 'estado', headerName: 'Estado' },
+  { field: 'fechaCreacion', headerName: 'Fecha' },
+  { field: 'fechaActualizacion', headerName: 'Actualizado' },
+];
