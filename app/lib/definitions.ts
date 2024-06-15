@@ -349,4 +349,12 @@ export interface ActividadUsuario{
   descripcion: string;
 }
 
+export type ActaExamen = {
+  id: number;
+  fecha: string;
+  inscriptos: Estudiante[];
+  asignaturaNombre: string;
+  docentes: Docente[];
+}
+
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]

@@ -281,3 +281,21 @@ export const getCarreras = async () => {
     }
   }
 };
+
+export const getAsignaturasCarrera = async (id: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/carreras/${id}/asignaturas`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  }
+}

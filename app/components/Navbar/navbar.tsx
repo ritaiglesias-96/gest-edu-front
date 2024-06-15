@@ -11,6 +11,7 @@ import Calendar from '@/assets/svg/calendar.svg';
 import Lessons from '@/assets/svg/enroll-lesson.svg';
 import Link from 'next/link';
 import Rule from '@/assets/svg/rule.svg';
+import Subject from '@/assets/svg/subject.svg';
 import { Role } from '@/lib/definitions';
 import React, { useEffect } from 'react';
 import Button from '../Button/button';
@@ -169,6 +170,13 @@ function NavbarFuncionario() {
         <GestEduIcon />
       </Link>
       <div className='flex flex-row gap-4'>
+        <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/funcionario/actas'
+        >
+          <Subject className='h-6 sm:w-auto' />
+          <span>Actas</span>
+        </Link>
         <MenuCalificaciones />
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
