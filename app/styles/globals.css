@@ -40,7 +40,7 @@
     @apply flex;
     @apply flex-col;
     @apply items-center;
-    @apply h-full;
+    min-height: calc(100vh - var(--navbar-height));
   }
 
   h1 {

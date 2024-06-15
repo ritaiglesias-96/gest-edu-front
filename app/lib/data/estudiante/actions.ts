@@ -3,7 +3,6 @@ import { RegisterState } from '@/lib/definitions';
 import { RegisterFormSchema } from '../schemasZod';
 import { authToken } from '@/utils/auth';
 import { getCarrera } from '../coordinador/actions';
-import { identifierToKeywordKind } from 'typescript';
 
 const apiRoute = process.env.BACK_API;
 
@@ -70,22 +69,18 @@ export async function registerUser(
         message: 'Error al registrar',
       };
     }
-    // TODO update this to do login after register with backend
   }
 }
 
 export const obtenerCarrerasInscriptoFetch = async () => {
   const token = authToken();
   if (token) {
-    const response = await fetch(
-      `https://localhost:8080/gest-edu/api/estudiantes/carreras-inscripto`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${apiRoute}/estudiantes/carreras-inscripto`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (response.ok) {
       const carrerasJson = await response.json();
       return carrerasJson;
@@ -99,7 +94,7 @@ export const obtenerInscripcionesVigentesExamen = async (id: string) => {
   const token = authToken();
   if (token) {
     const response = await fetch(
-      `https://localhost:8080/gest-edu/api/asignaturas/${id}/examenesVigentes`,
+      `${apiRoute}/asignaturas/${id}/examenesVigentes`,
       {
         method: 'GET',
         headers: {
@@ -119,15 +114,12 @@ export const obtenerInscripcionesVigentesExamen = async (id: string) => {
 export const obtenerAsignaturasPorCarreran = async (id: string) => {
   const token = authToken();
   if (token) {
-    const response = await fetch(
-      `https://localhost:8080/gest-edu/api/carreras/${id}/asignaturas`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${apiRoute}/carreras/${id}/asignaturas`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (response.ok) {
       const asignaturasJson = await response.json();
       return asignaturasJson;
@@ -163,6 +155,25 @@ export const inscribirseExamenFetch = async (
         message: response.message,
       };
     }
+  }
+};
+
+export const inscribirseCarreraFetch = async (carreraId: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/tramites/nuevo-tramite?carreraId=${carreraId}&tipoTramite=INSCRIPCION_A_CARRERA`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    ).then((res) => {
+      return res.json();
+    });
+    return response;
   }
 };
 
@@ -350,6 +361,27 @@ export const obtenerAsignaturasPendientes = async (id: number) => {
       return { asignaturas: asignaturasJson.content };
     } else {
       return { asignaturas: [] };
+    }
+  }
+};
+
+export const obtenerCarrerasNoInscripto = async () => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/estudiantes/carreras-no-inscripto`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const carrerasJson = await response.json();
+      return carrerasJson;
+    } else {
+      return [];
     }
   }
 };

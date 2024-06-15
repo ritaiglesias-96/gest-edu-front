@@ -37,11 +37,11 @@ import EditIcon from '@/assets/svg/edit.svg';
 import DeleteIcon from '@/assets/svg/delete.svg';
 import SaveIcon from '@/assets/svg/done.svg';
 import Enroll from '@/assets/svg/enroll-lesson.svg';
+import EnrollC from '@/assets/svg/enroll-exam.svg';
 import Close from '@/assets/svg/close.svg';
 import Schedule from '@/assets/svg/schedule.svg';
 import Grading from '@/assets/svg/grading.svg';
 import School from '@/assets/svg/school.svg';
-import Download from '@/assets/svg/download.svg';
 import CheckIcon from '@mui/icons-material/Check';
 import CertificadoPDF from '../DocumentosPDF/CertificadoPDF';
 import {
@@ -64,7 +64,12 @@ import {
   aprobarSolicitudInscripcionCarrera,
 } from '@/lib/data/funcionario/actions';
 import Link from 'next/link';
-import { Asignatura, HorarioCurso, Certificado } from '@/lib/definitions';
+import {
+  Asignatura,
+  HorarioCurso,
+  Certificado,
+  Carrera,
+} from '@/lib/definitions';
 import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
 import {
@@ -83,6 +88,7 @@ import {
 } from '@mui/material';
 import {
   bajaExamenFetch,
+  inscribirseCarreraFetch,
   inscribirseCursoFetch,
   inscribirseExamenFetch,
   solicitarCertificadoFetch,
@@ -130,6 +136,7 @@ interface ListProps {
   isEditableDocentes?: boolean;
   isInscripcionExamen?: boolean;
   isInscripcionCurso?: boolean;
+  isInscripcionCarrera?: boolean;
   isEditableAsignaturas?: boolean;
   editarCalificacionCurso?: boolean;
   editarCalificacionExamen?: boolean;
@@ -143,6 +150,7 @@ interface ListProps {
 
 export default function List({
   isEditableDocentes,
+  isInscripcionCarrera,
   isInscripcionExamen,
   isInscripcionCurso,
   isEditableAsignaturas,
@@ -220,8 +228,6 @@ export default function List({
     case 'calficar-examenes':
       columns = calificarExamenesColumns;
       break;
-    case 'registroExamen':
-      columns = registroExamenColumns;
     case 'carreraInscripcionFuncionario':
       columns = carreraInscripcionFuncionarioColumns;
       break;
@@ -307,6 +313,12 @@ export default function List({
           rowsLoadingParent={rowsLoading}
         />
       )}
+      {isInscripcionCarrera && (
+        <InscripcionCarreraDataGrid
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
+      )}
       {isHorarioCursoConsulta && (
         <HorariosCursosEstudiante
           rowsParent={rows}
@@ -315,6 +327,12 @@ export default function List({
       )}
       {isSolicitudTramite && (
         <SolicitudTramiteDataGrid
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
+        />
+      )}
+      {editarCalificacionExamen && (
+        <EditarCalificacionExamenDataGrid
           rowsParent={rows}
           rowsLoadingParent={rowsLoading}
         />
@@ -1330,10 +1348,10 @@ function InscripcionCursoDataGrid({
 function EditarCalificacionExamenDataGrid({
   rowsParent,
   rowsLoadingParent,
-}: {
+}: Readonly<{
   rowsParent: GridRowsProp;
   rowsLoadingParent: boolean;
-}) {
+}>) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [calificaciones, setCalificaciones] = useState<{
@@ -1343,7 +1361,7 @@ function EditarCalificacionExamenDataGrid({
   const handleChange = (id: number) => (event: SelectChangeEvent) => {
     setCalificaciones((prev) => ({
       ...prev,
-      [id]: event.target.value as string,
+      [id]: event.target.value,
     }));
   };
 
@@ -1491,7 +1509,8 @@ function HorariosCursosEstudiante({
         <Link
           href={`${window.location.pathname}`}
           onClick={() => {
-            setIsOpen(true), handleHorario(params.id.toString());
+            setIsOpen(true);
+            handleHorario(params.id.toString());
           }}
           className='mx-auto flex size-fit'
         >
@@ -1553,7 +1572,7 @@ function HorariosCursosEstudiante({
                 <div className='inline-block'>
                   <Button
                     onClick={() => setIsOpen(false)}
-                    className='lg:w-200'
+                    className=' lg:w-48'
                     styling='primary'
                   >
                     Cerrar
@@ -1787,7 +1806,7 @@ function SolicitudTramiteDataGrid({
                   <Button
                     styling='secondary'
                     onClick={() => setModalCertificado(false)}
-                    className='lg:w-200'
+                    className='lg:w-48'
                   >
                     Cerrar
                   </Button>
@@ -1832,5 +1851,189 @@ function SolicitudTramiteDataGrid({
         </Collapse>
       )}
     </>
+  );
+}
+
+function InscripcionCarreraDataGrid({
+  rowsParent,
+  rowsLoadingParent,
+}: Readonly<{
+  rowsParent: GridRowsProp;
+  rowsLoadingParent: boolean;
+}>) {
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
+  const [showModal, setShowModal] = useState(false);
+  const [carrera, setCarrera] = useState<Carrera>();
+  const [alertOk, setAlertOk] = useState(false);
+  const [alertError, setAlertError] = useState(false);
+  const [mensajeError, setMensajeError] = useState('');
+
+  useEffect(() => {
+    console.log(rowsParent);
+    setRows(rowsParent);
+    setRowsLoading(rowsLoadingParent);
+  }, [rowsLoadingParent, rowsParent]);
+
+  const handleSaveClick = (id: GridRowId) => async () => {
+    const carrera = rows.find((c) => c.id === id) as Carrera;
+    if (carrera) {
+      setCarrera(carrera);
+      setShowModal(true);
+    }
+  };
+
+  const inscribirseCarrera = async (id: string) => {
+    const data = await inscribirseCarreraFetch(id);
+    console.log(data);
+    if (data.estado === 'PENDIENTE') {
+      setShowModal(false);
+      setAlertOk(true);
+    }
+    if (data.message) {
+      setShowModal(false);
+      setAlertError(true);
+      setMensajeError(data.message);
+    }
+  };
+
+  const columns: GridColDef[] = [
+    { field: 'id', headerName: 'ID' },
+    {
+      field: 'nombre',
+      headerName: 'Nombre',
+      cellClassName: 'w-full',
+    },
+    {
+      field: 'duracionAnios',
+      headerName: 'Duracion',
+      type: 'number',
+    },
+    {
+      field: 'creditos',
+      headerName: 'Creditos',
+      type: 'number',
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Inscribirse',
+      cellClassName: 'actions',
+      getActions: (params) => {
+        return [
+          <GridActionsCellItem
+            icon={<EnrollC className='h-auto w-6 fill-garnet sm:w-8' />}
+            label='inscribirse'
+            sx={{
+              color: '#802c2c',
+            }}
+            onClick={handleSaveClick(params.row.id)}
+            key={params.row.id}
+          />,
+        ];
+      },
+    },
+  ];
+
+  return (
+    <div className='relative size-full'>
+      <DataGrid
+        rows={rows}
+        loading={rowsLoading}
+        columns={columns}
+        rowModesModel={rowModesModel}
+        autosizeOnMount={true}
+        autoHeight={true}
+        slotProps={{
+          toolbar: { setRows, setRowModesModel },
+        }}
+        initialState={{
+          pagination: {
+            paginationModel: { page: 0, pageSize: 25 },
+          },
+        }}
+        pageSizeOptions={[25, 50, 100]}
+        rowSelection={false}
+        autosizeOptions={{ expand: true }}
+        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+      />
+      {showModal && (
+        <div className='absolute inset-0 z-20 m-auto flex h-fit max-w-fit flex-col rounded-xl bg-ivory  p-4 shadow-lg shadow-garnet md:p-6'>
+          <button
+            className='right-0 block w-fit cursor-pointer self-end'
+            onClick={() => setShowModal(false)}
+          >
+            <Close className='self-end fill-garnet hover:fill-bittersweet sm:size-10' />
+          </button>
+          <div className='rounded-md text-center font-bold text-black'>
+            <h5 className='m-0 p-0'>{carrera?.nombre}</h5>
+            <p>{carrera?.descripcion}</p>
+            <p>
+              <span className='font-bold'>Creditos: </span>
+              {carrera?.creditos}
+            </p>
+            <div className='flex flex-col'>
+              <p className='font-bold'>
+                ¿Desea confirmar inscripción a carrera?
+              </p>
+            </div>
+            <div className='items-center md:space-x-6'>
+              <div className='inline-block'>
+                <Button
+                  styling='primary'
+                  className='lg:w-20'
+                  onClick={() => inscribirseCarrera(carrera!.id!.toString())}
+                >
+                  Si
+                </Button>
+              </div>
+              <div className='inline-block'>
+                <Button
+                  styling='secondary'
+                  onClick={() => setShowModal(false)}
+                  className='lg:w-20'
+                >
+                  No
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {alertOk && (
+        <Collapse
+          in={alertOk}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='success'
+            variant='filled'
+            onClose={() => {
+              setAlertOk(false);
+            }}
+          >
+            Su inscripcion ha sido solicidada correctamente
+          </Alert>
+        </Collapse>
+      )}
+      {alertError && (
+        <Collapse
+          in={alertError}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            severity='warning'
+            variant='filled'
+            onClose={() => {
+              setAlertError(false);
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
+    </div>
   );
 }
