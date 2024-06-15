@@ -794,3 +794,13 @@ export const consultaTramitesEstudiante: GridColDef[] = [
   { field: 'fechaCreacion', headerName: 'Fecha' },
   { field: 'fechaActualizacion', headerName: 'Actualizado' },
 ];
+
+export const horariosCursosColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'fechaInicio', headerName: 'Fecha de inicio' },
+  { field: 'fechaFin', headerName: 'Fecha final' },
+  { field: 'asignaturaNombre', headerName: 'Nombre de asignatura' },
+  { field: 'docenteNombre', headerName: 'Nombre de Docente' },
+  { field: 'docenteApellido', headerName: 'Apellido de Docente' },
+  { field: 'horarios', headerName: 'Horario' },
+];
