@@ -903,7 +903,7 @@ export const actaExamenColumn: GridColDef[] = [
         href={`${window.location.pathname}/${params.id}`}
         className='mx-auto flex size-fit'
       >
-        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
+        <List className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
