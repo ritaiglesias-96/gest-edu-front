@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import List from '@/components/List/list'; // Asegúrate de ajustar la ruta del componente List según tu estructura
-import { getCursosHorariosCarrera } from '@/lib/data/funcionario/actions'; // Ajusta esta importación a tu servicio real
+import List from '@/components/List/list';
+import { getCursosHorariosCarrera } from '@/lib/data/funcionario/actions';
 import { Box, CircularProgress } from '@mui/material';
 import { CursoHorario } from '@/lib/definitions';
 
@@ -20,19 +20,17 @@ export default function CursosPage({ params }: { params: { id: string } }) {
         console.log('Datos recibidos de la API:', existenCursos);
   
         if (existenCursos.length > 0) {
-          const cursosHorarios = existenCursos.map(
-            (cursoHorario: CursoHorario) => ({
-              id: cursoHorario.id, // Utilizar el id proporcionado por los datos
-              fechaInicio: cursoHorario.fechaInicio,
-              fechaFin: cursoHorario.fechaFin,
-              diasPrevInsc: cursoHorario.diasPrevInsc,
-              estado: cursoHorario.estado,
-              asignaturaNombre: cursoHorario.asignaturaNombre,
-              docenteNombre: cursoHorario.docenteNombre,
-              docenteApellido: cursoHorario.docenteApellido,
-              horarios: cursoHorario.horarios,
-            })
-          );
+          const cursosHorarios = existenCursos.map((cursoHorario: CursoHorario) => ({
+            id: cursoHorario.cursoId,
+            fechaInicio: cursoHorario.fechaInicio,
+            fechaFin: cursoHorario.fechaFin,
+            diasPrevInsc: cursoHorario.diasPrevInsc,
+            estado: cursoHorario.estado,
+            asignaturaNombre: cursoHorario.asignaturaNombre,
+            docenteNombre: cursoHorario.docenteNombre,
+            docenteApellido: cursoHorario.docenteApellido,
+            horarios: cursoHorario.horarios,
+          }));
           console.log('Datos procesados para rows:', cursosHorarios);
           setRows(cursosHorarios);
           setRowsLoading(false);

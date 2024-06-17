@@ -203,6 +203,7 @@ export type CursoAsignatura = {
 };
 
 export type HorarioCurso = {
+  id: number;
   dia: string;
   horaFin: string;
   horaInicio: string;
@@ -328,8 +329,8 @@ export type TramiteEstudiante = {
   fechaActualizacion: string;
 }
 
-export type CursoHorario = {
-  id: number;
+export interface CursoHorario{//} = {
+  cursoId: number;
   fechaInicio: string;
   fechaFin: string
   diasPrevInsc: number;
@@ -337,7 +338,7 @@ export type CursoHorario = {
   asignaturaNombre: string;
   docenteNombre: string;
   docenteApellido: string;
-  horarios: HorarioCurso[];
+  //horarios: HorarioCurso[];
 }
 
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
