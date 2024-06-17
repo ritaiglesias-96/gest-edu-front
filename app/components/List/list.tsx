@@ -26,6 +26,10 @@ import {
   ExamenFuncionarioColumns,
   InscriptosExamenFuncionarioColumns,
   asignaturaBajaCursoColumns,
+  consultaTramitesEstudiante,
+  solicitudTituloColumns,
+  horariosCursosColumns,
+  horariosColumns
 } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -69,6 +73,8 @@ import {
 import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
 import {
+  Box,
+  CircularProgress,
   FormControl,
   InputLabel,
   Select,
@@ -94,6 +100,7 @@ import { SessionContext } from '../../../context/SessionContext';
 import { convertirFecha } from '@/utils/utils';
 import InputField from '../InputField/inputField';
 import { obtenerDatosUsuarioFetch } from '@/lib/data/actions';
+
 
 type columnType =
   | 'carrera'
@@ -123,6 +130,10 @@ type columnType =
   | 'examenFuncionario'
   | 'inscriptosExamenFuncionario'
   | 'asignaturaBajaCurso'
+  | 'consultaTramitesEstudiante'
+  | 'solicitudTitulo'
+  | 'horariosCursos'
+  | 'horarios'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -237,11 +248,15 @@ export default function List({
       break;
     case 'consultaTramitesEstudiante':
       columns = consultaTramitesEstudiante;
+      break;
     case 'solicitudTitulo':
       columns = solicitudTituloColumns;
       break;
     case 'horariosCursos':
       columns = horariosCursosColumns;
+      break;
+    case 'horarios':
+      columns = horariosColumns;
       break;
     default:
       break;

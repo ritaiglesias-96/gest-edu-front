@@ -14,6 +14,7 @@ import { bajaCursoFetch } from '@/lib/data/estudiante/actions';
 import Evaluate from '@/assets/svg/rule.svg';
 import { Grade } from '@mui/icons-material';
 import { School } from '@mui/icons-material';
+import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedReactNode, Key } from 'react';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -802,5 +803,29 @@ export const horariosCursosColumns: GridColDef[] = [
   { field: 'asignaturaNombre', headerName: 'Nombre de asignatura' },
   { field: 'docenteNombre', headerName: 'Nombre de Docente' },
   { field: 'docenteApellido', headerName: 'Apellido de Docente' },
-  { field: 'horarios', headerName: 'Horario' },
+  {
+    field: '',
+    headerName: 'Horario',
+    filterable: false,
+    sortable: false,
+    disableColumnMenu: true,
+    resizable: false,
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <Enter className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
+export const horariosColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'dia', headerName: 'Dia' },
+  { field: 'horaInicio', headerName: 'Hora inicio' },
+  { field: 'horaFin', headerName: 'Hora fin' }
 ];
