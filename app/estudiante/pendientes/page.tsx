@@ -1,7 +1,6 @@
 'use client';
 import {
   getCarreraYAsignaturaPendientes,
-  obtenerAsignaturasPendientes,
   obtenerCarrerasInscriptoFetch,
 } from '@/lib/data/estudiante/actions';
 import { styled } from '@mui/material/styles';
@@ -11,7 +10,6 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Paper,
   Table,
   TableBody,
   TableContainer,
@@ -19,10 +17,9 @@ import {
 import { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Asignatura, Carrera, CarreraAsignaturas } from '@/lib/definitions';
-import { Heading3 } from '@/styles/typography.stories';
 
 export default function ConsultarCarreras() {
-  const [carrerasIncripto, setCarreras] = useState<Carrera[]>([]);
+  const [carrerasIncripto, setCarrerasIncripto] = useState<Carrera[]>([]);
   const [cargarPendientes, setCargarPendientes] = useState(false);
   const [carrerasAsignaturas, setCarrerasAsignaturas] = useState<
     CarreraAsignaturas[]
@@ -50,7 +47,7 @@ export default function ConsultarCarreras() {
 
   useEffect(() => {
     obtenerCarrerasInscriptoFetch().then((data) => {
-      setCarreras(data.content);
+      setCarrerasIncripto(data.content);
       setCargarPendientes(true);
     });
   }, []);
@@ -67,6 +64,7 @@ export default function ConsultarCarreras() {
           ...prevCarreras,
           carreraAsignaturas,
         ]);
+        console.log(carrerasAsignaturas);
       });
     });
   }, [cargarPendientes]);
@@ -79,10 +77,11 @@ export default function ConsultarCarreras() {
       </h5>
       <div>
         {carrerasAsignaturas.length <= 0 && (
-
           <div className='my-8 box-content items-center rounded-md bg-ivory py-8 '>
             <div className='items-center rounded-md text-center text-black '>
-              <h3 className='m-0 p-0'>No se encontraron inscripciones a carreras.</h3>              
+              <h3 className='m-0 p-0'>
+                No se encontraron inscripciones a carreras.
+              </h3>
             </div>
           </div>
         )}
