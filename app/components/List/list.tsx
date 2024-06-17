@@ -28,6 +28,8 @@ import {
   asignaturaBajaCursoColumns,
   consultaTramitesEstudiante,
   solicitudTituloColumns,
+  carrerasCalificacionesColums,
+  asignaturaCalificacionesColumns,
 } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -121,6 +123,8 @@ type columnType =
   | 'asignaturaBajaCurso'
   | 'consultaTramitesEstudiante'
   | 'solicitudTitulo'
+  | 'carreraCalificaciones'
+  | 'asignaturaCalificaciones'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -208,8 +212,8 @@ export default function List({
       columns = cursosColumns;
       break;
     case 'carrera-calificaciones':
-        columns = carreraCalificacionesColumns;
-        break;
+      columns = carreraCalificacionesColumns;
+      break;
     case 'calficar-cursos':
       columns = calificarCursosColumns;
       break;
@@ -237,6 +241,12 @@ export default function List({
       columns = consultaTramitesEstudiante;
     case 'solicitudTitulo':
       columns = solicitudTituloColumns;
+      break;
+    case 'carreraCalificaciones':
+      columns = carrerasCalificacionesColums;
+      break;
+    case 'asignaturaCalificaciones':
+      columns = asignaturaCalificacionesColumns;
       break;
     default:
       break;
@@ -761,7 +771,7 @@ function InscripcionExamenDataGrid({
   const [alertError, setAlertError] = useState(false);
   const [mensajeError, setMensajeError] = useState('');
 
-  const session = useContext(SessionContext);  
+  const session = useContext(SessionContext);
 
   useEffect(() => {
     if (session.session?.email) {
@@ -774,7 +784,7 @@ function InscripcionExamenDataGrid({
     //Se convierte la fecha a formato dd/MM/yyyy
     rowsParent.forEach((examen) => {
       examen.fecha = convertirFecha(examen.fecha);
-    });   
+    });
     setRows(rowsParent);
     setRowsLoading(rowsLoadingParent);
   }, [rowsLoadingParent, rowsParent]);
@@ -794,7 +804,7 @@ function InscripcionExamenDataGrid({
       });
     }
     setIsOpen(false);
-  };    
+  };
 
   const handleClickConfirmarBaja = () => {
     if (examenId) {
@@ -1765,10 +1775,10 @@ function SolicitudTramiteDataGrid({
         </div>
       )}
       {modalCertificado && (
-        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-8 py-8 shadow-lg shadow-garnet'>
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory p-8 shadow-lg shadow-garnet'>
           <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
             <div className='rounded-md text-center font-bold text-black'>
-              <h5 className='m-0 p-0 mb-6'>¿Descargar certificado?</h5>
+              <h5 className='m-0 mb-6 p-0'>¿Descargar certificado?</h5>
               <div className='flex items-center space-x-2'>
                 <div>
                   <CertificadoPDF certificado={certificado!} />

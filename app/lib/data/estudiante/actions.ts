@@ -427,20 +427,17 @@ export async function getHorariosCursosEstudiante() {
 export async function solicitarCertificadoFetch(id: string) {
   const token = authToken();
   if (token) {
-    const response = await fetch(
-      `${apiRoute}/estudiantes/${id}/certificado`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${apiRoute}/estudiantes/${id}/certificado`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (response.ok) {
       const certificadoJson = await response.json();
       return certificadoJson;
     } else {
-      return { message: 'No se pudo obtener certificado.'};
+      return { message: 'No se pudo obtener certificado.' };
     }
   }
 }
@@ -448,8 +445,26 @@ export async function solicitarCertificadoFetch(id: string) {
 export async function getTramitesEstudiantes() {
   const token = authToken();
   if (token) {
+    const response = await fetch(`${apiRoute}/tramites/tramites-estudiante`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const tramitesJson = await response.json();
+      return tramitesJson;
+    } else {
+      return { message: 'Error al obtener trámites.' };
+    }
+  }
+}
+
+export const obtenerAsignaturasInscriptoFetch = async () => {
+  const token = authToken();
+  if (token) {
     const response = await fetch(
-      `${apiRoute}/tramites/tramites-estudiante`,
+      `https://localhost:8080/gest-edu/api/estudiantes/carreras-inscripto`, //TODO falta endpoint de asignaturas de las cual esta insccipto el estudiante a algun curso
       {
         method: 'GET',
         headers: {
@@ -458,10 +473,10 @@ export async function getTramitesEstudiantes() {
       }
     );
     if (response.ok) {
-      const tramitesJson = await response.json();
-      return tramitesJson;
+      const carrerasJson = await response.json();
+      return carrerasJson;
     } else {
-      return { message: 'Error al obtener trámites.'};
+      return response.json();
     }
   }
-}
+};

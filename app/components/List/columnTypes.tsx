@@ -563,7 +563,6 @@ export const solicitudTituloColumns: GridColDef[] = [
   },
 ];
 
-
 export const carreraCalificacionesColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   {
@@ -787,10 +786,81 @@ export const consultaTramitesEstudiante: GridColDef[] = [
   {
     field: 'estado',
     headerName: 'Estado',
-    renderCell: (params) => (
-      <span>{params.row.estado}</span>
-    )       
+    renderCell: (params) => <span>{params.row.estado}</span>,
   },
   { field: 'fechaCreacion', headerName: 'Fecha' },
   { field: 'fechaActualizacion', headerName: 'Actualizado' },
+];
+
+export const carrerasCalificacionesColums: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+    cellClassName: 'w-full',
+  },
+  {
+    field: 'duracionAnios',
+    headerName: 'Duracion',
+    type: 'number',
+  },
+  {
+    field: 'creditos',
+    headerName: 'Creditos',
+    type: 'number',
+  },
+  {
+    field: '',
+    headerName: 'Listar Asignaturas',
+    filterable: false,
+    sortable: false,
+    disableColumnMenu: true,
+    resizable: false,
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <Enter className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
+export const asignaturaCalificacionesColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+  },
+  {
+    field: 'descripcion',
+    headerName: 'Descripcion',
+  },
+  {
+    field: 'creditos',
+    headerName: 'Creditos',
+    type: 'number',
+  },
+  {
+    field: 'semestrePlanEstudio',
+    headerName: 'Semestre',
+    type: 'number',
+  },
+  {
+    field: '',
+    headerName: 'Listar Cursos',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <Enter className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
 ];
