@@ -1,4 +1,4 @@
-export default function formatDate(inputDate: string) {
+export default function convertirFecha(inputDate: string) {
   if (inputDate !== null) {
     // Crear un objeto Date a partir de la cadena de entrada
     const date = new Date(inputDate);

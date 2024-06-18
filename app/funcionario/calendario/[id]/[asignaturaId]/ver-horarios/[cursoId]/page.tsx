@@ -13,25 +13,41 @@ export default function HorariosPage({ params }: { params: { cursoId: string } }
   const [rowsLoading, setRowsLoading] = useState(true);
   const [fallout, setFallout] = useState(false);
 
+    const formatoHora = (hora: string) => {
+        const [hours, minutes] = hora.split(':');
+        return `${hours}:${minutes}`;
+    }
+
+    // Definir el orden de los días de la semana
+    const diaOrden = ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"];
+
+    // Función para obtener el índice del día de la semana
+    const obtenerIndiceDia = (dia: string): number => {
+    return diaOrden.indexOf(dia.toUpperCase());
+    };
+  
+  
   useEffect(() => {
     const fetchCursos = async () => {
       try {
         const existenHorarios = await getHorariosCurso(params.cursoId);
-        console.log('Datos de los horarios recibidos de la API:', existenHorarios);
-  
+        
         if (existenHorarios.length > 0) {
           const horariosCurso = existenHorarios.map((horarioCurso: HorarioCurso) => ({
             id: horarioCurso.id,
             dia: horarioCurso.dia,
-            horaInicio: horarioCurso.horaInicio,
-            horaFin: horarioCurso.horaFin,
+            horaInicio: formatoHora(horarioCurso.horaInicio),
+            horaFin: formatoHora(horarioCurso.horaFin),
           }));
-          console.log('Datos procesados para rows:', horariosCurso);
+          console.log(horariosCurso)
+          // Ordenar los horarios por día de la semana
+            horariosCurso.sort((a:any, b:any) => obtenerIndiceDia(a.dia) - obtenerIndiceDia(b.dia));
+
           setRows(horariosCurso);
-          setRowsLoading(false);
         } else {
-          setFallout(true);
+            setFallout(true);
         }
+        setRowsLoading(false);
       } catch (error) {
         console.error("Error fetching horarios:", error);
         setFallout(true);

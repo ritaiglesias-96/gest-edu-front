@@ -9,7 +9,7 @@ import { Carrera } from '@/lib/definitions';
 import { useRouter } from 'next/navigation';
 import List from '@/components/List/list';
 import { getCarreraYAsignatura } from '@/lib/data/coordinador/actions';
-import { formatDate } from '@/utils/utils';
+import { convertirFecha } from '@/utils/utils';
 
 export default function HorariosCarreraPage({
   params,
@@ -43,8 +43,8 @@ export default function HorariosCarreraPage({
       if (existePeriodos) {
         const modifiedData = existePeriodos.periodos.map((item: any) => ({
           ...item,
-          fechaInicio: formatDate(item.fechaInicio),
-          fechaFin: formatDate(item.fechaFin),
+          fechaInicio: convertirFecha(item.fechaInicio),
+          fechaFin: convertirFecha(item.fechaFin),
         }));
         setCarrera(existePeriodos.carrera);
         setRowsPE(modifiedData);

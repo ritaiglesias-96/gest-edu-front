@@ -13,7 +13,7 @@ import List from '@/components/List/list';
 import Link from 'next/link';
 import { Asignatura } from '@/lib/definitions';
 import { useRouter } from 'next/navigation';
-import { formatDate, formatDateCurso } from '@/utils/utils';
+import { convertirFecha, convertirFechaCurso } from '@/utils/utils';
 
 export default function AsignaturaPage({
   params,
@@ -49,15 +49,15 @@ export default function AsignaturaPage({
       if (existePeriodos && existeCursos) {
         const periodos = existePeriodos.periodos.map((item: any) => ({
           ...item,
-          fechaInicio: formatDate(item.fechaInicio),
-          fechaFin: formatDate(item.fechaFin),
+          fechaInicio: convertirFecha(item.fechaInicio),
+          fechaFin: convertirFecha(item.fechaFin),
         }));
         setRowsExamen(periodos);
         setRowsExamenLoading(false);
         const cursos = existeCursos.map((item: Curso) => ({
           ...item,
-          fechaInicio: formatDateCurso(item.fechaInicio),
-          fechaFin: formatDateCurso(item.fechaFin),
+          fechaInicio: convertirFechaCurso(item.fechaInicio),
+          fechaFin: convertirFechaCurso(item.fechaFin),
         }));
         setRowsCurso(cursos);
         setRowsCursoLoading(false);

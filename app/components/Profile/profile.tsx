@@ -55,7 +55,7 @@ export default function Profile() {
 
   useEffect(() => {
     const inputDate = datosUsuario?.fechaNac;
-    const formattedDate = formatDate(inputDate);
+    const formattedDate = convertirFecha(inputDate);
     setDate(formattedDate);
     const formattedCI = datosUsuario?.ci.replace(
       /^(\d{1})(\d{3})(\d{3})(\d{1})$/,
@@ -66,7 +66,7 @@ export default function Profile() {
     setValidPhone(validPhone);
   }, [datosUsuario]);
 
-  function formatDate(inputDate: string) {
+  function convertirFecha(inputDate: string) {
     if (inputDate !== null) {
       // Crear un objeto Date a partir de la cadena de entrada
       const date = new Date(inputDate);

@@ -20,7 +20,7 @@ import { Docente } from '@/lib/definitions';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
-import formatDate from '@/utils/dateFormatter';
+import convertirFecha from '@/utils/dateFormatter';
 import { log } from 'console';
 
 const ITEM_HEIGHT = 48;
@@ -63,8 +63,8 @@ export default function FuncionarioHorariosExamenesAgregarHome({
       if (existePeriodos) {
         const periodosAux = existePeriodos.periodos.map((item: any) => ({
           ...item,
-          fechaInicio: formatDate(item.fechaInicio),
-          fechaFin: formatDate(item.fechaFin),
+          fechaInicio: convertirFecha(item.fechaInicio),
+          fechaFin: convertirFecha(item.fechaFin),
         }));
         setPeriodos(periodosAux);
         const newFormattedData = periodosAux.map((item: any) => {
