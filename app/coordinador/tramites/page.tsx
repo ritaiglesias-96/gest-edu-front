@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { getSolicitudesTituloPendientes } from '@/lib/data/coordinador/actions';
 import List from '@/components/List/list';
-import { formatDate } from '@/utils/utils';
+import { convertirFecha } from '@/utils/utils';
 import { SolicitudTitulo } from '@/lib/definitions';
 
 export default function CarrerasPage() {
@@ -11,7 +11,7 @@ export default function CarrerasPage() {
   useEffect(() => {
     getSolicitudesTituloPendientes().then((data) => {
       data.forEach((solicitud: SolicitudTitulo) => {
-        solicitud.fechaCreacion = formatDate(solicitud.fechaCreacion); // Remove the time component
+        solicitud.fechaCreacion = convertirFecha(solicitud.fechaCreacion); // Remove the time component
       });
 
       setRows(data ? data : []);
