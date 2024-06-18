@@ -811,33 +811,6 @@ export const consultaTramitesEstudiante: GridColDef[] = [
   { field: 'fechaActualizacion', headerName: 'Actualizado' },
 ];
 
-export const horariosCursosColumns: GridColDef[] = [
-  { field: 'id', headerName: 'ID' },
-  { field: 'fechaInicio', headerName: 'Fecha de inicio' },
-  { field: 'fechaFin', headerName: 'Fecha final' },
-  { field: 'asignaturaNombre', headerName: 'Nombre de asignatura' },
-  { field: 'docenteNombre', headerName: 'Nombre de Docente' },
-  { field: 'docenteApellido', headerName: 'Apellido de Docente' },
-  {
-    field: '',
-    headerName: 'Horario',
-    filterable: false,
-    sortable: false,
-    disableColumnMenu: true,
-    resizable: false,
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.id}`}
-        className='mx-auto flex size-fit'
-      >
-        <Enter className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
-  },
-];
-
 export const horariosColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   { field: 'dia', headerName: 'Dia' },

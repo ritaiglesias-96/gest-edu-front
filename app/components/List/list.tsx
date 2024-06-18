@@ -28,7 +28,6 @@ import {
   asignaturaBajaCursoColumns,
   consultaTramitesEstudiante,
   solicitudTituloColumns,
-  horariosCursosColumns,
   horariosColumns
 } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
@@ -73,8 +72,6 @@ import {
 import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
 import {
-  Box,
-  CircularProgress,
   FormControl,
   InputLabel,
   Select,
@@ -132,7 +129,6 @@ type columnType =
   | 'asignaturaBajaCurso'
   | 'consultaTramitesEstudiante'
   | 'solicitudTitulo'
-  | 'horariosCursos'
   | 'horarios'
   | 'none';
 interface ListProps {
@@ -251,9 +247,6 @@ export default function List({
       break;
     case 'solicitudTitulo':
       columns = solicitudTituloColumns;
-      break;
-    case 'horariosCursos':
-      columns = horariosCursosColumns;
       break;
     case 'horarios':
       columns = horariosColumns;
