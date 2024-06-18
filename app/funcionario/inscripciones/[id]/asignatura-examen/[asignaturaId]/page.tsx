@@ -7,7 +7,7 @@ import { Box, CircularProgress } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export default function examenActivoPage({
+export default function ExamenActivoPage({
   params,
 }: {
   params: { id: string };
