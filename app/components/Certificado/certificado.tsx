@@ -18,9 +18,12 @@ export default function Certificado() {
       <div className=' grid w-full grid-cols-1 items-center justify-items-center gap-4 sm:grid-cols-2'></div>
       {certificado && (
         <>
+          <h3>Estudiante</h3>
+          <div>CI: {certificado.estudiante.ci}</div>
           <div>Nombre: {certificado.estudiante.nombre}</div>
           <div>Apellido: {certificado.estudiante.apellido}</div>
-          <div>Carrera: {certificado.carrera}</div>
+          <h3>Carrera</h3>
+          <div>{certificado.carrera}</div>
           <div>Fecha: {convertirFecha(certificado.fecha)}</div>
         </>
       )}
