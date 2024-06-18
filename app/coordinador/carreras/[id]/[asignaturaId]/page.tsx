@@ -107,6 +107,7 @@ export default function AsignaturaPage({
             </div>
             <div className='my-2 box-content flex flex-col items-center justify-center rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
               <Button
+                styling='primary'
                 className='w-full self-center'
                 onClick={() => {
                   setNoPrevias(!noPrevias);
