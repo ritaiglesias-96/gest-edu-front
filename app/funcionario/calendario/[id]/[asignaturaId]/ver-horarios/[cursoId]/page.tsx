@@ -28,7 +28,7 @@ export default function HorariosPage({ params }: { params: { cursoId: string } }
   
   
   useEffect(() => {
-    const fetchCursos = async () => {
+    const fetchHorarios = async () => {
       try {
         const existenHorarios = await getHorariosCurso(params.cursoId);
         
@@ -53,7 +53,7 @@ export default function HorariosPage({ params }: { params: { cursoId: string } }
         setFallout(true);
       }
     };
-    fetchCursos().finally(() => setLoading(false));
+    fetchHorarios().finally(() => setLoading(false));
   }, [params.cursoId]);
 
   return (
