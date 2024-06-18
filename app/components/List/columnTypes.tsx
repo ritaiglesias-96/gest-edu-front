@@ -166,6 +166,20 @@ export const usuarioColumns: GridColDef[] = [
       </Link>
     ),
   },
+  {
+    field: 'actividad',
+    headerName: 'Actividad',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.row.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
 ];
 
 export const previaturasColumns: GridColDef[] = [
