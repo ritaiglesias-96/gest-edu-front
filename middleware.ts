@@ -3,7 +3,7 @@ import { authRol } from '@/utils/auth';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const publicRoutes = ['/ingresar', '/registrarse', '/resetPass', '/certificado', '/'];
+const publicRoutes = ['/ingresar', '/registrarse', '/resetPass', '/certificado', '/certificado/validar', '/'];
 
 export default function middleware(req: NextRequest) {
   const rol = authRol();
