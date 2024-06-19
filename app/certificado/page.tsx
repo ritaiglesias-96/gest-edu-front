@@ -46,7 +46,7 @@ export default function CodigoCertificado() {
   return (
     <FormContainer className='mt-20 w-2/5 gap-2 md:gap-2 md:px-6'>
       <div className='flex-col text-center items-center justify-between '>
-        <h3>Validar certificado</h3>
+        <h2>Validar certificado</h2>
         <h4>Ingrese código</h4>
         <InputField
           placeholder='Código'

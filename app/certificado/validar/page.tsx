@@ -5,9 +5,9 @@ import FormContainer from '@/components/FormContainer/formContainer';
 
 export default function ValidarCertificado() {
   return (
-    <div className='relative z-10 mx-auto my-4 flex w-1/3 flex-col rounded-xl bg-ivory px-2 pb-6 pt-2 shadow-lg shadow-garnet md:p-10 mt-20'>
-      <h1 className='text-center font-bold'>Certificado</h1>
-      <Certificado />
-    </div>
+    <FormContainer className='mt-20 w-2/5 gap-2 md:gap-2 md:px-6'>
+        <h1 className='text-center font-bold'>Certificado</h1>
+        <Certificado />
+    </FormContainer>
   );
 }

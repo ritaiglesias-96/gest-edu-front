@@ -1,6 +1,7 @@
 import { Certiticado } from '@/lib/definitions';
 import { convertirFecha } from '@/utils/utils';
 import { useEffect, useState } from 'react';
+import FormContainer from '../FormContainer/formContainer';
 
 export default function Certificado() {
   const [certificado, setCertificado] = useState<Certiticado>();
@@ -9,22 +10,32 @@ export default function Certificado() {
     const data = sessionStorage.getItem('datos-certificado');
     if (data) {
       let objetoJson = JSON.parse(data);
+      console.log(objetoJson);
+
       setCertificado(objetoJson);
     }
-  },[]);
+  }, []);
 
   return (
     <div className=' text-black sm:w-4/5 md:w-2/3'>
-      <div className=' grid w-full grid-cols-1 items-center justify-items-center gap-4 sm:grid-cols-2'></div>
       {certificado && (
         <>
-          <h3>Estudiante</h3>
-          <div>CI: {certificado.estudiante.ci}</div>
-          <div>Nombre: {certificado.estudiante.nombre}</div>
-          <div>Apellido: {certificado.estudiante.apellido}</div>
-          <h3>Carrera</h3>
-          <div>{certificado.carrera}</div>
-          <div>Fecha: {convertirFecha(certificado.fecha)}</div>
+          <h2>Estudiante</h2>
+          <div>
+            <b>CI:</b> {certificado.estudiante.ci}
+          </div>
+
+          <div>
+            <b>Nombre:</b> {certificado.estudiante.nombre}
+          </div>
+          <div>
+            <b>Apellido:</b> {certificado.estudiante.apellido}
+          </div>
+          <h2>Carrera</h2>
+          <h4>{certificado.carrera}</h4>
+          <div>
+            <b>Fecha:</b> {convertirFecha(certificado.fecha)}
+          </div>
         </>
       )}
     </div>

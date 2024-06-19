@@ -14,32 +14,32 @@ export default function middleware(req: NextRequest) {
     return NextResponse.redirect(absoluteURL.toString());
   } else if (req.nextUrl.pathname === '/logout') {
     return NextResponse.next();
+  } else if (
+    rol === Role.estudiante &&
+    !req.nextUrl.pathname.includes('estudiante')
+  ) {
+    const absoluteURL = new URL('/estudiante', req.nextUrl.origin);
+    return NextResponse.redirect(absoluteURL.toString());
+  } else if (
+    rol === Role.coordinador &&
+    !req.nextUrl.pathname.includes('coordinador')
+  ) {
+    const absoluteURL = new URL('/coordinador', req.nextUrl.origin);
+    return NextResponse.redirect(absoluteURL.toString());
+  } else if (
+    rol === Role.funcionario &&
+    !req.nextUrl.pathname.includes('funcionario')
+  ) {
+    const absoluteURL = new URL('/funcionario', req.nextUrl.origin);
+    return NextResponse.redirect(absoluteURL.toString());
+  } else if (
+    rol === Role.admin &&
+    !req.nextUrl.pathname.includes('administrador')
+  ) {
+    const absoluteURL = new URL('/administrador', req.nextUrl.origin);
+    return NextResponse.redirect(absoluteURL.toString());
   } else {
-    if (
-      rol === Role.estudiante &&
-      !req.nextUrl.pathname.includes('estudiante')
-    ) {
-      const absoluteURL = new URL('/estudiante', req.nextUrl.origin);
-      return NextResponse.redirect(absoluteURL.toString());
-    } else if (
-      rol === Role.coordinador &&
-      !req.nextUrl.pathname.includes('coordinador')
-    ) {
-      const absoluteURL = new URL('/coordinador', req.nextUrl.origin);
-      return NextResponse.redirect(absoluteURL.toString());
-    } else if (
-      rol === Role.funcionario &&
-      !req.nextUrl.pathname.includes('funcionario')
-    ) {
-      const absoluteURL = new URL('/funcionario', req.nextUrl.origin);
-      return NextResponse.redirect(absoluteURL.toString());
-    } else if (
-      rol === Role.admin &&
-      !req.nextUrl.pathname.includes('administrador')
-    ) {
-      const absoluteURL = new URL('/administrador', req.nextUrl.origin);
-      return NextResponse.redirect(absoluteURL.toString());
-    }
+    return NextResponse.next();
   }
 }
 
