@@ -30,6 +30,8 @@ import {
   solicitudTituloColumns,
   carrerasCalificacionesColums,
   asignaturaCalificacionesColumns,
+  cursosCalificadosColumns,
+  calificacionCursoColumns,
 } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -131,6 +133,8 @@ type columnType =
   | 'solicitudTitulo'
   | 'carreraCalificaciones'
   | 'asignaturaCalificaciones'
+  | 'cursosCalificados'
+  | 'calificacionCurso'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -253,6 +257,12 @@ export default function List({
       break;
     case 'asignaturaCalificaciones':
       columns = asignaturaCalificacionesColumns;
+      break;
+    case 'cursosCalificados':
+      columns = cursosCalificadosColumns;
+      break;
+    case 'calificacionCurso':
+      columns = calificacionCursoColumns;
       break;
     default:
       break;

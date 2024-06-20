@@ -428,7 +428,7 @@ export const calificarCursosColumns: GridColDef[] = [
   { field: 'fechaFin', headerName: 'Fecha de Fin' },
   {
     field: 'calificaciones',
-    headerName: 'Calificaciones',
+    headerName: 'Calificar',
     cellClassName: 'flex items-center self-end',
     headerAlign: 'center',
     renderCell: (params) => (
@@ -436,7 +436,7 @@ export const calificarCursosColumns: GridColDef[] = [
         href={`${window.location.pathname}/${params.row.id}`}
         className='mx-auto flex size-fit'
       >
-        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+        <Enter className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
@@ -863,4 +863,33 @@ export const asignaturaCalificacionesColumns: GridColDef[] = [
       </Link>
     ),
   },
+];
+
+export const cursosCalificadosColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'nombreAsignatura', headerName: 'Asignatura' },
+  { field: 'fechaInicio', headerName: 'Fecha de Inicio' },
+  { field: 'fechaFin', headerName: 'Fecha de Fin' },
+  {
+    field: 'calificaciones',
+    headerName: 'Ver Calificaciones',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.row.id}/verCalificaciones`}
+        className='mx-auto flex size-fit'
+      >
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
+export const calificacionCursoColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'ci', headerName: 'Cedula' },
+  { field: 'estudianteNombre', headerName: 'Nombre' },
+  { field: 'estudianteApellido', headerName: 'Apellido' },
+  { field: 'calificacionCurso', headerName: 'Calificacion' },
 ];
