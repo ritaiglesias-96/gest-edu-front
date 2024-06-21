@@ -670,7 +670,7 @@ export async function getExamenesCalificadosAsignatura(id: number) {
 
 export async function getExamen(id: string) {
   const token = authToken();
-  const response = await fetch(`${apiRoute}/cursos/${id}`, {
+  const response = await fetch(`${apiRoute}/examenes/${id}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,

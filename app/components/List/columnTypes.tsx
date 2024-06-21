@@ -888,7 +888,7 @@ export const cursosCalificadosColumns: GridColDef[] = [
 
 export const calificacionCursoColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
-  { field: 'ci', headerName: 'Cedula' },
+  { field: 'estudianteCi', headerName: 'Cedula' },
   { field: 'estudianteNombre', headerName: 'Nombre' },
   { field: 'estudianteApellido', headerName: 'Apellido' },
   { field: 'calificacionCurso', headerName: 'Calificacion' },
@@ -916,8 +916,8 @@ export const examenesCalificadosColumns: GridColDef[] = [
 
 export const calificacionExamenColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
-  { field: 'ci', headerName: 'Cedula' },
+  { field: 'estudianteCi', headerName: 'Cedula' },
   { field: 'estudianteNombre', headerName: 'Nombre' },
   { field: 'estudianteApellido', headerName: 'Apellido' },
-  { field: 'calificacionCurso', headerName: 'Calificacion' },
+  { field: 'calificacion', headerName: 'Calificacion' },
 ];
