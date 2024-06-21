@@ -3,10 +3,12 @@ import { cookies } from 'next/headers';
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { ResetPassFormSchema, SignInFormSchema } from './schemasZod';
+import { ResetPassFormSchema, SignInFormSchema } from './schemasZod';
 import {
   ResetPassState,
   CambiarPassState,
   EditarPerfilState,
+  LoginState,
   LoginState,
 } from '../definitions';
 import { authToken } from '@/utils/auth';
@@ -30,6 +32,7 @@ export const loginFetch = async (prevState: LoginState, formData: FormData) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password }),
   });
   if (response.ok) {
     const data = await response.json();
@@ -37,6 +40,14 @@ export const loginFetch = async (prevState: LoginState, formData: FormData) => {
       name: 'token',
       value: data.jwt.toString(),
     });
+    return {
+      message: 'Inicio de sesion con exito. 200',
+    };
+  }
+  return {
+    errors: { password: ['Correo o contraseña incorrectos'] },
+    message: 'Correo o contraseña incorrectos',
+  };
     return {
       message: 'Inicio de sesion con exito. 200',
     };
