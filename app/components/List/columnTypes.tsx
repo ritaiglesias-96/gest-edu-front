@@ -3,6 +3,7 @@ import EyeIcon from '@/assets/svg/visibility.svg';
 import Enter from '@/assets/svg/chevron-right.svg';
 import Enroll from '@/assets/svg/enroll-exam.svg';
 import Schedule from '@/assets/svg/schedule.svg';
+import Search from '@/assets/svg/search.svg';
 import Grading from '@/assets/svg/grading.svg';
 import Subject from '@/assets/svg/subject.svg';
 import Close from '@/assets/svg/close.svg';
@@ -14,6 +15,7 @@ import { bajaCursoFetch } from '@/lib/data/estudiante/actions';
 import Evaluate from '@/assets/svg/rule.svg';
 import { Grade } from '@mui/icons-material';
 import { School } from '@mui/icons-material';
+import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedReactNode, Key } from 'react';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -419,6 +421,20 @@ export const cursosColumns: GridColDef[] = [
       </Link>
     ),
   },
+  {
+    field: 'verHorarios',
+    headerName: 'Ver Horarios',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/ver-horarios/${params.row.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <Search className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
 ];
 
 export const calificarCursosColumns: GridColDef[] = [
@@ -793,4 +809,11 @@ export const consultaTramitesEstudiante: GridColDef[] = [
   },
   { field: 'fechaCreacion', headerName: 'Fecha' },
   { field: 'fechaActualizacion', headerName: 'Actualizado' },
+];
+
+export const horariosColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'dia', headerName: 'Dia' },
+  { field: 'horaInicio', headerName: 'Hora inicio' },
+  { field: 'horaFin', headerName: 'Hora fin' }
 ];
