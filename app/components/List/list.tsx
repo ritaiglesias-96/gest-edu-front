@@ -153,7 +153,7 @@ export default function List({
   rows,
   rowsLoading,
   columnsType,
-}: Readonly<ListProps>) {
+}: ListProps) {
   let columns: GridColDef[] = [];
   switch (columnsType) {
     case 'carrera':
@@ -966,10 +966,10 @@ function InscripcionExamenDataGrid({
 function ApproveRejectDataGrid({
   rowsParent,
   rowsLoadingParent,
-}: Readonly<{
+}: {
   rowsParent: GridRowsProp;
   rowsLoadingParent: boolean;
-}>) {
+}) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -992,6 +992,10 @@ function ApproveRejectDataGrid({
         if (data) {
           if (rows) setRows(rows.filter((row) => row.id !== tramiteId));
         }
+        setRowModesModel({
+          ...rowModesModel,
+          [tramiteId as number]: { mode: GridRowModes.View },
+        });
       };
       rechazarInscripcion();
     }

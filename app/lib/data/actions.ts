@@ -24,7 +24,7 @@ export const loginFetch = async (prevState: LoginState, formData: FormData) => {
     };
   }
   const { email, password } = validatedFields.data;
-  const response = await fetch(`https://localhost:8080/gest-edu/api/login`, {
+  const response = await fetch(`${apiRoute}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export const loginFetch = async (prevState: LoginState, formData: FormData) => {
 
 export const logoutFetch = async () => {
   const token = authToken();
-  await fetch(`https://localhost:8080/gest-edu/api/logout`, {
+  await fetch(`${apiRoute}/logout`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -80,16 +80,13 @@ export const resetPassFetch = async (
     };
   } else {
     const { email } = validatedFields.data;
-    const response = await fetch(
-      `https://localhost:8080/gest-edu/api/usuario/resetPassword`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ mailTo: email }),
-      }
-    ).then((res) => {
+    const response = await fetch(`${apiRoute}/correoPassword`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ mailTo: email }),
+    }).then((res) => {
       return res;
     });
 
@@ -128,16 +125,13 @@ export const cambiarPassFetch = async (
     };
   } else {
     const { password, confirmPassword, tokenPassword } = validatedFields.data;
-    const response = await fetch(
-      `https://localhost:8080/gest-edu/api/usuario/cambiarPassword`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ password, confirmPassword, tokenPassword }),
-      }
-    ).then((res) => {
+    const response = await fetch(`${apiRoute}/cambiarPassword`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ password, confirmPassword, tokenPassword }),
+    }).then((res) => {
       return res;
     });
     if (response.status === 200) {
@@ -244,15 +238,12 @@ export const obtenerDatosUsuarioFetch = async () => {
 
   if (token) {
     try {
-      const response = await fetch(
-        'https://localhost:8080/gest-edu/api/usuario/perfil',
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${apiRoute}/usuario/perfil`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!response.ok) {
         // Manejar errores HTTP
         console.error(`HTTP Error: ${response.status}`);

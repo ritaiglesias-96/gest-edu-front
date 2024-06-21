@@ -16,10 +16,11 @@ export default function AltaCarreraPage() {
     if (alta.message.includes('201')) {
       router.back();
     }
-  }, [alta.message, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [alta.message]);
 
   return (
-    <FormContainer className='w-1/3'>
+    <FormContainer className='w-2/3'>
       <form
         className='flex min-h-full w-full flex-col items-center justify-between gap-1 md:mx-auto md:h-full md:max-w-full md:gap-2 md:px-6'
         action={dispatch}
@@ -34,12 +35,11 @@ export default function AltaCarreraPage() {
           label='Nombre'
         ></InputField>
         <div id='nombre-error' aria-live='polite' aria-atomic='true'>
-          {alta?.errors?.nombre &&
-            alta.errors.nombre.map((error: string) => (
-              <p className='mt-2 text-sm text-garnet' key={error}>
-                {error}
-              </p>
-            ))}
+          {alta?.errors?.nombre?.map((error: string) => (
+            <p className='mt-2 text-sm text-garnet' key={error}>
+              {error}
+            </p>
+          ))}
         </div>
         <InputField
           placeholder='Descripcion'
@@ -48,12 +48,11 @@ export default function AltaCarreraPage() {
           label='Descripcion'
         ></InputField>
         <div id='descripcion-error' aria-live='polite' aria-atomic='true'>
-          {alta?.errors?.descripcion &&
-            alta.errors.descripcion.map((error: string) => (
-              <p className='mt-2 text-sm text-garnet' key={error}>
-                {error}
-              </p>
-            ))}
+          {alta?.errors?.descripcion?.map((error: string) => (
+            <p className='mt-2 text-sm text-garnet' key={error}>
+              {error}
+            </p>
+          ))}
         </div>
         <div className='flex w-2/3 flex-col justify-between gap-1 sm:w-full sm:flex-row'>
           <AltaCarreraButton />
