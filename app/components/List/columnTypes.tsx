@@ -671,7 +671,7 @@ export const calificarExamenesColumns: GridColDef[] = [
   { field: 'nombreAsignatura', headerName: 'Asignatura' },
   {
     field: 'calificaciones',
-    headerName: 'Calificaciones',
+    headerName: 'Calificar',
     cellClassName: 'flex items-center self-end',
     headerAlign: 'center',
     renderCell: (params) => (
@@ -679,7 +679,7 @@ export const calificarExamenesColumns: GridColDef[] = [
         href={`${window.location.pathname}/${params.row.id}`}
         className='mx-auto flex size-fit'
       >
-        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+        <Enter className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
@@ -887,6 +887,34 @@ export const cursosCalificadosColumns: GridColDef[] = [
 ];
 
 export const calificacionCursoColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'ci', headerName: 'Cedula' },
+  { field: 'estudianteNombre', headerName: 'Nombre' },
+  { field: 'estudianteApellido', headerName: 'Apellido' },
+  { field: 'calificacionCurso', headerName: 'Calificacion' },
+];
+
+export const examenesCalificadosColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'nombreAsignatura', headerName: 'Asignatura' },
+  { field: 'fecha', headerName: 'Fecha' },
+  {
+    field: 'calificaciones',
+    headerName: 'Ver Calificaciones',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.row.id}/verCalificaciones`}
+        className='mx-auto flex size-fit'
+      >
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
+export const calificacionExamenColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   { field: 'ci', headerName: 'Cedula' },
   { field: 'estudianteNombre', headerName: 'Nombre' },

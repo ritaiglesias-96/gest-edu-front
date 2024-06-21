@@ -34,7 +34,6 @@ export default function CalificacionCursoPage({
 
   useEffect(() => {
     const fetch = async () => {
-      //TODO: Se debe traer los cursos, no las asignaaturas
       const existeCarrera = await getCarreraYAsignatura(params.id);
       if (existeCarrera) {
         setCarrera(existeCarrera.carrera);

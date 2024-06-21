@@ -11,39 +11,38 @@ import {
   getCurso,
   getDocente,
   getEstudiantesCalificadosCurso,
+  getEstudiantesCalificadosExamen,
 } from '@/lib/data/funcionario/actions';
 import { convertirFecha } from '@/utils/utils';
 
-export default function CalificacionesCursoPage({
+export default function CalificacionesExamenPage({
   params,
-}: Readonly<{ params: { cursoId: string } }>) {
+}: Readonly<{ params: { examenId: string } }>) {
   const router = useRouter();
   const [rows, setRows] = useState<any[]>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
-  const [curso, setCurso] = useState<Curso>();
+  const [examen, setExamen] = useState<any>();
   const [asignatura, setAsignatura] = useState<Asignatura>();
   const [docente, setDocente] = useState<Docente>();
   const [fallout, setFallout] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (params.cursoId) {
-      getCurso(params.cursoId).then((dataCurso) => {
-        setCurso(dataCurso);
+    if (params.examenId) {
+      getExamen(params.examenId).then((dataExamen) => {
+        setExamen(dataExamen);
       });
     }
-  }, [params.cursoId]);
+  }, [params.examenId]);
 
   useEffect(() => {
-    if (curso?.id) {
-      curso.fechaInicio = convertirFecha(curso.fechaInicio);
-      curso.fechaFin = convertirFecha(curso.fechaFin);
-      getEstudiantesCalificadosCurso(curso.id).then(
+    if (examen?.id) {
+      examen.fecha = convertirFecha(examen.fecha);
+      getEstudiantesCalificadosExamen(examen.id).then(
         (arrayEstudiantes: any[]) => {
           if (arrayEstudiantes) {
             arrayEstudiantes.forEach((element: any) => {
               element.id = element.estudianteId;
-              element.fechaNac = convertirFecha(element.fechaNac!);
             });
             setRows(arrayEstudiantes);
             setRowsLoading(false);
@@ -52,14 +51,14 @@ export default function CalificacionesCursoPage({
           setLoading(false);
         }
       );
-      getAsignatura(curso.asignaturaId.toString()).then((dataAsignatura) => {
+      getAsignatura(examen.asignaturaId.toString()).then((dataAsignatura) => {
         setAsignatura(dataAsignatura);
       });
-      getDocente(curso.docenteId.toString()).then((dataDocente) => {
+      getDocente(examen.docenteId.toString()).then((dataDocente) => {
         setDocente(dataDocente);
       });
     }
-  }, [curso]);
+  }, [examen]);
 
   if (loading) {
     return (
@@ -82,22 +81,18 @@ export default function CalificacionesCursoPage({
 
   return (
     <div className='relative box-border size-full justify-center overflow-auto md:w-5/6'>
-      <h1 className='text-center'>Calificar curso</h1>
+      <h1 className='text-center'>Calificar examen</h1>
       <div className='h-fit w-full p-2'>
         <div className='my-2 box-content flex flex-col items-center justify-between gap-3 rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
           <div className='flex flex-col rounded-md text-center font-bold text-black md:text-left lg:max-w-md'>
-            <h3 className='m-0 p-0'>Datos del curso</h3>
+            <h3 className='m-0 p-0'>Datos del examen</h3>
             <div className='flex space-x-2'>
               <p className='w-32 font-bold'>Asignatura: </p>
               <p>{asignatura?.nombre}</p>
             </div>
             <div className='flex space-x-2'>
-              <p className='w-32 font-bold'>Fecha de inicio: </p>
-              <p>{curso?.fechaInicio.toString()}</p>
-            </div>
-            <div className='flex space-x-2'>
-              <p className='w-32 font-bold'>Fecha de fin: </p>
-              <p>{curso?.fechaFin.toString()}</p>
+              <p className='w-32 font-bold'>Fecha: </p>
+              <p>{examen?.fecha.toString()}</p>
             </div>
             <div className='flex space-x-2'>
               <p className='w-32 font-bold'>Docente: </p>
@@ -105,11 +100,11 @@ export default function CalificacionesCursoPage({
             </div>
           </div>
         </div>
-        <h3>Estudiantes inscriptos al curso</h3>
+        <h3>Estudiantes inscriptos al examen</h3>
         <List
           rows={rows}
           rowsLoading={rowsLoading}
-          columnsType='calificacionCurso'
+          columnsType='calificacionExamen'
         />
       </div>
     </div>
