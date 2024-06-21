@@ -15,13 +15,12 @@ import Link from 'next/link';
 import { useFormState, useFormStatus } from 'react-dom';
 import { registerUser } from '@/lib/data/estudiante/actions';
 import { redirect, usePathname, useRouter } from 'next/navigation';
-import { useContext, useEffect, useState } from 'react';
-import { SessionContext } from '@/../context/SessionContext';
+import { useEffect, useState } from 'react';
 import { initialState } from '@/lib/definitions';
+import { loginFetch } from '@/lib/data/actions';
 
 function LoginForm() {
-  const session = useContext(SessionContext);
-  const [logIn, dispatch] = useFormState(session.login, initialState);
+  const [logIn, dispatch] = useFormState(loginFetch, initialState);
 
   useEffect(() => {
     if (logIn.message?.includes('200')) {
@@ -47,12 +46,11 @@ function LoginForm() {
         <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </InputField>
       <div id='email-error' aria-live='polite' aria-atomic='true'>
-        {logIn?.errors?.email &&
-          logIn.errors.email.map((error: string) => (
-            <p className='mt-2 text-sm text-garnet' key={error}>
-              {error}
-            </p>
-          ))}
+        {logIn?.errors?.email?.map((error: string) => (
+          <p className='mt-2 text-sm text-garnet' key={error}>
+            {error}
+          </p>
+        ))}
       </div>
       <InputField
         placeholder='Ingresar contraseña'
@@ -68,12 +66,11 @@ function LoginForm() {
         aria-live='polite'
         aria-atomic='true'
       >
-        {logIn?.errors?.password &&
-          logIn.errors.password.map((error: string) => (
-            <p className='text-sm text-garnet' key={error}>
-              {error}
-            </p>
-          ))}
+        {logIn?.errors?.password?.map((error: string) => (
+          <p className='text-sm text-garnet' key={error}>
+            {error}
+          </p>
+        ))}
       </div>
       <LoginButton />
       <div className='my-4 flex w-full flex-col gap-3 text-center'>
@@ -116,12 +113,11 @@ function RegistrarForm({
         <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </InputField>
       <div id='nombre-error' aria-live='polite' aria-atomic='true'>
-        {register?.errors?.nombre &&
-          register.errors.nombre.map((error: string) => (
-            <p className='mt-2 text-sm text-garnet' key={error}>
-              {error}
-            </p>
-          ))}
+        {register?.errors?.nombre?.map((error: string) => (
+          <p className='mt-2 text-sm text-garnet' key={error}>
+            {error}
+          </p>
+        ))}
       </div>
       <InputField
         placeholder='Apellido'
@@ -132,12 +128,11 @@ function RegistrarForm({
         <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </InputField>
       <div id='apellido-error' aria-live='polite' aria-atomic='true'>
-        {register?.errors?.apellido &&
-          register.errors.apellido.map((error: string) => (
-            <p className='mt-2 text-sm text-garnet' key={error}>
-              {error}
-            </p>
-          ))}
+        {register?.errors?.apellido?.map((error: string) => (
+          <p className='mt-2 text-sm text-garnet' key={error}>
+            {error}
+          </p>
+        ))}
       </div>
       <InputField
         placeholder='jane@doe.com'
@@ -148,12 +143,11 @@ function RegistrarForm({
         <EmailIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </InputField>
       <div id='email-error' aria-live='polite' aria-atomic='true'>
-        {register?.errors?.email &&
-          register.errors.email.map((error: string) => (
-            <p className='mt-2 text-sm text-garnet' key={error}>
-              {error}
-            </p>
-          ))}
+        {register?.errors?.email?.map((error: string) => (
+          <p className='mt-2 text-sm text-garnet' key={error}>
+            {error}
+          </p>
+        ))}
       </div>
       <InputField
         placeholder='12347890 (sin puntos ni guiones)'
@@ -165,12 +159,11 @@ function RegistrarForm({
         <FingerprintIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </InputField>
       <div id='ci-error' aria-live='polite' aria-atomic='true'>
-        {register?.errors?.ci &&
-          register.errors.ci.map((error: string) => (
-            <p className='mt-2 text-sm text-garnet' key={error}>
-              {error}
-            </p>
-          ))}
+        {register?.errors?.ci?.map((error: string) => (
+          <p className='mt-2 text-sm text-garnet' key={error}>
+            {error}
+          </p>
+        ))}
       </div>
       <InputField
         placeholder='dd-mm-yyyy'
@@ -182,12 +175,11 @@ function RegistrarForm({
         <CalendarIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </InputField>
       <div id='fechaNac-error' aria-live='polite' aria-atomic='true'>
-        {register?.errors?.fechaNac &&
-          register.errors.fechaNac.map((error: string) => (
-            <p className='mt-2 text-sm text-garnet' key={error}>
-              {error}
-            </p>
-          ))}
+        {register?.errors?.fechaNac?.map((error: string) => (
+          <p className='mt-2 text-sm text-garnet' key={error}>
+            {error}
+          </p>
+        ))}
       </div>
       <InputField
         placeholder='Av. Siempre Viva 123'
@@ -198,12 +190,11 @@ function RegistrarForm({
         <LocationIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </InputField>
       <div id='domicilio-error' aria-live='polite' aria-atomic='true'>
-        {register?.errors?.domicilio &&
-          register.errors.domicilio.map((error: string) => (
-            <p className='mt-2 text-sm text-garnet' key={error}>
-              {error}
-            </p>
-          ))}
+        {register?.errors?.domicilio?.map((error: string) => (
+          <p className='mt-2 text-sm text-garnet' key={error}>
+            {error}
+          </p>
+        ))}
       </div>
       <InputField
         placeholder='09X XXX XXX'
@@ -214,12 +205,11 @@ function RegistrarForm({
         <PhoneIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </InputField>
       <div id='telefono-error' aria-live='polite' aria-atomic='true'>
-        {register?.errors?.telefono &&
-          register.errors.telefono.map((error: string) => (
-            <p className='mt-2 text-sm text-garnet' key={error}>
-              {error}
-            </p>
-          ))}
+        {register?.errors?.telefono?.map((error: string) => (
+          <p className='mt-2 text-sm text-garnet' key={error}>
+            {error}
+          </p>
+        ))}
       </div>
       <InputField
         placeholder='Constraseña'
@@ -230,12 +220,11 @@ function RegistrarForm({
         <KeyIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </InputField>
       <div id='password-error' aria-live='polite' aria-atomic='true'>
-        {register?.errors?.password &&
-          register.errors.password.map((error: string) => (
-            <p className='mt-2 text-sm text-garnet' key={error}>
-              {error}
-            </p>
-          ))}
+        {register?.errors?.password?.map((error: string) => (
+          <p className='mt-2 text-sm text-garnet' key={error}>
+            {error}
+          </p>
+        ))}
       </div>
       <InputField
         placeholder='Confirmar contraseña'
@@ -246,12 +235,11 @@ function RegistrarForm({
         <KeyIcon className='h-auto w-6 fill-garnet sm:w-8' />
       </InputField>
       <div id='confirm-error' aria-live='polite' aria-atomic='true'>
-        {register?.errors?.confirmPassword &&
-          register.errors.confirmPassword.map((error: string) => (
-            <p className='mt-2 text-sm text-garnet' key={error}>
-              {error}
-            </p>
-          ))}
+        {register?.errors?.confirmPassword?.map((error: string) => (
+          <p className='mt-2 text-sm text-garnet' key={error}>
+            {error}
+          </p>
+        ))}
       </div>
       <div className='flex w-2/3 flex-col items-center gap-1 sm:w-full'>
         <RegisterButton />
