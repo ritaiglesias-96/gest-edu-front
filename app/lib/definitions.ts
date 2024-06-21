@@ -341,4 +341,11 @@ export interface CursoHorario{//} = {
   //horarios: HorarioCurso[];
 }
 
+export interface ActividadUsuario{
+  id: number;
+  fecha: string;
+  tipoActividad: string;
+  descripcion: string;
+}
+
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
