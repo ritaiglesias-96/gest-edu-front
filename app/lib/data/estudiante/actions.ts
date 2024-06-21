@@ -483,11 +483,10 @@ export async function getTramitesEstudiantes() {
         Authorization: `Bearer ${token}`,
       },
     });
-      const tramitesJson = await response.json();
-      return tramitesJson;
-    } else {
-      return { message: 'Error al obtener trámites.' };
-    }
+    const tramitesJson = await response.json();
+    return tramitesJson;
+  } else {
+    return { message: 'Error al obtener trámites.' };
   }
 }
 
