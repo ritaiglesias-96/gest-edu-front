@@ -52,7 +52,6 @@ export default function CursoPage({
             arrayEstudiantes.push(element.estudiante);
           });
         }
-
         setRows(arrayEstudiantes);
         setRowsLoading(false);
         setLoading(false);

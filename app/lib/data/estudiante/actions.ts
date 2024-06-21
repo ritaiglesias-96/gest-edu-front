@@ -483,7 +483,6 @@ export async function getTramitesEstudiantes() {
         Authorization: `Bearer ${token}`,
       },
     });
-    if (response.ok) {
       const tramitesJson = await response.json();
       return tramitesJson;
     } else {

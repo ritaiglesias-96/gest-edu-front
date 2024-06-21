@@ -34,6 +34,7 @@ import {
   calificacionCursoColumns,
   examenesCalificadosColumns,
   calificacionExamenColumns,
+  horariosColumns
 } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -103,6 +104,7 @@ import { convertirFecha } from '@/utils/utils';
 import InputField from '../InputField/inputField';
 import { obtenerDatosUsuarioFetch } from '@/lib/data/actions';
 
+
 type columnType =
   | 'carrera'
   | 'asignatura'
@@ -139,6 +141,7 @@ type columnType =
   | 'calificacionCurso'
   | 'examenesCalificados'
   | 'calificacionExamen'
+  | 'horarios'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -253,6 +256,7 @@ export default function List({
       break;
     case 'consultaTramitesEstudiante':
       columns = consultaTramitesEstudiante;
+      break;
     case 'solicitudTitulo':
       columns = solicitudTituloColumns;
       break;
@@ -273,6 +277,9 @@ export default function List({
       break;
     case 'calificacionExamen':
       columns = calificacionExamenColumns;
+      break;
+    case 'horarios':
+      columns = horariosColumns;
       break;
     default:
       break;

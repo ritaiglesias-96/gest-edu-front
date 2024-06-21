@@ -14,6 +14,7 @@ import {
 import { GridRowModel } from '@mui/x-data-grid/models/gridRows';
 import { HorarioCurso } from '@/lib/definitions';
 import { getCarrera } from '../coordinador/actions';
+import { response } from 'express';
 
 const apiRoute = process.env.BACK_API;
 
@@ -592,10 +593,10 @@ export async function getInscriptosAExamen(examenId: string) {
   }
 }
 
-export async function getCursosCarrera(id: string) {
+export async function getCursosCarrera(carreraId: string) {
   const token = authToken();
   if (token) {
-    const response = await fetch(`${apiRoute}/carreras/${id}/cursos-activos`, {
+    const response = await fetch(`${apiRoute}/carreras/${carreraId}/cursos-activos`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -698,4 +699,49 @@ export async function getEstudiantesCalificadosExamen(id: number) {
   } else {
     return [];
   }
+}
+
+
+export async function getCursosHorariosCarrera(carreraId: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/carreras/${carreraId}/horarios-cursos`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data.content || []; // Devolvemos el contenido o un array vacío
+    } else {
+      return []; // Devolvemos un array vacío en caso de error
+    }
+  }
+  return []; // Devolvemos un array vacío si no hay token
+}
+
+export async function getHorariosCurso(cursoId: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/cursos/${cursoId}/horarios`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data.content || []; // Devolvemos el contenido o un array vacío
+    } else {
+      return []; // Devolvemos un array vacío en caso de error
+    }
+  }
+  return []; // Devolvemos un array vacío si no hay token
 }
