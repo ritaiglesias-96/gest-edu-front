@@ -90,3 +90,21 @@ export async function getUsuarios() {
     return null;
   }
 }
+
+export async function getActividadUsuarios(id: string) {
+  const token = authToken();
+
+  const response = await fetch(`${apiRoute}/actividades/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return null;
+  }
+}
