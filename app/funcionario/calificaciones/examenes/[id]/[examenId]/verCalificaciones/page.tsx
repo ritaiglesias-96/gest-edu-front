@@ -12,6 +12,7 @@ import {
   getDocente,
   getEstudiantesCalificadosCurso,
   getEstudiantesCalificadosExamen,
+  getExamen,
 } from '@/lib/data/funcionario/actions';
 import { convertirFecha } from '@/utils/utils';
 
@@ -44,6 +45,7 @@ export default function CalificacionesExamenPage({
             arrayEstudiantes.forEach((element: any) => {
               element.id = element.estudianteId;
             });
+            console.log(arrayEstudiantes);
             setRows(arrayEstudiantes);
             setRowsLoading(false);
           }
@@ -51,10 +53,10 @@ export default function CalificacionesExamenPage({
           setLoading(false);
         }
       );
-      getAsignatura(examen.asignaturaId.toString()).then((dataAsignatura) => {
+      getAsignatura(examen.asignaturaId).then((dataAsignatura) => {
         setAsignatura(dataAsignatura);
       });
-      getDocente(examen.docenteId.toString()).then((dataDocente) => {
+      getDocente(examen.docenteId).then((dataDocente) => {
         setDocente(dataDocente);
       });
     }
