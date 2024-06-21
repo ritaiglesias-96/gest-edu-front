@@ -167,6 +167,20 @@ export const usuarioColumns: GridColDef[] = [
       </Link>
     ),
   },
+  {
+    field: 'actividad',
+    headerName: 'Actividad',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.row.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <Schedule className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
 ];
 
 export const previaturasColumns: GridColDef[] = [
@@ -929,4 +943,12 @@ export const horariosColumns: GridColDef[] = [
   { field: 'dia', headerName: 'Dia' },
   { field: 'horaInicio', headerName: 'Hora inicio' },
   { field: 'horaFin', headerName: 'Hora fin' }
+];
+
+export const actividadUsuarioColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'fecha', headerName: 'Fecha' },
+  { field: 'hora', headerName: 'Hora' },
+  { field: 'tipoActividad', headerName: 'Tipo de actividad'},
+  { field: 'descripcion', headerName: 'Descripción' },
 ];

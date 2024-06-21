@@ -31,7 +31,8 @@ import {
   actasFuncionarioColumn,
   actasAsignaturasFuncionarioColumn,
   actaExamenColumn,
-  horariosColumns
+  horariosColumns,
+  actividadUsuarioColumns
 } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -136,6 +137,7 @@ type columnType =
   | 'actasAsignaturasFuncionario'
   | 'actaExamen'
   | 'horarios'
+  | 'actividadUsuario'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -265,6 +267,9 @@ export default function List({
       break;
     case 'horarios':
       columns = horariosColumns;
+      break;
+    case 'actividadUsuario':
+      columns = actividadUsuarioColumns;
       break;
     default:
       break;
