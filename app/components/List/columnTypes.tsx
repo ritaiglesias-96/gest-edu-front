@@ -751,6 +751,118 @@ export const consultaTramitesEstudiante: GridColDef[] = [
   { field: 'fechaActualizacion', headerName: 'Actualizado' },
 ];
 
+export const actasFuncionarioColumn: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+    cellClassName: 'w-full',
+  },
+  {
+    field: 'duracionAnios',
+    headerName: 'Duracion',
+    type: 'number',
+  },
+  {
+    field: 'creditos',
+    headerName: 'Creditos',
+    type: 'number',
+  },
+  {
+    field: 'asignaturas',
+    headerName: 'Asignaturas',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        onClick={() =>
+          sessionStorage.setItem('carrera_id', params.id.toString())
+        }
+        className='mx-auto flex size-fit'
+      >
+        <List className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
+export const actasAsignaturasFuncionarioColumn: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+  },
+  {
+    field: 'descripcion',
+    headerName: 'Descripcion',
+  },
+  {
+    field: 'creditos',
+    headerName: 'Creditos',
+    type: 'number',
+  },
+  {
+    field: 'semestrePlanEstudio',
+    headerName: 'Semestre',
+    type: 'number',
+  },
+  {
+    field: 'curso',
+    headerName: 'Curso',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}/curso`} //TODO RITA ACTA CURSO
+        className='mx-auto flex size-fit'
+      >
+        <List className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+  {
+    field: 'examen',
+    headerName: 'Examen',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}/examen`}
+        className='mx-auto flex size-fit'
+      >
+        <List className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+
+];
+
+export const actaExamenColumn: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'fecha',
+    headerName: 'Fecha',
+
+  },
+  { field: 'asignaturaNombre', headerName: 'Asignatura' },
+
+  {
+    field: 'acta',
+    headerName: 'Acta',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <List className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+]
+
 export const horariosColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   { field: 'dia', headerName: 'Dia' },

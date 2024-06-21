@@ -125,6 +125,11 @@ type columnType =
   | 'asignaturaBajaCurso'
   | 'consultaTramitesEstudiante'
   | 'solicitudTitulo'
+  | 'actasFuncionario'
+  | 'actasAsignaturasFuncionario'
+  | 'actaExamen'
+  | 'horarios'
+  | 'actividadUsuario'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;

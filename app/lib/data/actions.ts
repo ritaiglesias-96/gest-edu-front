@@ -299,3 +299,4 @@ export const getAsignaturasCarrera = async (id: string) => {
     }
   }
 };
+
