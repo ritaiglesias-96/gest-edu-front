@@ -755,6 +755,7 @@ export const horariosColumns: GridColDef[] = [
   { field: 'dia', headerName: 'Dia' },
   { field: 'horaInicio', headerName: 'Hora inicio' },
   { field: 'horaFin', headerName: 'Hora fin' },
+
 ];
 
 export const actividadUsuarioColumns: GridColDef[] = [
@@ -764,3 +765,4 @@ export const actividadUsuarioColumns: GridColDef[] = [
   { field: 'tipoActividad', headerName: 'Tipo de actividad' },
   { field: 'descripcion', headerName: 'Descripción' },
 ];
+
