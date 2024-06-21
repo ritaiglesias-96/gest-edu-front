@@ -12,6 +12,7 @@ import Lessons from '@/assets/svg/enroll-lesson.svg';
 import Link from 'next/link';
 import Enrollment from '@/assets/svg/enroll-lesson.svg';
 import Rule from '@/assets/svg/rule.svg';
+import Grading from '@/assets/svg/grading.svg';
 import { Role } from '@/lib/definitions';
 import React, { useContext, useEffect, useState } from 'react';
 import { SessionContext } from '../../../context/SessionContext';
@@ -74,6 +75,13 @@ function NavbarEstudiante() {
         <GestEduIcon />
       </Link>
       <div className='flex flex-row gap-6'>
+        <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/estudiante/instructivos'
+        >
+          <Rule className='h-6 self-center sm:w-auto' />
+          <span>Instructivos</span>
+        </Link>
         <MenuConsulta />
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
@@ -219,11 +227,11 @@ function MenuCalificaciones() {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = (opcion: string) => {
-    if(opcion === 'cursos')
+    if (opcion === 'cursos')
       window.location.href = `/funcionario/calificaciones/cursos`;
-    else if(opcion === 'examenes')
+    else if (opcion === 'examenes')
       window.location.href = `/funcionario/calificaciones/examenes`;
-      setAnchorEl(null);
+    setAnchorEl(null);
   };
 
   return (
@@ -261,7 +269,7 @@ function MenuConsulta() {
     if (opcion === 'horarios') {
       window.location.href = `/estudiante/horarios`;
     }
-    if(opcion === 'tramites'){
+    if (opcion === 'tramites') {
       window.location.href = `/estudiante/tramites`;
     }
     setAnchorEl(null);
@@ -270,7 +278,7 @@ function MenuConsulta() {
   return (
     <>
       <Button styling='link' onClick={handleClick}>
-        <Lessons className='h-6 self-center sm:w-auto' />
+        <Grading className='h-6 self-center sm:w-auto' />
         <span className='text-sm'>Consultar</span>
       </Button>
       <Menu
