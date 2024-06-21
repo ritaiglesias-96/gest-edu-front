@@ -54,12 +54,11 @@ export default function AltaUsuarioPage() {
             <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
           </InputField>
           <div id='nombre-error' aria-live='polite' aria-atomic='true'>
-            {register.errors?.nombre &&
-              register.errors?.nombre.map((error: string) => (
-                <p className='mt-2 text-sm text-garnet' key={error}>
-                  {error}
-                </p>
-              ))}
+            {register.errors?.nombre?.map((error: string) => (
+              <p className='mt-2 text-sm text-garnet' key={error}>
+                {error}
+              </p>
+            ))}
           </div>
         </div>
         <div>
@@ -72,12 +71,11 @@ export default function AltaUsuarioPage() {
             <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
           </InputField>
           <div id='apellido-error' aria-live='polite' aria-atomic='true'>
-            {register?.errors?.apellido &&
-              register.errors.apellido.map((error: string) => (
-                <p className='mt-2 text-sm text-garnet' key={error}>
-                  {error}
-                </p>
-              ))}
+            {register?.errors?.apellido?.map((error: string) => (
+              <p className='mt-2 text-sm text-garnet' key={error}>
+                {error}
+              </p>
+            ))}
           </div>
         </div>
         <div>
@@ -90,12 +88,11 @@ export default function AltaUsuarioPage() {
             <EmailIcon className='h-auto w-6 fill-garnet sm:w-8' />
           </InputField>
           <div id='email-error' aria-live='polite' aria-atomic='true'>
-            {register?.errors?.email &&
-              register.errors.email.map((error: string) => (
-                <p className='mt-2 text-sm text-garnet' key={error}>
-                  {error}
-                </p>
-              ))}
+            {register?.errors?.email?.map((error: string) => (
+              <p className='mt-2 text-sm text-garnet' key={error}>
+                {error}
+              </p>
+            ))}
           </div>
         </div>
         <div>
@@ -109,12 +106,11 @@ export default function AltaUsuarioPage() {
             <FingerprintIcon className='h-auto w-6 fill-garnet sm:w-8' />
           </InputField>
           <div id='ci-error' aria-live='polite' aria-atomic='true'>
-            {register?.errors?.ci &&
-              register.errors.ci.map((error: string) => (
-                <p className='mt-2 text-sm text-garnet' key={error}>
-                  {error}
-                </p>
-              ))}
+            {register?.errors?.ci?.map((error: string) => (
+              <p className='mt-2 text-sm text-garnet' key={error}>
+                {error}
+              </p>
+            ))}
           </div>
         </div>
         <div>
@@ -128,12 +124,11 @@ export default function AltaUsuarioPage() {
             <CalendarIcon className='h-auto w-6 fill-garnet sm:w-8' />
           </InputField>
           <div id='fechaNac-error' aria-live='polite' aria-atomic='true'>
-            {register?.errors?.fechaNac &&
-              register.errors.fechaNac.map((error: string) => (
-                <p className='mt-2 text-sm text-garnet' key={error}>
-                  {error}
-                </p>
-              ))}
+            {register?.errors?.fechaNac?.map((error: string) => (
+              <p className='mt-2 text-sm text-garnet' key={error}>
+                {error}
+              </p>
+            ))}
           </div>
         </div>
         <div>
@@ -146,12 +141,11 @@ export default function AltaUsuarioPage() {
             <LocationIcon className='h-auto w-6 fill-garnet sm:w-8' />
           </InputField>
           <div id='domicilio-error' aria-live='polite' aria-atomic='true'>
-            {register?.errors?.domicilio &&
-              register.errors.domicilio.map((error: string) => (
-                <p className='mt-2 text-sm text-garnet' key={error}>
-                  {error}
-                </p>
-              ))}
+            {register?.errors?.domicilio?.map((error: string) => (
+              <p className='mt-2 text-sm text-garnet' key={error}>
+                {error}
+              </p>
+            ))}
           </div>
         </div>
         <div>
@@ -164,12 +158,11 @@ export default function AltaUsuarioPage() {
             <PhoneIcon className='h-auto w-6 fill-garnet sm:w-8' />
           </InputField>
           <div id='telefono-error' aria-live='polite' aria-atomic='true'>
-            {register?.errors?.telefono &&
-              register.errors.telefono.map((error: string) => (
-                <p className='mt-2 text-sm text-garnet' key={error}>
-                  {error}
-                </p>
-              ))}
+            {register?.errors?.telefono?.map((error: string) => (
+              <p className='mt-2 text-sm text-garnet' key={error}>
+                {error}
+              </p>
+            ))}
           </div>
         </div>
         <div>
@@ -202,12 +195,11 @@ export default function AltaUsuarioPage() {
             <KeyIcon className='h-auto w-6 fill-garnet sm:w-8' />
           </InputField>
           <div id='password-error' aria-live='polite' aria-atomic='true'>
-            {register?.errors?.password &&
-              register.errors.password.map((error: string) => (
-                <p className='mt-2 text-sm text-garnet' key={error}>
-                  {error}
-                </p>
-              ))}
+            {register?.errors?.password?.map((error: string) => (
+              <p className='mt-2 text-sm text-garnet' key={error}>
+                {error}
+              </p>
+            ))}
           </div>
         </div>
         <div>
@@ -220,12 +212,11 @@ export default function AltaUsuarioPage() {
             <KeyIcon className='h-auto w-6 fill-garnet sm:w-8' />
           </InputField>
           <div id='confirm-error' aria-live='polite' aria-atomic='true'>
-            {register?.errors?.confirmPassword &&
-              register.errors.confirmPassword.map((error: string) => (
-                <p className='mt-2 text-sm text-garnet' key={error}>
-                  {error}
-                </p>
-              ))}
+            {register?.errors?.confirmPassword?.map((error: string) => (
+              <p className='mt-2 text-sm text-garnet' key={error}>
+                {error}
+              </p>
+            ))}
           </div>
         </div>
 

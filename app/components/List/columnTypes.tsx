@@ -12,10 +12,6 @@ import Add from '@/assets/svg/add.svg';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
 import Button from '../Button/button';
 import { bajaCursoFetch } from '@/lib/data/estudiante/actions';
-import Evaluate from '@/assets/svg/rule.svg';
-import { Grade } from '@mui/icons-material';
-import { School } from '@mui/icons-material';
-import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedReactNode, Key } from 'react';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -353,41 +349,6 @@ export const periodosExamenColumns: GridColDef[] = [
   },
 ];
 
-export const registroExamenColumns: GridColDef[] = [
-  { field: 'id', headerName: 'ID' },
-  {
-    field: 'fecha',
-    headerName: 'Fecha',
-  },
-];
-
-export const examenColumns: GridColDef[] = [
-  { field: 'id', headerName: 'ID' },
-  {
-    field: 'fecha',
-    headerName: 'Fecha',
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-  },
-  {
-    field: 'inscripcion',
-    headerName: 'Inscripcion',
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}`}
-        onClick={() =>
-          sessionStorage.setItem('examen_id', params.id.toString())
-        }
-        className='mx-auto flex size-fit'
-      >
-        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
-  },
-];
-
 export const inscriptoColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   { field: 'ci', headerName: 'Cédula' },
@@ -450,39 +411,6 @@ export const calificarCursosColumns: GridColDef[] = [
     renderCell: (params) => (
       <Link
         href={`${window.location.pathname}/${params.row.id}`}
-        className='mx-auto flex size-fit'
-      >
-        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
-  },
-];
-
-export const carreraFuncionarioColumns: GridColDef[] = [
-  { field: 'id', headerName: 'ID' },
-  {
-    field: 'nombre',
-    headerName: 'Nombre',
-    cellClassName: 'w-full',
-  },
-  {
-    field: 'duracionAnios',
-    headerName: 'Duracion',
-    type: 'number',
-  },
-  {
-    field: 'creditos',
-    headerName: 'Creditos',
-    type: 'number',
-  },
-  {
-    field: 'detalles',
-    headerName: 'Detalles',
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.id}`}
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
@@ -578,7 +506,6 @@ export const solicitudTituloColumns: GridColDef[] = [
     ),
   },
 ];
-
 
 export const carreraCalificacionesColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -803,9 +730,7 @@ export const consultaTramitesEstudiante: GridColDef[] = [
   {
     field: 'estado',
     headerName: 'Estado',
-    renderCell: (params) => (
-      <span>{params.row.estado}</span>
-    )       
+    renderCell: (params) => <span>{params.row.estado}</span>,
   },
   { field: 'fechaCreacion', headerName: 'Fecha' },
   { field: 'fechaActualizacion', headerName: 'Actualizado' },
@@ -815,5 +740,5 @@ export const horariosColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   { field: 'dia', headerName: 'Dia' },
   { field: 'horaInicio', headerName: 'Hora inicio' },
-  { field: 'horaFin', headerName: 'Hora fin' }
+  { field: 'horaFin', headerName: 'Hora fin' },
 ];

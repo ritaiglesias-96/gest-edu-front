@@ -7,16 +7,13 @@ import {
   usuarioColumns,
   estudianteColumns,
   periodosExamenColumns,
-  registroExamenColumns,
   inscriptoColumns,
   cursosColumns,
-  carreraFuncionarioColumns,
   asignaturaFuncionarioColumns,
   calificarCursosColumns,
   carrerasEstudiante,
   asignaturaExamenColumns,
   asignaturaCursoColumns,
-  examenColumns,
   carreraCalificacionesColumns,
   calificarExamenesColumns,
   datosEstudianteColumns,
@@ -28,7 +25,7 @@ import {
   asignaturaBajaCursoColumns,
   consultaTramitesEstudiante,
   solicitudTituloColumns,
-  horariosColumns
+  horariosColumns,
 } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -93,30 +90,25 @@ import {
   solicitarCertificadoFetch,
   solicitarTituloFetch,
 } from '@/lib/data/estudiante/actions';
-import { SessionContext } from '../../../context/SessionContext';
+import { SessionCtx } from '../../../context/SessionContext';
 import { convertirFecha } from '@/utils/utils';
 import InputField from '../InputField/inputField';
 import { obtenerDatosUsuarioFetch } from '@/lib/data/actions';
-
 
 type columnType =
   | 'carrera'
   | 'asignatura'
   | 'usuario'
-  | 'docente'
   | 'estudiante'
   | 'carreras-estudiante'
   | 'datos-estudiante'
   | 'asignatura-examenes'
   | 'asignatura-curso'
-  | 'examen'
   | 'inscripto'
   | 'previtaturas'
   | 'noPrevitaturas'
-  | 'registroExamen'
   | 'periodosExamen'
   | 'cursos'
-  | 'carreraFuncionario'
   | 'asignaturaFuncionario'
   | 'carrera-calificaciones'
   | 'calficar-examenes'
@@ -191,9 +183,6 @@ export default function List({
     case 'asignatura-curso':
       columns = asignaturaCursoColumns;
       break;
-    case 'examen':
-      columns = examenColumns;
-      break;
     case 'previtaturas':
       columns = previaturasColumns;
       break;
@@ -202,12 +191,6 @@ export default function List({
       break;
     case 'periodosExamen':
       columns = periodosExamenColumns;
-      break;
-    case 'registroExamen':
-      columns = registroExamenColumns;
-      break;
-    case 'carreraFuncionario':
-      columns = carreraFuncionarioColumns;
       break;
     case 'asignaturaFuncionario':
       columns = asignaturaFuncionarioColumns;
@@ -786,7 +769,7 @@ function InscripcionExamenDataGrid({
   const [alertError, setAlertError] = useState(false);
   const [mensajeError, setMensajeError] = useState('');
 
-  const session = useContext(SessionContext);
+  const session = useContext(SessionCtx);
 
   useEffect(() => {
     if (session.session?.email) {
@@ -1651,8 +1634,6 @@ function SolicitudTramiteDataGrid({
     setTimeout(setAlertHelper, 5000);
   };
 
-  const downloadCertificado = () => {};
-
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID' },
     {
@@ -1980,7 +1961,7 @@ function InscripcionCarreraDataGrid({
                 <Button
                   styling='primary'
                   className='lg:w-20'
-                  onClick={() => inscribirseCarrera(carrera!.id!.toString())}
+                  onClick={() => inscribirseCarrera(carrera!.id.toString())}
                 >
                   Si
                 </Button>

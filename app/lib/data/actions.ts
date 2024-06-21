@@ -2,23 +2,34 @@
 import { cookies } from 'next/headers';
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
-import { AltaDocenteFormSchema, ResetPassFormSchema } from './schemasZod';
+import { ResetPassFormSchema, SignInFormSchema } from './schemasZod';
 import {
   ResetPassState,
   CambiarPassState,
   EditarPerfilState,
-  DocenteState,
+  LoginState,
 } from '../definitions';
 import { authToken } from '@/utils/auth';
 const apiRoute = process.env.BACK_API;
 
-export const loginFetch = async (data: { email: string; password: string }) => {
+export const loginFetch = async (prevState: LoginState, formData: FormData) => {
+  const validatedFields = SignInFormSchema.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+  });
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to login User.',
+    };
+  }
+  const { email, password } = validatedFields.data;
   const response = await fetch(`https://localhost:8080/gest-edu/api/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ email, password }),
   });
   if (response.ok) {
     const data = await response.json();
@@ -26,13 +37,18 @@ export const loginFetch = async (data: { email: string; password: string }) => {
       name: 'token',
       value: data.jwt.toString(),
     });
-    return data;
-  } else {
-    return response.json();
+    return {
+      message: 'Inicio de sesion con exito. 200',
+    };
   }
+  return {
+    errors: { password: ['Correo o contraseña incorrectos'] },
+    message: 'Correo o contraseña incorrectos',
+  };
 };
 
-export const logoutFetch = async (token: string) => {
+export const logoutFetch = async () => {
+  const token = authToken();
   await fetch(`https://localhost:8080/gest-edu/api/logout`, {
     method: 'POST',
     headers: {

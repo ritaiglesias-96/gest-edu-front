@@ -90,3 +90,40 @@ export async function getUsuarios() {
     return null;
   }
 }
+
+export async function getUserByCi(ci: string) {
+  const token = authToken();
+  const response = await fetch(`${apiRoute}/usuario/buscar/${ci}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return null;
+  }
+}
+
+export async function desactivarCuenta(id: string) {
+  const token = authToken();
+  console.log(id);
+  const response = await fetch(`${apiRoute}/administrador/desactivarUsuario`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(id),
+  });
+  if (response.ok) {
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } else {
+    return null;
+  }
+}
