@@ -28,6 +28,9 @@ import {
   asignaturaBajaCursoColumns,
   consultaTramitesEstudiante,
   solicitudTituloColumns,
+  actasFuncionarioColumn,
+  actasAsignaturasFuncionarioColumn,
+  actaExamenColumn,
   horariosColumns,
   actividadUsuarioColumns
 } from './columnTypes';
@@ -130,6 +133,9 @@ type columnType =
   | 'asignaturaBajaCurso'
   | 'consultaTramitesEstudiante'
   | 'solicitudTitulo'
+  | 'actasFuncionario'
+  | 'actasAsignaturasFuncionario'
+  | 'actaExamen'
   | 'horarios'
   | 'actividadUsuario'
   | 'none';
@@ -249,6 +255,15 @@ export default function List({
       break;
     case 'solicitudTitulo':
       columns = solicitudTituloColumns;
+      break;
+    case 'actasFuncionario':
+      columns = actasFuncionarioColumn;
+      break; 
+    case 'actasAsignaturasFuncionario':
+      columns = actasAsignaturasFuncionarioColumn;
+      break;
+    case 'actaExamen':
+      columns = actaExamenColumn;
       break;
     case 'horarios':
       columns = horariosColumns;

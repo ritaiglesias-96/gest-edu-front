@@ -11,7 +11,9 @@ import Calendar from '@/assets/svg/calendar.svg';
 import Lessons from '@/assets/svg/enroll-lesson.svg';
 import Link from 'next/link';
 import Enrollment from '@/assets/svg/enroll-lesson.svg';
+import List from '@/assets/svg/list.svg';
 import Rule from '@/assets/svg/rule.svg';
+import Subject from '@/assets/svg/subject.svg';
 import { Role } from '@/lib/definitions';
 import React, { useContext, useEffect, useState } from 'react';
 import { SessionContext } from '../../../context/SessionContext';
@@ -170,6 +172,13 @@ function NavbarFuncionario() {
         <GestEduIcon />
       </Link>
       <div className='flex flex-row gap-4'>
+        <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/funcionario/actas'
+        >
+          <List className='h-6 sm:w-auto ' style={{ fill: 'black' }} />
+          <span>Actas</span>
+        </Link>
         <MenuCalificaciones />
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
@@ -219,11 +228,11 @@ function MenuCalificaciones() {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = (opcion: string) => {
-    if(opcion === 'cursos')
+    if (opcion === 'cursos')
       window.location.href = `/funcionario/calificaciones/cursos`;
-    else if(opcion === 'examenes')
+    else if (opcion === 'examenes')
       window.location.href = `/funcionario/calificaciones/examenes`;
-      setAnchorEl(null);
+    setAnchorEl(null);
   };
 
   return (
@@ -261,7 +270,7 @@ function MenuConsulta() {
     if (opcion === 'horarios') {
       window.location.href = `/estudiante/horarios`;
     }
-    if(opcion === 'tramites'){
+    if (opcion === 'tramites') {
       window.location.href = `/estudiante/tramites`;
     }
     setAnchorEl(null);

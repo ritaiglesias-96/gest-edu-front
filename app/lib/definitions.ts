@@ -329,6 +329,14 @@ export type TramiteEstudiante = {
   fechaActualizacion: string;
 }
 
+export type ActaExamen = {
+  id: number;
+  fecha: string;
+  inscriptos: Estudiante[];
+  asignaturaNombre: string;
+  docentes: Docente[];
+}
+
 export interface CursoHorario{//} = {
   cursoId: number;
   fechaInicio: string;
