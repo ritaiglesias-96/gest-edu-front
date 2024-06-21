@@ -25,6 +25,11 @@ import {
   asignaturaBajaCursoColumns,
   consultaTramitesEstudiante,
   solicitudTituloColumns,
+  actasFuncionarioColumn,
+  actasAsignaturasFuncionarioColumn,
+  actaExamenColumn,
+  horariosColumns,
+  actividadUsuarioColumns,
 } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -228,6 +233,21 @@ export default function List({
       break;
     case 'solicitudTitulo':
       columns = solicitudTituloColumns;
+      break;
+    case 'actasFuncionario':
+      columns = actasFuncionarioColumn;
+      break;
+    case 'actasAsignaturasFuncionario':
+      columns = actasAsignaturasFuncionarioColumn;
+      break;
+    case 'actaExamen':
+      columns = actaExamenColumn;
+      break;
+    case 'horarios':
+      columns = horariosColumns;
+      break;
+    case 'actividadUsuario':
+      columns = actividadUsuarioColumns;
       break;
     default:
       break;

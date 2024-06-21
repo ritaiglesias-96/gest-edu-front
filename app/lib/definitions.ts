@@ -342,7 +342,7 @@ export interface CursoHorario {
   //horarios: HorarioCurso[];
 }
 
-export interface ActividadUsuario{
+export interface ActividadUsuario {
   id: number;
   fecha: string;
   tipoActividad: string;
@@ -355,6 +355,6 @@ export type ActaExamen = {
   inscriptos: Estudiante[];
   asignaturaNombre: string;
   docentes: Docente[];
-}
+};
 
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]

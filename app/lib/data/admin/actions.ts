@@ -145,4 +145,3 @@ export async function getActividadUsuarios(id: string) {
     return null;
   }
 }
-
