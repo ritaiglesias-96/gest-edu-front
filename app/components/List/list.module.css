@@ -4,7 +4,6 @@
   @apply font-poppins;
   @apply font-normal;
   background-color: theme('colors.ivory');
-  /* width: fit-content; */
   height: 100%;
 
   & * {

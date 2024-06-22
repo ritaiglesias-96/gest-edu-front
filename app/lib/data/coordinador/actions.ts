@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import {
   AltaAsignaturaFormSchema,
   AsignaturaEditFormSchema,
+  CarreraEditFormSchema,
   CarreraFormSchema,
 } from '../schemasZod';
 const apiRoute = process.env.BACK_API;
@@ -89,11 +90,12 @@ export async function getCarreraYAsignatura(id: string) {
 
 export async function altaCarrera(prevState: CarreraState, formData: FormData) {
   const token = authToken();
+  console.log(formData);
+
   const validatedFields = CarreraFormSchema.safeParse({
     nombre: formData.get('nombre'),
     descripcion: formData.get('descripcion'),
   });
-
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -101,7 +103,7 @@ export async function altaCarrera(prevState: CarreraState, formData: FormData) {
     };
   } else {
     const { nombre, descripcion } = validatedFields.data;
-
+    console.log({ nombre, descripcion });
     const response = await fetch(`${apiRoute}/carreras`, {
       method: 'POST',
       headers: {
@@ -113,6 +115,7 @@ export async function altaCarrera(prevState: CarreraState, formData: FormData) {
         descripcion,
       }),
     });
+    console.log(response);
     if (response.ok) {
       return {
         message: 'Creada con exito. 201',
@@ -127,7 +130,7 @@ export async function altaCarrera(prevState: CarreraState, formData: FormData) {
 
 export async function editCarrera(prevState: CarreraState, formData: FormData) {
   const token = authToken();
-  const validatedFields = CarreraFormSchema.safeParse({
+  const validatedFields = CarreraEditFormSchema.safeParse({
     nombre: formData.get('nombre'),
     descripcion: formData.get('descripcion'),
     carreraId: formData.get('carreraId'),
@@ -287,9 +290,9 @@ export const obtenerExamenesVigentes = async (id: string) => {
     );
     if (response.ok) {
       const examenesJson = await response.json();
-      return {exmanes: examenesJson.content};
+      return { exmanes: examenesJson.content };
     } else {
-      return { exmanes: [] }
+      return { exmanes: [] };
     }
   }
 };

@@ -2,23 +2,34 @@
 import { cookies } from 'next/headers';
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
-import { AltaDocenteFormSchema, ResetPassFormSchema } from './schemasZod';
+import { ResetPassFormSchema, SignInFormSchema } from './schemasZod';
 import {
   ResetPassState,
   CambiarPassState,
   EditarPerfilState,
-  DocenteState,
+  LoginState,
 } from '../definitions';
 import { authToken } from '@/utils/auth';
 const apiRoute = process.env.BACK_API;
 
-export const loginFetch = async (data: { email: string; password: string }) => {
-  const response = await fetch(`https://localhost:8080/gest-edu/api/login`, {
+export const loginFetch = async (prevState: LoginState, formData: FormData) => {
+  const validatedFields = SignInFormSchema.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+  });
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to login User.',
+    };
+  }
+  const { email, password } = validatedFields.data;
+  const response = await fetch(`${apiRoute}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ email, password }),
   });
   if (response.ok) {
     const data = await response.json();
@@ -26,14 +37,19 @@ export const loginFetch = async (data: { email: string; password: string }) => {
       name: 'token',
       value: data.jwt.toString(),
     });
-    return data;
-  } else {
-    return response.json();
+    return {
+      message: 'Inicio de sesion con exito. 200',
+    };
   }
+  return {
+    errors: { password: ['Correo o contraseña incorrectos'] },
+    message: 'Correo o contraseña incorrectos',
+  };
 };
 
-export const logoutFetch = async (token: string) => {
-  await fetch(`https://localhost:8080/gest-edu/api/logout`, {
+export const logoutFetch = async () => {
+  const token = authToken();
+  await fetch(`${apiRoute}/logout`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -64,16 +80,13 @@ export const resetPassFetch = async (
     };
   } else {
     const { email } = validatedFields.data;
-    const response = await fetch(
-      `https://localhost:8080/gest-edu/api/usuario/resetPassword`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ mailTo: email }),
-      }
-    ).then((res) => {
+    const response = await fetch(`${apiRoute}/correoPassword`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ mailTo: email }),
+    }).then((res) => {
       return res;
     });
 
@@ -112,16 +125,13 @@ export const cambiarPassFetch = async (
     };
   } else {
     const { password, confirmPassword, tokenPassword } = validatedFields.data;
-    const response = await fetch(
-      `https://localhost:8080/gest-edu/api/usuario/cambiarPassword`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ password, confirmPassword, tokenPassword }),
-      }
-    ).then((res) => {
+    const response = await fetch(`${apiRoute}/cambiarPassword`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ password, confirmPassword, tokenPassword }),
+    }).then((res) => {
       return res;
     });
     if (response.status === 200) {
@@ -228,15 +238,12 @@ export const obtenerDatosUsuarioFetch = async () => {
 
   if (token) {
     try {
-      const response = await fetch(
-        'https://localhost:8080/gest-edu/api/usuario/perfil',
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${apiRoute}/usuario/perfil`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!response.ok) {
         // Manejar errores HTTP
         console.error(`HTTP Error: ${response.status}`);
@@ -287,3 +294,21 @@ export const validarCertificadoFetch = async (codigo: string) => {
     return null;
   }
 };
+export const getAsignaturasCarrera = async (id: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/carreras/${id}/asignaturas`, {
+      method: 'GET',
+      headers: {
+        Authotization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  }
+};
+

@@ -17,12 +17,7 @@ export default function EstudiantePage() {
   return (
     <div className='relative box-border size-full justify-center overflow-auto md:w-2/3'>
       <h1 className='text-center font-bold'>Estudiantes</h1>
-      <List
-        isEditableDocentes={false}
-        rows={rows}
-        rowsLoading={rowsLoading}
-        columnsType='estudiante'
-      />
+      <List rows={rows} rowsLoading={rowsLoading} columnsType='estudiante' />
     </div>
   );
 }

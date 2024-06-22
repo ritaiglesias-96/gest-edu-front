@@ -252,8 +252,8 @@ export type Calificacion = {
 };
 
 export type CalificacionExamen = {
-  estudianteId: string,
-  calificacion: string
+  estudianteId: string;
+  calificacion: string;
 };
 export type CarreraAsignaturas = {
   carrera: Carrera;
@@ -293,8 +293,8 @@ export interface SolicitudTitulo {
     nombre: string;
     apellido: string;
     email: string;
-  }
-};
+  };
+}
 
 export interface ExamenFlattened {
   id: number;
@@ -316,7 +316,7 @@ export type Certificado = {
   codigoValidacion: string;
   fecha: string;
   estudiante: Estudiante;
-}
+};
 
 export type TramiteEstudiante = {
   id: string;
@@ -327,7 +327,7 @@ export type TramiteEstudiante = {
   estado: string;
   fechaCreacion: string;
   fechaActualizacion: string;
-}
+};
 
 export type Certiticado = {
   id: string;
@@ -337,10 +337,10 @@ export type Certiticado = {
   estudiante: Estudiante;  
 }
 
-export interface CursoHorario{//} = {
+export interface CursoHorario{
   cursoId: number;
   fechaInicio: string;
-  fechaFin: string
+  fechaFin: string;
   diasPrevInsc: number;
   estado: string;
   asignaturaNombre: string;
@@ -349,11 +349,19 @@ export interface CursoHorario{//} = {
   //horarios: HorarioCurso[];
 }
 
-export interface ActividadUsuario{
+export interface ActividadUsuario {
   id: number;
   fecha: string;
   tipoActividad: string;
   descripcion: string;
 }
+
+export type ActaExamen = {
+  id: number;
+  fecha: string;
+  inscriptos: Estudiante[];
+  asignaturaNombre: string;
+  docentes: Docente[];
+};
 
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
