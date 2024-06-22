@@ -14,7 +14,6 @@ import {
 import { GridRowModel } from '@mui/x-data-grid/models/gridRows';
 import { HorarioCurso } from '@/lib/definitions';
 import { getCarrera } from '../coordinador/actions';
-import { response } from 'express';
 
 const apiRoute = process.env.BACK_API;
 
@@ -324,6 +323,7 @@ export async function getSolicitudesInscripcionCarreras() {
       {
         method: 'GET',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
@@ -343,10 +343,11 @@ export async function aprobarSolicitudInscripcionCarrera(tramiteId: string) {
   const token = authToken();
   if (token) {
     const response = await fetch(
-      `${apiRoute}/tramites/aprobar-tramite-solicitud-titulo/${tramiteId}`,
+      `${apiRoute}/tramites/aprobar-tramite-inscripcion-carrera/${tramiteId}`,
       {
         method: 'PUT',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
@@ -368,15 +369,17 @@ export async function rechazarSolicitudInscripcionCarrera(
   const token = authToken();
   if (token) {
     const response = await fetch(
-      `${apiRoute}/tramites/rechazar-tramite-solicitud-titulo/${tramiteId}`,
+      `${apiRoute}/tramites/rechazar-tramite-inscripcion-carrera/${tramiteId}`,
       {
         method: 'PUT',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ motivoRechazo }),
       }
     );
+    console.log(response);
     if (response.ok) {
       return response.json();
     } else {
@@ -393,6 +396,7 @@ export const getAsignatura = async (id: string) => {
     const response = await fetch(`${apiRoute}/asignaturas/${id}`, {
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         Authotization: `Bearer ${token}`,
       },
     });
@@ -413,6 +417,7 @@ export const getExamenesAsignaturaVigentes = async (asignaturaId: string) => {
       {
         method: 'GET',
         headers: {
+          'Content-Type': 'application/json',
           Authotization: `Bearer ${token}`,
         },
       }
@@ -727,15 +732,12 @@ export async function getCursosHorariosCarrera(carreraId: string) {
 export async function getHorariosCurso(cursoId: string) {
   const token = authToken();
   if (token) {
-    const response = await fetch(
-      `${apiRoute}/cursos/${cursoId}/horarios`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${apiRoute}/cursos/${cursoId}/horarios`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (response.ok) {
       const data = await response.json();
       return data.content || []; // Devolvemos el contenido o un array vacío

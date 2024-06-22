@@ -36,12 +36,11 @@ export default function AltaAsignaturaPage() {
           label='Nombre'
         ></InputField>
         <div id='nombre-error' aria-live='polite' aria-atomic='true'>
-          {alta?.errors?.nombre &&
-            alta.errors.nombre.map((error: string) => (
-              <p className='mt-2 text-sm text-garnet' key={error}>
-                {error}
-              </p>
-            ))}
+          {alta?.errors?.nombre?.map((error: string) => (
+            <p className='mt-2 text-sm text-garnet' key={error}>
+              {error}
+            </p>
+          ))}
         </div>
         <InputField
           placeholder='Descripcion'
@@ -50,12 +49,11 @@ export default function AltaAsignaturaPage() {
           label='Descripcion'
         ></InputField>
         <div id='descripcion-error' aria-live='polite' aria-atomic='true'>
-          {alta?.errors?.descripcion &&
-            alta.errors.descripcion.map((error: string) => (
-              <p className='mt-2 text-sm text-garnet' key={error}>
-                {error}
-              </p>
-            ))}
+          {alta?.errors?.descripcion?.map((error: string) => (
+            <p className='mt-2 text-sm text-garnet' key={error}>
+              {error}
+            </p>
+          ))}
         </div>
         <InputField
           placeholder='Creditos'
@@ -64,12 +62,11 @@ export default function AltaAsignaturaPage() {
           label='Creditos'
         ></InputField>
         <div id='creditos-error' aria-live='polite' aria-atomic='true'>
-          {alta?.errors?.creditos &&
-            alta.errors.creditos.map((error: string) => (
-              <p className='mt-2 text-sm text-garnet' key={error}>
-                {error}
-              </p>
-            ))}
+          {alta?.errors?.creditos?.map((error: string) => (
+            <p className='mt-2 text-sm text-garnet' key={error}>
+              {error}
+            </p>
+          ))}
         </div>
         <InputField
           type='number'
@@ -79,12 +76,11 @@ export default function AltaAsignaturaPage() {
           value={parseInt(carreraId)}
         />
         <div id='carreraId-error' aria-live='polite' aria-atomic='true'>
-          {alta?.errors?.creditos &&
-            alta.errors.creditos.map((error: string) => (
-              <p className='mt-2 text-sm text-garnet' key={error}>
-                {error}
-              </p>
-            ))}
+          {alta?.errors?.creditos?.map((error: string) => (
+            <p className='mt-2 text-sm text-garnet' key={error}>
+              {error}
+            </p>
+          ))}
         </div>
         <div className='flex w-2/3 flex-col justify-between gap-1 sm:w-full sm:flex-row'>
           <AltaAsignaturaButton />

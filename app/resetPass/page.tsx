@@ -40,12 +40,11 @@ export default function ResetPaswordPage() {
               <EmailIcon className='h-auto w-6 fill-garnet sm:w-8' />
             </InputField>
             <div id='email-error' aria-live='polite' aria-atomic='true'>
-              {resetPass?.errors?.email &&
-                resetPass.errors.email.map((error: string) => (
-                  <p className='mt-2 text-sm text-garnet' key={error}>
-                    {error}
-                  </p>
-                ))}
+              {resetPass?.errors?.email?.map((error: string) => (
+                <p className='mt-2 text-sm text-garnet' key={error}>
+                  {error}
+                </p>
+              ))}
             </div>
             <RestablecerButton />
           </form>

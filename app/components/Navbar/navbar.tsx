@@ -11,20 +11,23 @@ import Calendar from '@/assets/svg/calendar.svg';
 import Lessons from '@/assets/svg/enroll-lesson.svg';
 import Link from 'next/link';
 import Enrollment from '@/assets/svg/enroll-lesson.svg';
+import List from '@/assets/svg/list.svg';
 import Rule from '@/assets/svg/rule.svg';
+import Subject from '@/assets/svg/subject.svg';
 import { Role } from '@/lib/definitions';
-import React, { useContext, useEffect, useState } from 'react';
-import { SessionContext } from '../../../context/SessionContext';
+import React, { useEffect } from 'react';
 import Button from '../Button/button';
 import { Menu, MenuItem } from '@mui/material';
+import { logoutFetch } from '@/lib/data/actions';
+import { Session, useSession } from '../../../context/SessionContext';
 
-export default function Navbar() {
-  const session = useContext(SessionContext);
-  const [rol, setRol] = useState<Role>(Role.public);
+export default function Navbar({ rol, mail }: { rol: Role; mail: string }) {
+  const context = useSession();
+
   useEffect(() => {
-    if (session.session) setRol(session.session?.rol);
-    else setRol(Role.public);
-  }, [session.session]);
+    context.setSession({ email: mail, rol: rol } as Session);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mail]);
 
   switch (rol) {
     case Role.admin:
@@ -56,9 +59,8 @@ export default function Navbar() {
 }
 
 function LogoutButton() {
-  const session = useContext(SessionContext);
   return (
-    <form action={session.logout}>
+    <form action={() => logoutFetch()}>
       <button className='flex flex-col gap-1 text-wrap align-middle text-sm'>
         <Logout className='h-auto sm:w-auto' />
         <span>Salir</span>
@@ -79,7 +81,7 @@ function NavbarEstudiante() {
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
           href='/estudiante/solicitudes'
         >
-          <Enrollment className='h-6 self-center sm:w-auto' />
+          <Lessons className='h-6 self-center sm:w-auto' />
           <span>Solicitudes</span>
         </Link>
         <Link
@@ -170,6 +172,13 @@ function NavbarFuncionario() {
         <GestEduIcon />
       </Link>
       <div className='flex flex-row gap-4'>
+        <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/funcionario/actas'
+        >
+          <List className='h-6 sm:w-auto ' style={{ fill: 'black' }} />
+          <span>Actas</span>
+        </Link>
         <MenuCalificaciones />
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
@@ -189,7 +198,7 @@ function NavbarFuncionario() {
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
           href='/funcionario/inscripciones'
         >
-          <Enrollment className='h-6 sm:w-auto' />
+          <Lessons className='h-6 sm:w-auto' />
           <span>Inscripciones</span>
         </Link>
         <Link
@@ -219,11 +228,11 @@ function MenuCalificaciones() {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = (opcion: string) => {
-    if(opcion === 'cursos')
+    if (opcion === 'cursos')
       window.location.href = `/funcionario/calificaciones/cursos`;
-    else if(opcion === 'examenes')
+    else if (opcion === 'examenes')
       window.location.href = `/funcionario/calificaciones/examenes`;
-      setAnchorEl(null);
+    setAnchorEl(null);
   };
 
   return (
@@ -261,7 +270,7 @@ function MenuConsulta() {
     if (opcion === 'horarios') {
       window.location.href = `/estudiante/horarios`;
     }
-    if(opcion === 'tramites'){
+    if (opcion === 'tramites') {
       window.location.href = `/estudiante/tramites`;
     }
     setAnchorEl(null);
