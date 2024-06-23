@@ -23,7 +23,7 @@ export default function ResolverSolicitudPage({
   const [carrera, setCarrera] = useState<Carrera>();
   const [isOpen, setIsOpen] = useState(false);
   const [isModalRechazo, setIsModalRechazo] = useState(false);
-  const [isAprobar, setIsAprobar] = useState<Boolean>();
+  const [isAprobar, setIsAprobar] = useState<boolean>();
   const [alertOk, setAlertOk] = useState(false);
   const [motivoRechazo, setMotivoRechazo] = useState('');
 
@@ -39,6 +39,7 @@ export default function ResolverSolicitudPage({
         setCarrera(data);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

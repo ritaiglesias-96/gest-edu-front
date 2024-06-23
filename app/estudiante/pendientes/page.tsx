@@ -67,6 +67,7 @@ export default function ConsultarCarreras() {
         console.log(carrerasAsignaturas);
       });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cargarPendientes]);
 
   return (
