@@ -16,7 +16,11 @@ const ActaExamenPDF: FC<Props> = ({ acta }) => {
     doc.setFont('helvetica', 'italic');
     doc.setTextColor(100); // Color gris
     doc.setFontSize(12);
-    doc.text(`Fecha de Emisión: ${new Date().toLocaleDateString('es-ES')}`, 130, 20);
+    doc.text(
+      `Fecha de Emisión: ${new Date().toLocaleDateString('es-ES')}`,
+      130,
+      20
+    );
 
     // Configurar estilos y contenido del PDF
     doc.setFontSize(20);
@@ -32,13 +36,21 @@ const ActaExamenPDF: FC<Props> = ({ acta }) => {
     doc.setFont('helvetica', 'normal');
     doc.text('Docentes:', 20, 90);
     acta.docentes.forEach((docente, index) => {
-      doc.text(`${index + 1}. ${docente.nombre} ${docente.apellido}`, 20, 100 + (index * 10));
+      doc.text(
+        `${index + 1}. ${docente.nombre} ${docente.apellido}`,
+        20,
+        100 + index * 10
+      );
     });
 
     doc.text('Estudiantes Inscriptos:', 20, 130);
     acta.inscriptos.forEach((estudiante, index) => {
-      const y = 140 + (index * 10);
-      doc.text(`${index + 1}. ${estudiante.nombre} ${estudiante.apellido} - CI: ${estudiante.ci}`, 20, y);
+      const y = 140 + index * 10;
+      doc.text(
+        `${index + 1}. ${estudiante.nombre} ${estudiante.apellido} - CI: ${estudiante.ci}`,
+        20,
+        y
+      );
       doc.text('Calificación:', 160, y); // Espacio para calificación
     });
 
@@ -60,7 +72,7 @@ const ActaExamenPDF: FC<Props> = ({ acta }) => {
   };
 
   return (
-    <div className="flex justify-center mt-8">
+    <div className='mt-8 flex justify-center'>
       <Button styling='primary' onClick={generatePDF}>
         <div className='flex items-center'>
           <Download className='lg:w-7' />

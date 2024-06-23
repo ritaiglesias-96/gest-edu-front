@@ -44,12 +44,12 @@ export default function CalificacionCursoPage({
     const fetch = async () => {
       const existeCursos = await getCursosCarrera(params.id);
       if (existeCursos) {
-        const cursos = existeCursos.cursos;        
+        const cursos = existeCursos.cursos;
         const crusosAsignarua: CursoAsignatura[] = [];
 
-        cursos.map((c: Curso) =>{
-          asignaturas.map((a: Asignatura)=>{
-            if(c.asignaturaId === a.id){
+        cursos.map((c: Curso) => {
+          asignaturas.map((a: Asignatura) => {
+            if (c.asignaturaId === a.id) {
               const ca: CursoAsignatura = {
                 id: c.id,
                 fechaInicio: convertirFecha(c.fechaInicio),
@@ -60,11 +60,11 @@ export default function CalificacionCursoPage({
                 nombreAsignatura: a.nombre,
                 docenteId: c.docenteId,
               };
-              crusosAsignarua.push(ca);              
+              crusosAsignarua.push(ca);
             }
           });
         });
-        
+
         console.log(crusosAsignarua);
         setRows(crusosAsignarua);
         setRowsLoading(false);
@@ -73,6 +73,7 @@ export default function CalificacionCursoPage({
       }
     };
     fetch().finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asignaturas]);
 
   if (loading) {

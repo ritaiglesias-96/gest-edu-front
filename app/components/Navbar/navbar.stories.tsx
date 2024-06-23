@@ -18,29 +18,34 @@ type Story = StoryObj<typeof meta>;
 export const Public: Story = {
   args: {
     rol: Role.public,
+    mail: '',
   },
 };
 
 export const Admin: Story = {
   args: {
     rol: Role.admin,
+    mail: '',
   },
 };
 
 export const Estudiante: Story = {
   args: {
     rol: Role.estudiante,
+    mail: '',
   },
 };
 
 export const Coordinador: Story = {
   args: {
     rol: Role.coordinador,
+    mail: '',
   },
 };
 
 export const Funcionario: Story = {
   args: {
     rol: Role.funcionario,
+    mail: '',
   },
 };
