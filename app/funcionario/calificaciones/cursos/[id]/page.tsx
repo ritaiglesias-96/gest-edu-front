@@ -1,9 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import {
-  getCarrera,
-  getCarreraYAsignatura,
-} from '@/lib/data/coordinador/actions';
+import { getCarreraYAsignatura } from '@/lib/data/coordinador/actions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
 import Button from '@/components/Button/button';

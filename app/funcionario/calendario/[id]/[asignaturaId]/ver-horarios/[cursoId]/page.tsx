@@ -11,7 +11,6 @@ export default function HorariosPage({
 }: {
   params: { cursoId: string };
 }) {
-  const [horariosCurso, setHorariosCurso] = useState<HorarioCurso[]>([]);
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState<any[]>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
