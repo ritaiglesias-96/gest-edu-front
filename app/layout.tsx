@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { poppins } from './styles/fonts';
-import './styles/globals.css';
+import './globals.css';
 import Navbar from './components/Navbar/navbar';
 import { authMail, authRol } from './utils/auth';
 import { SessionProvider } from '../context/SessionContext';
