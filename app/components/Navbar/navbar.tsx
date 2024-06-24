@@ -13,11 +13,8 @@ import Link from 'next/link';
 import Enrollment from '@/assets/svg/enroll-lesson.svg';
 import List from '@/assets/svg/list.svg';
 import Rule from '@/assets/svg/rule.svg';
-<<<<<<< HEAD
 import Grading from '@/assets/svg/grading.svg';
-=======
 import Subject from '@/assets/svg/subject.svg';
->>>>>>> 495690f243a38302d59b733f0ce76b7c64cd7a35
 import { Role } from '@/lib/definitions';
 import React, { useEffect } from 'react';
 import Button from '../Button/button';
