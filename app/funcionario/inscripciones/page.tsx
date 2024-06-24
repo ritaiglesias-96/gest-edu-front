@@ -50,11 +50,11 @@ export default function InscripcionesPage() {
   }, []);
 
   return (
-    <div className='relative box-border size-full justify-center overflow-auto md:w-2/3'>
+    <div className='relative box-border size-full justify-center md:w-2/3'>
       <div className='h-fit w-full'>
         <h3 className='text-center font-bold text-ivory'>Inscripciones</h3>
       </div>
-      <Box>
+      <Box className='min-h-full'>
         <Tabs defaultValue={1}>
           <TabsList className='mb-4 flex size-full content-between items-center justify-center rounded-xl bg-garnet shadow-lg'>
             <Tab

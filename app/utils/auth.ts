@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 
 export const isAuthenticated = () => {
   const cookie = cookies().get('token');
-  return cookie && cookie.value !== '' ? true : false;
+  return !!(cookie && cookie.value !== '');
 };
 
 export const authRol = () => {
@@ -14,6 +14,16 @@ export const authRol = () => {
     return roles as Role;
   } else {
     return Role.public;
+  }
+};
+
+export const authMail = () => {
+  const cookie = cookies().get('token');
+  if (cookie && cookie.value !== '') {
+    const { sub } = decodeJwt(cookie.value);
+    return sub as string;
+  } else {
+    return '';
   }
 };
 

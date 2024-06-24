@@ -1,7 +1,12 @@
 'use server';
 
 import { authToken } from '@/utils/auth';
-import { Calificacion, CalificacionExamen, DocenteState, PeriodoExamenState } from '@/lib/definitions';
+import {
+  Calificacion,
+  CalificacionExamen,
+  DocenteState,
+  PeriodoExamenState,
+} from '@/lib/definitions';
 import {
   AltaDocenteFormSchema,
   RegistrarPeriopdoExamenFormSchema,
@@ -9,7 +14,6 @@ import {
 import { GridRowModel } from '@mui/x-data-grid/models/gridRows';
 import { HorarioCurso } from '@/lib/definitions';
 import { getCarrera } from '../coordinador/actions';
-import { response } from 'express';
 
 const apiRoute = process.env.BACK_API;
 
@@ -166,20 +170,20 @@ export async function calificarCursoFetch(
   }
 }
 
-export async function calificarExamenFetch(id: number, califiaciones: CalificacionExamen[]) {
+export async function calificarExamenFetch(
+  id: number,
+  califiaciones: CalificacionExamen[]
+) {
   const token = authToken();
-  if(token){
-    const response = await fetch(
-      `${apiRoute}/examenes/${id}/calificar`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(califiaciones),
-      }
-    );
+  if (token) {
+    const response = await fetch(`${apiRoute}/examenes/${id}/calificar`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(califiaciones),
+    });
     if (response.ok) {
       return {
         message: 'Calificaciones guardadas con exito. 200',
@@ -210,14 +214,17 @@ export async function getEstudiantesPorCurso(id: string) {
 
 export async function getEstudiantesInscriptosExamen(id: string) {
   const token = authToken();
-  const estudiantes = await fetch(`${apiRoute}/examenes/${id}/estudiantes-inscriptos`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const estudiantes = await fetch(
+    `${apiRoute}/examenes/${id}/estudiantes-inscriptos`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   if (estudiantes.ok) {
-    const estudiantesJson = await estudiantes.json();      
+    const estudiantesJson = await estudiantes.json();
     return { estudiantes: estudiantesJson };
   } else {
     return { estudiantesJson: [] };
@@ -316,6 +323,7 @@ export async function getSolicitudesInscripcionCarreras() {
       {
         method: 'GET',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
@@ -335,10 +343,11 @@ export async function aprobarSolicitudInscripcionCarrera(tramiteId: string) {
   const token = authToken();
   if (token) {
     const response = await fetch(
-      `${apiRoute}/tramites/aprobar-tramite-solicitud-titulo/${tramiteId}`,
+      `${apiRoute}/tramites/aprobar-tramite-inscripcion-carrera/${tramiteId}`,
       {
         method: 'PUT',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
@@ -360,15 +369,17 @@ export async function rechazarSolicitudInscripcionCarrera(
   const token = authToken();
   if (token) {
     const response = await fetch(
-      `${apiRoute}/tramites/rechazar-tramite-solicitud-titulo/${tramiteId}`,
+      `${apiRoute}/tramites/rechazar-tramite-inscripcion-carrera/${tramiteId}`,
       {
         method: 'PUT',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ motivoRechazo }),
       }
     );
+    console.log(response);
     if (response.ok) {
       return response.json();
     } else {
@@ -385,6 +396,7 @@ export const getAsignatura = async (id: string) => {
     const response = await fetch(`${apiRoute}/asignaturas/${id}`, {
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         Authotization: `Bearer ${token}`,
       },
     });
@@ -405,6 +417,7 @@ export const getExamenesAsignaturaVigentes = async (asignaturaId: string) => {
       {
         method: 'GET',
         headers: {
+          'Content-Type': 'application/json',
           Authotization: `Bearer ${token}`,
         },
       }
@@ -513,7 +526,7 @@ export async function geExamenesPendientesCalificacion() {
       },
     });
     if (examenes.ok) {
-      const examenesJson = await examenes.json();      
+      const examenesJson = await examenes.json();
       return { examenes: examenesJson.content };
     } else {
       return { examenesJson: [] };
@@ -631,15 +644,12 @@ export async function getCursosHorariosCarrera(carreraId: string) {
 export async function getHorariosCurso(cursoId: string) {
   const token = authToken();
   if (token) {
-    const response = await fetch(
-      `${apiRoute}/cursos/${cursoId}/horarios`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${apiRoute}/cursos/${cursoId}/horarios`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (response.ok) {
       const data = await response.json();
       return data.content || []; // Devolvemos el contenido o un array vacío

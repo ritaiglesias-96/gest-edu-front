@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react';
 
 export default function EstudiantesInscriptosPage({
   params,
-}: {
+}: Readonly<{
   params: { id: string };
-}) {
+}>) {
   const [rows, setRows] = useState([]);
   const [rowsLoading, setRowsLoading] = useState(true);
 
@@ -41,12 +41,7 @@ export default function EstudiantesInscriptosPage({
   return (
     <div className='relative box-border size-full justify-center overflow-auto md:w-2/3'>
       <h1 className='text-center font-bold'>Estudiantes</h1>
-      <List
-        isEditableDocentes={false}
-        rows={rows}
-        rowsLoading={rowsLoading}
-        columnsType='inscripto'
-      />
+      <List rows={rows} rowsLoading={rowsLoading} columnsType='inscripto' />
     </div>
   );
 }

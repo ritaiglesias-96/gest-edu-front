@@ -19,9 +19,9 @@ import InputField from '@/components/InputField/inputField';
 
 export default function AsignaturaPage({
   params,
-}: {
+}: Readonly<{
   params: { id: string; asignaturaId: string };
-}) {
+}>) {
   const router = useRouter();
   const [asignatura, setAsignatura] = useState<Asignatura>();
   const [fallout, setFallout] = useState(false);
@@ -140,7 +140,6 @@ function EditAsignatura({
   setAsignatura: (asignatura: Asignatura) => void;
   id: string;
 }) {
-  const router = useRouter();
   const [editForm, dispatch] = useFormState(editAsignatura, initialState);
   useEffect(() => {
     if (editForm.message.includes('200')) {
@@ -178,12 +177,11 @@ function EditAsignatura({
             label='Nombre'
           ></InputField>
           <div id='nombre-error' aria-live='polite' aria-atomic='true'>
-            {editForm?.errors?.nombre &&
-              editForm.errors.nombre.map((error: string) => (
-                <p className='mt-2 text-sm text-garnet' key={error}>
-                  {error}
-                </p>
-              ))}
+            {editForm?.errors?.nombre?.map((error: string) => (
+              <p className='mt-2 text-sm text-garnet' key={error}>
+                {error}
+              </p>
+            ))}
           </div>
           <InputField
             placeholder='Descripcion'
@@ -192,12 +190,11 @@ function EditAsignatura({
             label='Descripcion'
           ></InputField>
           <div id='descripcion-error' aria-live='polite' aria-atomic='true'>
-            {editForm?.errors?.descripcion &&
-              editForm.errors.descripcion.map((error: string) => (
-                <p className='mt-2 text-sm text-garnet' key={error}>
-                  {error}
-                </p>
-              ))}
+            {editForm?.errors?.descripcion?.map((error: string) => (
+              <p className='mt-2 text-sm text-garnet' key={error}>
+                {error}
+              </p>
+            ))}
           </div>
           <InputField
             type='number'
@@ -207,12 +204,11 @@ function EditAsignatura({
             value={parseInt(id)}
           />
           <div id='carreraId-error' aria-live='polite' aria-atomic='true'>
-            {editForm?.errors?.carreraId &&
-              editForm.errors.carreraId.map((error: string) => (
-                <p className='mt-2 text-sm text-garnet' key={error}>
-                  {error}
-                </p>
-              ))}
+            {editForm?.errors?.carreraId?.map((error: string) => (
+              <p className='mt-2 text-sm text-garnet' key={error}>
+                {error}
+              </p>
+            ))}
           </div>
           <div className='flex w-2/3 flex-col items-center gap-1 sm:w-full'>
             <EditButton />
@@ -246,8 +242,8 @@ function SeleccionarPreviatura({
     const fetch = async () => {
       const data = await getNoPrevituras(asignaturaId);
       if (data) {
-        for (let i = 0; i < data.length; i++) {
-          data[i].idAsignatura = asignaturaId;
+        for (const element of data) {
+          element.idAsignatura = asignaturaId;
         }
         setRows(data);
         setRowsLoading(false);

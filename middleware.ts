@@ -3,13 +3,23 @@ import { authRol } from '@/utils/auth';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const publicRoutes = ['/ingresar', '/registrarse', '/resetPass', '/'];
+const publicRoutes = [
+  '/ingresar',
+  '/registrarse',
+  '/resetPass',
+  '/',
+  '/resetPass/[token]',
+];
 
 export default function middleware(req: NextRequest) {
   const rol = authRol();
   const isLoggedIn = rol !== Role.public;
 
-  if (!isLoggedIn && !publicRoutes.includes(req.nextUrl.pathname)) {
+  if (
+    !isLoggedIn &&
+    !publicRoutes.includes(req.nextUrl.pathname) &&
+    !req.nextUrl.pathname.includes('resetPass')
+  ) {
     const absoluteURL = new URL('/', req.nextUrl.origin);
     return NextResponse.redirect(absoluteURL.toString());
   } else if (req.nextUrl.pathname === '/logout') {

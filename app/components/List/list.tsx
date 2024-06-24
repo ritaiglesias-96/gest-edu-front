@@ -7,16 +7,13 @@ import {
   usuarioColumns,
   estudianteColumns,
   periodosExamenColumns,
-  registroExamenColumns,
   inscriptoColumns,
   cursosColumns,
-  carreraFuncionarioColumns,
   asignaturaFuncionarioColumns,
   calificarCursosColumns,
   carrerasEstudiante,
   asignaturaExamenColumns,
   asignaturaCursoColumns,
-  examenColumns,
   carreraCalificacionesColumns,
   calificarExamenesColumns,
   datosEstudianteColumns,
@@ -28,7 +25,11 @@ import {
   asignaturaBajaCursoColumns,
   consultaTramitesEstudiante,
   solicitudTituloColumns,
-  horariosColumns
+  actasFuncionarioColumn,
+  actasAsignaturasFuncionarioColumn,
+  actaExamenColumn,
+  horariosColumns,
+  actividadUsuarioColumns,
 } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -93,30 +94,25 @@ import {
   solicitarCertificadoFetch,
   solicitarTituloFetch,
 } from '@/lib/data/estudiante/actions';
-import { SessionContext } from '../../../context/SessionContext';
+import { SessionCtx } from '../../../context/SessionContext';
 import { convertirFecha } from '@/utils/utils';
 import InputField from '../InputField/inputField';
 import { obtenerDatosUsuarioFetch } from '@/lib/data/actions';
-
 
 type columnType =
   | 'carrera'
   | 'asignatura'
   | 'usuario'
-  | 'docente'
   | 'estudiante'
   | 'carreras-estudiante'
   | 'datos-estudiante'
   | 'asignatura-examenes'
   | 'asignatura-curso'
-  | 'examen'
   | 'inscripto'
   | 'previtaturas'
   | 'noPrevitaturas'
-  | 'registroExamen'
   | 'periodosExamen'
   | 'cursos'
-  | 'carreraFuncionario'
   | 'asignaturaFuncionario'
   | 'carrera-calificaciones'
   | 'calficar-examenes'
@@ -129,7 +125,11 @@ type columnType =
   | 'asignaturaBajaCurso'
   | 'consultaTramitesEstudiante'
   | 'solicitudTitulo'
+  | 'actasFuncionario'
+  | 'actasAsignaturasFuncionario'
+  | 'actaExamen'
   | 'horarios'
+  | 'actividadUsuario'
   | 'none';
 interface ListProps {
   isEditableDocentes?: boolean;
@@ -161,7 +161,7 @@ export default function List({
   rows,
   rowsLoading,
   columnsType,
-}: Readonly<ListProps>) {
+}: ListProps) {
   let columns: GridColDef[] = [];
   switch (columnsType) {
     case 'carrera':
@@ -191,9 +191,6 @@ export default function List({
     case 'asignatura-curso':
       columns = asignaturaCursoColumns;
       break;
-    case 'examen':
-      columns = examenColumns;
-      break;
     case 'previtaturas':
       columns = previaturasColumns;
       break;
@@ -202,12 +199,6 @@ export default function List({
       break;
     case 'periodosExamen':
       columns = periodosExamenColumns;
-      break;
-    case 'registroExamen':
-      columns = registroExamenColumns;
-      break;
-    case 'carreraFuncionario':
-      columns = carreraFuncionarioColumns;
       break;
     case 'asignaturaFuncionario':
       columns = asignaturaFuncionarioColumns;
@@ -248,8 +239,20 @@ export default function List({
     case 'solicitudTitulo':
       columns = solicitudTituloColumns;
       break;
+    case 'actasFuncionario':
+      columns = actasFuncionarioColumn;
+      break;
+    case 'actasAsignaturasFuncionario':
+      columns = actasAsignaturasFuncionarioColumn;
+      break;
+    case 'actaExamen':
+      columns = actaExamenColumn;
+      break;
     case 'horarios':
       columns = horariosColumns;
+      break;
+    case 'actividadUsuario':
+      columns = actividadUsuarioColumns;
       break;
     default:
       break;
@@ -786,7 +789,7 @@ function InscripcionExamenDataGrid({
   const [alertError, setAlertError] = useState(false);
   const [mensajeError, setMensajeError] = useState('');
 
-  const session = useContext(SessionContext);
+  const session = useContext(SessionCtx);
 
   useEffect(() => {
     if (session.session?.email) {
@@ -983,10 +986,10 @@ function InscripcionExamenDataGrid({
 function ApproveRejectDataGrid({
   rowsParent,
   rowsLoadingParent,
-}: Readonly<{
+}: {
   rowsParent: GridRowsProp;
   rowsLoadingParent: boolean;
-}>) {
+}) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -1009,6 +1012,10 @@ function ApproveRejectDataGrid({
         if (data) {
           if (rows) setRows(rows.filter((row) => row.id !== tramiteId));
         }
+        setRowModesModel({
+          ...rowModesModel,
+          [tramiteId as number]: { mode: GridRowModes.View },
+        });
       };
       rechazarInscripcion();
     }
@@ -1651,8 +1658,6 @@ function SolicitudTramiteDataGrid({
     setTimeout(setAlertHelper, 5000);
   };
 
-  const downloadCertificado = () => {};
-
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID' },
     {
@@ -1980,7 +1985,7 @@ function InscripcionCarreraDataGrid({
                 <Button
                   styling='primary'
                   className='lg:w-20'
-                  onClick={() => inscribirseCarrera(carrera!.id!.toString())}
+                  onClick={() => inscribirseCarrera(carrera!.id.toString())}
                 >
                   Si
                 </Button>

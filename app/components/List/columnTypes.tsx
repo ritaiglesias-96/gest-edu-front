@@ -7,15 +7,12 @@ import Search from '@/assets/svg/search.svg';
 import Grading from '@/assets/svg/grading.svg';
 import Subject from '@/assets/svg/subject.svg';
 import Close from '@/assets/svg/close.svg';
+import List from '@/assets/svg/list.svg';
 import Link from 'next/link';
 import Add from '@/assets/svg/add.svg';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
 import Button from '../Button/button';
 import { bajaCursoFetch } from '@/lib/data/estudiante/actions';
-import Evaluate from '@/assets/svg/rule.svg';
-import { Grade } from '@mui/icons-material';
-import { School } from '@mui/icons-material';
-import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedReactNode, Key } from 'react';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -159,10 +156,24 @@ export const usuarioColumns: GridColDef[] = [
     headerAlign: 'center',
     renderCell: (params) => (
       <Link
-        href={`${window.location.pathname}/${params.row.ci}`}
+        href={`${window.location.pathname}/detalles/${params.row.ci}`}
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+  {
+    field: 'actividad',
+    headerName: 'Actividad',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.row.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <Schedule className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
@@ -353,41 +364,6 @@ export const periodosExamenColumns: GridColDef[] = [
   },
 ];
 
-export const registroExamenColumns: GridColDef[] = [
-  { field: 'id', headerName: 'ID' },
-  {
-    field: 'fecha',
-    headerName: 'Fecha',
-  },
-];
-
-export const examenColumns: GridColDef[] = [
-  { field: 'id', headerName: 'ID' },
-  {
-    field: 'fecha',
-    headerName: 'Fecha',
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-  },
-  {
-    field: 'inscripcion',
-    headerName: 'Inscripcion',
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}`}
-        onClick={() =>
-          sessionStorage.setItem('examen_id', params.id.toString())
-        }
-        className='mx-auto flex size-fit'
-      >
-        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
-  },
-];
-
 export const inscriptoColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   { field: 'ci', headerName: 'Cédula' },
@@ -450,39 +426,6 @@ export const calificarCursosColumns: GridColDef[] = [
     renderCell: (params) => (
       <Link
         href={`${window.location.pathname}/${params.row.id}`}
-        className='mx-auto flex size-fit'
-      >
-        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
-  },
-];
-
-export const carreraFuncionarioColumns: GridColDef[] = [
-  { field: 'id', headerName: 'ID' },
-  {
-    field: 'nombre',
-    headerName: 'Nombre',
-    cellClassName: 'w-full',
-  },
-  {
-    field: 'duracionAnios',
-    headerName: 'Duracion',
-    type: 'number',
-  },
-  {
-    field: 'creditos',
-    headerName: 'Creditos',
-    type: 'number',
-  },
-  {
-    field: 'detalles',
-    headerName: 'Detalles',
-    cellClassName: 'flex items-center self-end',
-    headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.id}`}
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
@@ -578,7 +521,6 @@ export const solicitudTituloColumns: GridColDef[] = [
     ),
   },
 ];
-
 
 export const carreraCalificacionesColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -803,17 +745,133 @@ export const consultaTramitesEstudiante: GridColDef[] = [
   {
     field: 'estado',
     headerName: 'Estado',
-    renderCell: (params) => (
-      <span>{params.row.estado}</span>
-    )       
+    renderCell: (params) => <span>{params.row.estado}</span>,
   },
   { field: 'fechaCreacion', headerName: 'Fecha' },
   { field: 'fechaActualizacion', headerName: 'Actualizado' },
+];
+
+export const actasFuncionarioColumn: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+    cellClassName: 'w-full',
+  },
+  {
+    field: 'duracionAnios',
+    headerName: 'Duracion',
+    type: 'number',
+  },
+  {
+    field: 'creditos',
+    headerName: 'Creditos',
+    type: 'number',
+  },
+  {
+    field: 'asignaturas',
+    headerName: 'Asignaturas',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        onClick={() =>
+          sessionStorage.setItem('carrera_id', params.id.toString())
+        }
+        className='mx-auto flex size-fit'
+      >
+        <List className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
 ];
 
 export const horariosColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   { field: 'dia', headerName: 'Dia' },
   { field: 'horaInicio', headerName: 'Hora inicio' },
-  { field: 'horaFin', headerName: 'Hora fin' }
+  { field: 'horaFin', headerName: 'Hora fin' },
+];
+
+export const actividadUsuarioColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'fecha', headerName: 'Fecha' },
+  { field: 'hora', headerName: 'Hora' },
+  { field: 'tipoActividad', headerName: 'Tipo de actividad' },
+  { field: 'descripcion', headerName: 'Descripción' },
+];
+
+export const actasAsignaturasFuncionarioColumn: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'nombre',
+    headerName: 'Nombre',
+  },
+  {
+    field: 'descripcion',
+    headerName: 'Descripcion',
+  },
+  {
+    field: 'creditos',
+    headerName: 'Creditos',
+    type: 'number',
+  },
+  {
+    field: 'semestrePlanEstudio',
+    headerName: 'Semestre',
+    type: 'number',
+  },
+  {
+    field: 'curso',
+    headerName: 'Curso',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}/curso`}
+        className='mx-auto flex size-fit'
+      >
+        <List className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+  {
+    field: 'examen',
+    headerName: 'Examen',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}/examen`}
+        className='mx-auto flex size-fit'
+      >
+        <List className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];
+
+export const actaExamenColumn: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'fecha',
+    headerName: 'Fecha',
+  },
+  { field: 'asignaturaNombre', headerName: 'Asignatura' },
+
+  {
+    field: 'acta',
+    headerName: 'Acta',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <List className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
 ];

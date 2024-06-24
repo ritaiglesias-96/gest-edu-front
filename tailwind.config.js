@@ -1,4 +1,4 @@
-import { grey, indigo } from '@mui/material/colors';
+const { grey, indigo } = require('@mui/material/colors');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {

@@ -84,9 +84,9 @@ function PlanDeEstudioExistente({ id }: { id: string }) {
       }
     };
     fetch().finally(() => setLoading(false));
-    for (let index = 0; index < asignaturas.length; index++) {
-      if (asignaturas[index].semestrePlanEstudio > columns) {
-        setColumns(asignaturas[index].semestrePlanEstudio);
+    for (const element of asignaturas) {
+      if (element.semestrePlanEstudio > columns) {
+        setColumns(element.semestrePlanEstudio);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -159,8 +159,8 @@ function PlanDeEstudioRegistro({ id }: { id: string }) {
       }
     };
     fetch().finally(() => setLoading(false));
-    for (let index = 0; index < asignaturas.length; index++) {
-      const asignatura: Asignatura = asignaturas[index];
+    for (const element of asignaturas) {
+      const asignatura: Asignatura = element;
       if (asignatura.semestrePlanEstudio > columns) {
         setColumns(asignatura.semestrePlanEstudio);
       }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import List from '@/components/List/list';
 import {
@@ -5,8 +6,7 @@ import {
   obtenerExamenesVigentes,
 } from '@/lib/data/coordinador/actions';
 import { Asignatura } from '@/lib/definitions';
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function ConfirmarInscripcionExamen() {
   const [asignatura, setAsignatura] = useState<Asignatura>();
@@ -17,9 +17,6 @@ export default function ConfirmarInscripcionExamen() {
   const [examenes, setExamenes] = useState([]);
   const [rows, setRows] = useState([]);
   const [rowsLoading, setRowsLoading] = useState(true);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     let id = sessionStorage.getItem('asignatura_id');
@@ -45,7 +42,7 @@ export default function ConfirmarInscripcionExamen() {
     obtenerExamenesVigentes(asignaturaId).then((data) => {
       if (data) {
         setRows(data.exmanes ? data.exmanes : []);
-        setExamenes(data.exmanes);        
+        setExamenes(data.exmanes);
       }
       setRowsLoading(false);
     });

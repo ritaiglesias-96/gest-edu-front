@@ -25,6 +25,17 @@ export const CarreraFormSchema = z.object({
     invalid_type_error: 'Ingrese un descripcion valida',
     required_error: 'Campo requerido',
   }),
+});
+
+export const CarreraEditFormSchema = z.object({
+  nombre: z.string({
+    invalid_type_error: 'Ingrese un nombre valido',
+    required_error: 'Campo requerido',
+  }),
+  descripcion: z.string({
+    invalid_type_error: 'Ingrese un descripcion valida',
+    required_error: 'Campo requerido',
+  }),
   carreraId: z.string(),
 });
 
