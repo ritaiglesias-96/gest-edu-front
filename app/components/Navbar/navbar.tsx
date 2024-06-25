@@ -14,6 +14,7 @@ import Link from 'next/link';
 import Enrollment from '@/assets/svg/enroll-lesson.svg';
 import List from '@/assets/svg/list.svg';
 import Rule from '@/assets/svg/rule.svg';
+import Grading from '@/assets/svg/grading.svg';
 import Subject from '@/assets/svg/subject.svg';
 import { Role } from '@/lib/definitions';
 import React, { useEffect } from 'react';
@@ -84,6 +85,13 @@ function NavbarEstudiante() {
         <GestEduIcon />
       </Link>
       <div className='flex flex-row gap-6'>
+        <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/estudiante/instructivos'
+        >
+          <Rule className='h-6 self-center sm:w-auto' />
+          <span>Instructivos</span>
+        </Link>
         <MenuConsulta />
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
@@ -287,7 +295,7 @@ function MenuConsulta() {
   return (
     <>
       <Button styling='link' onClick={handleClick}>
-        <Lessons className='h-6 self-center sm:w-auto' />
+        <Grading className='h-6 self-center sm:w-auto' />
         <span className='text-sm'>Consultar</span>
       </Button>
       <Menu
