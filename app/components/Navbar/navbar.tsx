@@ -9,6 +9,7 @@ import Hat from '@/assets/svg/school.svg';
 import Pencil from '@/assets/svg/edit.svg';
 import Calendar from '@/assets/svg/calendar.svg';
 import Lessons from '@/assets/svg/enroll-lesson.svg';
+import Done from '@/assets/svg/done.svg';
 import Link from 'next/link';
 import Enrollment from '@/assets/svg/enroll-lesson.svg';
 import List from '@/assets/svg/list.svg';
@@ -45,6 +46,13 @@ export default function Navbar({ rol, mail }: { rol: Role; mail: string }) {
             <GestEduIcon />
           </Link>
           <div className='flex flex-row gap-4'>
+            <Link
+              className='flex flex-col gap-1 text-wrap align-middle text-sm'
+              href='/certificado'
+            >
+              <Done className='h-6 w-auto self-center' />
+              <span>Validar certificado</span>
+            </Link>
             <Link
               className='flex flex-col gap-1 text-wrap align-middle text-sm'
               href='/ingresar'

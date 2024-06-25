@@ -282,6 +282,18 @@ export const getCarreras = async () => {
   }
 };
 
+export const validarCertificadoFetch = async (codigo: string) => {
+  const response = await fetch(`${apiRoute}/validar/${codigo}`, {
+    method: 'GET',
+    headers: {},
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return null;
+  }
+};
 export const getAsignaturasCarrera = async (id: string) => {
   const token = authToken();
   if (token) {
