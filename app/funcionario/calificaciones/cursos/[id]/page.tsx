@@ -1,9 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import {
-  getCarrera,
-  getCarreraYAsignatura,
-} from '@/lib/data/coordinador/actions';
+import { getCarreraYAsignatura } from '@/lib/data/coordinador/actions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
 import Button from '@/components/Button/button';
@@ -76,6 +73,7 @@ export default function CalificacionCursoPage({
       }
     };
     fetch().finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asignaturas]);
 
   useEffect(() => {

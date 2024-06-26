@@ -156,7 +156,7 @@ export const usuarioColumns: GridColDef[] = [
     headerAlign: 'center',
     renderCell: (params) => (
       <Link
-        href={`${window.location.pathname}/${params.row.ci}`}
+        href={`${window.location.pathname}/detalles/${params.row.ci}`}
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
@@ -958,7 +958,7 @@ export const actasAsignaturasFuncionarioColumn: GridColDef[] = [
     headerAlign: 'center',
     renderCell: (params) => (
       <Link
-        href={`${window.location.pathname}/${params.id}/curso`} //TODO RITA ACTA CURSO
+        href={`${window.location.pathname}/${params.id}/curso`}
         className='mx-auto flex size-fit'
       >
         <List className='h-auto w-6 fill-garnet sm:w-8' />

@@ -9,10 +9,12 @@ import Hat from '@/assets/svg/school.svg';
 import Pencil from '@/assets/svg/edit.svg';
 import Calendar from '@/assets/svg/calendar.svg';
 import Lessons from '@/assets/svg/enroll-lesson.svg';
+import Done from '@/assets/svg/done.svg';
 import Link from 'next/link';
 import Enrollment from '@/assets/svg/enroll-lesson.svg';
 import List from '@/assets/svg/list.svg';
 import Rule from '@/assets/svg/rule.svg';
+import Grading from '@/assets/svg/grading.svg';
 import Subject from '@/assets/svg/subject.svg';
 import { Role } from '@/lib/definitions';
 import React, { useEffect } from 'react';
@@ -47,6 +49,13 @@ export default function Navbar({ rol, mail }: { rol: Role; mail: string }) {
           <div className='flex flex-row gap-4'>
             <Link
               className='flex flex-col gap-1 text-wrap align-middle text-sm'
+              href='/certificado'
+            >
+              <Done className='h-6 w-auto self-center' />
+              <span>Validar certificado</span>
+            </Link>
+            <Link
+              className='flex flex-col gap-1 text-wrap align-middle text-sm'
               href='/ingresar'
             >
               <Login className='h-6 w-auto self-center' />
@@ -76,6 +85,13 @@ function NavbarEstudiante() {
         <GestEduIcon />
       </Link>
       <div className='flex flex-row gap-6'>
+        <Link
+          className='flex flex-col gap-1  text-wrap align-middle text-sm'
+          href='/estudiante/instructivos'
+        >
+          <Rule className='h-6 self-center sm:w-auto' />
+          <span>Instructivos</span>
+        </Link>
         <MenuConsulta />
         <Link
           className='flex flex-col gap-1  text-wrap align-middle text-sm'
@@ -279,7 +295,7 @@ function MenuConsulta() {
   return (
     <>
       <Button styling='link' onClick={handleClick}>
-        <Lessons className='h-6 self-center sm:w-auto' />
+        <Grading className='h-6 self-center sm:w-auto' />
         <span className='text-sm'>Consultar</span>
       </Button>
       <Menu

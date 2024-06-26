@@ -6,10 +6,10 @@ const emailGestEdu = process.env.NEXT_PUBLIC_EMAIL_GEST_EDU;
 
 export default function Contacto() {
   return (
-    <div className='absolute right-7 bottom-5 flex justify-end'>
+    <div className='absolute bottom-5 right-7 flex justify-end'>
       <Link href={`mailto:${emailGestEdu}`}>
         <Button styling='pill'>
-          <EmailIcon className='h-auto w-6 vg-ivory sm:w-8' />
+          <EmailIcon className='h-auto w-6 bg-ivory sm:w-8' />
         </Button>
       </Link>
     </div>

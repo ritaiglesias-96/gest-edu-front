@@ -38,7 +38,8 @@ export default function CursoPage({
         }
       });
     }
-  }, [params.examenId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (examen) {
