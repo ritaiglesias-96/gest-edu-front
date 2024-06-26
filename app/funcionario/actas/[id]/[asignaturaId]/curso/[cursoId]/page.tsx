@@ -1,8 +1,8 @@
 'use client';
 
-import ActaExamenPDF from '@/components/DocumentosPDF/ActaExamenPDF';
+import ActaCursoPDF from '@/components/DocumentosPDF/ActaCursoPDF';
 import { getActaCurso } from '@/lib/data/funcionario/actions';
-import { ActaExamen } from '@/lib/definitions';
+import { ActaCurso, Estudiante } from '@/lib/definitions';
 import { Box, CircularProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
 
@@ -11,7 +11,7 @@ export default function ActaCursoPage({
 }: {
   params: { cursoId: string };
 }) {
-  const [actaCurso, setActaCurso] = useState<ActaExamen | null>(null);
+  const [actaCurso, setActaCurso] = useState<ActaCurso | null>(null);
   const [fallout, setFallout] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -22,20 +22,23 @@ export default function ActaCursoPage({
         console.log('🚀 ~ fetch ~ response:', response);
         if (response) {
           const curso = response.curso;
-          const estudiantes = response.inscripciones.map(
-            (inscripcion: any) => inscripcion.estudiante
+          const estudiantes = response.estudiantes.map(
+            (estudiante: Estudiante) => estudiante
           );
-          console.log('🚀 ~ fetch ~ estudiantes:', estudiantes);
-          const docentes = curso.docentes;
-          const asignaturaNombre = curso.asignatura.nombre;
-          const fecha = new Date(curso.fecha).toLocaleDateString('es-ES');
+          const docente = response.docente;
+          const asignaturaNombre = response.asignatura.nombre;
+          const fechaInicio = new Date(curso.fechaInicio).toLocaleDateString(
+            'es-ES'
+          );
+          const fechaFin = new Date(curso.fechaFin).toLocaleDateString('es-ES');
 
-          const acta: ActaExamen = {
+          const acta: ActaCurso = {
             id: curso.id,
-            fecha: fecha,
+            fechaInicio: fechaInicio,
+            fechaFin: fechaFin,
             inscriptos: estudiantes,
             asignaturaNombre: asignaturaNombre,
-            docentes: docentes,
+            docente: docente,
           };
           setActaCurso(acta);
         } else {
@@ -58,7 +61,7 @@ export default function ActaCursoPage({
           <CircularProgress sx={{ color: '#802c2c' }} />
         </Box>
       )}
-      {!loading && <ActaExamenPDF acta={actaCurso!} />}
+      {!loading && <ActaCursoPDF acta={actaCurso!} />}
     </>
   );
 }
