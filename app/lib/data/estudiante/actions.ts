@@ -474,6 +474,24 @@ export async function solicitarCertificadoFetch(id: string) {
   }
 }
 
+export async function solicitarEscolaridadFetch(id: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/estudiantes/${id}/escolaridad`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const escolaridadJson = await response.json();
+      return escolaridadJson;
+    } else {
+      return { message: 'No se pudo obtener el certificado de escolaridad.' };
+    }
+  }
+}
+
 export async function getTramitesEstudiantes() {
   const token = authToken();
   if (token) {
