@@ -18,7 +18,7 @@ export default function ActaCursoPage({
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await getActaCurso(params.cursoId); //TODO HARDCODEADO PQ NO ME DEVUELVE NADA SI USO params.examenId pq no hay datos
+        const response = await getActaCurso(params.cursoId);
         console.log('🚀 ~ fetch ~ response:', response);
         if (response) {
           const curso = response.curso;
