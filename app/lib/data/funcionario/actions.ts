@@ -659,3 +659,22 @@ export async function getHorariosCurso(cursoId: string) {
   }
   return []; // Devolvemos un array vacío si no hay token
 }
+
+export async function getActaCurso(cursoId: string) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/cursos/${cursoId}/acta`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return { message: 'Error al obtener los inscriptos' };
+    }
+  }
+}

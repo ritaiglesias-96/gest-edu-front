@@ -1,41 +1,43 @@
 'use client';
 
 import ActaExamenPDF from '@/components/DocumentosPDF/ActaExamenPDF';
-import { getInscriptosAExamen } from '@/lib/data/funcionario/actions';
+import { getActaCurso } from '@/lib/data/funcionario/actions';
 import { ActaExamen } from '@/lib/definitions';
 import { Box, CircularProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
 
-export default function ActaExamenPage({
+export default function ActaCursoPage({
   params,
 }: {
-  params: { examenId: string };
+  params: { cursoId: string };
 }) {
-  const [actaExamen, setActaExamen] = useState<ActaExamen | null>(null);
+  const [actaCurso, setActaCurso] = useState<ActaExamen | null>(null);
   const [fallout, setFallout] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await getInscriptosAExamen('2'); //TODO HARDCODEADO PQ NO ME DEVUELVE NADA SI USO params.examenId pq no hay datos
-        if (response && response.length > 0) {
-          const examen = response[0].examen;
-          const estudiantes = response.map(
+        const response = await getActaCurso(params.cursoId); //TODO HARDCODEADO PQ NO ME DEVUELVE NADA SI USO params.examenId pq no hay datos
+        console.log('🚀 ~ fetch ~ response:', response);
+        if (response) {
+          const curso = response.curso;
+          const estudiantes = response.inscripciones.map(
             (inscripcion: any) => inscripcion.estudiante
           );
-          const docentes = examen.docentes;
-          const asignaturaNombre = examen.asignatura.nombre;
-          const fecha = new Date(examen.fecha).toLocaleDateString('es-ES');
+          console.log('🚀 ~ fetch ~ estudiantes:', estudiantes);
+          const docentes = curso.docentes;
+          const asignaturaNombre = curso.asignatura.nombre;
+          const fecha = new Date(curso.fecha).toLocaleDateString('es-ES');
 
           const acta: ActaExamen = {
-            id: examen.id,
+            id: curso.id,
             fecha: fecha,
             inscriptos: estudiantes,
             asignaturaNombre: asignaturaNombre,
             docentes: docentes,
           };
-          setActaExamen(acta);
+          setActaCurso(acta);
         } else {
           setFallout(true);
         }
@@ -47,7 +49,7 @@ export default function ActaExamenPage({
       }
     };
     fetch();
-  }, [params.examenId]);
+  }, [params.cursoId]);
 
   return (
     <>
@@ -56,7 +58,7 @@ export default function ActaExamenPage({
           <CircularProgress sx={{ color: '#802c2c' }} />
         </Box>
       )}
-      {!loading && <ActaExamenPDF acta={actaExamen!} />}
+      {!loading && <ActaExamenPDF acta={actaCurso!} />}
     </>
   );
 }

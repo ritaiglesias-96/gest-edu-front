@@ -30,6 +30,7 @@ import {
   actaExamenColumn,
   horariosColumns,
   actividadUsuarioColumns,
+  actaCursoColumn,
 } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -128,6 +129,7 @@ type columnType =
   | 'actasFuncionario'
   | 'actasAsignaturasFuncionario'
   | 'actaExamen'
+  | 'actaCurso'
   | 'horarios'
   | 'actividadUsuario'
   | 'none';
@@ -247,6 +249,9 @@ export default function List({
       break;
     case 'actaExamen':
       columns = actaExamenColumn;
+      break;
+    case 'actaCurso':
+      columns = actaCursoColumn;
       break;
     case 'horarios':
       columns = horariosColumns;

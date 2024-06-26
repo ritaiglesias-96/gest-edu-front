@@ -357,4 +357,13 @@ export type ActaExamen = {
   docentes: Docente[];
 };
 
+export type ActaCurso = {
+  id: number;
+  fechaInicio: string;
+  fechaFin: string;
+  inscriptos: Estudiante[];
+  asignaturaNombre: string;
+  docente: Docente;
+};
+
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
