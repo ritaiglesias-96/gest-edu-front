@@ -688,6 +688,6 @@ export async function getActaCurso(cursoId: string) {
     }
   } catch (error) {
     // Handling network or other unexpected errors
-    return { message: 'Network error or server is down', error: error.message };
+    return { message: 'Network error or server is down', error: error };
   }
 }
