@@ -483,11 +483,30 @@ export async function getTramitesEstudiantes() {
         Authorization: `Bearer ${token}`,
       },
     });
-    if (response.ok) {
-      const tramitesJson = await response.json();
-      return tramitesJson;
-    } else {
-      return { message: 'Error al obtener trámites.' };
-    }
+    const tramitesJson = await response.json();
+    return tramitesJson;
+  } else {
+    return { message: 'Error al obtener trámites.' };
   }
 }
+
+export const obtenerAsignaturasInscriptoFetch = async () => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `https://localhost:8080/gest-edu/api/estudiantes/carreras-inscripto`, //TODO falta endpoint de asignaturas de las cual esta insccipto el estudiante a algun curso
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const carrerasJson = await response.json();
+      return carrerasJson;
+    } else {
+      return response.json();
+    }
+  }
+};

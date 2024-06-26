@@ -4,7 +4,13 @@ import { getAsignatura } from '@/lib/data/coordinador/actions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
 import Button from '@/components/Button/button';
-import { Curso, Asignatura, Docente, Calificacion, Estudiante } from '@/lib/definitions';
+import {
+  Curso,
+  Asignatura,
+  Docente,
+  Calificacion,
+  Estudiante,
+} from '@/lib/definitions';
 import { useRouter } from 'next/navigation';
 import List from '@/components/List/list';
 import {
@@ -32,6 +38,7 @@ export default function CursoPage({
   useEffect(() => {
     if (params.cursoId) {
       getCurso(params.cursoId).then((dataCurso) => {
+        console.log('🚀 ~ getCurso ~ dataCurso:', dataCurso);
         setCurso(dataCurso);
       });
     }
@@ -41,22 +48,27 @@ export default function CursoPage({
     if (curso?.id) {
       curso.fechaInicio = convertirFecha(curso.fechaInicio);
       curso.fechaFin = convertirFecha(curso.fechaFin);
-      getEstudiantesPorCurso(curso.id.toString()).then((arrayEstudiantes:any) => {
-        if (arrayEstudiantes) {
-          arrayEstudiantes.forEach((element: Estudiante) => {
-            element.fechaNac = convertirFecha(element.fechaNac!);
-          });
-          setDisabled(arrayEstudiantes.length === 0);                    
-          setRows(arrayEstudiantes);
-          setRowsLoading(false);
-          setLoading(false);
-          setFallout(false);
+      getEstudiantesPorCurso(curso.id.toString()).then(
+        (arrayEstudiantes: any) => {
+          if (arrayEstudiantes) {
+            arrayEstudiantes.forEach((element: Estudiante) => {
+              element.fechaNac = convertirFecha(element.fechaNac!);
+            });
+            console.log('🚀 ~ useEffect ~ arrayEstudiantes:', arrayEstudiantes);
+            setDisabled(arrayEstudiantes.length === 0);
+            setRows(arrayEstudiantes);
+            setRowsLoading(false);
+            setLoading(false);
+            setFallout(false);
+          }
         }
-      });
+      );
       getAsignatura(curso.asignaturaId.toString()).then((dataAsignatura) => {
+        console.log('🚀 ~ getAsignatura ~ dataAsignatura:', dataAsignatura);
         setAsignatura(dataAsignatura);
       });
       getDocente(curso.docenteId.toString()).then((dataDocente) => {
+        console.log('🚀 ~ getDocente ~ dataDocente:', dataDocente);
         setDocente(dataDocente);
       });
     }
@@ -153,13 +165,21 @@ export default function CursoPage({
             </div>
           </div>
           <div className='my-4 box-content flex flex-row justify-end rounded-md bg-ivory p-4'>
-            <Button disabled={disabled} styling='primary' onClick={() => setOpen(true)}>
+            <Button
+              disabled={disabled}
+              styling='primary'
+              onClick={() => setOpen(true)}
+            >
               Ingresar calificaciones
             </Button>
           </div>
         </div>
         <h3>Estudiantes inscriptos al curso</h3>
-        <List rows={rows} rowsLoading={rowsLoading} columnsType='datos-estudiante' />
+        <List
+          rows={rows}
+          rowsLoading={rowsLoading}
+          columnsType='datos-estudiante'
+        />
       </div>
       {open && (
         <>

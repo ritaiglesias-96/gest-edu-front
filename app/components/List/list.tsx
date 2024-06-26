@@ -25,6 +25,12 @@ import {
   asignaturaBajaCursoColumns,
   consultaTramitesEstudiante,
   solicitudTituloColumns,
+  carrerasCalificacionesColums,
+  asignaturaCalificacionesColumns,
+  cursosCalificadosColumns,
+  calificacionCursoColumns,
+  examenesCalificadosColumns,
+  calificacionExamenColumns,
   actasFuncionarioColumn,
   actasAsignaturasFuncionarioColumn,
   actaExamenColumn,
@@ -125,6 +131,12 @@ type columnType =
   | 'asignaturaBajaCurso'
   | 'consultaTramitesEstudiante'
   | 'solicitudTitulo'
+  | 'carreraCalificaciones'
+  | 'asignaturaCalificaciones'
+  | 'cursosCalificados'
+  | 'calificacionCurso'
+  | 'examenesCalificados'
+  | 'calificacionExamen'
   | 'actasFuncionario'
   | 'actasAsignaturasFuncionario'
   | 'actaExamen'
@@ -239,6 +251,23 @@ export default function List({
     case 'solicitudTitulo':
       columns = solicitudTituloColumns;
       break;
+    case 'carreraCalificaciones':
+      columns = carrerasCalificacionesColums;
+      break;
+    case 'asignaturaCalificaciones':
+      columns = asignaturaCalificacionesColumns;
+      break;
+    case 'cursosCalificados':
+      columns = cursosCalificadosColumns;
+      break;
+    case 'calificacionCurso':
+      columns = calificacionCursoColumns;
+      break;
+    case 'examenesCalificados':
+      columns = examenesCalificadosColumns;
+      break;
+    case 'calificacionExamen':
+      columns = calificacionExamenColumns;
     case 'actasFuncionario':
       columns = actasFuncionarioColumn;
       break;

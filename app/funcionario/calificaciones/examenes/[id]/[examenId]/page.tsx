@@ -42,11 +42,14 @@ export default function CursoPage({
   }, []);
 
   useEffect(() => {
-    if (examen?.id) {
+    if (examen) {
       const arrayEstudiantes: Estudiante[] = [];
       getEstudiantesInscriptosExamen(examen.id.toString()).then((data) => {
         if (data.estudiantes) {
           data.estudiantes.forEach((element: any) => {
+            element.fechaNac = convertirFecha(element.fechaNac);
+            console.log(element);
+
             arrayEstudiantes.push(element.estudiante);
           });
         }
@@ -124,7 +127,13 @@ export default function CursoPage({
             </div>
             <div className='flex space-x-2'>
               <p className='w-32 font-bold'>Docentes: </p>
-              <p>{examen?.docentes}</p>
+              <p>
+                {examen?.docentes
+                  .map(
+                    (docente: any) => `${docente.nombre} ${docente.apellido}`
+                  )
+                  .join(', ')}
+              </p>
             </div>
           </div>
           <div className='my-4 box-content flex flex-row justify-end rounded-md bg-ivory p-4'>

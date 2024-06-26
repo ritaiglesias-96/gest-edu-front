@@ -227,7 +227,7 @@ export async function getEstudiantesInscriptosExamen(id: string) {
     const estudiantesJson = await estudiantes.json();
     return { estudiantes: estudiantesJson };
   } else {
-    return { estudiantesJson: [] };
+    return { estudiantes: [] };
   }
 }
 
@@ -529,7 +529,7 @@ export async function geExamenesPendientesCalificacion() {
       const examenesJson = await examenes.json();
       return { examenes: examenesJson.content };
     } else {
-      return { examenesJson: [] };
+      return { examenes: [] };
     }
   } else {
     return null;
@@ -601,8 +601,26 @@ export async function getInscriptosAExamen(examenId: string) {
 export async function getCursosCarrera(carreraId: string) {
   const token = authToken();
   if (token) {
+    const response = await fetch(`${apiRoute}/carreras/${carreraId}/cursos-activos`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const cursosJson = await response.json();
+      return { cursos: cursosJson };
+    } else {
+      return { cursos: [] };
+    }
+  }
+}
+
+export async function getCursosCalificadosAsignatura(id: number) {
+  const token = authToken();
+  if (token) {
     const response = await fetch(
-      `${apiRoute}/carreras/${carreraId}/cursos-activos`,
+      `${apiRoute}/asignaturas/${id}/cursosCalificados`,
       {
         method: 'GET',
         headers: {
@@ -611,13 +629,83 @@ export async function getCursosCarrera(carreraId: string) {
       }
     );
     if (response.ok) {
-      const data = await response.json();
-      return data;
+      const cursosJson = await response.json();
+      return cursosJson;
     } else {
-      return { message: 'Error al obtener los cursos' };
+      return [];
     }
   }
 }
+
+export async function getEstudiantesCalificadosCurso(id: number) {
+  const token = authToken();
+  const response = await fetch(`${apiRoute}/cursos/${id}/calificaciones`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return [];
+  }
+}
+
+export async function getExamenesCalificadosAsignatura(id: number) {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/asignaturas/${id}/examenesCalificados`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const cursosJson = await response.json();
+      return cursosJson;
+    } else {
+      return [];
+    }
+  }
+}
+
+export async function getExamen(id: string) {
+  const token = authToken();
+  const response = await fetch(`${apiRoute}/examenes/${id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return null;
+  }
+}
+
+export async function getEstudiantesCalificadosExamen(id: number) {
+  const token = authToken();
+  const response = await fetch(`${apiRoute}/examenes/${id}/calificar`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return [];
+  }
+}
+
 
 export async function getCursosHorariosCarrera(carreraId: string) {
   const token = authToken();
