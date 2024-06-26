@@ -329,8 +329,15 @@ export type TramiteEstudiante = {
   fechaActualizacion: string;
 };
 
-export interface CursoHorario {
-  //} = {
+export type Certiticado = {
+  id: string;
+  carrera: string;
+  codigoValidacion: string;
+  fecha: string;
+  estudiante: Estudiante;  
+}
+
+export interface CursoHorario{
   cursoId: number;
   fechaInicio: string;
   fechaFin: string;

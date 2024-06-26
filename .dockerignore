@@ -1,0 +1,17 @@
+# Ignorar archivos y carpetas generados por Next.js
+.next/
+out/
+.cache/
+public/
+
+# Ignorar archivos y carpetas de dependencias
+node_modules/
+
+# Ignorar archivos y carpetas específicos de desarrollo
+.DS_Store
+.env.development.local
+.env.test.local
+
+# Ignorar archivos y carpetas de control de versiones
+.git/
+.gitignore

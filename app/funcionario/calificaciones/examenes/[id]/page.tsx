@@ -3,12 +3,23 @@ import List from '@/components/List/list';
 import Button from '@/components/Button/button';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
-import { getCarrera } from '@/lib/data/coordinador/actions';
+import {
+  getCarrera,
+  getCarreraYAsignatura,
+} from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
 import { convertirFecha } from '@/utils/utils';
 import { useEffect, useState } from 'react';
-import { Carrera, Examen, ExamenFlattened } from '@/lib/definitions';
-import { geExamenesPendientesCalificacion } from '@/lib/data/funcionario/actions';
+import {
+  Asignatura,
+  Carrera,
+  Examen,
+  ExamenFlattened,
+} from '@/lib/definitions';
+import {
+  geExamenesPendientesCalificacion,
+  getExamenesCalificadosAsignatura,
+} from '@/lib/data/funcionario/actions';
 
 export default function ExamenesPendientesPage({
   params,
@@ -19,13 +30,24 @@ export default function ExamenesPendientesPage({
   const [rows, setRows] = useState<any[]>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [carrera, setCarrera] = useState<Carrera>();
+  const [asignaturas, setAsignaturas] = useState<Asignatura[]>([]);
   const [fallout, setFallout] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [examenesCalificados, setExamenesCalificados] = useState<any[]>([]);
+  const [examenesCalificadosLoading, setExamenesCalificadosLoading] =
+    useState(true);
 
   useEffect(() => {
-    getCarrera(params.id).then((data) => {
-      setCarrera(data);
-    });
+    const fetch = async () => {
+      const existeCarrera = await getCarreraYAsignatura(params.id);
+      if (existeCarrera) {
+        setCarrera(existeCarrera.carrera);
+        setAsignaturas(existeCarrera.asignaturas);
+      } else {
+        setFallout(true);
+      }
+    };
+    fetch().finally(() => setLoading(false));
   }, [params.id]);
 
   useEffect(() => {
@@ -60,6 +82,32 @@ export default function ExamenesPendientesPage({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [carrera]);
+
+  useEffect(() => {
+    const fetchExamenesCalificados = async () => {
+      try {
+        const allExamenesAsignatura = [];
+        for (const asignatura of asignaturas) {
+          const data = await getExamenesCalificadosAsignatura(asignatura.id);
+          allExamenesAsignatura.push(...data);
+        }
+        allExamenesAsignatura.forEach((element) => {
+          element.nombreAsignatura = element.asignatura.nombre;
+          element.fecha = convertirFecha(element.fecha);
+        });
+        console.log(
+          '🚀 ~ allExamenesAsignatura.forEach ~ allExamenesAsignatura:',
+          allExamenesAsignatura
+        );
+        setExamenesCalificados(allExamenesAsignatura);
+      } catch (error) {
+        console.error('Error fetching examenes calificados:', error);
+      } finally {
+        setExamenesCalificadosLoading(false);
+      }
+    };
+    fetchExamenesCalificados();
+  }, [asignaturas]);
 
   if (loading) {
     return (
@@ -103,11 +151,17 @@ export default function ExamenesPendientesPage({
               </div>
             </div>
           </div>
-          <h3>Examenes</h3>
+          <h3>Calificar Examenes</h3>
           <List
             rows={rows}
             rowsLoading={rowsLoading}
             columnsType='calficar-examenes'
+          />
+          <h3>Ver Calificaciones</h3>
+          <List
+            rows={examenesCalificados}
+            rowsLoading={examenesCalificadosLoading}
+            columnsType='examenesCalificados'
           />
         </div>
       )}

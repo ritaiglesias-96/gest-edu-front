@@ -7,7 +7,10 @@ import Button from '@/components/Button/button';
 import { Asignatura, Carrera, Curso, CursoAsignatura } from '@/lib/definitions';
 import { useRouter } from 'next/navigation';
 import List from '@/components/List/list';
-import { getCursosCarrera } from '@/lib/data/funcionario/actions';
+import {
+  getCursosCalificadosAsignatura,
+  getCursosCarrera,
+} from '@/lib/data/funcionario/actions';
 import { convertirFecha } from '@/utils/utils';
 
 export default function CalificacionCursoPage({
@@ -17,7 +20,10 @@ export default function CalificacionCursoPage({
 }>) {
   const router = useRouter();
   const [rows, setRows] = useState<any[]>([]);
+  const [cursosCalificados, setCursosCalificados] = useState<any[]>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
+  const [cursosCalificadosLoading, setCursosCalificadosLoading] =
+    useState(true);
   const [carrera, setCarrera] = useState<Carrera>();
   const [asignaturas, setAsignaturas] = useState<Asignatura[]>([]);
   const [fallout, setFallout] = useState(false);
@@ -25,7 +31,6 @@ export default function CalificacionCursoPage({
 
   useEffect(() => {
     const fetch = async () => {
-      //TODO: Se debe traer los cursos, no las asignaaturas
       const existeCarrera = await getCarreraYAsignatura(params.id);
       if (existeCarrera) {
         setCarrera(existeCarrera.carrera);
@@ -61,8 +66,6 @@ export default function CalificacionCursoPage({
             }
           });
         });
-
-        console.log(crusosAsignarua);
         setRows(crusosAsignarua);
         setRowsLoading(false);
       } else {
@@ -71,6 +74,28 @@ export default function CalificacionCursoPage({
     };
     fetch().finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [asignaturas]);
+
+  useEffect(() => {
+    const fetchCursosCalificados = async () => {
+      try {
+        const allCursosAsignatura = [];
+        for (const asignatura of asignaturas) {
+          const data = await getCursosCalificadosAsignatura(asignatura.id);
+          allCursosAsignatura.push(...data);
+        }
+        allCursosAsignatura.forEach((element) => {
+          element.fechaInicio = convertirFecha(element.fechaInicio);
+          element.fechaFin = convertirFecha(element.fechaFin);
+        });
+        setCursosCalificados(allCursosAsignatura);
+      } catch (error) {
+        console.error('Error fetching cursos calificados:', error);
+      } finally {
+        setCursosCalificadosLoading(false);
+      }
+    };
+    fetchCursosCalificados();
   }, [asignaturas]);
 
   if (loading) {
@@ -116,11 +141,17 @@ export default function CalificacionCursoPage({
             </div>
           </div>
         </div>
-        <h3>Cursos</h3>
+        <h3>Calificar Cursos</h3>
         <List
           rows={rows}
           rowsLoading={rowsLoading}
           columnsType='calficar-cursos'
+        />
+        <h3>Ver Calificaciones</h3>
+        <List
+          rows={cursosCalificados}
+          rowsLoading={cursosCalificadosLoading}
+          columnsType='cursosCalificados'
         />
       </div>
     </div>
