@@ -15,7 +15,7 @@ const nextConfig = {
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ["gestedu.work", "localhost:3000", "www.gestedu.work"]
+      allowedOrigins: ["gestedu.works", "localhost:3000", "www.gestedu.works"]
     }
   },
   webpack: (config) => {
