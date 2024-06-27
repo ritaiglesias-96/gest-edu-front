@@ -13,6 +13,11 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    serverActions: {
+      allowedOrigins: ["gestedu.work", "localhost:3000", "www.gestedu.work"]
+    }
+  },
   webpack: (config) => {
     // Add a rule to handle SVG files
     config.module.rules.push({
