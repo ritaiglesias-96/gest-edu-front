@@ -4,13 +4,13 @@ import { Escolaridad } from '@/lib/definitions'; // Ajusta la ruta según tu est
 import Button from '../Button/button';
 import Download from '@/assets/svg/download.svg';
 import { convertirFecha } from '@/utils/utils';
-import headerImage from '../../assets/images/logo-light-horizontal-bg.png'; // Ajusta la ruta según tu estructura de archivos
+import headerImage from '@/assets/images/logo-black-horizontal.png'; // Ajusta la ruta según tu estructura de archivos
 
 interface Props {
   escolaridad: Escolaridad;
 }
 
-const CertificadoPDF: FC<Props> = ({ escolaridad }) => {
+const EscolaridadPDF: FC<Props> = ({ escolaridad }) => {
   const [base64Image, setBase64Image] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -83,6 +83,7 @@ const CertificadoPDF: FC<Props> = ({ escolaridad }) => {
         y = 40; // Reinicia la posición vertical en la nueva página, ajustada para dejar espacio debajo del encabezado
         addHeader(); // Vuelve a agregar el encabezado en la nueva página
         footer(doc, totalPages);
+        applyGeneralStyles(); // Vuelve a aplicar los estilos generales en la nueva página
       }
     };
 
@@ -97,13 +98,21 @@ const CertificadoPDF: FC<Props> = ({ escolaridad }) => {
       doc.addImage(base64Image!, 'PNG', 10, 10, 50, 15); // Ajusta la imagen como encabezado
     };
 
+    // Aplicar estilos generales
+    const applyGeneralStyles = () => {
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(0, 0, 0); // Negro
+    };
+
     // Configurar encabezado y primera página
     addHeader();
     footer(doc, pageNumber);
+    applyGeneralStyles();
 
     // Información general
-    doc.setFont('helvetica', 'italic');
     doc.setFontSize(12); // Tamaño de fuente para la fecha de emisión
+    doc.setFont('helvetica', 'italic');
     doc.setTextColor(100); // Color gris
     doc.text(`Fecha de Emisión: ${convertirFecha(new Date().toISOString())}`, 130, y);
     y += 10;
@@ -198,4 +207,4 @@ const CertificadoPDF: FC<Props> = ({ escolaridad }) => {
   );
 };
 
-export default CertificadoPDF;
+export default EscolaridadPDF;
