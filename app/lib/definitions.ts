@@ -334,10 +334,10 @@ export type Certiticado = {
   carrera: string;
   codigoValidacion: string;
   fecha: string;
-  estudiante: Estudiante;  
-}
+  estudiante: Estudiante;
+};
 
-export interface CursoHorario{
+export interface CursoHorario {
   cursoId: number;
   fechaInicio: string;
   fechaFin: string;

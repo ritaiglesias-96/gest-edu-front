@@ -601,12 +601,15 @@ export async function getInscriptosAExamen(examenId: string) {
 export async function getCursosCarrera(carreraId: string) {
   const token = authToken();
   if (token) {
-    const response = await fetch(`${apiRoute}/carreras/${carreraId}/cursos-activos`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${apiRoute}/carreras/${carreraId}/cursos-activos`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.ok) {
       const cursosJson = await response.json();
       return { cursos: cursosJson };
@@ -706,7 +709,6 @@ export async function getEstudiantesCalificadosExamen(id: number) {
   }
 }
 
-
 export async function getCursosHorariosCarrera(carreraId: string) {
   const token = authToken();
   if (token) {
@@ -774,8 +776,8 @@ export async function getActaCurso(cursoId: string) {
         .catch(() => ({ message: 'Unknown error occurred' }));
       return { message: 'Error al obtener los inscriptos', ...errorData };
     }
-  } catch (error) {
+  } catch (error: any) {
     // Handling network or other unexpected errors
-    return { message: 'Network error or server is down', error: error };
+    return { message: 'Network error or server is down', error: error.message };
   }
 }
