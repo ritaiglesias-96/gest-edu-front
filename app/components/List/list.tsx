@@ -42,6 +42,7 @@ import Close from '@/assets/svg/close.svg';
 import Schedule from '@/assets/svg/schedule.svg';
 import Grading from '@/assets/svg/grading.svg';
 import School from '@/assets/svg/school.svg';
+import Download from '@/assets/svg/download.svg';
 import CheckIcon from '@mui/icons-material/Check';
 import CertificadoPDF from '../DocumentosPDF/CertificadoPDF';
 import EscolaridadPDF from '../DocumentosPDF/EscolaridadPDF';
@@ -1761,7 +1762,7 @@ function SolicitudTramiteDataGrid({
           }}
           className='mx-auto flex size-fit'
         >
-          <Grading className='h-auto w-6 fill-garnet sm:w-8' />
+          <Download className='h-auto w-6 fill-garnet sm:w-8' />
         </button>
       ),
     },
