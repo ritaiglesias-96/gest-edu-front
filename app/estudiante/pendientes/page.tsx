@@ -17,13 +17,21 @@ import {
 import { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Asignatura, Carrera, CarreraAsignaturas } from '@/lib/definitions';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 export default function ConsultarCarreras() {
   const [carrerasIncripto, setCarrerasIncripto] = useState<Carrera[]>([]);
   const [cargarPendientes, setCargarPendientes] = useState(false);
-  const [carrerasAsignaturas, setCarrerasAsignaturas] = useState<
-    CarreraAsignaturas[]
-  >([]);
+  const [state, setState] = useState<{
+    loading: boolean;
+    vacio: boolean;
+    carrerasAsignaturas: CarreraAsignaturas[];
+  }>({
+    loading: true,
+    vacio: true,
+    carrerasAsignaturas: [],
+  });
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -53,22 +61,31 @@ export default function ConsultarCarreras() {
   }, []);
 
   useEffect(() => {
-    carrerasIncripto.map((carrera) => {
-      getCarreraYAsignaturaPendientes(carrera.id.toString()).then((data) => {
-        const carrera: Carrera = data?.carrera;
-        const asignaturas: Asignatura[] = data?.asignaturas;
-        const carreraAsignaturas: CarreraAsignaturas = { carrera, asignaturas };
-        //TODO: Hacer if para que no agrege mas de una vez la carrera
-        //prevCarreras.push(carreraAsignaturas);
-        setCarrerasAsignaturas((prevCarreras: CarreraAsignaturas[]) => [
-          ...prevCarreras,
-          carreraAsignaturas,
-        ]);
-        console.log(carrerasAsignaturas);
-      });
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cargarPendientes]);
+    if (cargarPendientes) {
+      const fetchData = async () => {
+        const allPromises = carrerasIncripto.map(async (carrera) => {
+          const data = await getCarreraYAsignaturaPendientes(
+            carrera.id.toString()
+          );
+          const carreraData = data?.carrera;
+          const asignaturas = data?.asignaturas;
+          return { carrera: carreraData, asignaturas };
+        });
+
+        const results = await Promise.all(allPromises);
+
+        setState({
+          loading: false,
+          vacio: results.length === 0,
+          carrerasAsignaturas: results,
+        });
+      };
+
+      fetchData();
+    }
+  }, [cargarPendientes, carrerasIncripto]);
+
+  const { loading, vacio, carrerasAsignaturas } = state;
 
   return (
     <div className='relative box-border size-full justify-center overflow-auto md:w-3/4'>
@@ -77,8 +94,15 @@ export default function ConsultarCarreras() {
         Asignaturas pendientes para finalizar una carrera.
       </h5>
       <div>
-        {carrerasAsignaturas.length <= 0 && (
-          <div className='my-8 box-content items-center rounded-md bg-ivory py-8 '>
+        {loading && (
+          <div className='my-8 flex justify-center py-8'>
+            <Box sx={{ display: 'flex' }}>
+              <CircularProgress />
+            </Box>
+          </div>
+        )}
+        {!loading && vacio && (
+          <div className='my-8 box-content items-center rounded-md bg-ivory py-8'>
             <div className='items-center rounded-md text-center text-black '>
               <h3 className='m-0 p-0'>
                 No se encontraron inscripciones a carreras.
