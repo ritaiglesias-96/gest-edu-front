@@ -1004,3 +1004,29 @@ export const actaExamenColumn: GridColDef[] = [
     ),
   },
 ];
+
+export const actaCursoColumn: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'fechaInicio',
+    headerName: 'Fecha de inicio',
+  },
+  {
+    field: 'fechaFin',
+    headerName: 'Fecha de fin',
+  },
+  {
+    field: 'acta',
+    headerName: 'Acta',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}`}
+        className='mx-auto flex size-fit'
+      >
+        <List className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+];

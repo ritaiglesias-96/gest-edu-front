@@ -334,10 +334,10 @@ export type Certiticado = {
   carrera: string;
   codigoValidacion: string;
   fecha: string;
-  estudiante: Estudiante;  
-}
+  estudiante: Estudiante;
+};
 
-export interface CursoHorario{
+export interface CursoHorario {
   cursoId: number;
   fechaInicio: string;
   fechaFin: string;
@@ -362,6 +362,15 @@ export type ActaExamen = {
   inscriptos: Estudiante[];
   asignaturaNombre: string;
   docentes: Docente[];
+};
+
+export type ActaCurso = {
+  id: number;
+  fechaInicio: string;
+  fechaFin: string;
+  inscriptos: Estudiante[];
+  asignaturaNombre: string;
+  docente: Docente;
 };
 
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]

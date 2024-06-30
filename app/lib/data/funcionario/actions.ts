@@ -601,12 +601,15 @@ export async function getInscriptosAExamen(examenId: string) {
 export async function getCursosCarrera(carreraId: string) {
   const token = authToken();
   if (token) {
-    const response = await fetch(`${apiRoute}/carreras/${carreraId}/cursos-activos`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${apiRoute}/carreras/${carreraId}/cursos-activos`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.ok) {
       const cursosJson = await response.json();
       return { cursos: cursosJson };
@@ -706,7 +709,6 @@ export async function getEstudiantesCalificadosExamen(id: number) {
   }
 }
 
-
 export async function getCursosHorariosCarrera(carreraId: string) {
   const token = authToken();
   if (token) {
@@ -746,4 +748,36 @@ export async function getHorariosCurso(cursoId: string) {
     }
   }
   return []; // Devolvemos un array vacío si no hay token
+}
+
+export async function getActaCurso(cursoId: string) {
+  const token = authToken();
+
+  if (!token) {
+    return { message: 'Authentication token not available' };
+  }
+
+  try {
+    const response = await fetch(`${apiRoute}/cursos/${cursoId}/acta`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      // You might want to return a more detailed error response
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: 'Unknown error occurred' }));
+      return { message: 'Error al obtener los inscriptos', ...errorData };
+    }
+  } catch (error: any) {
+    // Handling network or other unexpected errors
+    return { message: 'Network error or server is down', error: error.message };
+  }
 }
