@@ -10,6 +10,7 @@ export default function CarrerasPage() {
   const [rowsLoading, setRowsLoading] = useState(true);
   useEffect(() => {
     getCarreras().then((data) => {
+      console.log('🚀 ~ getCarreras ~ data:', data);
       setRows(data.content ? data.content : []);
       setRowsLoading(false);
     });

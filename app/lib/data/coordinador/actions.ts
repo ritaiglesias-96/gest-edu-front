@@ -16,14 +16,16 @@ export const getCarreras = async () => {
     const response = await fetch(`${apiRoute}/carreras`, {
       method: 'GET',
       headers: {
-        Authotization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
     });
+    console.log('🚀 ~ getCarreras ~ response:', response);
     if (response.ok) {
       const data = await response.json();
       return data;
     } else {
-      return null;
+      return { content: [] };
     }
   }
 };
@@ -34,7 +36,7 @@ export const getAsignatura = async (id: string) => {
     const response = await fetch(`${apiRoute}/asignaturas/${id}`, {
       method: 'GET',
       headers: {
-        Authotization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     if (response.ok) {
@@ -284,7 +286,7 @@ export const obtenerExamenesVigentes = async (id: string) => {
       {
         method: 'GET',
         headers: {
-          Authotization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
