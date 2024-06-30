@@ -17,10 +17,14 @@ import {
 import { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Asignatura, Carrera, CarreraAsignaturas } from '@/lib/definitions';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 export default function ConsultarCarreras() {
   const [carrerasIncripto, setCarrerasIncripto] = useState<Carrera[]>([]);
   const [cargarPendientes, setCargarPendientes] = useState(false);
+  const [vacio, setVacio] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [carrerasAsignaturas, setCarrerasAsignaturas] = useState<
     CarreraAsignaturas[]
   >([]);
@@ -67,6 +71,8 @@ export default function ConsultarCarreras() {
         console.log(carrerasAsignaturas);
       });
     });
+    setVacio(!(carrerasAsignaturas.length <= 0));
+    setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cargarPendientes]);
 
@@ -77,8 +83,15 @@ export default function ConsultarCarreras() {
         Asignaturas pendientes para finalizar una carrera.
       </h5>
       <div>
-        {carrerasAsignaturas.length <= 0 && (
-          <div className='my-8 box-content items-center rounded-md bg-ivory py-8 '>
+        {loading && (
+          <div className='my-8 flex justify-center py-8'>
+            <Box sx={{ display: 'flex' }}>
+              <CircularProgress />
+            </Box>
+          </div>
+        )}
+        {!loading && vacio && (
+          <div className='my-8 box-content items-center rounded-md bg-ivory py-8'>
             <div className='items-center rounded-md text-center text-black '>
               <h3 className='m-0 p-0'>
                 No se encontraron inscripciones a carreras.
