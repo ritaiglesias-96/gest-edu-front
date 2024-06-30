@@ -23,11 +23,15 @@ import Box from '@mui/material/Box';
 export default function ConsultarCarreras() {
   const [carrerasIncripto, setCarrerasIncripto] = useState<Carrera[]>([]);
   const [cargarPendientes, setCargarPendientes] = useState(false);
-  const [vacio, setVacio] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [carrerasAsignaturas, setCarrerasAsignaturas] = useState<
-    CarreraAsignaturas[]
-  >([]);
+  const [state, setState] = useState<{
+    loading: boolean;
+    vacio: boolean;
+    carrerasAsignaturas: CarreraAsignaturas[];
+  }>({
+    loading: true,
+    vacio: true,
+    carrerasAsignaturas: [],
+  });
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -57,24 +61,31 @@ export default function ConsultarCarreras() {
   }, []);
 
   useEffect(() => {
-    carrerasIncripto.map((carrera) => {
-      getCarreraYAsignaturaPendientes(carrera.id.toString()).then((data) => {
-        const carrera: Carrera = data?.carrera;
-        const asignaturas: Asignatura[] = data?.asignaturas;
-        const carreraAsignaturas: CarreraAsignaturas = { carrera, asignaturas };
-        //TODO: Hacer if para que no agrege mas de una vez la carrera
-        //prevCarreras.push(carreraAsignaturas);
-        setCarrerasAsignaturas((prevCarreras: CarreraAsignaturas[]) => [
-          ...prevCarreras,
-          carreraAsignaturas,
-        ]);
-        console.log(carrerasAsignaturas);
-      });
-    });
-    setVacio(!(carrerasAsignaturas.length <= 0));
-    setLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cargarPendientes]);
+    if (cargarPendientes) {
+      const fetchData = async () => {
+        const allPromises = carrerasIncripto.map(async (carrera) => {
+          const data = await getCarreraYAsignaturaPendientes(
+            carrera.id.toString()
+          );
+          const carreraData = data?.carrera;
+          const asignaturas = data?.asignaturas;
+          return { carrera: carreraData, asignaturas };
+        });
+
+        const results = await Promise.all(allPromises);
+
+        setState({
+          loading: false,
+          vacio: results.length === 0,
+          carrerasAsignaturas: results,
+        });
+      };
+
+      fetchData();
+    }
+  }, [cargarPendientes, carrerasIncripto]);
+
+  const { loading, vacio, carrerasAsignaturas } = state;
 
   return (
     <div className='relative box-border size-full justify-center overflow-auto md:w-3/4'>
