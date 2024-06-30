@@ -23,7 +23,7 @@ export const getDocentes = async () => {
     const response = await fetch(`${apiRoute}/docentes`, {
       method: 'GET',
       headers: {
-        Authotization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     if (response.ok) {
@@ -397,7 +397,7 @@ export const getAsignatura = async (id: string) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authotization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     if (response.ok) {
@@ -418,7 +418,7 @@ export const getExamenesAsignaturaVigentes = async (asignaturaId: string) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authotization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -437,7 +437,7 @@ export async function registrarFechaExamen(data: any) {
     const response = await fetch(`${apiRoute}/examenes/crear`, {
       method: 'POST',
       headers: {
-        Authotization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -483,7 +483,7 @@ export async function getCursosAsignatura(id: string) {
     const response = await fetch(`${apiRoute}/asignaturas/${id}/cursos`, {
       method: 'GET',
       headers: {
-        Authotization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     if (response.ok) {
