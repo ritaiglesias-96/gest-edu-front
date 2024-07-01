@@ -19,7 +19,7 @@ export default function ExamenesActaPage({
   useEffect(() => {
     const fetch = async () => {
       const existeExamen = await getExamenesAsignatura(params.asignaturaId);
-      if (existeExamen) {
+      if (!existeExamen.message) {
         const examenes = existeExamen.content.map((examen: Examen) => ({
           id: examen.id,
           fecha: new Date(examen.fecha).toLocaleDateString('es-ES'),
@@ -28,6 +28,8 @@ export default function ExamenesActaPage({
         setRows(examenes);
         setRowsLoading(false);
       } else {
+        setRowsLoading(false);
+
         setFallout(true);
       }
     };
@@ -48,11 +50,13 @@ export default function ExamenesActaPage({
                 Seleccione el examen a generar acta
               </h3>
             </div>
-            <List
-              rows={rows}
-              rowsLoading={rowsLoading}
-              columnsType='actaExamen'
-            />
+            <div className='h-fit w-full p-4'>
+              <List
+                rows={rows}
+                rowsLoading={rowsLoading}
+                columnsType='actaExamen'
+              />
+            </div>
           </div>
         </div>
       )}
