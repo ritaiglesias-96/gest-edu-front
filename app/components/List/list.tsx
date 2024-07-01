@@ -790,7 +790,6 @@ function EditarCalificacionCursoDataGrid({
                 <MenuItem value='EXONERADO'>Exonerado</MenuItem>
                 <MenuItem value='AEXAMEN'>A Examen</MenuItem>
                 <MenuItem value='RECURSA'>Recursa</MenuItem>
-                <MenuItem value='PENDIENTE'>Pendiente</MenuItem>
               </Select>
             </FormControl>
           </div>

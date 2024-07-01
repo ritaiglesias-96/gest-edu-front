@@ -82,7 +82,7 @@ export default function CalificacionesCursoPage({
 
   return (
     <div className='relative box-border size-full justify-center overflow-auto md:w-5/6'>
-      <h1 className='text-center'>Calificar curso</h1>
+      <h1 className='text-center'>Calificaciones del curso</h1>
       <div className='h-fit w-full p-2'>
         <div className='my-2 box-content flex flex-col items-center justify-between gap-3 rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
           <div className='flex flex-col rounded-md text-center font-bold text-black md:text-left lg:max-w-md'>
