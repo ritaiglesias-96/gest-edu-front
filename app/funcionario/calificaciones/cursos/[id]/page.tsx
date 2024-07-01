@@ -82,6 +82,9 @@ export default function CalificacionCursoPage({
         const allCursosAsignatura = [];
         for (const asignatura of asignaturas) {
           const data = await getCursosCalificadosAsignatura(asignatura.id);
+          data[0].nombreAsignatura = asignaturas.find(
+            (a) => a.id === asignatura.id
+          )?.nombre;
           allCursosAsignatura.push(...data);
         }
         allCursosAsignatura.forEach((element) => {
