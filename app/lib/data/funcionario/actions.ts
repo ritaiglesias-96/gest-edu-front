@@ -564,10 +564,12 @@ export async function getExamenesAsignatura(asignaturaId: string) {
       {
         method: 'GET',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
     );
+
     if (response.ok) {
       const data = await response.json();
       return data;
