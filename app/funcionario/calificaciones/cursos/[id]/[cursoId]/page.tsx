@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { getAsignatura } from '@/lib/data/coordinador/actions';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Box } from '@mui/material';
+import { Alert, Box, Collapse } from '@mui/material';
 import Button from '@/components/Button/button';
 import {
   Curso,
@@ -20,6 +20,7 @@ import {
   getEstudiantesPorCurso,
 } from '@/lib/data/funcionario/actions';
 import { convertirFecha } from '@/utils/utils';
+import CheckIcon from '@mui/icons-material/Check';
 
 export default function CursoPage({
   params,
@@ -34,11 +35,11 @@ export default function CursoPage({
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [alertOk, setAlertOk] = useState(false);
 
   useEffect(() => {
     if (params.cursoId) {
       getCurso(params.cursoId).then((dataCurso) => {
-        console.log('🚀 ~ getCurso ~ dataCurso:', dataCurso);
         setCurso(dataCurso);
       });
     }
@@ -54,7 +55,6 @@ export default function CursoPage({
             arrayEstudiantes.forEach((element: Estudiante) => {
               element.fechaNac = convertirFecha(element.fechaNac!);
             });
-            console.log('🚀 ~ useEffect ~ arrayEstudiantes:', arrayEstudiantes);
             setDisabled(arrayEstudiantes.length === 0);
             setRows(arrayEstudiantes);
             setRowsLoading(false);
@@ -64,15 +64,22 @@ export default function CursoPage({
         }
       );
       getAsignatura(curso.asignaturaId.toString()).then((dataAsignatura) => {
-        console.log('🚀 ~ getAsignatura ~ dataAsignatura:', dataAsignatura);
         setAsignatura(dataAsignatura);
       });
       getDocente(curso.docenteId.toString()).then((dataDocente) => {
-        console.log('🚀 ~ getDocente ~ dataDocente:', dataDocente);
         setDocente(dataDocente);
       });
     }
   }, [curso]);
+
+  useEffect(() => {
+    if (alertOk) {
+      setTimeout(() => {
+        setAlertOk(false);
+        router.back();
+      }, 3000);
+    }
+  }, [alertOk]);
 
   if (loading) {
     return (
@@ -113,7 +120,7 @@ export default function CursoPage({
 
       if (calificaciones) {
         calificarCursoFetch(curso!.id, calificaciones).then((data) => {
-          //TODO mostrar mensaje de confirmacion
+          setAlertOk(true);
         });
       }
     }
@@ -218,6 +225,23 @@ export default function CursoPage({
             </div>
           </div>
         </>
+      )}
+      {alertOk && (
+        <Collapse
+          in={alertOk}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='success'
+            variant='filled'
+            onClose={() => {
+              setAlertOk(false);
+            }}
+          >
+            ¡Inscripcion editados correctamente!
+          </Alert>
+        </Collapse>
       )}
     </div>
   );
