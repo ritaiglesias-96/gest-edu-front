@@ -337,6 +337,58 @@ export type Certiticado = {
   estudiante: Estudiante;
 };
 
+export type EscolaridadCurso = {
+  id: number;
+  fechaFinCurso: string;
+  calificacion: Calificacion;
+}
+
+export type EscolaridadExamen = {
+  id: number;
+  fechaExamen: string;
+  calificacion: CalificacionExamen;
+}
+
+export type EscolaridadAsignatura = {
+  id: number;
+  nombre: string;
+  creditos: number;
+  cursos: EscolaridadCurso[];
+  examenes: EscolaridadExamen[];
+}
+
+export type EscolaridadSemestre = {
+  anio: number;
+  semestre: number;
+  asignaturas: EscolaridadAsignatura[];
+}
+
+export type Escolaridad = {
+  estudiante:{
+    id: number;
+    ci: string;
+    nombre: string;
+    apellido: string;
+    email: string;
+    telefono: string;
+    domicilio: string;
+    fechaNac: string;
+    imagen: string;
+    tipoUsuario: string;
+    activo: boolean;
+  } ;
+  carrera: {
+    id: number;
+    nombre: string;
+    descripcion: string;
+    duracionAnios: number;
+    creditos: number;
+    existePlanDeEstudio: boolean;
+  };
+  creditosAprobados: number;
+  semestres: EscolaridadSemestre[];
+}
+
 export interface CursoHorario {
   cursoId: number;
   fechaInicio: string;
