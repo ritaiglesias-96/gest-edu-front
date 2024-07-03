@@ -21,7 +21,8 @@ export default function ExamenActivoPage({
   useEffect(() => {
     const fetch = async () => {
       const existeExamen = await getExamenesAsignatura(params.id);
-      if (existeExamen) {
+      console.log('🚀 ~ fetch ~ existeExamen:', existeExamen);
+      if (!existeExamen.message) {
         const examenes = existeExamen.content.map((examen: Examen) => ({
           id: examen.id,
           fecha: new Date(examen.fecha).toLocaleDateString('es-ES'),
@@ -30,6 +31,7 @@ export default function ExamenActivoPage({
         setRows(examenes);
         setRowsLoading(false);
       } else {
+        setRowsLoading(false);
         setFallout(true);
       }
     };
