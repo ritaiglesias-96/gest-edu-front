@@ -6,9 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function EditarPerfilPage() {
-  return (
-    <section>
-      <Profile />
-    </section>
-  );
+  return <Profile />;
 }
