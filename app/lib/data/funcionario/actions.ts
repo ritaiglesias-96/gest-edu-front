@@ -557,6 +557,7 @@ export async function getAsignaturasConExamenActivo(carreraId: string) {
 }
 
 export async function getExamenesAsignatura(asignaturaId: string) {
+  console.log('🚀 ~ getExamenesAsignatura ~ asignaturaId:', asignaturaId);
   const token = authToken();
   if (token) {
     const response = await fetch(

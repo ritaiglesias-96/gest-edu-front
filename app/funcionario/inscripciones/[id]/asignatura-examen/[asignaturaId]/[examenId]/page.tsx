@@ -4,23 +4,20 @@ import List from '@/components/List/list';
 import { getInscriptosAExamen } from '@/lib/data/funcionario/actions';
 import { Estudiante, Examen } from '@/lib/definitions';
 import { Box, CircularProgress } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function InscriptosExamenPage({
   params,
 }: {
-  params: { id: string };
+  params: { id: string; examenId: string };
 }) {
-  const router = useRouter();
   const [rows, setRows] = useState<any[]>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
-  const [fallout, setFallout] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetch = async () => {
-      const existeInscriptos = await getInscriptosAExamen(params.id);
+      const existeInscriptos = await getInscriptosAExamen(params.examenId);
       if (existeInscriptos) {
         const inscriptos = existeInscriptos.map(
           (inscripcion: { estudiante: Estudiante }) => ({
@@ -34,10 +31,8 @@ export default function InscriptosExamenPage({
           })
         );
         setRows(inscriptos);
-        setRowsLoading(false);
-      } else {
-        setFallout(true);
       }
+      setRowsLoading(false);
     };
     fetch().finally(() => setLoading(false));
   }, [params.id]);
