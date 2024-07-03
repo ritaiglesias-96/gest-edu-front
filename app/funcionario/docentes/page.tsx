@@ -14,7 +14,7 @@ export default function DocentePage() {
   }, []);
 
   return (
-    <div className='relative box-border size-full justify-center overflow-auto md:w-2/3'>
+    <div className='relative box-border size-full justify-center md:w-2/3'>
       <h1 className='text-center font-bold'>Docentes</h1>
       <List
         isEditableDocentes={true}

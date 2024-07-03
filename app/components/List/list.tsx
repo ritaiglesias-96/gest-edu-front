@@ -452,27 +452,27 @@ function EditableDocentesDataGrid({
       field: 'id',
       type: 'number',
       headerName: 'ID',
-      width: 90,
+      width: 10,
       editable: false,
     },
-    { field: 'nombre', headerName: 'Nombre', width: 180, editable: true },
+    { field: 'nombre', headerName: 'Nombre', flex: 1, editable: true },
     {
       field: 'apellido',
       headerName: 'Apellido',
-      width: 180,
+      flex: 1,
       editable: true,
     },
     {
       field: 'documento',
       headerName: 'Cedula',
-      width: 180,
+      flex: 1,
       editable: true,
     },
     {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      width: 150,
+      flex: 1,
       cellClassName: 'actions',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
