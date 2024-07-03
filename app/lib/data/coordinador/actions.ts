@@ -415,11 +415,12 @@ export async function aprobarSolicitud(id: string) {
   const token = authToken();
   if (token) {
     const response = await fetch(
-      `${apiRoute}/tramites/aprobar-tramite-inscripcion-carrera/${id}`,
+      `${apiRoute}/tramites/aprobar-tramite-solicitud-titulo/${id}`,
       {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
       }
     );
@@ -442,8 +443,8 @@ export async function rechazarSolicitud(id: string, motivoRechazo: string) {
       {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(motivoRechazo),
       }
