@@ -248,13 +248,16 @@ export async function getCurso(id: string) {
 }
 
 export async function getDocente(id: string) {
+  console.log('🚀 ~ getDocente ~ id:', id);
   const token = authToken();
   const response = await fetch(`${apiRoute}/docentes/${id}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
     },
   });
+  console.log('🚀 ~ getDocente ~ response:', response);
   if (response.ok) {
     const data = await response.json();
     return data;
@@ -287,8 +290,8 @@ export async function registrarPeriodoExamen(
       const response = await fetch(`${apiRoute}/periodoExamen/registrar`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           id: 0,

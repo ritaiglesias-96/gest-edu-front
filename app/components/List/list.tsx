@@ -270,6 +270,7 @@ export default function List({
       break;
     case 'calificacionExamen':
       columns = calificacionExamenColumns;
+      break;
     case 'actasFuncionario':
       columns = actasFuncionarioColumn;
       break;
