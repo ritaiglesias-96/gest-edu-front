@@ -77,7 +77,8 @@ const CertificadoPDF: FC<Props> = ({ escolaridad }) => {
     let totalPages = 1;
 
     const addPageIfNecessary = (heightToAdd: number) => {
-      if (y + heightToAdd > pageHeight - 10) { // Deja espacio para el pie de página
+      if (y + heightToAdd > pageHeight - 10) {
+        // Deja espacio para el pie de página
         doc.addPage();
         totalPages++;
         y = 40; // Reinicia la posición vertical en la nueva página, ajustada para dejar espacio debajo del encabezado
@@ -114,7 +115,11 @@ const CertificadoPDF: FC<Props> = ({ escolaridad }) => {
     doc.setFontSize(12); // Tamaño de fuente para la fecha de emisión
     doc.setFont('helvetica', 'italic');
     doc.setTextColor(100); // Color gris
-    doc.text(`Fecha de Emisión: ${convertirFecha(new Date().toISOString())}`, 130, y);
+    doc.text(
+      `Fecha de Emisión: ${convertirFecha(new Date().toISOString())}`,
+      130,
+      y
+    );
     y += 10;
 
     doc.setFontSize(20); // Tamaño de fuente para el título del certificado
@@ -133,13 +138,21 @@ const CertificadoPDF: FC<Props> = ({ escolaridad }) => {
     y += 10;
     doc.text(`Apellido: ${escolaridad.estudiante.apellido}`, 20, y);
     y += 10;
-    doc.text(`CI: ${escolaridad.estudiante.ci.replace(/(\d+)(?=\d$)/g, '$1-')}`, 20, y);
+    doc.text(
+      `CI: ${escolaridad.estudiante.ci.replace(/(\d+)(?=\d$)/g, '$1-')}`,
+      20,
+      y
+    );
     y += 10;
     doc.text(`Domicilio: ${escolaridad.estudiante.domicilio}`, 20, y);
     y += 10;
     doc.text(`Email: ${escolaridad.estudiante.email}`, 20, y);
     y += 10;
-    doc.text(`Fecha de Nacimiento: ${convertirFecha(escolaridad.estudiante.fechaNac!)}`, 20, y);
+    doc.text(
+      `Fecha de Nacimiento: ${convertirFecha(escolaridad.estudiante.fechaNac!)}`,
+      20,
+      y
+    );
     y += 10;
     doc.text(`Teléfono: ${escolaridad.estudiante.telefono}`, 20, y);
     y += 20;
@@ -147,7 +160,11 @@ const CertificadoPDF: FC<Props> = ({ escolaridad }) => {
     // Detalle de semestres
     doc.setFontSize(12); // Tamaño de fuente para los detalles de los semestres y asignaturas
     doc.setFont('helvetica', 'bold');
-    doc.text(`Créditos Aprobados: ${escolaridad.creditosAprobados}`, 20, y);
+    doc.text(
+      `Créditos Aprobados: ${escolaridad.creditosAprobados} de ${escolaridad.carrera.creditos}`,
+      20,
+      y
+    );
     y += 10;
 
     escolaridad.semestres.forEach((semestre) => {
@@ -161,16 +178,28 @@ const CertificadoPDF: FC<Props> = ({ escolaridad }) => {
         addPageIfNecessary(30); // Espacio para cada asignatura aproximadamente
 
         doc.setFont('helvetica', 'normal');
-        doc.text(`Asignatura: ${asignatura.nombre} (Créditos: ${asignatura.creditos})`, 20, y);
+        doc.text(
+          `Asignatura: ${asignatura.nombre} (Créditos: ${asignatura.creditos})`,
+          20,
+          y
+        );
         y += 10;
 
         asignatura.cursos.forEach((curso) => {
-          doc.text(`Curso Finalizado: ${convertirFecha(curso.fechaFinCurso)} - Calificación: ${curso.calificacion}`, 30, y);
+          doc.text(
+            `Curso Finalizado: ${convertirFecha(curso.fechaFinCurso)} - Calificación: ${curso.calificacion}`,
+            30,
+            y
+          );
           y += 5;
         });
 
         asignatura.examenes.forEach((examen) => {
-          doc.text(`Examen: ${convertirFecha(examen.fechaExamen)} - Calificación: ${examen.calificacion}`, 30, y);
+          doc.text(
+            `Examen: ${convertirFecha(examen.fechaExamen)} - Calificación: ${examen.calificacion}`,
+            30,
+            y
+          );
           y += 5;
         });
 

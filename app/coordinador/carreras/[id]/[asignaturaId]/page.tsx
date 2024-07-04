@@ -46,8 +46,26 @@ export default function AsignaturaPage({
       setRowsLoading(false);
     };
     fetch().finally(() => setLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [params.asignaturaId]);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', height: '70vh' }}>
+        <CircularProgress sx={{ color: '#802c2c' }} />
+      </Box>
+    );
+  }
+
+  if (fallout && !loading) {
+    return (
+      <div className='mx-auto flex flex-col items-center justify-center text-ivory'>
+        <h1>Ha ocurrido un error</h1>
+        <Button onClick={() => router.back()} styling='primary'>
+          Regresar
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -58,11 +76,6 @@ export default function AsignaturaPage({
           setAsignatura={setAsignatura}
         />
       )}
-      {loading && (
-        <Box sx={{ display: 'flex', alignItems: 'center', height: '70vh' }}>
-          <CircularProgress sx={{ color: '#802c2c' }} />
-        </Box>
-      )}
       {noPrevias && (
         <SeleccionarPreviatura
           setOpen={setNoPrevias}
@@ -70,62 +83,50 @@ export default function AsignaturaPage({
         />
       )}
       <div className='relative box-border size-full justify-center overflow-auto px-3 md:w-5/6'>
-        {!fallout && !loading && (
-          <>
-            <div className='my-2 box-content flex flex-col items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
-              <div className='flex flex-col rounded-md text-center font-bold text-black md:text-left lg:max-w-md'>
-                <h3 className='m-0 p-0'>{asignatura?.nombre}</h3>
-                <div className='flex flex-col'>
-                  <p className='font-bold'>Descripcion:</p>
-                  <p>{asignatura?.descripcion}</p>
-                </div>
-              </div>
-              <div className='flex w-full flex-row justify-evenly rounded-md text-black md:w-fit md:flex-col md:justify-center'>
-                <div className='flex flex-col'>
-                  <p className='font-bold'>Creditos:</p>
-                  <p>{asignatura?.creditos + ' creditos'}</p>
-                </div>
-              </div>
-              <div className='flex w-fit max-w-52 flex-col justify-center rounded-md'>
-                <Button
-                  className='w-full self-center'
-                  styling='pill'
-                  onClick={() => {
-                    setEdit(!edit);
-                  }}
-                >
-                  <PencilIcon className='h-auto w-6 fill-garnet sm:w-8' />
-                </Button>
-              </div>
+        <div className='my-2 box-content flex flex-col items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+          <div className='flex flex-col rounded-md text-center font-bold text-black md:text-left lg:max-w-md'>
+            <h3 className='m-0 p-0'>{asignatura?.nombre}</h3>
+            <div className='flex flex-col'>
+              <p className='font-bold'>Descripcion:</p>
+              <p>{asignatura?.descripcion}</p>
             </div>
-            <div>
-              <List
-                rows={rows}
-                rowsLoading={rowsLoading}
-                columnsType='previtaturas'
-              />
+          </div>
+          <div className='flex w-full flex-row justify-evenly rounded-md text-black md:w-fit md:flex-col md:justify-center'>
+            <div className='flex flex-col'>
+              <p className='font-bold'>Creditos:</p>
+              <p>{asignatura?.creditos + ' creditos'}</p>
             </div>
-            <div className='my-2 box-content flex flex-col items-center justify-center rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
-              <Button
-                styling='primary'
-                className='w-full self-center'
-                onClick={() => {
-                  setNoPrevias(!noPrevias);
-                }}
-              >
-                Agregar previa
-              </Button>
-            </div>
-          </>
-        )}
-        {fallout && !loading && (
-          <div className='mx-auto flex flex-col items-center justify-center text-ivory'>
-            <h1>Ha ocurrido un error</h1>
-            <Button onClick={() => router.back()} styling='primary'>
-              Regresar
+          </div>
+          <div className='flex w-fit max-w-52 flex-col justify-center rounded-md'>
+            <Button
+              className='w-full self-center'
+              styling='pill'
+              onClick={() => {
+                setEdit(!edit);
+              }}
+            >
+              <PencilIcon className='h-auto w-6 fill-garnet sm:w-8' />
             </Button>
           </div>
-        )}
+        </div>
+        <div>
+          <List
+            rows={rows}
+            rowsLoading={rowsLoading}
+            columnsType='previtaturas'
+          />
+        </div>
+        <div className='my-2 box-content flex flex-col items-center justify-center rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+          <Button
+            styling='primary'
+            className='w-full self-center'
+            onClick={() => {
+              setNoPrevias(!noPrevias);
+            }}
+          >
+            Agregar previa
+          </Button>
+        </div>
       </div>
     </>
   );
@@ -152,6 +153,7 @@ function EditAsignatura({
       setOpen(false);
     }
   }, [editForm.message, id, setAsignatura, setOpen]);
+
   return (
     <>
       <div
@@ -250,8 +252,7 @@ function SeleccionarPreviatura({
       }
     };
     fetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [asignaturaId]);
 
   return (
     <>

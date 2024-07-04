@@ -79,6 +79,7 @@ export default function CursoPage({
         router.back();
       }, 3000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [alertOk]);
 
   if (loading) {

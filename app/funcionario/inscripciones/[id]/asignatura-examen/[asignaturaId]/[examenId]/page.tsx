@@ -35,25 +35,24 @@ export default function InscriptosExamenPage({
       setRowsLoading(false);
     };
     fetch().finally(() => setLoading(false));
-  }, [params.id]);
+  }, [params.examenId]);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', height: '70vh' }}>
+        <CircularProgress sx={{ color: '#802c2c' }} />
+      </Box>
+    );
+  }
 
   return (
-    <>
-      {loading && (
-        <Box sx={{ display: 'flex', alignItems: 'center', height: '70vh' }}>
-          <CircularProgress sx={{ color: '#802c2c' }} />
-        </Box>
-      )}
-      {!loading && (
-        <div className='relative box-border size-full justify-center overflow-auto md:w-2/3'>
-          <h1 className='text-center font-bold'>Inscriptos</h1>
-          <List
-            rows={rows}
-            rowsLoading={rowsLoading}
-            columnsType='inscriptosExamenFuncionario'
-          />
-        </div>
-      )}
-    </>
+    <div className='relative box-border size-full justify-center overflow-auto md:w-2/3'>
+      <h1 className='text-center font-bold'>Inscriptos</h1>
+      <List
+        rows={rows}
+        rowsLoading={rowsLoading}
+        columnsType='inscriptosExamenFuncionario'
+      />
+    </div>
   );
 }

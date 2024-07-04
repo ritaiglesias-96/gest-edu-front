@@ -17,6 +17,7 @@ export default function CarrerasActasPage() {
       setRowsLoading(false);
     });
   }, []);
+
   return (
     <div className='relative box-border size-full justify-center overflow-auto md:w-2/3'>
       <div className='h-fit w-full'>

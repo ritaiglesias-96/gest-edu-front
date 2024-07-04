@@ -1,5 +1,6 @@
 'use client';
 import { User, emptyUser } from '@/lib/definitions';
+import { convertirFecha } from '@/utils/utils';
 import './profile.css';
 import Button from '@/components/Button/button';
 import Image from 'next/image';
@@ -67,19 +68,6 @@ export default function Profile() {
     setValidPhone(validPhone);
   }, [datosUsuario]);
 
-  function convertirFecha(inputDate: string) {
-    if (inputDate !== null) {
-      const date = new Date(inputDate);
-      const day = date.getDate();
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
-      const formattedDay = day < 10 ? '0' + day : day;
-      const formattedMonth = month < 10 ? '0' + month : month;
-      return `${formattedDay}/${formattedMonth}/${year}`;
-    }
-    return '';
-  }
-
   const handleClickEditar = () => {
     setErrorMessage('');
     if (!validPhone) {
@@ -114,11 +102,11 @@ export default function Profile() {
 
   const handleChange = (name: string, newValue: string) => {
     if (name === 'telefono') {
-      setUsuario({ ...datosUsuario, telefono: newValue });
+      setDatosUsuario({ ...datosUsuario, telefono: newValue });
       setValidPhone(/^\d+$/.test(newValue));
     }
     if (name === 'domicilio') {
-      setUsuario({ ...datosUsuario, domicilio: newValue });
+      setDatosUsuario({ ...datosUsuario, domicilio: newValue });
     }
   };
 

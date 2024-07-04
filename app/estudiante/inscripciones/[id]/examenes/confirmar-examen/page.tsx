@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import List from '@/components/List/list';
 import {
@@ -23,12 +22,9 @@ export default function ConfirmarInscripcionExamen() {
     if (id) {
       setAsignaturaId(id);
     }
-  }, []);
-
-  useEffect(() => {
-    let id = sessionStorage.getItem('examen_id');
-    if (id) {
-      setExamenId(id);
+    let idEx = sessionStorage.getItem('examen_id');
+    if (idEx) {
+      setExamenId(idEx);
     }
   }, []);
 
@@ -46,12 +42,11 @@ export default function ConfirmarInscripcionExamen() {
       }
       setRowsLoading(false);
     });
-  }, [asignatura]);
+  }, [asignaturaId]);
 
   return (
     <div className='relative box-border size-full w-3/6 justify-center overflow-auto'>
       <h1 className='text-center font-bold'>Confirmar inscripción a examen</h1>
-
       {asignatura && (
         <div>
           <div>

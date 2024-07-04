@@ -111,15 +111,15 @@
   }
 
   .btn-primary {
-    @apply bg-garnet font-normal text-ivory text-sm sm:text-base lg:text-md tracking-widest lg:font-semibold py-2 px-4 hover:bg-atomic-tangerine hover:text-garnet;
+    @apply bg-garnet font-normal text-ivory text-sm sm:text-base lg:text-md tracking-widest p-2 hover:bg-atomic-tangerine hover:text-garnet;
   }
 
   .btn-primary:disabled {
-    @apply bg-grey-600 font-normal text-grey-900 text-sm sm:text-base lg:text-md tracking-widest lg:font-semibold py-2 px-4 hover:bg-grey-800 hover:text-grey-500 cursor-not-allowed;
+    @apply bg-grey-600 font-normal text-grey-900 text-sm sm:text-base lg:text-md tracking-widest p-2 hover:bg-grey-800 hover:text-grey-500 cursor-not-allowed;
   }
 
   .btn-secondary {
-    @apply bg-bittersweet font-normal text-white text-sm sm:text-base lg:text-md tracking-widest lg:font-semibold py-2 px-4 hover:bg-sunglow hover:text-garnet;
+    @apply bg-bittersweet font-normal text-white text-sm sm:text-base lg:text-md tracking-widest p-2 hover:bg-sunglow hover:text-garnet;
   }
 
   .btn {

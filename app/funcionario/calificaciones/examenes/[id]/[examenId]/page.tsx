@@ -40,8 +40,7 @@ export default function CursoPage({
         }
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [params.examenId]);
 
   useEffect(() => {
     if (examen) {
@@ -68,6 +67,7 @@ export default function CursoPage({
         router.back();
       }, 3000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [alertOk]);
 
   if (loading) {

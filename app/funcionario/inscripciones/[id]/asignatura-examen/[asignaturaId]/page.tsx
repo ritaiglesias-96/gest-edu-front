@@ -29,25 +29,24 @@ export default function ExamenActivoPage({
       setRowsLoading(false);
     };
     fetch().finally(() => setLoading(false));
-  }, [params.id]);
+  }, [params.asignaturaId]);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', height: '70vh' }}>
+        <CircularProgress sx={{ color: '#802c2c' }} />
+      </Box>
+    );
+  }
 
   return (
-    <>
-      {loading && (
-        <Box sx={{ display: 'flex', alignItems: 'center', height: '70vh' }}>
-          <CircularProgress sx={{ color: '#802c2c' }} />
-        </Box>
-      )}
-      {!loading && (
-        <div className='relative box-border size-full justify-center overflow-auto md:w-2/3'>
-          <h1 className='text-center font-bold'>Examenes</h1>
-          <List
-            rows={rows}
-            rowsLoading={rowsLoading}
-            columnsType='examenFuncionario'
-          />
-        </div>
-      )}
-    </>
+    <div className='relative box-border size-full justify-center overflow-auto md:w-2/3'>
+      <h1 className='text-center font-bold'>Examenes</h1>
+      <List
+        rows={rows}
+        rowsLoading={rowsLoading}
+        columnsType='examenFuncionario'
+      />
+    </div>
   );
 }

@@ -12,7 +12,8 @@ export type IconName =
   | 'Done'
   | 'Menu'
   | 'Rule'
-  | 'Grading';
+  | 'Grading'
+  | 'UserAdd';
 
 export type NavLink = {
   href: string;
@@ -46,12 +47,22 @@ export const strings = {
         label: 'Consultar',
       },
       {
+        href: '',
+        iconName: '',
+        label: '',
+      },
+      {
         href: '/estudiante/pendientes',
         iconName: 'Calendar',
         label: 'Asignaturas pendientes',
       },
       { href: '/estudiante/horarios', iconName: 'Calendar', label: 'Horarios' },
       { href: '/estudiante/tramites', iconName: 'Book', label: 'Tramites' },
+      {
+        href: '',
+        iconName: '',
+        label: '',
+      },
       {
         href: '/estudiante/solicitudes',
         iconName: 'Lessons',
@@ -64,7 +75,6 @@ export const strings = {
       },
       { href: '/estudiante/perfil', iconName: 'User', label: 'Perfil' },
       { href: '/', iconName: 'Logout', label: 'Salir' },
-      { href: '', iconName: '', label: '' },
     ],
   },
   navFuncionario: {
@@ -92,6 +102,7 @@ export const strings = {
         iconName: 'Lessons',
         label: 'Calificaciones',
       },
+      { href: '', iconName: '', label: '' },
       {
         href: '/funcionario/calificaciones/cursos',
         iconName: 'Grading',
@@ -102,6 +113,7 @@ export const strings = {
         iconName: 'Grading',
         label: 'Examenes',
       },
+      { href: '', iconName: '', label: '' },
       { href: '/', iconName: 'Logout', label: 'Salir' },
     ],
   },
@@ -124,7 +136,7 @@ export const strings = {
   navPublic: {
     links: [
       { href: '/ingresar', iconName: 'Login', label: 'Iniciar Sesión' },
-      { href: '/registrarse', iconName: 'UserPlus', label: 'Registrarse' },
+      { href: '/registrarse', iconName: 'UserAdd', label: 'Registrarse' },
     ],
   },
 } as Strings;

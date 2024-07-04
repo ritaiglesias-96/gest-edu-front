@@ -1,9 +1,11 @@
 'use client';
 
+import Button from '@/components/Button/button';
 import ActaCursoPDF from '@/components/DocumentosPDF/ActaCursoPDF';
 import { getActaCurso } from '@/lib/data/funcionario/actions';
 import { ActaCurso, Estudiante } from '@/lib/definitions';
 import { Box, CircularProgress } from '@mui/material';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function ActaCursoPage({
@@ -11,6 +13,7 @@ export default function ActaCursoPage({
 }: {
   params: { cursoId: string };
 }) {
+  const router = useRouter();
   const [actaCurso, setActaCurso] = useState<ActaCurso | null>(null);
   const [fallout, setFallout] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -53,14 +56,24 @@ export default function ActaCursoPage({
     fetch();
   }, [params.cursoId]);
 
-  return (
-    <>
-      {loading && (
-        <Box sx={{ display: 'flex', alignItems: 'center', height: '70vh' }}>
-          <CircularProgress sx={{ color: '#802c2c' }} />
-        </Box>
-      )}
-      {!loading && <ActaCursoPDF acta={actaCurso!} />}
-    </>
-  );
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', height: '70vh' }}>
+        <CircularProgress sx={{ color: '#802c2c' }} />
+      </Box>
+    );
+  }
+
+  if (fallout && !loading) {
+    return (
+      <div className='mx-auto flex flex-col items-center justify-center text-ivory'>
+        <h1>Ha ocurrido un error</h1>
+        <Button onClick={() => router.back()} styling='primary'>
+          Regresar
+        </Button>
+      </div>
+    );
+  }
+
+  return <ActaCursoPDF acta={actaCurso!} />;
 }

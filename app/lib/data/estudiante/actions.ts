@@ -237,11 +237,6 @@ export const obtenerAsignaturasParaInscripcionFetch = async (id: string) => {
         },
       }
     );
-
-    // console.log(
-    //   '🚀 ~ obtenerAsignaturasParaInscripcionFetch ~ response:',
-    //   response
-    // );
     if (response.ok) {
       const asignaturasJson = await response.json();
       return { asignaturas: asignaturasJson.content };
@@ -472,6 +467,7 @@ export async function solicitarCertificadoFetch(id: string) {
     });
     if (response.ok) {
       const certificadoJson = await response.json();
+      console.log(certificadoJson);
       return certificadoJson;
     } else {
       return { message: 'No se pudo obtener certificado.' };

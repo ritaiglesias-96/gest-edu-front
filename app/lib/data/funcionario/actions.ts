@@ -433,6 +433,28 @@ export const getExamenesAsignaturaVigentes = async (asignaturaId: string) => {
   }
 };
 
+export const getExamenesAsignaturaTodos = async (asignaturaId: string) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/asignaturas/${asignaturaId}/examenes`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data.content;
+    } else {
+      return { message: 'Error al obtener los examenes' };
+    }
+  }
+};
+
 export async function registrarFechaExamen(data: any) {
   const token = authToken();
   if (token) {
@@ -464,8 +486,8 @@ export async function registrarHorarioDiaCurso(
     const response = await fetch(`${apiRoute}/cursos/${cursoId}/horarios`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         dia: horario.dia,
@@ -473,9 +495,14 @@ export async function registrarHorarioDiaCurso(
         horaFin: horario.horaFin,
       }),
     }).then((res) => {
-      return res.json();
+      return res;
     });
-    return { message: response.message };
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
   }
 }
 
@@ -492,7 +519,7 @@ export async function getCursosAsignatura(id: string) {
       const data = await response.json();
       return data;
     } else {
-      return { message: 'Error al obtener los examenes vigentes' };
+      return { message: 'Error al obtener los cursos vigentes' };
     }
   }
 }
@@ -786,10 +813,7 @@ export async function getActaCurso(cursoId: string) {
   }
 }
 
-export async function registrarCurso(
-  prevState: Curso,
-  formData: FormData
-) {
+export async function registrarCurso(prevState: Curso, formData: FormData) {
   const token = authToken();
   if (token) {
     const validatedFields = RegistrarCursoFormSchema.safeParse({
@@ -807,7 +831,14 @@ export async function registrarCurso(
         message: 'Missing Fields. Failed to Create Subject.',
       };
     } else {
-      const { fechaInicio, fechaFin, diasPrevInsc, estado, asignaturaId, docenteId } = validatedFields.data;
+      const {
+        fechaInicio,
+        fechaFin,
+        diasPrevInsc,
+        estado,
+        asignaturaId,
+        docenteId,
+      } = validatedFields.data;
       const docId = parseInt(docenteId);
 
       const response = await fetch(`${apiRoute}/cursos`, {

@@ -196,6 +196,23 @@ export const previaturasColumns: GridColDef[] = [
   },
 ];
 
+export const examenColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'asignatura',
+    headerName: 'Asignatura',
+  },
+  {
+    field: 'fecha',
+    headerName: 'Fecha',
+  },
+  {
+    field: 'docentes',
+    headerName: 'Docentes',
+    type: 'singleSelect',
+  },
+];
+
 export const noPreviaturasColumns: GridColDef[] = [
   {
     field: 'idAsignatura',

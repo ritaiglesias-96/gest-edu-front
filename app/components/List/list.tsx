@@ -37,6 +37,7 @@ import {
   horariosColumns,
   actividadUsuarioColumns,
   actaCursoColumn,
+  examenColumns,
 } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
@@ -112,6 +113,7 @@ import { obtenerDatosUsuarioFetch } from '@/lib/data/actions';
 
 type columnType =
   | 'carrera'
+  | 'examen'
   | 'asignatura'
   | 'usuario'
   | 'estudiante'
@@ -187,6 +189,9 @@ export default function List({
       break;
     case 'asignatura':
       columns = asignaturaColumns;
+      break;
+    case 'examen':
+      columns = examenColumns;
       break;
     case 'usuario':
       columns = usuarioColumns;
@@ -769,39 +774,37 @@ function EditarCalificacionCursoDataGrid({
       renderCell: (params: GridRenderCellParams<any>) => {
         const id = params.id as number; // asegurarse de que params.id es un número
         return (
-          <div>
-            <FormControl
-              fullWidth
-              variant='standard'
-              sx={{ m: 1, minWidth: 120 }}
+          <FormControl
+            fullWidth
+            variant='standard'
+            sx={{ m: 1, minWidth: 120 }}
+          >
+            <InputLabel
+              id={`demo-simple-select-standard-label-${id}`}
+              sx={{ color: 'black' }}
             >
-              <InputLabel
-                id={`demo-simple-select-standard-label-${id}`}
-                sx={{ color: 'black' }}
-              >
-                Calificación
-              </InputLabel>
-              <Select
-                labelId={`demo-simple-select-label-${id}`}
-                id={`select-${id}`}
-                value={calificaciones[id] || ''}
-                label='Calificación'
-                onChange={handleChange(id)}
-                sx={{
-                  '&.MuiInputBase-root': {
-                    color: 'inherit',
-                  },
-                  '& .MuiSelect-select:focus': {
-                    backgroundColor: 'transparent',
-                  },
-                }}
-              >
-                <MenuItem value='EXONERADO'>Exonerado</MenuItem>
-                <MenuItem value='AEXAMEN'>A Examen</MenuItem>
-                <MenuItem value='RECURSA'>Recursa</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
+              Calificación
+            </InputLabel>
+            <Select
+              labelId={`demo-simple-select-label-${id}`}
+              id={`select-${id}`}
+              value={calificaciones[id] || ''}
+              label='Calificación'
+              onChange={handleChange(id)}
+              sx={{
+                '&.MuiInputBase-root': {
+                  color: 'inherit',
+                },
+                '& .MuiSelect-select:focus': {
+                  backgroundColor: 'transparent',
+                },
+              }}
+            >
+              <MenuItem value='EXONERADO'>Exonerado</MenuItem>
+              <MenuItem value='AEXAMEN'>A Examen</MenuItem>
+              <MenuItem value='RECURSA'>Recursa</MenuItem>
+            </Select>
+          </FormControl>
         );
       },
     },
@@ -1590,7 +1593,6 @@ function HorariosCursosEstudiante({
           autosizeOnMount={true}
           autoHeight={true}
           columns={columns}
-          autoHeight={true}
           sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
         />
       </div>
@@ -1830,7 +1832,6 @@ function SolicitudTramiteDataGrid({
           autosizeOnMount={true}
           autoHeight={true}
           columns={columns}
-          autoHeight={true}
           sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
         />
       </div>

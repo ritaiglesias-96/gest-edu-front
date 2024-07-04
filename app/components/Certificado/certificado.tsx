@@ -1,7 +1,6 @@
-import { Certiticado } from '@/lib/definitions';
 import { convertirFecha } from '@/utils/utils';
+import { Certiticado } from '@/lib/definitions';
 import { useEffect, useState } from 'react';
-import FormContainer from '../FormContainer/formContainer';
 
 export default function Certificado() {
   const [certificado, setCertificado] = useState<Certiticado>();
