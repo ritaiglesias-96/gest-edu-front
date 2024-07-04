@@ -20,19 +20,17 @@ export default function CodigoCertificado() {
 
   const handleSubmit = () => {
     if (codigo) {
-      validarCertificadoFetch(codigo).then(
-        (response: Certificado) => {
-          if(!response){
-            setMensaje('Certificado no encontrado.');
-            setInfo(true);
-            setTimeout(setAlertHelper, 3000);
-          }else{
-            sessionStorage.setItem('datos-certificado', JSON.stringify(response));
-            window.location.href = `${window.location.pathname}/validar`;
-          }        
+      validarCertificadoFetch(codigo).then((response: Certificado) => {
+        if (!response) {
+          setMensaje('Certificado no encontrado.');
+          setInfo(true);
+          setTimeout(setAlertHelper, 3000);
+        } else {
+          sessionStorage.setItem('datos-certificado', JSON.stringify(response));
+          window.location.href = `${window.location.pathname}/validar`;
         }
-      );
-    }else{
+      });
+    } else {
       setMensaje('Debe ingresar un código');
       setInfo(true);
       setTimeout(setAlertHelper, 3000);
@@ -40,12 +38,12 @@ export default function CodigoCertificado() {
   };
 
   const setAlertHelper = () => {
-    setInfo(false);    
+    setInfo(false);
   };
 
   return (
     <FormContainer className='mt-20 w-2/5 gap-2 md:gap-2 md:px-6'>
-      <div className='flex-col text-center items-center justify-between '>
+      <div className='flex-col items-center justify-between text-center '>
         <h2>Validar certificado</h2>
         <h4>Ingrese código</h4>
         <InputField
@@ -54,7 +52,7 @@ export default function CodigoCertificado() {
           name='codigo'
           label='Código'
           onChange={handleChange}
-          className='text-left mt-5'
+          className='mt-5 text-left'
         >
           <Key className='h-auto w-6 fill-garnet sm:w-8' />
         </InputField>

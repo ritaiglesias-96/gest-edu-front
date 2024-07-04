@@ -29,7 +29,7 @@ import { fbStorage } from '../../../firebase.config';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
 export default function Profile() {
-  const [datosUsuario, setUsuario] = useState<User>(emptyUser);
+  const [datosUsuario, setDatosUsuario] = useState<User>(emptyUser);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editado, setEditado] = useState(false);
@@ -46,7 +46,7 @@ export default function Profile() {
     });
     if (data.imagen === null)
       data.imagen = '../../../public/assets/images/default-user.png';
-    setUsuario(data);
+    setDatosUsuario(data);
     setLoading(false);
   };
 
@@ -97,13 +97,15 @@ export default function Profile() {
         datosUsuario.telefono,
         datosUsuario.domicilio,
         datosUsuario.imagen
-      ).then(() => {
-        setEditado(true);
-        setOpen(true);
-      }).catch(() => {
-        setErrorMessage('¡Hubo un error al editar los datos!');
-        setOpen(true);
-      });
+      )
+        .then(() => {
+          setEditado(true);
+          setOpen(true);
+        })
+        .catch(() => {
+          setErrorMessage('¡Hubo un error al editar los datos!');
+          setOpen(true);
+        });
     } else {
       setErrorMessage('¡Complete todos los campos antes de editar!');
       setOpen(true);
@@ -144,7 +146,7 @@ export default function Profile() {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL: any) => {
-            setUsuario({ ...datosUsuario, imagen: downloadURL });
+            setDatosUsuario({ ...datosUsuario, imagen: downloadURL });
           });
         }
       );
@@ -152,16 +154,16 @@ export default function Profile() {
   };
 
   return (
-    <FormContainer className=' text-black sm:w-4/5 md:w-2/3'>
+    <FormContainer className=' text-black sm:w-4/5 md:w-2/3 md:max-w-fit'>
       <div className=' grid w-full grid-cols-1 items-center justify-items-center gap-4 sm:grid-cols-2'>
         <div className='relative'>
           <Image
             loader={() => datosUsuario?.imagen}
             src={datosUsuario?.imagen}
             alt=''
-            width={200}
+            width={100}
             height={100}
-            className='h-32 w-auto rounded-full border-2 border-black object-cover md:h-48'
+            className='size-auto rounded-full border-2 border-black object-cover md:h-48'
           />
           <div className='absolute -bottom-2 flex w-full justify-center'>
             <input
@@ -179,7 +181,7 @@ export default function Profile() {
           </div>
         </div>
         <div>
-          <h3 className=' break-all'>
+          <h3 className=' break-words'>
             {datosUsuario?.nombre} {datosUsuario?.apellido}
           </h3>
         </div>

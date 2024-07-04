@@ -439,8 +439,8 @@ export async function registrarFechaExamen(data: any) {
     const response = await fetch(`${apiRoute}/examenes/crear`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         fecha: data.fecha,

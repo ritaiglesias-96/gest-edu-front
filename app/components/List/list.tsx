@@ -526,7 +526,7 @@ function EditableDocentesDataGrid({
   ];
 
   return (
-    <div className='m-4 h-fit w-full'>
+    <div className='mx-auto my-4 size-fit'>
       <div className='my-4 box-content flex flex-row justify-end rounded-md bg-ivory p-4'>
         <Link href='/funcionario/docentes/agregar'>
           <Button styling='primary'>Agregar Docente</Button>
@@ -546,7 +546,11 @@ function EditableDocentesDataGrid({
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+        sx={{
+          backgroundColor: '#f6f6e9',
+          color: 'black',
+          width: 'fit-content',
+        }}
       />
     </div>
   );
@@ -805,7 +809,13 @@ function EditarCalificacionCursoDataGrid({
 
   return (
     <div className='h-fit w-full p-4'>
-      <DataGrid rows={rows} loading={rowsLoading} columns={columns} />
+      <DataGrid
+        rows={rows}
+        autosizeOnMount={true}
+        autoHeight={true}
+        loading={rowsLoading}
+        columns={columns}
+      />
     </div>
   );
 }
@@ -934,6 +944,8 @@ function InscripcionExamenDataGrid({
           className='w-full'
           rows={rows}
           loading={rowsLoading}
+          autosizeOnMount={true}
+          autoHeight={true}
           columns={columns}
           sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
         />
@@ -1308,6 +1320,8 @@ function InscripcionCursoDataGrid({
         <DataGrid
           className='w-full'
           rows={rows}
+          autosizeOnMount={true}
+          autoHeight={true}
           loading={rowsLoading}
           columns={columns}
           sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
@@ -1466,7 +1480,13 @@ function EditarCalificacionExamenDataGrid({
 
   return (
     <div className='h-fit w-full p-4'>
-      <DataGrid rows={rows} loading={rowsLoading} columns={columns} />
+      <DataGrid
+        rows={rows}
+        autosizeOnMount={true}
+        autoHeight={true}
+        loading={rowsLoading}
+        columns={columns}
+      />
     </div>
   );
 }
@@ -1567,6 +1587,8 @@ function HorariosCursosEstudiante({
           className='w-full'
           rows={rows}
           loading={rowsLoading}
+          autosizeOnMount={true}
+          autoHeight={true}
           columns={columns}
           autoHeight={true}
           sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
@@ -1805,6 +1827,8 @@ function SolicitudTramiteDataGrid({
           className='m-4 h-fit w-full'
           rows={rows}
           loading={rowsLoading}
+          autosizeOnMount={true}
+          autoHeight={true}
           columns={columns}
           autoHeight={true}
           sx={{ backgroundColor: '#f6f6e9', color: 'black' }}

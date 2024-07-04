@@ -516,20 +516,38 @@ export async function getTramitesEstudiantes() {
 export const obtenerAsignaturasInscriptoFetch = async () => {
   const token = authToken();
   if (token) {
-    const response = await fetch(
-      `https://localhost:8080/gest-edu/api/estudiantes/carreras-inscripto`, //TODO falta endpoint de asignaturas de las cual esta insccipto el estudiante a algun curso
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${apiRoute}/estudiantes/carreras-inscripto`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (response.ok) {
       const carrerasJson = await response.json();
       return carrerasJson;
     } else {
       return response.json();
+    }
+  }
+};
+
+export const tokenFirebasePost = async (firebaseToken: string) => {
+  const token = authToken();
+  console.log('Token Firebase', firebaseToken);
+  if (token && firebaseToken) {
+    const response = await fetch(`${apiRoute}/notificaciones/tokenFirebase`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ tokenFirebase: firebaseToken }),
+    });
+
+    if (response.ok) {
+      console.log('Token Firebase registrado');
+    } else {
+      console.error('Error al registrar token Firebase:', response.statusText);
     }
   }
 };

@@ -68,13 +68,13 @@ export default function InstructivosPage() {
         <AccordionDetails>
           <Typography>
             <div className='flex'>
-              <Grading className='h-6 self-center sm:w-auto mr-5' />
+              <Grading className='mr-5 h-6 self-center sm:w-auto' />
               <h6>Asignaturas pendientes</h6>
             </div>
             Por cada carrera que el estudiante se encuentra inscripto, puede ver
             las asignaturas que tiene pendientes para finalizar la carrera.
             <div className='flex'>
-              <Grading className='h-6 self-center sm:w-auto mr-5' />
+              <Grading className='mr-5 h-6 self-center sm:w-auto' />
               <h6>Horarios</h6>
             </div>
             Permite consultar los horarios de la semana, de los cursos que se
@@ -82,7 +82,7 @@ export default function InstructivosPage() {
             click en el boton detalles, puede ver los horarios desglosados por
             dia de la semana.
             <div className='flex'>
-              <Grading className='h-6 self-center sm:w-auto mr-5' />
+              <Grading className='mr-5 h-6 self-center sm:w-auto' />
               <h6>Tramites</h6>
             </div>
             Permite ver el estado de los trámites, los cuales pueden ser de
@@ -104,7 +104,7 @@ export default function InstructivosPage() {
         <AccordionDetails>
           <Typography>
             <div className='flex'>
-              <School className='h-6 self-center sm:w-auto mr-5' />
+              <School className='mr-5 h-6 self-center sm:w-auto' />
               <h6>Solicitud de título</h6>
             </div>
             <p>
@@ -120,7 +120,7 @@ export default function InstructivosPage() {
             </p>
             <hr />
             <div className='flex'>
-              <Grading className='h-6 self-center sm:w-auto mr-5' />
+              <Grading className='mr-5 h-6 self-center sm:w-auto' />
               <h6>Solicitud de certificado</h6>
             </div>
             <p>
@@ -146,7 +146,7 @@ export default function InstructivosPage() {
             carrras, como cursos y exámenes. Para ello, se divide en dos
             secciones mas.
             <div className='flex'>
-              <Edit className='h-6 self-center sm:w-auto mr-5' />
+              <Edit className='mr-5 h-6 self-center sm:w-auto' />
               <h6>Mis carreras</h6>
             </div>
             <p>
@@ -163,7 +163,7 @@ export default function InstructivosPage() {
               para inscribirse como para darse de baja.
             </p>
             <div className='flex'>
-              <Edit className='h-6 self-center sm:w-auto mr-5' />
+              <Edit className='mr-5 h-6 self-center sm:w-auto' />
               <h6>Otras carreras</h6>
             </div>
             <p>

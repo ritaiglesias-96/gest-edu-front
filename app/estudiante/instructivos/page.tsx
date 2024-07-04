@@ -3,7 +3,7 @@ import InstructivosPage from '@/components/Instructivos/instructivo';
 
 export default function InstructivosEstudiante() {
   return (
-    <div className='h-screen flex items-center justify-center flex-col'>
+    <div className='flex h-screen flex-col items-center justify-center'>
       <h1>Instructivos</h1>
       <InstructivosPage />
     </div>

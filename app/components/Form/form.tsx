@@ -103,10 +103,10 @@ function RegistrarForm({
 
   return (
     <form
-      className='flex min-h-full flex-col items-center justify-between gap-1 md:mx-auto md:h-full md:max-w-full md:gap-2 md:px-6'
+      className='flex h-full flex-col items-center justify-between gap-1 md:mx-auto md:gap-2 md:px-6'
       action={dispatch}
     >
-      <h1 className='text-center text-2xl font-bold leading-snug text-black'>
+      <h1 className='heading2 text-center font-bold leading-snug text-black'>
         Complete el formulario para ingresar
       </h1>
       <InputField placeholder='Nombre' type='text' name='nombre' label='Nombre'>
