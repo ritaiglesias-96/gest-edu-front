@@ -9,7 +9,8 @@ import {
   getPeriodosExamenCarrera,
   registrarFechaExamen,
 } from '@/lib/data/funcionario/actions';
-import { Input, InputLabel } from '@mui/material';
+import { Input, InputLabel, Collapse, Alert } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
 import * as React from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
@@ -38,6 +39,9 @@ export default function FuncionarioHorariosExamenesAgregarHome({
   const [periodosSelect, setPeriodosSelect] = useState<string[]>([]);
   const [disabled, setDisabled] = useState(true);
   const [selectedDate, setSelectedDate] = useState<string>('');
+  const [alertOk, setAlertOk] = useState(false);
+  const [alertError, setAlertError] = useState(false);
+  const [mensajeError, setMensajeError] = useState('');
 
   const MenuProps = {
     PaperProps: {
@@ -178,11 +182,16 @@ export default function FuncionarioHorariosExamenesAgregarHome({
         if (params) {
           registrarFechaExamen(data).then((res) => {
             if (res) {
+              console.log(res);
               if (res.message) {
-                alert(res.message);
+                setMensajeError(res.message);
+                setAlertError(true);
+                setAlertOk(false);
               } else {
-                alert('Examen registrado');
-                router.back();
+                setMensajeError('Examen registrado con exito');
+                setAlertError(false);
+                setAlertOk(true);
+                //router.back();
               }
             }
           });
@@ -192,51 +201,88 @@ export default function FuncionarioHorariosExamenesAgregarHome({
       }
     } else {
       alert(
-        'La fecha ingresada no esta por dentro del periodo de examen seleccionado'
+        'La fecha ingresada no esta dentro del periodo de examen seleccionado'
       );
     }
   };
 
   return (
-    <FormContainer>
-      <div className='flex min-h-full w-full flex-col items-center justify-between gap-1 md:mx-auto md:h-full md:max-w-full md:gap-2 md:px-6'>
-        <h1 className='pb-4 text-center text-2xl font-bold leading-snug text-black'>
-          Agregar Fecha y hora de examen
-        </h1>
-        <BasicSelect />
-        <InputLabel htmlFor='component-simple'>Fecha y Hora</InputLabel>
-        <Input
-          className={
-            'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:underline focus:outline-none sm:text-base'
-          }
-          type='datetime-local'
-          name='fecha'
-          onChange={(event) => setFecha(event.target.value)}
-          disabled={disabled}
-        ></Input>
-        <InputLabel htmlFor='component-simple'>
-          Dias previos para la inscripcion
-        </InputLabel>
-        <Input
-          className={
-            'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:underline focus:outline-none sm:text-base'
-          }
-          type='number'
-          name='diasPrevInsc'
-          onChange={(event) => setDiasPrevInsc(event.target.value)}
-          disabled={disabled}
-        ></Input>
-        <MultipleSelectCheckmarks />
-        <div className='flex w-2/3 flex-col justify-between gap-1 sm:w-full sm:flex-row'>
-          <Button
-            onClick={() => handleClick()}
-            className='w-full'
-            styling='primary'
-          >
-            Registrar
-          </Button>
+    <>
+      <FormContainer>
+        <div className='flex min-h-full w-full flex-col items-center justify-between gap-1 md:mx-auto md:h-full md:max-w-full md:gap-2 md:px-6'>
+          <h1 className='pb-4 text-center text-2xl font-bold leading-snug text-black'>
+            Agregar Fecha y hora de examen
+          </h1>
+          <BasicSelect />
+          <InputLabel htmlFor='component-simple'>Fecha y Hora</InputLabel>
+          <Input
+            className={
+              'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:underline focus:outline-none sm:text-base'
+            }
+            type='datetime-local'
+            name='fecha'
+            onChange={(event) => setFecha(event.target.value)}
+            disabled={disabled}
+          ></Input>
+          <InputLabel htmlFor='component-simple'>
+            Dias previos para la inscripcion
+          </InputLabel>
+          <Input
+            className={
+              'mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:underline focus:outline-none sm:text-base'
+            }
+            type='number'
+            name='diasPrevInsc'
+            onChange={(event) => setDiasPrevInsc(event.target.value)}
+            disabled={disabled}
+          ></Input>
+          <MultipleSelectCheckmarks />
+          <div className='flex w-2/3 flex-col justify-between gap-1 sm:w-full sm:flex-row'>
+            <Button
+              onClick={() => handleClick()}
+              className='w-full'
+              styling='primary'
+            >
+              Registrar
+            </Button>
+          </div>
         </div>
-      </div>
-    </FormContainer>
+      </FormContainer>
+      {alertOk && (
+        <Collapse
+          in={alertOk}
+          className='z-10 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='success'
+            variant='filled'
+            onClose={() => {
+              setAlertOk(false);
+              router.back();
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
+      {alertError && (
+        <Collapse
+          in={alertError}
+          className='z-10 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='error'
+            variant='filled'
+            onClose={() => {
+              setAlertError(false);
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
+    </>
   );
 }
