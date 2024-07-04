@@ -1116,7 +1116,7 @@ function ApproveRejectDataGrid({
       },
     },
     {
-      field: 'nombreCarrera',
+      field: 'carreraNombre',
       type: 'string',
       headerName: 'Carrera',
     },
