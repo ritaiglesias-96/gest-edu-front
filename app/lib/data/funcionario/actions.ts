@@ -837,7 +837,7 @@ export async function registrarCurso(
       } else {
         return {
           message:
-            'Error al registrar periodo de examen. Verifique que las no correspodan a un periodo ya existente y sean coherentes entre ellas.',
+            'Error al registrar periodo de examen. Verifique que los datos sean coherentes.',
         };
       }
     }
