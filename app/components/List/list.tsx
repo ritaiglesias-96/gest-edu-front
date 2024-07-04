@@ -1804,10 +1804,11 @@ function SolicitudTramiteDataGrid({
     <>
       <div>
         <DataGrid
-          className='w-full'
+          className='m-4 h-fit w-full'
           rows={rows}
           loading={rowsLoading}
           columns={columns}
+          autoHeight={true}
           sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
         />
       </div>
