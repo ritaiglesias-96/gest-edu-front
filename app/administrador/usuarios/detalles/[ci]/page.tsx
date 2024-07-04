@@ -13,6 +13,8 @@ import PhoneIcon from '@/assets/svg/phone.svg';
 import CalendarIcon from '@/assets/svg/calendar.svg';
 import EmailIcon from '@/assets/svg/email.svg';
 import Button from '@/components/Button/button';
+import { Box, CircularProgress } from '@mui/material';
+import { useRouter } from 'next/navigation';
 
 interface Usuario {
   id: string;
@@ -29,15 +31,44 @@ interface Usuario {
 
 export default function UsuarioPage({ params }: { params: { ci: string } }) {
   const [userData, setUserData] = useState<Usuario>();
+  const [loading, setLoading] = useState(true);
+  const [fallout, setFallout] = useState(false);
+  const router = useRouter();
+
   useEffect(() => {
     const getUser = async () => {
       const user: Usuario | null = await getUserByCi(params.ci);
-      if (user) setUserData(user);
+      if (user) {
+        setUserData(user);
+        setLoading(false);
+      } else {
+        setFallout(true);
+      }
     };
     getUser();
   }, [params.ci]);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', height: '70vh' }}>
+        <CircularProgress sx={{ color: '#802c2c' }} />
+      </Box>
+    );
+  }
+
+  if (fallout && !loading) {
+    return (
+      <div className='mx-auto flex flex-col items-center justify-center text-ivory'>
+        <h1>Ha ocurrido un error</h1>
+        <Button onClick={() => router.back()} styling='primary'>
+          Regresar
+        </Button>
+      </div>
+    );
+  }
+
   return (
-    <FormContainer>
+    <div className='relative mx-auto my-4 flex size-fit flex-col rounded-xl bg-ivory px-2 pb-6 pt-2  md:p-10'>
       <div className='flex flex-col gap-4 text-black'>
         {userData && (
           <div className=' grid w-full grid-cols-1 items-center justify-items-center gap-4 sm:grid-cols-2'>
@@ -123,9 +154,18 @@ export default function UsuarioPage({ params }: { params: { ci: string } }) {
                 Desactivar usuario
               </Button>
             ) : null}
+            <Button
+              styling='primary'
+              className='col-span-full'
+              onClick={() => {
+                router.back();
+              }}
+            >
+              Volver
+            </Button>
           </div>
         )}
       </div>
-    </FormContainer>
+    </div>
   );
 }
