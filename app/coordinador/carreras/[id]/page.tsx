@@ -30,7 +30,15 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
     const fetch = async () => {
       const existeCarrera = await getCarreraYAsignatura(params.id);
       if (existeCarrera) {
-        setCarrera(existeCarrera.carrera);
+        // Verificar y asignar valores por defecto si son null
+        const fetchedCarrera = existeCarrera.carrera;
+        if (fetchedCarrera.duracionAnios === null) {
+          fetchedCarrera.duracionAnios = 0;
+        }
+        if (fetchedCarrera.creditos === null) {
+          fetchedCarrera.creditos = 0;
+        }
+        setCarrera(fetchedCarrera);
         setRows(existeCarrera.asignaturas);
         setRowsLoading(false);
       } else {
@@ -78,11 +86,11 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
               <div className='flex w-full flex-row justify-evenly rounded-md text-black md:w-fit md:flex-col md:justify-center'>
                 <div className='flex flex-col'>
                   <p className='font-bold'>Duracion:</p>
-                  <p>{carrera?.duracionAnios + ' años'}</p>
+                  <p>{carrera?.duracionAnios ?? 0} años</p>
                 </div>
                 <div className='flex flex-col'>
                   <p className='font-bold'>Creditos:</p>
-                  <p>{carrera?.creditos + ' creditos'}</p>
+                  <p>{carrera?.creditos ?? 0} creditos</p>
                 </div>
                 <Button
                   className='w-full self-center'
