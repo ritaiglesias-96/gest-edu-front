@@ -33,6 +33,7 @@ export default function AltaCarreraPage() {
           type='text'
           name='nombre'
           label='Nombre'
+          required
         ></InputField>
         <div id='nombre-error' aria-live='polite' aria-atomic='true'>
           {alta?.errors?.nombre?.map((error: string) => (
