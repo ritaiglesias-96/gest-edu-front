@@ -183,3 +183,19 @@ export const RegisterUserFormSchema = z
     message: 'Las contraseñas no coinciden',
     path: ['confirmPassword'],
   });
+
+  export const RegistrarCursoFormSchema = z
+  .object({
+    fechaInicio: z.string({
+      invalid_type_error: 'Ingrese una fecha valida',
+      required_error: 'Campo requerido',
+    }),
+    fechaFin: z.string({
+      invalid_type_error: 'Ingrese una fecha valida',
+      required_error: 'Campo requerido',
+    }),
+    diasPrevInsc: z.string(),
+    estado: z.string(),
+    asignaturaId: z.string(),
+    docenteId: z.string(),
+  });

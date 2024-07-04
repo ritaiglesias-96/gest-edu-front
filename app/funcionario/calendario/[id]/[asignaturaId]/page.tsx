@@ -100,6 +100,13 @@ export default function AsignaturaPage({
                     Registrar Fecha de Examen
                   </Button>
                 </Link>
+                <Link
+                  href={`/funcionario/calendario/${params.id}/${params.asignaturaId}/agregar-curso`}
+                >
+                  <Button className='w-full' styling='primary'>
+                    Registrar Fecha de Curso
+                  </Button>
+                </Link>
               </div>
             </div>
             <h3>Cursos</h3>
