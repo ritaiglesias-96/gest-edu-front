@@ -37,7 +37,6 @@ export default function CalificacionesExamenPage({
   }, [params.examenId]);
 
   useEffect(() => {
-    console.log('🚀 ~ useEffect ~ examen:', examen);
     if (examen?.id) {
       examen.fecha = convertirFecha(examen.fecha);
       getEstudiantesCalificadosExamen(examen.id).then(

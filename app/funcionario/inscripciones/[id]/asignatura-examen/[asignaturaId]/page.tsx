@@ -18,7 +18,6 @@ export default function ExamenActivoPage({
   useEffect(() => {
     const fetch = async () => {
       const existeExamen = await getExamenesAsignatura(params.asignaturaId);
-      console.log('🚀 ~ fetch ~ existeExamen:', existeExamen);
       if (!existeExamen.message) {
         const examenes = existeExamen.content.map((examen: Examen) => ({
           id: examen.id,

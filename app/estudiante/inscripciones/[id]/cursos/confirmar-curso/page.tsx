@@ -1,8 +1,6 @@
 'use client';
 import List from '@/components/List/list';
-import {
-  getAsignatura,
-} from '@/lib/data/coordinador/actions';
+import { getAsignatura } from '@/lib/data/coordinador/actions';
 import { obtenerCursosVigentes } from '@/lib/data/estudiante/actions';
 import { Asignatura } from '@/lib/definitions';
 import React from 'react';
@@ -49,7 +47,6 @@ export default function ConfirmarInscripcionCurso() {
     });
   }, [asignaturaId]);
 
-  console.log(rows);
   return (
     <div className='relative box-border size-full w-3/6 justify-center overflow-auto'>
       <h1 className='text-center font-bold'>Confirmar inscripción a curso</h1>

@@ -9,8 +9,6 @@ export default function CursosEstudiante() {
 
   useEffect(() => {
     getHorariosCursosEstudiante().then((horarioCursos: any) => {
-      console.log(horarioCursos);
-
       if (horarioCursos) {
         const horarios = horarioCursos.map((horario: any) => {
           const id = horario.cursoId;

@@ -19,7 +19,6 @@ export default function ActaCursoPage({
     const fetch = async () => {
       try {
         const response = await getActaCurso(params.cursoId);
-        console.log('🚀 ~ fetch ~ response:', response);
         if (response) {
           const curso = response.curso;
           const estudiantes = response.estudiantes.map(
