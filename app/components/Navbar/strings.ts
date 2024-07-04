@@ -119,7 +119,6 @@ export const strings = {
   },
   navCoordinador: {
     links: [
-      { href: '/coordinador/home', iconName: 'GestEduIcon', label: 'Inicio' },
       { href: '/coordinador/tramites', iconName: 'Rule', label: 'Tramites' },
       { href: '/coordinador/carreras', iconName: 'Hat', label: 'Carreras' },
       { href: '/coordinador/perfil', iconName: 'User', label: 'Perfil' },
