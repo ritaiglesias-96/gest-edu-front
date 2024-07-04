@@ -4,23 +4,20 @@ import List from '@/components/List/list';
 import { getExamenesAsignatura } from '@/lib/data/funcionario/actions';
 import { Examen } from '@/lib/definitions';
 import { Box, CircularProgress } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function ExamenActivoPage({
   params,
 }: {
-  params: { id: string };
+  params: { id: string; asignaturaId: string };
 }) {
-  const router = useRouter();
   const [rows, setRows] = useState<any[]>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
-  const [fallout, setFallout] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetch = async () => {
-      const existeExamen = await getExamenesAsignatura(params.id);
+      const existeExamen = await getExamenesAsignatura(params.asignaturaId);
       console.log('🚀 ~ fetch ~ existeExamen:', existeExamen);
       if (!existeExamen.message) {
         const examenes = existeExamen.content.map((examen: Examen) => ({
@@ -29,11 +26,8 @@ export default function ExamenActivoPage({
           asignaturaNombre: examen.asignatura.nombre,
         }));
         setRows(examenes);
-        setRowsLoading(false);
-      } else {
-        setRowsLoading(false);
-        setFallout(true);
       }
+      setRowsLoading(false);
     };
     fetch().finally(() => setLoading(false));
   }, [params.id]);
