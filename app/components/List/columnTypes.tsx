@@ -916,6 +916,7 @@ export const calificacionExamenColumns: GridColDef[] = [
   { field: 'estudianteApellido', headerName: 'Apellido' },
   { field: 'calificacion', headerName: 'Calificacion' },
 ];
+
 export const horariosColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   { field: 'dia', headerName: 'Dia' },

@@ -49,8 +49,10 @@ import Close from '@/assets/svg/close.svg';
 import Schedule from '@/assets/svg/schedule.svg';
 import Grading from '@/assets/svg/grading.svg';
 import School from '@/assets/svg/school.svg';
+import Download from '@/assets/svg/download.svg';
 import CheckIcon from '@mui/icons-material/Check';
 import CertificadoPDF from '../DocumentosPDF/CertificadoPDF';
+import EscolaridadPDF from '../DocumentosPDF/EscolaridadPDF';
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -76,6 +78,7 @@ import {
   HorarioCurso,
   Certificado,
   Carrera,
+  Escolaridad,
 } from '@/lib/definitions';
 import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
@@ -100,6 +103,7 @@ import {
   inscribirseExamenFetch,
   solicitarCertificadoFetch,
   solicitarTituloFetch,
+  solicitarEscolaridadFetch,
 } from '@/lib/data/estudiante/actions';
 import { SessionCtx } from '../../../context/SessionContext';
 import { convertirFecha } from '@/utils/utils';
@@ -270,6 +274,7 @@ export default function List({
       break;
     case 'calificacionExamen':
       columns = calificacionExamenColumns;
+      break;
     case 'actasFuncionario':
       columns = actasFuncionarioColumn;
       break;
@@ -452,27 +457,27 @@ function EditableDocentesDataGrid({
       field: 'id',
       type: 'number',
       headerName: 'ID',
-      width: 90,
+      width: 10,
       editable: false,
     },
-    { field: 'nombre', headerName: 'Nombre', width: 180, editable: true },
+    { field: 'nombre', headerName: 'Nombre', flex: 1, editable: true },
     {
       field: 'apellido',
       headerName: 'Apellido',
-      width: 180,
+      flex: 1,
       editable: true,
     },
     {
       field: 'documento',
       headerName: 'Cedula',
-      width: 180,
+      flex: 1,
       editable: true,
     },
     {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      width: 150,
+      flex: 1,
       cellClassName: 'actions',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -1635,10 +1640,13 @@ function SolicitudTramiteDataGrid({
   const [rowsLoading, setRowsLoading] = useState(true);
   const [isOpenTitulo, setIsOpenTitulo] = useState(false);
   const [isOpenCertificado, setIsOpenCertificado] = useState(false);
+  const [isOpenEscolaridad, setIsOpenEscolaridad] = useState(false);
   const [carreraId, setCarreraId] = useState('');
   const [alertOk, setAlertOk] = useState(false);
   const [alertError, setAlertError] = useState(false);
   const [modalCertificado, setModalCertificado] = useState(false);
+  const [modalEscolaridad, setModalEscolaridad] = useState(false);
+  const [escolaridad, setEscolaridad] = useState<Escolaridad>();
   const [mensajeError, setMensajeError] = useState('');
   const [certificado, setCertificado] = useState<Certificado>();
 
@@ -1690,6 +1698,26 @@ function SolicitudTramiteDataGrid({
     setAlertOk(false);
     setTimeout(setAlertHelper, 5000);
   };
+
+  const handleClickSolicitudEscolaridad = () => {
+      if (carreraId) {
+        solicitarEscolaridadFetch(carreraId).then((data) => {
+          if (data?.message) {
+            setMensajeError(data.message);
+            setAlertError(true);
+            setAlertOk(false);
+          } else {
+            setModalEscolaridad(true);
+            setMensajeError('');
+            setAlertError(false);
+            setEscolaridad(data);
+          }
+        });
+      }
+      setIsOpenEscolaridad(false);
+      setAlertOk(false);
+      setTimeout(setAlertHelper, 5000);
+    };
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID' },
@@ -1748,6 +1776,24 @@ function SolicitudTramiteDataGrid({
           className='mx-auto flex size-fit'
         >
           <Grading className='h-auto w-6 fill-garnet sm:w-8' />
+        </button>
+      ),
+    },
+    {
+      field: 'solicitarEscolaridad',
+      headerName: 'Solicitar Escolaridad',
+      cellClassName: 'flex items-center self-end',
+      headerAlign: 'center',
+      flex: 1,
+      renderCell: (params) => (
+        <button
+          onClick={() => {
+            setIsOpenEscolaridad(true);
+            setCarreraId(params.id.toString());
+          }}
+          className='mx-auto flex size-fit'
+        >
+          <Download className='h-auto w-6 fill-garnet sm:w-8' />
         </button>
       ),
     },
@@ -1885,6 +1931,61 @@ function SolicitudTramiteDataGrid({
           </Alert>
         </Collapse>
       )}
+      {isOpenEscolaridad && (
+              <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
+                <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+                  <div className='rounded-md text-center font-bold text-black'>
+                    <h5 className='m-0 p-0'>Solicitud de Certificado de Escolaridad</h5>
+                    <div className='flex flex-col'>
+                      <p className='font-bold'>¿Desea solicitar el Certificado de Escolaridad?</p>
+                    </div>
+                    <div className='items-center md:space-x-6'>
+                      <div className='inline-block'>
+                        <Button
+                          styling='primary'
+                          className='lg:w-20'
+                          onClick={handleClickSolicitudEscolaridad}
+                        >
+                          Si
+                        </Button>
+                      </div>
+                      <div className='inline-block'>
+                        <Button
+                          styling='secondary'
+                          onClick={() => setIsOpenEscolaridad(false)}
+                          className='lg:w-20'
+                        >
+                          No
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {modalEscolaridad && (
+              <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory p-8 shadow-lg shadow-garnet'>
+                <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+                  <div className='rounded-md text-center font-bold text-black'>
+                    <h5 className='m-0 mb-6 p-0'>¿Descargar escolaridad?</h5>
+                    <div className='flex items-center space-x-2'>
+                      <div>
+                        <EscolaridadPDF escolaridad={escolaridad!} />
+                      </div>
+                      <div>
+                        <Button
+                          styling='secondary'
+                          onClick={() => setModalEscolaridad(false)}
+                          className='lg:w-48'
+                        >
+                          Cerrar
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
     </>
   );
 }
