@@ -4,11 +4,13 @@ import { authToken } from '@/utils/auth';
 import {
   Calificacion,
   CalificacionExamen,
+  Curso,
   DocenteState,
   PeriodoExamenState,
 } from '@/lib/definitions';
 import {
   AltaDocenteFormSchema,
+  RegistrarCursoFormSchema,
   RegistrarPeriopdoExamenFormSchema,
 } from '../schemasZod';
 import { GridRowModel } from '@mui/x-data-grid/models/gridRows';
@@ -781,5 +783,63 @@ export async function getActaCurso(cursoId: string) {
   } catch (error: any) {
     // Handling network or other unexpected errors
     return { message: 'Network error or server is down', error: error.message };
+  }
+}
+
+export async function registrarCurso(
+  prevState: Curso,
+  formData: FormData
+) {
+  const token = authToken();
+  if (token) {
+    const validatedFields = RegistrarCursoFormSchema.safeParse({
+      fechaInicio: formData.get('fechaInicio'),
+      fechaFin: formData.get('fechaFin'),
+      diasPrevInsc: formData.get('diasPrevInsc'),
+      estado: formData.get('estado'),
+      asignaturaId: formData.get('asignaturaId'),
+      docenteId: formData.get('docenteId'),
+    });
+
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Create Subject.',
+      };
+    } else {
+      const { fechaInicio, fechaFin, diasPrevInsc, estado, asignaturaId, docenteId } = validatedFields.data;
+      const docId = parseInt(docenteId);
+
+      const response = await fetch(`${apiRoute}/cursos`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: 0,
+          fechaInicio,
+          fechaFin,
+          diasPrevInsc,
+          estado,
+          asignaturaId,
+          docenteId: docId,
+        }),
+      });
+      if (response.ok) {
+        return {
+          message: 'Registrado con exito. 200',
+        };
+      } else {
+        return {
+          message:
+            'Error al registrar periodo de examen. Verifique que los datos sean coherentes.',
+        };
+      }
+    }
+  } else {
+    return {
+      message: 'Debe ser un funcionario para registrar periodos de examen',
+    };
   }
 }
