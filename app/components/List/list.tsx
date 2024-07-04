@@ -886,13 +886,11 @@ function InscripcionExamenDataGrid({
       headerName: 'ID',
       cellClassName: 'flex items-center self-end',
       headerClassName: 'header-center',
-      flex: 1,
     },
     {
       field: 'fecha',
       headerName: 'Fecha',
-      cellClassName: 'flex justify-center self-end',
-      headerAlign: 'center',
+      cellClassName: 'flex justify-center  items-center self-end',
       flex: 1,
     },
     {
