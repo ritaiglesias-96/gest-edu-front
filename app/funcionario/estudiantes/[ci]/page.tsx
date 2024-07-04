@@ -26,7 +26,8 @@ export default function EstudiantePage({
     const fetchEstudiante = async () => {
       const data = await getEstudiante(params.ci);
       if (data) {
-        if (!data.imagen) data.imagen = '/static/images/default-user-image.png';
+        if (!data.imagen)
+          data.imagen = process.env.REACT_APP_BLANK_PROFILE_PICTURE;
         setEstudiante(data);
         setLoading(false);
       } else {
@@ -57,7 +58,7 @@ export default function EstudiantePage({
   }
 
   return (
-    <div className='relative box-border size-full justify-center overflow-auto md:w-1/3'>
+    <div className='relative box-border size-full justify-center overflow-auto md:w-4/5 lg:w-3/5'>
       <div className='h-fit w-full p-2'>
         <div className='my-2 box-content flex flex-col items-center justify-between rounded-md bg-ivory p-6 text-black'>
           <div className='mt-4 grid grid-cols-1 items-center gap-4 md:grid-cols-2'>
@@ -70,7 +71,7 @@ export default function EstudiantePage({
                 className='rounded-full border-2 border-black object-cover'
               />
             )}
-            <h3 className='break-all text-center'>
+            <h3 className='break-words text-center'>
               {estudiante?.nombre} {estudiante?.apellido}
             </h3>
             <InputField
@@ -118,6 +119,13 @@ export default function EstudiantePage({
             >
               <CalendarIcon className='h-auto w-6 fill-garnet sm:w-8' />
             </InputField>
+            <Button
+              className='col-span-2 mx-auto w-fit'
+              onClick={() => router.back()}
+              styling='primary'
+            >
+              Regresar
+            </Button>
           </div>
         </div>
       </div>

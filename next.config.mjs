@@ -10,6 +10,16 @@ const nextConfig = {
       allowedOrigins: ['gestedu.works', 'localhost:3000', 'www.gestedu.works'],
     },
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
   webpack: (config) => {
     // Add a rule to handle SVG files
     config.module.rules.push({
