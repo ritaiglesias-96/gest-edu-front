@@ -1564,12 +1564,13 @@ function HorariosCursosEstudiante({
 
   return (
     <>
-      <div>
+      <div className='m-4 h-fit w-full'>
         <DataGrid
           className='w-full'
           rows={rows}
           loading={rowsLoading}
           columns={columns}
+          autoHeight={true}
           sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
         />
       </div>
@@ -1700,24 +1701,24 @@ function SolicitudTramiteDataGrid({
   };
 
   const handleClickSolicitudEscolaridad = () => {
-      if (carreraId) {
-        solicitarEscolaridadFetch(carreraId).then((data) => {
-          if (data?.message) {
-            setMensajeError(data.message);
-            setAlertError(true);
-            setAlertOk(false);
-          } else {
-            setModalEscolaridad(true);
-            setMensajeError('');
-            setAlertError(false);
-            setEscolaridad(data);
-          }
-        });
-      }
-      setIsOpenEscolaridad(false);
-      setAlertOk(false);
-      setTimeout(setAlertHelper, 5000);
-    };
+    if (carreraId) {
+      solicitarEscolaridadFetch(carreraId).then((data) => {
+        if (data?.message) {
+          setMensajeError(data.message);
+          setAlertError(true);
+          setAlertOk(false);
+        } else {
+          setModalEscolaridad(true);
+          setMensajeError('');
+          setAlertError(false);
+          setEscolaridad(data);
+        }
+      });
+    }
+    setIsOpenEscolaridad(false);
+    setAlertOk(false);
+    setTimeout(setAlertHelper, 5000);
+  };
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID' },
@@ -1932,60 +1933,64 @@ function SolicitudTramiteDataGrid({
         </Collapse>
       )}
       {isOpenEscolaridad && (
-              <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
-                <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
-                  <div className='rounded-md text-center font-bold text-black'>
-                    <h5 className='m-0 p-0'>Solicitud de Certificado de Escolaridad</h5>
-                    <div className='flex flex-col'>
-                      <p className='font-bold'>¿Desea solicitar el Certificado de Escolaridad?</p>
-                    </div>
-                    <div className='items-center md:space-x-6'>
-                      <div className='inline-block'>
-                        <Button
-                          styling='primary'
-                          className='lg:w-20'
-                          onClick={handleClickSolicitudEscolaridad}
-                        >
-                          Si
-                        </Button>
-                      </div>
-                      <div className='inline-block'>
-                        <Button
-                          styling='secondary'
-                          onClick={() => setIsOpenEscolaridad(false)}
-                          className='lg:w-20'
-                        >
-                          No
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
+          <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+            <div className='rounded-md text-center font-bold text-black'>
+              <h5 className='m-0 p-0'>
+                Solicitud de Certificado de Escolaridad
+              </h5>
+              <div className='flex flex-col'>
+                <p className='font-bold'>
+                  ¿Desea solicitar el Certificado de Escolaridad?
+                </p>
+              </div>
+              <div className='items-center md:space-x-6'>
+                <div className='inline-block'>
+                  <Button
+                    styling='primary'
+                    className='lg:w-20'
+                    onClick={handleClickSolicitudEscolaridad}
+                  >
+                    Si
+                  </Button>
+                </div>
+                <div className='inline-block'>
+                  <Button
+                    styling='secondary'
+                    onClick={() => setIsOpenEscolaridad(false)}
+                    className='lg:w-20'
+                  >
+                    No
+                  </Button>
                 </div>
               </div>
-            )}
-            {modalEscolaridad && (
-              <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory p-8 shadow-lg shadow-garnet'>
-                <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
-                  <div className='rounded-md text-center font-bold text-black'>
-                    <h5 className='m-0 mb-6 p-0'>¿Descargar escolaridad?</h5>
-                    <div className='flex items-center space-x-2'>
-                      <div>
-                        <EscolaridadPDF escolaridad={escolaridad!} />
-                      </div>
-                      <div>
-                        <Button
-                          styling='secondary'
-                          onClick={() => setModalEscolaridad(false)}
-                          className='lg:w-48'
-                        >
-                          Cerrar
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {modalEscolaridad && (
+        <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory p-8 shadow-lg shadow-garnet'>
+          <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
+            <div className='rounded-md text-center font-bold text-black'>
+              <h5 className='m-0 mb-6 p-0'>¿Descargar escolaridad?</h5>
+              <div className='flex items-center space-x-2'>
+                <div>
+                  <EscolaridadPDF escolaridad={escolaridad!} />
+                </div>
+                <div>
+                  <Button
+                    styling='secondary'
+                    onClick={() => setModalEscolaridad(false)}
+                    className='lg:w-48'
+                  >
+                    Cerrar
+                  </Button>
                 </div>
               </div>
-            )}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
