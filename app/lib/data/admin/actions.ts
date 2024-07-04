@@ -110,7 +110,6 @@ export async function getUserByCi(ci: string) {
 
 export async function desactivarCuenta(id: string) {
   const token = authToken();
-  console.log(id);
   const response = await fetch(`${apiRoute}/administrador/desactivarUsuario`, {
     method: 'POST',
     headers: {
@@ -121,7 +120,6 @@ export async function desactivarCuenta(id: string) {
   });
   if (response.ok) {
     const data = await response.json();
-    console.log(data);
     return data;
   } else {
     return null;

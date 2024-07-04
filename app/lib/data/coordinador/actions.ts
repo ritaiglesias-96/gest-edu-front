@@ -20,7 +20,6 @@ export const getCarreras = async () => {
         'Content-Type': 'application/json',
       },
     });
-    console.log('🚀 ~ getCarreras ~ response:', response);
     if (response.ok) {
       const data = await response.json();
       return data;
@@ -92,7 +91,6 @@ export async function getCarreraYAsignatura(id: string) {
 
 export async function altaCarrera(prevState: CarreraState, formData: FormData) {
   const token = authToken();
-  console.log(formData);
 
   const validatedFields = CarreraFormSchema.safeParse({
     nombre: formData.get('nombre'),
@@ -105,7 +103,6 @@ export async function altaCarrera(prevState: CarreraState, formData: FormData) {
     };
   } else {
     const { nombre, descripcion } = validatedFields.data;
-    console.log({ nombre, descripcion });
     const response = await fetch(`${apiRoute}/carreras`, {
       method: 'POST',
       headers: {
@@ -117,7 +114,6 @@ export async function altaCarrera(prevState: CarreraState, formData: FormData) {
         descripcion,
       }),
     });
-    console.log(response);
     if (response.ok) {
       return {
         message: 'Creada con exito. 201',

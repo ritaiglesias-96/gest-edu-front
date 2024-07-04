@@ -2011,7 +2011,6 @@ function InscripcionCarreraDataGrid({
   const [mensajeError, setMensajeError] = useState('');
 
   useEffect(() => {
-    console.log(rowsParent);
     setRows(rowsParent);
     setRowsLoading(rowsLoadingParent);
   }, [rowsLoadingParent, rowsParent]);
@@ -2026,7 +2025,6 @@ function InscripcionCarreraDataGrid({
 
   const inscribirseCarrera = async (id: string) => {
     const data = await inscribirseCarreraFetch(id);
-    console.log(data);
     if (data.estado === 'PENDIENTE') {
       setShowModal(false);
       setAlertOk(true);

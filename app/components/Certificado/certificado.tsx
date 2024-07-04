@@ -10,8 +10,6 @@ export default function Certificado() {
     const data = sessionStorage.getItem('datos-certificado');
     if (data) {
       let objetoJson = JSON.parse(data);
-      console.log(objetoJson);
-
       setCertificado(objetoJson);
     }
   }, []);

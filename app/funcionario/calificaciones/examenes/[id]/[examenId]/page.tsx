@@ -50,8 +50,6 @@ export default function CursoPage({
         if (data.estudiantes) {
           data.estudiantes.forEach((element: any) => {
             element.fechaNac = convertirFecha(element.fechaNac);
-            console.log(element);
-
             arrayEstudiantes.push(element.estudiante);
           });
         }

@@ -95,10 +95,6 @@ export default function ExamenesPendientesPage({
           element.nombreAsignatura = element.asignatura.nombre;
           element.fecha = convertirFecha(element.fecha);
         });
-        console.log(
-          '🚀 ~ allExamenesAsignatura.forEach ~ allExamenesAsignatura:',
-          allExamenesAsignatura
-        );
         setExamenesCalificados(allExamenesAsignatura);
       } catch (error) {
         console.error('Error fetching examenes calificados:', error);

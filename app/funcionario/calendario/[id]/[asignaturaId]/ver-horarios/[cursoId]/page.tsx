@@ -43,7 +43,6 @@ export default function HorariosPage({
               horaFin: formatoHora(horarioCurso.horaFin),
             })
           );
-          console.log(horariosCurso);
           // Ordenar los horarios por día de la semana
           horariosCurso.sort(
             (a: any, b: any) =>

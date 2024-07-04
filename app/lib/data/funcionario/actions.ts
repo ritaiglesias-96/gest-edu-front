@@ -248,7 +248,6 @@ export async function getCurso(id: string) {
 }
 
 export async function getDocente(id: string) {
-  console.log('🚀 ~ getDocente ~ id:', id);
   const token = authToken();
   const response = await fetch(`${apiRoute}/docentes/${id}`, {
     method: 'GET',
@@ -257,7 +256,6 @@ export async function getDocente(id: string) {
       'Content-Type': 'application/json',
     },
   });
-  console.log('🚀 ~ getDocente ~ response:', response);
   if (response.ok) {
     const data = await response.json();
     return data;
@@ -559,7 +557,6 @@ export async function getAsignaturasConExamenActivo(carreraId: string) {
 }
 
 export async function getExamenesAsignatura(asignaturaId: string) {
-  console.log('🚀 ~ getExamenesAsignatura ~ asignaturaId:', asignaturaId);
   const token = authToken();
   if (token) {
     const response = await fetch(
@@ -573,7 +570,6 @@ export async function getExamenesAsignatura(asignaturaId: string) {
       }
     );
 
-    console.log('🚀 ~ getExamenesAsignatura ~ response:', response);
     if (response.ok) {
       const data = await response.json();
       return data;

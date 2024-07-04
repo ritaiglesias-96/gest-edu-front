@@ -13,7 +13,6 @@ export default function TramitesEstudiantes() {
   useEffect(() => {
     getTramitesEstudiantes().then((response) => {
       if (!response.message) {
-        console.log(response);
         const tramites: TramiteEstudiante[] = response.map((r: any) => {
           const tramite: TramiteEstudiante = {
             id: r.id,

@@ -87,10 +87,6 @@ export default function CalificacionCursoPage({
           )?.nombre;
           allCursosAsignatura.push(...data);
         }
-        console.log(
-          '🚀 ~ fetchCursosCalificados ~ allCursosAsignatura:',
-          allCursosAsignatura
-        );
         allCursosAsignatura.forEach((element) => {
           element.fechaInicio = convertirFecha(element.fechaInicio);
           element.fechaFin = convertirFecha(element.fechaFin);
@@ -104,10 +100,6 @@ export default function CalificacionCursoPage({
     };
     fetchCursosCalificados();
   }, [asignaturas]);
-
-  // useEffect(() => {
-  //   console.log('🚀 ~ cursosCalificados:', cursosCalificados);
-  // }, [cursosCalificados]);
 
   if (loading) {
     return (
