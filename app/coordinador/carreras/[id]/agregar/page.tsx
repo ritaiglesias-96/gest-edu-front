@@ -34,6 +34,7 @@ export default function AltaAsignaturaPage() {
           type='text'
           name='nombre'
           label='Nombre'
+          required
         ></InputField>
         <div id='nombre-error' aria-live='polite' aria-atomic='true'>
           {alta?.errors?.nombre?.map((error: string) => (
@@ -60,6 +61,7 @@ export default function AltaAsignaturaPage() {
           type='number'
           name='creditos'
           label='Creditos'
+          required
         ></InputField>
         <div id='creditos-error' aria-live='polite' aria-atomic='true'>
           {alta?.errors?.creditos?.map((error: string) => (

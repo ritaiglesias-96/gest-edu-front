@@ -165,7 +165,7 @@ function EditAsignatura({
         >
           <Close className='self-end fill-garnet hover:fill-bittersweet sm:size-10' />
         </button>
-        <h2 className='text-center text-black'>Editar Asignaruea</h2>
+        <h2 className='text-center text-black'>Editar Asignatura</h2>
         <form
           className='flex min-h-full w-full flex-col items-center justify-between gap-2 md:mx-auto md:h-full md:max-w-full md:gap-2 '
           action={dispatch}
