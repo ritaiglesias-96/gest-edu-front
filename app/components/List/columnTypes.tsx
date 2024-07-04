@@ -713,10 +713,12 @@ export const asignaturaBajaCursoColumns: GridColDef[] = [
       <Button
         styling='outline'
         onClick={async () => {
-          const response = await bajaCursoFetch(params.id.toString());
-          if (response) {
-            alert(response.message);
-          }
+          bajaCursoFetch(params.id.toString()).then((response) => {
+            if (response) {
+              alert(response.message);
+              location.reload();
+            }
+          });
         }}
         className='mx-auto flex size-fit'
       >
