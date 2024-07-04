@@ -233,10 +233,15 @@ export const obtenerAsignaturasParaInscripcionFetch = async (id: string) => {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
       }
     );
 
+    // console.log(
+    //   '🚀 ~ obtenerAsignaturasParaInscripcionFetch ~ response:',
+    //   response
+    // );
     if (response.ok) {
       const asignaturasJson = await response.json();
       return { asignaturas: asignaturasJson.content };
@@ -427,9 +432,9 @@ export const bajaCursoFetch = async (id: string) => {
       return res.json();
     });
 
-    if (response.ok) {
+    if (response) {
       return {
-        message: response.message,
+        message: 'Dado de baja con exito',
       };
     }
   }
