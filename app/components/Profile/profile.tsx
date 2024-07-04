@@ -35,8 +35,9 @@ export default function Profile() {
   const [editado, setEditado] = useState(false);
   const [date, setDate] = useState('');
   const [ci, setCI] = useState('');
-  const [validPhone, setValidPhone] = useState(false);
+  const [validPhone, setValidPhone] = useState(true);
   const [isOpen, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const fetchDatosUser = async () => {
     const data = await obtenerDatosUsuarioFetch().catch((error) => {
@@ -62,32 +63,31 @@ export default function Profile() {
       '$1.$2.$3-$4'
     );
     setCI(formattedCI);
-    const validPhone = !/^\d+$/.test(datosUsuario?.telefono);
+    const validPhone = /^\d+$/.test(datosUsuario?.telefono);
     setValidPhone(validPhone);
   }, [datosUsuario]);
 
   function convertirFecha(inputDate: string) {
     if (inputDate !== null) {
-      // Crear un objeto Date a partir de la cadena de entrada
       const date = new Date(inputDate);
-
-      // Obtener el día, mes y año de la fecha
       const day = date.getDate();
-      const month = date.getMonth() + 1; // Los meses en JavaScript son 0-indexed (0 = Enero, 11 = Diciembre)
+      const month = date.getMonth() + 1;
       const year = date.getFullYear();
-
-      // Formatear el día y el mes para que tengan siempre dos dígitos
       const formattedDay = day < 10 ? '0' + day : day;
       const formattedMonth = month < 10 ? '0' + month : month;
-
-      // Devolver la fecha formateada
       return `${formattedDay}/${formattedMonth}/${year}`;
     }
-
     return '';
   }
 
   const handleClickEditar = () => {
+    setErrorMessage('');
+    if (!validPhone) {
+      setErrorMessage('¡Ingrese solo números en el teléfono!');
+      setOpen(true);
+      return;
+    }
+
     if (
       datosUsuario.telefono !== '' &&
       datosUsuario.domicilio !== '' &&
@@ -100,15 +100,24 @@ export default function Profile() {
       ).then(() => {
         setEditado(true);
         setOpen(true);
+      }).catch(() => {
+        setErrorMessage('¡Hubo un error al editar los datos!');
+        setOpen(true);
       });
+    } else {
+      setErrorMessage('¡Complete todos los campos antes de editar!');
+      setOpen(true);
     }
   };
 
   const handleChange = (name: string, newValue: string) => {
-    if (name === 'telefono')
+    if (name === 'telefono') {
       setUsuario({ ...datosUsuario, telefono: newValue });
-    if (name === 'domicilio')
+      setValidPhone(/^\d+$/.test(newValue));
+    }
+    if (name === 'domicilio') {
       setUsuario({ ...datosUsuario, domicilio: newValue });
+    }
   };
 
   if (loading) {
@@ -122,27 +131,18 @@ export default function Profile() {
   const handlefile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Referencia a la ubicación donde se almacenará el archivo en Firebase Storage
-      // El nombre de archivo se guarda con la cedula de la persona
       const storageRef = ref(fbStorage, datosUsuario.ci);
-
-      // Subir el archivo
       const uploadTask = uploadBytesResumable(storageRef, file);
-
-      // Escuchar los cambios de estado del proceso de subida
       uploadTask.on(
         'state_changed',
         (snapshot) => {
-          // Progreso de la subida
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         },
         (error) => {
-          // Manejar errores
           console.error('Error uploading file:', error);
         },
         () => {
-          // Subida completa, obtener URL de descarga
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL: any) => {
             setUsuario({ ...datosUsuario, imagen: downloadURL });
           });
@@ -184,7 +184,7 @@ export default function Profile() {
           </h3>
         </div>
         <div className=' col-span-full'>
-          <h4>Datos Personlanes:</h4>
+          <h4>Datos Personales:</h4>
         </div>
         <div
           id='divNombre'
@@ -293,25 +293,24 @@ export default function Profile() {
             variant='standard'
             style={{ display: 'inline-block', verticalAlign: 'middle' }}
           >
-            <InputLabel htmlFor='component-simple'>Telefono</InputLabel>
+            <InputLabel htmlFor='component-simple'>Teléfono</InputLabel>
             <Input
               id='component-simple'
               name='telefono'
               value={datosUsuario?.telefono}
               size='small'
               onChange={(e) => handleChange(e.target.name, e.target.value)}
-              readOnly={false}
               inputProps={{
                 inputMode: 'numeric',
               }}
             />
-            {validPhone && (
+            {!validPhone && (
               <p style={{ color: 'red' }}>¡Ingrese solo números!</p>
             )}
           </FormControl>
         </div>
         <div
-          id='divFechaNac'
+          id='divDomicilio'
           className='flex w-full flex-row justify-center gap-2'
         >
           <LocationIcon className='h-auto w-6 fill-garnet sm:w-8' />
@@ -335,16 +334,28 @@ export default function Profile() {
           </Button>
         </div>
         <Collapse in={isOpen} className='col-span-full'>
-          <Alert
-            icon={<CheckIcon fontSize='inherit' />}
-            severity='success'
-            variant='filled'
-            onClose={() => {
-              setOpen(false);
-            }}
-          >
-            ¡Datos editados correctamente!
-          </Alert>
+          {editado ? (
+            <Alert
+              icon={<CheckIcon fontSize='inherit' />}
+              severity='success'
+              variant='filled'
+              onClose={() => {
+                setOpen(false);
+              }}
+            >
+              ¡Datos editados correctamente!
+            </Alert>
+          ) : (
+            <Alert
+              severity='error'
+              variant='filled'
+              onClose={() => {
+                setOpen(false);
+              }}
+            >
+              {errorMessage}
+            </Alert>
+          )}
         </Collapse>
       </div>
     </FormContainer>
