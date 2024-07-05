@@ -73,6 +73,7 @@ export default function AsignaturaPage({
         <EditAsignatura
           setOpen={setEdit}
           id={params.id}
+          idAsignatura={params.asignaturaId}
           setAsignatura={setAsignatura}
         />
       )}
@@ -136,10 +137,12 @@ function EditAsignatura({
   setOpen,
   setAsignatura,
   id,
+  idAsignatura,
 }: {
   setOpen: (open: boolean) => void;
   setAsignatura: (asignatura: Asignatura) => void;
   id: string;
+  idAsignatura: string;
 }) {
   const [editForm, dispatch] = useFormState(editAsignatura, initialState);
   useEffect(() => {
@@ -199,11 +202,18 @@ function EditAsignatura({
             ))}
           </div>
           <InputField
-            type='number'
+            type='text'
+            name='carreraId'
+            label='Carrera ID'
+            className='hidden'
+            value={id}
+          />
+          <InputField
+            type='text'
             name='asignaturaId'
             label='Asignatura ID'
             className='hidden'
-            value={parseInt(id)}
+            value={idAsignatura}
           />
           <div id='carreraId-error' aria-live='polite' aria-atomic='true'>
             {editForm?.errors?.carreraId?.map((error: string) => (

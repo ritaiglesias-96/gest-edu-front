@@ -16,6 +16,7 @@ import {
 import { GridRowModel } from '@mui/x-data-grid/models/gridRows';
 import { HorarioCurso } from '@/lib/definitions';
 import { getCarrera } from '../coordinador/actions';
+import { revalidatePath } from 'next/cache';
 
 const apiRoute = process.env.BACK_API;
 
@@ -161,6 +162,7 @@ export async function calificarCursoFetch(
       }
     );
     if (response.ok) {
+      revalidatePath(`/funcionario/calificaciones/cursos/${id}`);
       return {
         message: 'Calificaciones guardadas con exito. 200',
       };

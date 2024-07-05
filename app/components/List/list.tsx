@@ -866,7 +866,7 @@ function InscripcionExamenDataGrid({
           setAlertError(true);
           setAlertOk(false);
         } else {
-          setMensajeError('');
+          setMensajeError('Se ha inscrito al examen correctamente');
           setAlertError(false);
           setAlertOk(true);
         }
@@ -883,7 +883,7 @@ function InscripcionExamenDataGrid({
           setAlertError(true);
           setAlertOk(false);
         } else {
-          setMensajeError('');
+          setMensajeError('Se ha dado de baja del examen correctamente');
           setAlertError(false);
           setAlertOk(true);
         }
@@ -1009,7 +1009,7 @@ function InscripcionExamenDataGrid({
               setAlertOk(false);
             }}
           >
-            ¡Inscripcion editados correctamente!
+            {mensajeError}
           </Alert>
         </Collapse>
       )}

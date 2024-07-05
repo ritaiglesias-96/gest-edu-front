@@ -240,7 +240,7 @@ export default function CursoPage({
               setAlertOk(false);
             }}
           >
-            ¡Inscripcion editados correctamente!
+            Calificaciones guardadas
           </Alert>
         </Collapse>
       )}

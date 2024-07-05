@@ -132,7 +132,7 @@ function DrawerNavbarStudent(sectionLinks: NavSection) {
         <List>
           {sectionLinks.links.map(({ href, iconName, label }, index) =>
             href === '' && label === '' && iconName === '' ? (
-              <Divider key={index} />
+              <Divider key={`divider-${index}`} />
             ) : (
               <ListItem
                 key={label}
@@ -220,29 +220,39 @@ function DrawerNavbar(sectionLinks: NavSection) {
           </IconButton>
         </DrawerHeader>
         <List>
-          {sectionLinks.links.map(({ href, iconName, label }) => (
-            <ListItem key={label} disablePadding>
-              {href !== '' && label !== 'Salir' && (
-                <ListItemButton href={href}>
-                  <ListItemIcon>
-                    {getIconByName(iconName as IconName)}
-                  </ListItemIcon>
+          {sectionLinks.links.map(({ href, iconName, label }, index) =>
+            href === '' && label === '' && iconName === '' ? (
+              <Divider key={`divider-${index}`} />
+            ) : (
+              <ListItem
+                key={label}
+                disablePadding={href === '' && label !== 'Salir' ? false : true}
+                alignItems={
+                  href === '' && label !== 'Salir' ? 'center' : 'flex-start'
+                }
+              >
+                {href !== '' && label !== 'Salir' && (
+                  <ListItemButton href={href}>
+                    <ListItemIcon>
+                      {getIconByName(iconName as IconName)}
+                    </ListItemIcon>
+                    <ListItemText primary={label} />
+                  </ListItemButton>
+                )}
+                {href === '' && label !== 'Salir' && (
                   <ListItemText primary={label} />
-                </ListItemButton>
-              )}
-              {href === '' && label !== 'Salir' && (
-                <ListItemText primary={label} />
-              )}
-              {label === 'Salir' && (
-                <ListItemButton onClick={() => logoutFetch()}>
-                  <ListItemIcon>
-                    {getIconByName(iconName as IconName)}
-                  </ListItemIcon>
-                  <ListItemText primary={label} />
-                </ListItemButton>
-              )}
-            </ListItem>
-          ))}
+                )}
+                {label === 'Salir' && (
+                  <ListItemButton onClick={() => logoutFetch()}>
+                    <ListItemIcon>
+                      {getIconByName(iconName as IconName)}
+                    </ListItemIcon>
+                    <ListItemText primary={label} />
+                  </ListItemButton>
+                )}
+              </ListItem>
+            )
+          )}
         </List>
       </Drawer>
     </nav>

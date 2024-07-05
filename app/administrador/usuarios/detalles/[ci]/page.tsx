@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import FormContainer from '@/components/FormContainer/formContainer';
 import { desactivarCuenta, getUserByCi } from '@/lib/data/admin/actions';
 import Image from 'next/image';
 import InputField from '@/components/InputField/inputField';
@@ -27,6 +26,7 @@ interface Usuario {
   fechaNac: string;
   imagen: string;
   tipoUsuario: string;
+  activo: boolean;
 }
 
 export default function UsuarioPage({ params }: { params: { ci: string } }) {
@@ -142,13 +142,16 @@ export default function UsuarioPage({ params }: { params: { ci: string } }) {
             >
               <UsersIcon className='h-auto w-6 fill-garnet sm:w-8' />
             </InputField>
-            {userData.tipoUsuario === 'FUNCIONARIO' ||
-            userData.tipoUsuario === 'COORDINADOR' ? (
+            {userData.activo &&
+            (userData.tipoUsuario === 'FUNCIONARIO' ||
+              userData.tipoUsuario === 'COORDINADOR') ? (
               <Button
                 styling='primary'
                 className='col-span-full'
                 onClick={() => {
                   desactivarCuenta(userData?.id);
+
+                  router.back();
                 }}
               >
                 Desactivar usuario

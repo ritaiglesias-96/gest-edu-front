@@ -14,6 +14,7 @@ export default function AdministradorHome() {
     const getUsers = async () => {
       const data = await getUsuarios();
       if (data) {
+        console.log(data);
         setRows(data.content ? data.content : []);
         setRowsLoading(false);
       } else {

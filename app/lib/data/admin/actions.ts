@@ -2,6 +2,7 @@
 import { RegisterUserFormSchema } from '../schemasZod';
 import { RegisterUserState } from '@/lib/definitions';
 import { authToken } from '@/utils/auth';
+import { revalidatePath } from 'next/cache';
 
 const apiRoute = process.env.BACK_API;
 
@@ -119,6 +120,7 @@ export async function desactivarCuenta(id: string) {
     body: JSON.stringify(id),
   });
   if (response.ok) {
+    revalidatePath('/administrador/usuarios');
     const data = await response.json();
     return data;
   } else {

@@ -12,11 +12,12 @@ export default function TramitesEstudiantes() {
 
   useEffect(() => {
     getTramitesEstudiantes().then((response) => {
+      console.log(response);
       if (!response.message) {
         const tramites: TramiteEstudiante[] = response.map((r: any) => {
           const tramite: TramiteEstudiante = {
             id: r.id,
-            carreraId: r.carreraId,
+            carreraId: r.carreraNombre,
             nombreCarrera: '', //TODO luego cambiar por el nombre
             tipo:
               r.tipo.toLowerCase().replace(/_/g, ' ').charAt(0).toUpperCase() +
