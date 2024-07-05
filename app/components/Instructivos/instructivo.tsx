@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import Grading from '@/assets/svg/grading.svg';
 import Edit from '@/assets/svg/edit.svg';
 import School from '@/assets/svg/school.svg';
+import DownloadIcon from '@/assets/svg/download.svg';
+
 
 export default function InstructivosPage() {
   const [expanded, setExpanded] = React.useState<string | false>('');
@@ -81,22 +83,22 @@ export default function InstructivosPage() {
           </div>
           <p>
             Permite consultar los horarios de la semana, de los cursos que se
-            encuentra inscripto. Se muestra una tabla con las cursos, y haciendo
+            encuentra inscripto. Se muestra una tabla con los cursos, y haciendo
             click en el boton detalles, puede ver los horarios desglosados por
-            dia de la semana.
+            día de la semana.
           </p>
           <hr />
           <div className='flex'>
             <Grading className='mr-5 h-6 self-center sm:w-auto' />
-            <h6>Tramites</h6>
+            <h6>Trámites</h6>
           </div>
           <p>
             Permite ver el estado de los trámites, los cuales pueden ser de
-            inscripción a carrear o solicitud de título. El estado puede ser
-            aceptado o rechazado, y para el caso de solicitud de titulo cuando
+            inscripción a carrera o solicitud de título. El estado puede ser
+            aceptado o rechazado, y para el caso de solicitud de título cuando
             es rechazado, se muestra un breve mensaje con el motivo por el cual
-            fue rechazado. Tambien muestra la fecha en que fue realizado la
-            solicitud, y la fecha que fue aceptodo o rechazado.
+            fue rechazado. También muestra la fecha en que fue realizada la
+            solicitud, y la fecha en que fue aceptada o rechazada.
           </p>
         </AccordionDetails>
       </Accordion>
@@ -115,15 +117,15 @@ export default function InstructivosPage() {
             <h6>Solicitud de título</h6>
           </div>
           <p>
-            En la seccion del solicitudes, el estudiante puede ver las carreras
-            que se encuentra inscripto y aun no han finalizado. Haciendo clic en
-            el botón solicitar título, se envía una solicitud, la cual debe ser
-            aprobada por el coordinador de la carrera. En caso de ser rechazada,
-            se muestra un mensaje indicando el motivo, por ejemplo, no tiene los
-            créditos suficientes o no tiene aprobadas todas las asignaturas.
-            Tanto cuando es aprobada como rechazada, el estudiante recibe una
-            triple notificación, por correo electrónico, notificaciónweb y
-            mobile.
+            En la sección de solicitudes, el estudiante puede ver las
+            carreras en las que se encuentra inscripto y aún no han finalizado. 
+            Haciendo click en el botón solicitar título, se envía una solicitud, 
+            la cual debe ser aprobada por el coordinador de la carrera. En caso de 
+            ser rechazada, se muestra un mensaje indicando el motivo, por ejemplo, 
+            no tiene los créditos suficientes o no tiene aprobadas todas las 
+            asignaturas. Tanto cuando es aprobada como rechazada, el estudiante 
+            recibe una triple notificación, por correo electrónico, notificación web 
+            y mobile.
           </p>
           <hr />
           <div className='flex'>
@@ -137,6 +139,17 @@ export default function InstructivosPage() {
             dicho código en la página como invitado, puede ver los datos del
             certificado y comprobar que corresponde al estudiante.
           </p>
+          <hr />
+	        <div className='flex'>
+            <DownloadIcon className='mr-5 h-6 self-center sm:w-auto' />
+            <h6>Solicitud de escolaridad</h6>
+          </div>
+          <p>
+            En la sección de escolaridad, se puede descargar en 
+            formato PDF, la escolaridad del estudiante. La misma
+            contará con información acerca del progreso del 
+            estudiante en la carrera pertinente.    
+          </p>    
         </AccordionDetails>
       </Accordion>
       <Accordion
@@ -150,24 +163,23 @@ export default function InstructivosPage() {
         </AccordionSummary>
         <AccordionDetails className='px-4'>
           En la sección inscripciones, el estudiante puede inscribirse tanto a
-          carrras, como cursos y exámenes. Para ello, se divide en dos secciones
-          mas.
+          carreras, como a cursos y exámenes. Para ello, se divide en dos secciones
+          más.
           <div className='flex'>
             <Edit className='mr-5 h-6 self-center sm:w-auto' />
             <h6>Mis carreras</h6>
           </div>
           <p>
-            Muestra las carreras que se encuentra inscripto, y dentro de éste
-            listado, es posible anotarse tanto a cursos como exámenes. Al hacer
-            clic en cursos, es redirigido a otra página, donde puede seleccionar
-            el curso que desea filtrando por asignatura. Tambien es posible
-            darse de baja si ya se encuentra inscripto en un curso que aun no ha
-            comenzado. En el caso de exámenes, tambien es redirigido a otra
-            página, donde se muestra los exámenes disponibles para inscribirse.
-            Luego de acceder al exámen se muestran dos botones, para inscribirse
-            o darse de baja. Al hacer click en alguno de éstos botones, se
-            solicita confirmación tanto para inscribirse como para darse de
-            baja.
+            Muestra las carreras en las que se encuentra inscripto, y dentro de 
+            este listado, es posible anotarse tanto a cursos como a exámenes. Al 
+            hacer clic en cursos, se redirige a otra página, donde puede seleccionar 
+            el curso que desea filtrando por asignatura. También es posible darse de 
+            baja si ya se encuentra inscripto en un curso que aún no ha comenzado. 
+            En el caso de exámenes, también se redirige a otra página, donde se 
+            muestran los exámenes disponibles para inscribirse. Luego de acceder 
+            al examen, se muestran dos botones: uno para inscribirse y otro para 
+            darse de baja. Al hacer click en alguno de estos botones, se solicita 
+            confirmación tanto para inscribirse como para darse de baja.
           </p>
           <hr />
           <div className='flex'>
@@ -175,14 +187,14 @@ export default function InstructivosPage() {
             <h6>Otras carreras</h6>
           </div>
           <p>
-            Son las carreras que el estudiante no se encuentra inscripto, donde
-            se muestra la lista de carreras disponibles y en dicha lista se
-            encuentra un boton, donde al hacer click se muestra mensaje de
+            Son las carreras en las que el estudiante no se encuentra inscripto,
+            donde se muestra la lista de carreras disponibles y en dicha lista
+            se encuentra un botón, donde al hacer click se muestra un mensaje de
             confirmación para inscribirse a la carrera. Luego de realizada la
-            inscripción, esta debe ser aprobada por un coordiador, y finalmente
-            el estudiante recibe una triple notificacion por correo electrónico,
-            notificacion web y mobile, tanto en caso que sea aprobada o
-            rechazada.
+            inscripción, esta debe ser aprobada por un coordiador, y
+            finalmente el estudiante recibe una triple notificacion por correo
+            electrónico, notificacion web y mobile, tanto en caso que sea
+            aprobada o rechazada.
           </p>
         </AccordionDetails>
       </Accordion>
@@ -199,7 +211,7 @@ export default function InstructivosPage() {
           <p>
             Sección donde puede visualizar los datos de su perfil, nombre,
             apellido, documento, correo electrónico, fecha de nacimiento,
-            teléfono y domicilio. Tambien puede agregar una foto de perfil. Los
+            teléfono y domicilio. También puede agregar una foto de perfil. Los
             únicos datos que está permitido modificar son la foto, domicilio y
             el teléfono.
           </p>
