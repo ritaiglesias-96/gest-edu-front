@@ -98,8 +98,8 @@ export default function InstructivosPage() {
             aceptado o rechazado, y para el caso de solicitud de título cuando
             es rechazado, se muestra un breve mensaje con el motivo por el cual
             fue rechazado. También muestra la fecha en que fue realizada la
-            solicitud, y la fecha en que fue aceptada o rechazada.
-          </Typography>
+            solicitud, y la fecha en que fue aceptada o rechazada.           
+          </p>
         </AccordionDetails>
       </Accordion>
       <Accordion
