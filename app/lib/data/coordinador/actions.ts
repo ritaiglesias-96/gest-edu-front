@@ -174,6 +174,7 @@ export async function editAsignatura(
     nombre: formData.get('nombre'),
     descripcion: formData.get('descripcion'),
     asignaturaId: formData.get('asignaturaId'),
+    carreraId: formData.get('carreraId'),
   });
   if (!validatedFields.success) {
     return {
@@ -183,7 +184,6 @@ export async function editAsignatura(
   } else {
     const { nombre, descripcion, asignaturaId, carreraId } =
       validatedFields.data;
-
     const response = await fetch(`${apiRoute}/asignaturas/${asignaturaId}`, {
       method: 'PUT',
       headers: {

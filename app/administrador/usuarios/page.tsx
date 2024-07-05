@@ -9,11 +9,20 @@ import { useEffect, useState } from 'react';
 export default function AdministradorHome() {
   const [rows, setRows] = useState([]);
   const [rowsLoading, setRowsLoading] = useState(true);
+
   useEffect(() => {
-    getUsuarios().then((data) => {
-      setRows(data.content ? data.content : []);
-      setRowsLoading(false);
-    });
+    const getUsers = async () => {
+      const data = await getUsuarios();
+      if (data) {
+        console.log(data);
+        setRows(data.content ? data.content : []);
+        setRowsLoading(false);
+      } else {
+        setRows([]);
+        setRowsLoading(false);
+      }
+    };
+    getUsers();
   }, []);
 
   return (

@@ -2,14 +2,17 @@
 import Button from '@/components/Button/button';
 import FormContainer from '@/components/FormContainer/formContainer';
 import React, { useState } from 'react';
-import { useEffect } from 'react';
+import { Input, InputLabel, Collapse, Alert } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
 import { useRouter } from 'next/navigation';
 import { registrarHorarioDiaCurso } from '@/lib/data/funcionario/actions';
-import { Input, InputLabel } from '@mui/material';
 import { horarios } from './horarios';
 import { HorarioCurso } from '@/lib/definitions';
 
 function HorariosPorDia(cursoId: { cursoId: string }) {
+  const [alertOk, setAlertOk] = useState(false);
+  const [alertError, setAlertError] = useState(false);
+  const [mensajeError, setMensajeError] = useState('');
   const dias = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
 
   const handleChange = (horario: string, tipoHora: string, dia: string) => {
@@ -30,10 +33,11 @@ function HorariosPorDia(cursoId: { cursoId: string }) {
         horario.horaInicio
       ) {
         registrarHorarioDiaCurso(horario, cursoId.cursoId).then((res) => {
-          if (res?.message) {
-            alert(res?.message);
+          if (res === null) {
+            setMensajeError('Error al registrar horario');
+            setAlertError(true);
           } else {
-            alert('Horario registrado con exito');
+            setAlertOk(true);
           }
         });
       } else if (horario.dia == dia.toUpperCase()) {
@@ -82,6 +86,40 @@ function HorariosPorDia(cursoId: { cursoId: string }) {
           </Button>
         </div>
       ))}
+      {alertOk && (
+        <Collapse
+          in={alertOk}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='success'
+            variant='filled'
+            onClose={() => {
+              setAlertOk(false);
+            }}
+          >
+            ¡Horario registrado correctamente!
+          </Alert>
+        </Collapse>
+      )}
+      {alertError && (
+        <Collapse
+          in={alertError}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='error'
+            variant='filled'
+            onClose={() => {
+              setAlertError(false);
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
     </div>
   );
 }

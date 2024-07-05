@@ -29,7 +29,6 @@ export default function FuncionarioCursosAgregarHome({
   const [estado] = useState('ACTIVO'); // Estado por defecto
   const [docente, setDocente] = useState<string>('');
   const [listaDocentes, setListaDocentes] = useState<Docente[]>([]);
-  const [disabled, setDisabled] = useState(false);
 
   const MenuProps = {
     PaperProps: {
@@ -51,8 +50,8 @@ export default function FuncionarioCursosAgregarHome({
   };
 
   const handleClick = () => {
-    const inicio = new Date(fechaInicio);
-    const fin = new Date(fechaFin);
+    const inicio = new Date(fechaInicio).toLocaleDateString();
+    const fin = new Date(fechaFin).toLocaleDateString();
 
     if (fin <= inicio) {
       alert('La fecha de fin debe ser posterior a la fecha de inicio');
@@ -63,7 +62,14 @@ export default function FuncionarioCursosAgregarHome({
     const docenteId = listaDocentes.find((d) => d.nombre === docente)?.id;
 
     if (docenteId) {
-      const data = { fechaInicio, fechaFin, diasPrevInsc, estado, asignaturaId, docenteId };
+      const data = {
+        fechaInicio,
+        fechaFin,
+        diasPrevInsc,
+        estado,
+        asignaturaId,
+        docenteId,
+      };
 
       // Convertir el objeto data a FormData
       const formData = new FormData();
@@ -85,21 +91,23 @@ export default function FuncionarioCursosAgregarHome({
         docenteId: 0,
       };
 
-      registrarCurso(prevState, formData).then((res) => {
-        if (res) {
-          if (res.message) {
-            alert(res.message);
+      registrarCurso(prevState, formData)
+        .then((res) => {
+          if (res) {
+            if (res.message) {
+              alert(res.message);
+            } else {
+              alert('Curso registrado');
+              router.back();
+            }
           } else {
-            alert('Curso registrado');
-            router.back();
+            alert('Failed to register the course. Missing Fields.');
           }
-        } else {
-          alert('Failed to register the course. Missing Fields.');
-        }
-      }).catch((error) => {
-        console.error("Error registering the course:", error);
-        alert('An error occurred while registering the course.');
-      });
+        })
+        .catch((error) => {
+          console.error('Error registering the course:', error);
+          alert('An error occurred while registering the course.');
+        });
     } else {
       alert('Debe seleccionar un docente');
     }
@@ -116,14 +124,20 @@ export default function FuncionarioCursosAgregarHome({
           className='mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:underline focus:outline-none sm:text-base'
           type='date'
           name='fechaInicio'
-          onChange={(event) => setFechaInicio(event.target.value)}
+          inputProps={{ pattern: 'dd-mm-yyyy' }}
+          onChange={(event) => {
+            setFechaInicio(event.target.value);
+          }}
         />
         <InputLabel htmlFor='component-simple'>Fecha de Fin</InputLabel>
         <Input
           className='mx-3 w-full py-1 text-sm invalid:border-atomic-tangerine invalid:text-atomic-tangerine focus:underline focus:outline-none sm:text-base'
           type='date'
           name='fechaFin'
-          onChange={(event) => setFechaFin(event.target.value)}
+          inputProps={{ pattern: 'dd-mm-yyyy' }}
+          onChange={(event) => {
+            setFechaFin(event.target.value);
+          }}
         />
         <InputLabel htmlFor='component-simple'>Docente</InputLabel>
         <FormControl sx={{ m: 1, width: 300 }}>

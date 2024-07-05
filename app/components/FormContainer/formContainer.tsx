@@ -22,7 +22,7 @@ export default function FormContainer({
       />
       <div
         className={clsx(
-          'relative z-10 mx-auto my-4 flex size-fit flex-col rounded-xl bg-ivory px-2 pb-6 pt-2 shadow-lg shadow-garnet md:p-10',
+          'relative z-10 mx-auto my-4 flex size-fit flex-col rounded-xl bg-ivory px-2 pb-6 pt-2  md:p-10',
           className
         )}
       >
@@ -30,7 +30,7 @@ export default function FormContainer({
           className='relative right-0 block w-fit cursor-pointer self-end'
           href={previousPath === '' ? '/' : previousPath}
         >
-          <Close className=' self-end fill-garnet hover:fill-bittersweet sm:size-10' />
+          <Close className=' size-5 self-end fill-garnet hover:fill-bittersweet sm:size-10' />
         </Link>
         {children}
       </div>

@@ -12,7 +12,6 @@ import {
 import { Input, InputLabel, Collapse, Alert } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import * as React from 'react';
-import { Theme, useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -21,8 +20,7 @@ import { Docente } from '@/lib/definitions';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
-import convertirFecha from '@/utils/dateFormatter';
-import { log } from 'console';
+import { convertirFecha } from '@/utils/utils';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

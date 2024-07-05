@@ -196,6 +196,23 @@ export const previaturasColumns: GridColDef[] = [
   },
 ];
 
+export const examenColumns: GridColDef[] = [
+  { field: 'id', headerName: 'ID' },
+  {
+    field: 'asignatura',
+    headerName: 'Asignatura',
+  },
+  {
+    field: 'fecha',
+    headerName: 'Fecha',
+  },
+  {
+    field: 'docentes',
+    headerName: 'Docentes',
+    type: 'singleSelect',
+  },
+];
+
 export const noPreviaturasColumns: GridColDef[] = [
   {
     field: 'idAsignatura',
@@ -381,6 +398,7 @@ export const inscriptoColumns: GridColDef[] = [
 
 export const cursosColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
+  { field: 'estado', headerName: 'Estado' },
   { field: 'fechaInicio', headerName: 'Fecha de Inicio' },
   { field: 'fechaFin', headerName: 'Fecha de Fin' },
   {
@@ -388,14 +406,15 @@ export const cursosColumns: GridColDef[] = [
     headerName: 'Crear Horarios',
     cellClassName: 'flex items-center self-end',
     headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.row.id}`}
-        className='mx-auto flex size-fit'
-      >
-        <Schedule className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
+    renderCell: (params) =>
+      params.row.estado !== 'FINALIZADO' && (
+        <Link
+          href={`${window.location.pathname}/${params.row.id}`}
+          className='mx-auto flex size-fit'
+        >
+          <Schedule className='h-auto w-6 fill-garnet sm:w-8' />
+        </Link>
+      ),
   },
   {
     field: 'verHorarios',

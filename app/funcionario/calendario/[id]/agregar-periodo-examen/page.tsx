@@ -1,7 +1,7 @@
 'use client';
 import Button from '@/components/Button/button';
 import FormContainer from '@/components/FormContainer/formContainer';
-import React, { useState } from 'react';
+import React from 'react';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFormState, useFormStatus } from 'react-dom';
@@ -9,7 +9,20 @@ import { initialState } from '@/lib/definitions';
 import { registrarPeriodoExamen } from '@/lib/data/funcionario/actions';
 import InputField from '@/components/InputField/inputField';
 
-function Form({ carreraId }: any) {
+function RegistrarPeriodoButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button className='w-full' styling='primary' disabled={pending}>
+      {pending ? 'Registrando...' : 'Registrar'}
+    </Button>
+  );
+}
+
+export default function FuncionarioHorariosExamenesAgregarHome({
+  params,
+}: {
+  params: { id: string };
+}) {
   const [registro, dispatch] = useFormState(
     registrarPeriodoExamen,
     initialState
@@ -24,6 +37,7 @@ function Form({ carreraId }: any) {
       router.back();
     }
   }, [registro.message, router]);
+
   return (
     <FormContainer>
       <form
@@ -66,7 +80,7 @@ function Form({ carreraId }: any) {
           name='carreraId'
           label='Carrera ID'
           className='hidden'
-          value={carreraId}
+          value={params.id}
         />
         <div id='carreraId-error' aria-live='polite' aria-atomic='true'>
           {registro?.errors?.carreraId &&
@@ -76,31 +90,10 @@ function Form({ carreraId }: any) {
               </p>
             ))}
         </div>
-        <div className='flex w-2/3 flex-col justify-between gap-1 sm:w-full sm:flex-row'>
+        <div className='flex w-2/3 flex-col justify-between gap-1 sm:flex-row'>
           <RegistrarPeriodoButton />
         </div>
       </form>
     </FormContainer>
-  );
-}
-
-function RegistrarPeriodoButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button className='w-full' styling='primary' disabled={pending}>
-      {pending ? 'Registrando...' : 'Registrar'}
-    </Button>
-  );
-}
-
-export default function FuncionarioHorariosExamenesAgregarHome({
-  params,
-}: {
-  params: { id: string };
-}) {
-  return (
-    <section className='text-ivory'>
-      <Form carreraId={params.id} className='inset-1/2' />
-    </section>
   );
 }

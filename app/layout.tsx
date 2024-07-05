@@ -1,9 +1,14 @@
 import type { Metadata } from 'next';
 import { poppins } from './styles/fonts';
 import './globals.css';
-import Navbar from './components/Navbar/navbar';
 import { authMail, authRol } from './utils/auth';
 import { SessionProvider } from '../context/SessionContext';
+// Example of dynamically importing a component that uses Firebase Messaging
+import dynamic from 'next/dynamic';
+
+const Navbar = dynamic(() => import('./components/Navbar/navbar'), {
+  ssr: false,
+});
 
 export const metadata: Metadata = {
   title: {

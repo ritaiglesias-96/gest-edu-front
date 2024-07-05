@@ -181,6 +181,23 @@ export type Examen = {
   };
   docentes: [];
 };
+
+export type ExamenList = {
+  id: number;
+  fecha: Date;
+  diasPrevInsc: string;
+  estado: string;
+  asignatura: {
+    id: number;
+    nombre: string;
+    descripcion: string;
+    creditos: number;
+    semestrePlanEstudios: number;
+    carreraId: number;
+  };
+  docentes: Docente[];
+};
+
 export type Curso = {
   id: number;
   fechaInicio: string;
@@ -341,13 +358,13 @@ export type EscolaridadCurso = {
   id: number;
   fechaFinCurso: string;
   calificacion: Calificacion;
-}
+};
 
 export type EscolaridadExamen = {
   id: number;
   fechaExamen: string;
   calificacion: CalificacionExamen;
-}
+};
 
 export type EscolaridadAsignatura = {
   id: number;
@@ -355,16 +372,16 @@ export type EscolaridadAsignatura = {
   creditos: number;
   cursos: EscolaridadCurso[];
   examenes: EscolaridadExamen[];
-}
+};
 
 export type EscolaridadSemestre = {
   anio: number;
   semestre: number;
   asignaturas: EscolaridadAsignatura[];
-}
+};
 
 export type Escolaridad = {
-  estudiante:{
+  estudiante: {
     id: number;
     ci: string;
     nombre: string;
@@ -376,7 +393,7 @@ export type Escolaridad = {
     imagen: string;
     tipoUsuario: string;
     activo: boolean;
-  } ;
+  };
   carrera: {
     id: number;
     nombre: string;
@@ -387,7 +404,7 @@ export type Escolaridad = {
   };
   creditosAprobados: number;
   semestres: EscolaridadSemestre[];
-}
+};
 
 export interface CursoHorario {
   cursoId: number;

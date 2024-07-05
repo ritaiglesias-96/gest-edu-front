@@ -5,6 +5,8 @@ import {
   getAsignatura,
   getCursosAsignatura,
 } from '@/lib/data/funcionario/actions';
+import Button from '@/components/Button/button';
+import { useRouter } from 'next/navigation';
 import { Asignatura, Curso, Examen } from '@/lib/definitions';
 import { Box, CircularProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -14,6 +16,7 @@ export default function CursosActaPage({
 }: {
   params: { asignaturaId: string };
 }) {
+  const router = useRouter();
   const [rows, setRows] = useState([]);
   const [asignatura, setAsignatura] = useState<Asignatura>();
   const [rowsLoading, setRowsLoading] = useState(true);
@@ -39,29 +42,36 @@ export default function CursosActaPage({
     };
     fetch().finally(() => setLoading(false));
   }, [params.asignaturaId]);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', height: '70vh' }}>
+        <CircularProgress sx={{ color: '#802c2c' }} />
+      </Box>
+    );
+  }
+
+  if (fallout && !loading) {
+    return (
+      <div className='mx-auto flex flex-col items-center justify-center text-ivory'>
+        <h1>Ha ocurrido un error</h1>
+        <Button onClick={() => router.back()} styling='primary'>
+          Regresar
+        </Button>
+      </div>
+    );
+  }
+
   return (
-    <>
-      {loading && (
-        <Box sx={{ display: 'flex', alignItems: 'center', height: '70vh' }}>
-          <CircularProgress sx={{ color: '#802c2c' }} />
-        </Box>
-      )}
-      {!loading && (
-        <div className='relative box-border size-full justify-center overflow-auto md:w-2/3'>
-          <div className='h-fit w-full'>
-            <div className='my-4 flex flex-row items-center justify-between rounded-md bg-ivory p-4'>
-              <h3 className='text-center font-bold text-black'>
-                {`Seleccione el curso de ${asignatura?.nombre.toLowerCase()} a generar acta`}
-              </h3>
-            </div>
-            <List
-              rows={rows}
-              rowsLoading={rowsLoading}
-              columnsType='actaCurso'
-            />
-          </div>
+    <div className='relative box-border size-full justify-center overflow-auto md:w-2/3'>
+      <div className='h-fit w-full'>
+        <div className='my-4 flex flex-row items-center justify-between rounded-md bg-ivory p-4'>
+          <h3 className='text-center font-bold text-black'>
+            {`Seleccione el curso de ${asignatura?.nombre.toLowerCase()} a generar acta`}
+          </h3>
         </div>
-      )}
-    </>
+        <List rows={rows} rowsLoading={rowsLoading} columnsType='actaCurso' />
+      </div>
+    </div>
   );
 }

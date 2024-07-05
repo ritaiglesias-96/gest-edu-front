@@ -3,7 +3,16 @@ import { authRol } from '@/utils/auth';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const publicRoutes = ['/ingresar', '/registrarse', '/resetPass', '/resetPass/[token]', '/certificado', '/certificado/validar', '/'];
+const publicRoutes = [
+  '/ingresar',
+  '/registrarse',
+  '/resetPass',
+  '/resetPass/[token]',
+  '/certificado',
+  '/certificado/validar',
+  '/',
+  '/firebase-cloud-messaging-sw',
+];
 
 export default function middleware(req: NextRequest) {
   const rol = authRol();
@@ -56,6 +65,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|firebase-messaging-sw.js).*)',
   ],
 };
