@@ -145,10 +145,9 @@ export default function InstructivosPage() {
             <h6>Solicitud de escolaridad</h6>
           </div>
           <p>
-            En la sección de escolaridad, se puede descargar en 
-            formato PDF, la escolaridad del estudiante. La misma
-            contará con información acerca del progreso del 
-            estudiante en la carrera pertinente.    
+            En la sección de escolaridad, el estudiante puede descargar en 
+            formato PDF su escolaridad. La misma contará con información acerca 
+            del progreso del estudiante en la carrera pertinente.    
           </p>    
         </AccordionDetails>
       </Accordion>
