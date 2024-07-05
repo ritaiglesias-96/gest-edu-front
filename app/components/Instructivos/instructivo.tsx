@@ -142,6 +142,10 @@ export default function InstructivosPage() {
             dicho código en la página como invitado, puede ver los datos del
             certificado y comprobar que corresponde al estudiante.
           </p>
+          <div className='flex'>
+            <DownloadIcon className='mr-5 h-6 self-center sm:w-auto' />
+            <h6>Solicitud de certificado</h6>
+          </div>
           <hr />
             En la sección de escolaridad, se puede descargar en 
             formato PDF, la escolaridad del estudiante. La misma
