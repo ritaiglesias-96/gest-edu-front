@@ -50,8 +50,8 @@ export default function FuncionarioCursosAgregarHome({
   };
 
   const handleClick = () => {
-    const inicio = new Date(fechaInicio).toLocaleDateString();
-    const fin = new Date(fechaFin).toLocaleDateString();
+    const inicio = new Date(fechaInicio);
+    const fin = new Date(fechaFin);
 
     if (fin <= inicio) {
       alert('La fecha de fin debe ser posterior a la fecha de inicio');

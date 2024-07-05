@@ -1,7 +1,6 @@
 'use client';
 import {
   Dispatch,
-  PropsWithChildren,
   SetStateAction,
   createContext,
   useContext,
@@ -14,15 +13,27 @@ export type Session = {
   rol: Role;
 };
 
+export type Notificacion = {
+  descripcion: string;
+  fecha: string;
+  id: number;
+  leido: boolean;
+  titulo: string;
+};
+
 interface SessionContextType {
   session: Session | null;
   setSession: Dispatch<SetStateAction<Session | null>>;
+  notifications: Notificacion[];
+  setNotifications: Dispatch<SetStateAction<Notificacion[] | []>>;
 }
 
 // Create the session context
 export const SessionCtx = createContext<SessionContextType>({
   session: null,
   setSession: () => {},
+  notifications: [],
+  setNotifications: () => {},
 });
 
 export const SessionProvider = ({
@@ -31,9 +42,12 @@ export const SessionProvider = ({
   children: React.ReactNode;
 }) => {
   const [session, setSession] = useState<Session | null>(null);
+  const [notifications, setNotifications] = useState<Notificacion[] | []>([]);
 
   return (
-    <SessionCtx.Provider value={{ session, setSession }}>
+    <SessionCtx.Provider
+      value={{ session, setSession, notifications, setNotifications }}
+    >
       {children}
     </SessionCtx.Provider>
   );

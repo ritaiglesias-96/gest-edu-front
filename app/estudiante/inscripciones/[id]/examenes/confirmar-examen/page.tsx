@@ -20,10 +20,12 @@ export default function ConfirmarInscripcionExamen() {
   useEffect(() => {
     let id = sessionStorage.getItem('asignatura_id');
     if (id) {
+      console.log(id);
       setAsignaturaId(id);
     }
     let idEx = sessionStorage.getItem('examen_id');
     if (idEx) {
+      console.log('examen: ', id);
       setExamenId(idEx);
     }
   }, []);
@@ -36,6 +38,7 @@ export default function ConfirmarInscripcionExamen() {
 
   useEffect(() => {
     obtenerExamenesVigentes(asignaturaId).then((data) => {
+      console.log(data);
       if (data) {
         setRows(data.exmanes ? data.exmanes : []);
         setExamenes(data.exmanes);

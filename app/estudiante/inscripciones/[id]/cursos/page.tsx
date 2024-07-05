@@ -7,7 +7,11 @@ import {
 import { convertirFecha } from '@/utils/utils';
 import { useState, useEffect } from 'react';
 
-export default function CursosEstudiante() {
+export default function CursosEstudiante({
+  params,
+}: {
+  params: { id: string };
+}) {
   const [rows, setRows] = useState([]);
   const [rowsBaja, setRowsBaja] = useState([]);
   const [rowsLoading, setRowsLoading] = useState(true);
@@ -15,11 +19,8 @@ export default function CursosEstudiante() {
   const [carreraId, setCarrera] = useState('');
 
   useEffect(() => {
-    let id = sessionStorage.getItem('carrera_id');
-    if (id) {
-      setCarrera(id);
-    }
-  }, []);
+    setCarrera(params.id);
+  }, [params.id]);
 
   useEffect(() => {
     if (carreraId) {

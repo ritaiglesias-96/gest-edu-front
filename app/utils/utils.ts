@@ -9,6 +9,13 @@ export function convertirFecha(fecha: string) {
   return formattedDate; // Format the date string
 }
 
+export function formatText(text: string) {
+  return (
+    text.charAt(0).toUpperCase() +
+    text.slice(1).toLowerCase().replace(/_/g, ' ')
+  );
+}
+
 // Para las fechas que vienen con el formato que muestra el GET de cursos en swagger
 export function convertirFechaCurso(dateString: string): string {
   if (!dateString) {

@@ -83,42 +83,22 @@ export default function ResolverSolicitudPage({
   return (
     <FormContainer className='text-black sm:w-4/5 md:w-2/3'>
       <div className='h-fit w-full p-2'>
-        <div className='my-2 box-content flex flex-col items-center justify-between gap-3 rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
-          <div className='flex flex-col rounded-md text-center font-bold text-black md:text-left lg:max-w-md'>
-            <h3 className='m-0 w-12 p-0'>{carrera?.nombre}</h3>
-          </div>
-          <div className='flex w-full flex-row justify-evenly rounded-md text-black md:w-fit md:flex-col md:justify-center'>
-            <div className='flex flex-col'>
-              <p className='font-bold'>Creditos Totales:</p>
-              <p>{carrera?.creditos}</p>
-            </div>
-          </div>
-          <div className='flex w-full flex-col justify-center rounded-md md:max-w-52'>
-            <Button
-              className='w-full py-8'
-              styling='primary'
-              onClick={() => {
-                setIsOpen(true);
-                setIsAprobar(true);
-              }}
-            >
-              Aprobar
-            </Button>
-          </div>
-        </div>
-      </div>
-      <div className='h-fit w-full p-2'>
-        <div className='my-2 box-content flex flex-col items-center justify-between gap-3 rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
-          <div className='flex flex-col rounded-md text-center font-bold text-black md:text-left lg:max-w-md'>
-            <h3 className='m-0 w-12 p-0'>
+        <div className='my-2 box-content flex flex-col items-center justify-between gap-3 rounded-md bg-ivory p-2 md:align-baseline'>
+          <div className='flex flex-col items-center rounded-md text-center font-bold text-black md:text-left'>
+            <h3>{carrera?.nombre}</h3>
+            <h3 className='font-bold text-black  md:text-left'>
               {solicitud?.usuarioSolicitante.nombre +
                 ' ' +
                 solicitud?.usuarioSolicitante.apellido}
             </h3>
           </div>
-          <div className='flex w-full flex-row justify-evenly rounded-md text-black md:w-fit md:flex-col md:justify-center'>
-            <div className='flex flex-col'>
-              <p className='font-bold'>Cedula:</p>
+          <div className='flex w-full flex-col items-center justify-between rounded-md text-black md:flex-row md:items-start'>
+            <div className='flex flex-col items-center md:flex-row md:items-start'>
+              <p className='px-1 font-bold'>Creditos Totales:</p>
+              <p>{carrera?.creditos}</p>
+            </div>
+            <div className='flex flex-col items-center md:flex-row md:items-start'>
+              <p className='px-1 font-bold'>Cedula: </p>
               <p>
                 {solicitud?.usuarioSolicitante.ci.replace(
                   /(\d+)(?=\d$)/g,
@@ -126,23 +106,33 @@ export default function ResolverSolicitudPage({
                 )}
               </p>
             </div>
-            <div className='flex flex-col'>
-              <p className='font-bold'>Creditos Aprobados:</p>
+            <div className='flex flex-col items-center md:flex-row md:items-start'>
+              <p className='px-1 font-bold'>Creditos Aprobados:</p>
               <p>{solicitud?.creditosAprobados}</p>
             </div>
           </div>
-          <div className='flex w-full flex-col justify-center rounded-md md:max-w-52'>
-            <Button
-              className='w-full py-8'
-              styling='primary'
-              onClick={() => {
-                setIsOpen(true);
-                setIsAprobar(false);
-              }}
-            >
-              Rechazar
-            </Button>
-          </div>
+
+          <div className='flex w-full flex-row justify-evenly rounded-md text-black md:w-fit md:flex-col md:justify-center'></div>
+          <Button
+            className='w-full'
+            styling='primary'
+            onClick={() => {
+              setIsOpen(true);
+              setIsAprobar(true);
+            }}
+          >
+            Aprobar
+          </Button>
+          <Button
+            className='w-full'
+            styling='primary'
+            onClick={() => {
+              setIsOpen(true);
+              setIsAprobar(false);
+            }}
+          >
+            Rechazar
+          </Button>
         </div>
       </div>
       {isOpen && (
