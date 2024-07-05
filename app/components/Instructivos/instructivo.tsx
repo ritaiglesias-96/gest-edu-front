@@ -84,6 +84,7 @@ export default function InstructivosPage() {
           <p>
             Permite consultar los horarios de la semana, de los cursos que se
             encuentra inscripto. Se muestra una tabla con los cursos, y haciendo
+            encuentra inscripto. Se muestra una tabla con los cursos, y haciendo
             click en el boton detalles, puede ver los horarios desglosados por
             día de la semana.
           </p>
@@ -94,6 +95,8 @@ export default function InstructivosPage() {
           </div>
           <p>
             Permite ver el estado de los trámites, los cuales pueden ser de
+            inscripción a carrera o solicitud de título. El estado puede ser
+            aceptado o rechazado, y para el caso de solicitud de título cuando
             inscripción a carrera o solicitud de título. El estado puede ser
             aceptado o rechazado, y para el caso de solicitud de título cuando
             es rechazado, se muestra un breve mensaje con el motivo por el cual
@@ -205,6 +208,7 @@ export default function InstructivosPage() {
           <p>
             Sección donde puede visualizar los datos de su perfil, nombre,
             apellido, documento, correo electrónico, fecha de nacimiento,
+            teléfono y domicilio. También puede agregar una foto de perfil. Los
             teléfono y domicilio. También puede agregar una foto de perfil. Los
             únicos datos que está permitido modificar son la foto, domicilio y
             el teléfono.
