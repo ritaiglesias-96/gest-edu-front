@@ -25,8 +25,7 @@ const useFcmToken = () => {
                 console.error('Service Worker registration failed:', error);
               });
             const currentToken = await getToken(messaging, {
-              vapidKey:
-                'BMhHn9Tqsp9A6BVloya8r4jJhflAEHs5V0roxXpycbOJBW28fnD2RwwRFyETa0YoOPSMVzpYtWAdLDdW5aVDutM',
+              vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
             }).then((currentToken) => {
               return currentToken;
             });
@@ -43,7 +42,6 @@ const useFcmToken = () => {
         console.log('Error retrieving token:', error);
       }
     };
-
     retrieveToken();
   }, []);
 

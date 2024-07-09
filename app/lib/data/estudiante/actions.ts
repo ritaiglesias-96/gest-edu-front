@@ -238,6 +238,7 @@ export const obtenerAsignaturasParaInscripcionFetch = async (id: string) => {
       }
     );
     if (response.ok) {
+      console.log('response', response);
       const asignaturasJson = await response.json();
       return { asignaturas: asignaturasJson.content };
     } else {
@@ -544,6 +545,45 @@ export const tokenFirebasePost = async (firebaseToken: string) => {
       console.log('Token Firebase registrado');
     } else {
       console.error('Error al registrar token Firebase:', response.statusText);
+    }
+  }
+};
+
+export const getNotificaciones = async () => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/notificaciones`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      const notificaciones = await response.json();
+      return notificaciones;
+    } else {
+      return null;
+    }
+  }
+};
+
+export const marcarComoLeida = async (idNotificacion: number) => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(
+      `${apiRoute}/notificaciones/${idNotificacion}/leida`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      return true;
+    } else {
+      return false;
     }
   }
 };

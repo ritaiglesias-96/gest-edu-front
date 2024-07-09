@@ -135,6 +135,7 @@ export const strings = {
   navPublic: {
     links: [
       { href: '/ingresar', iconName: 'Login', label: 'Iniciar Sesión' },
+      { href: '/certificado', iconName: 'Done', label: 'Validar certificado' },
       { href: '/registrarse', iconName: 'UserAdd', label: 'Registrarse' },
     ],
   },

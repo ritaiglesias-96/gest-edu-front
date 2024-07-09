@@ -850,10 +850,10 @@ function InscripcionExamenDataGrid({
   }, []);
 
   useEffect(() => {
-    //Se convierte la fecha a formato dd/MM/yyyy
     rowsParent.forEach((examen) => {
       examen.fecha = convertirFecha(examen.fecha);
     });
+    console.log(rowsParent);
     setRows(rowsParent);
     setRowsLoading(rowsLoadingParent);
   }, [rowsLoadingParent, rowsParent]);

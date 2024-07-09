@@ -120,6 +120,7 @@ export async function altaCarrera(prevState: CarreraState, formData: FormData) {
       };
     } else {
       return {
+        errors: { descripcion: ['Error al crear carrera'] },
         message: 'Error al crear carrera',
       };
     }
@@ -159,6 +160,7 @@ export async function editCarrera(prevState: CarreraState, formData: FormData) {
       };
     } else {
       return {
+        errors: { descripcion: ['Error al editar carrera'] },
         message: 'Error al editar carrera',
       };
     }
@@ -202,7 +204,8 @@ export async function editAsignatura(
       };
     } else {
       return {
-        message: 'Error al editar carrera',
+        errors: { descripcion: ['Error al editar asignatura'] },
+        message: 'Error al editar asignatura',
       };
     }
   }
@@ -248,6 +251,7 @@ export async function altaAsignatura(
       };
     } else {
       return {
+        errors: { descripcion: ['Error al crear asignatura'] },
         message: 'Error al crear asignatura',
       };
     }
