@@ -100,17 +100,7 @@ function DrawerNavbarStudent(sectionLinks: NavSection) {
   const [modalContent, setModalContent] = React.useState<Notificacion>(
     {} as Notificacion
   );
-  const [length, setLength] = React.useState(0);
   const openNotifications = Boolean(anchorEl);
-
-  useEffect(() => {
-    let i = 0;
-    notifications.forEach((notificacion) => {
-      if (!notificacion.leido) {
-        setLength((i) => i + 1);
-      }
-    });
-  }, []);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -149,7 +139,11 @@ function DrawerNavbarStudent(sectionLinks: NavSection) {
           return notificacion;
         });
         context.setNotifications(newNotifications);
-        setLength((i) => i - 1);
+        context.setNotReadNotifications(
+          context.notReadNotifications - 1 > 0
+            ? context.notReadNotifications - 1
+            : 0
+        );
         setModalOpen(false);
       }
     };
@@ -187,7 +181,7 @@ function DrawerNavbarStudent(sectionLinks: NavSection) {
             aria-haspopup='true'
             onClick={handleClick}
           >
-            <Badge badgeContent={length}>
+            <Badge badgeContent={context.notReadNotifications}>
               <Notifications color='primary' />
             </Badge>
           </IconButton>
@@ -246,7 +240,7 @@ function DrawerNavbarStudent(sectionLinks: NavSection) {
         >
           <Box
             sx={{
-              position: 'absolute' as 'absolute',
+              position: 'absolute',
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
@@ -299,13 +293,11 @@ function DrawerNavbarStudent(sectionLinks: NavSection) {
           <List>
             {sectionLinks.links.map(({ href, iconName, label }, index) =>
               href === '' && label === '' && iconName === '' ? (
-                <Divider key={`divider-${index}`} />
+                <Divider key={'divider-' + index} />
               ) : (
                 <ListItem
                   key={label}
-                  disablePadding={
-                    href === '' && label !== 'Salir' ? false : true
-                  }
+                  disablePadding={href === '' && label !== 'Salir'}
                   alignItems={
                     href === '' && label !== 'Salir' ? 'center' : 'flex-start'
                   }
@@ -392,11 +384,11 @@ function DrawerNavbar(sectionLinks: NavSection) {
         <List>
           {sectionLinks.links.map(({ href, iconName, label }, index) =>
             href === '' && label === '' && iconName === '' ? (
-              <Divider key={`divider-${index}`} />
+              <Divider key={'divider-' + index} />
             ) : (
               <ListItem
                 key={label}
-                disablePadding={href === '' && label !== 'Salir' ? false : true}
+                disablePadding={href === '' && label !== 'Salir'}
                 alignItems={
                   href === '' && label !== 'Salir' ? 'center' : 'flex-start'
                 }

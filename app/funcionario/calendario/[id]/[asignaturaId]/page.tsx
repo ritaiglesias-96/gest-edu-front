@@ -59,18 +59,16 @@ export default function AsignaturaPage({
           fechaFin: convertirFecha(item.fechaFin),
         }));
         setRowsPeriodoExamen(periodos);
-        setRowsPeriodoExamenLoading(false);
       }
-      if (existeCursos) {
+      if (!existeCursos.message) {
         const cursos = existeCursos.map((curso: Curso) => ({
           ...curso,
           fechaInicio: convertirFechaCurso(curso.fechaInicio),
           fechaFin: convertirFechaCurso(curso.fechaFin),
         }));
         setRowsCurso(cursos);
-        setRowsCursoLoading(false);
       }
-      if (existeExamenes) {
+      if (!existeExamenes.message) {
         const examenes = existeExamenes.map((examen: ExamenList) => ({
           id: examen.id,
           fecha: convertirFecha(examen.fecha.toString()),
@@ -80,11 +78,13 @@ export default function AsignaturaPage({
           }),
         }));
         setRowsExamen(examenes);
-        setRowsExamenLoading(false);
       }
-      if (!existePeriodos && !existeCursos && !existeExamenes) {
+      if (!existePeriodos && existeCursos.message && existeExamenes.message) {
         setFallout(true);
       }
+      setRowsPeriodoExamenLoading(false);
+      setRowsCursoLoading(false);
+      setRowsExamenLoading(false);
     };
     fetch().finally(() => setLoading(false));
   }, [params.asignaturaId, params.id]);

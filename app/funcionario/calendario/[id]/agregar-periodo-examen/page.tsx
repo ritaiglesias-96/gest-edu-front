@@ -1,13 +1,14 @@
 'use client';
 import Button from '@/components/Button/button';
 import FormContainer from '@/components/FormContainer/formContainer';
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFormState, useFormStatus } from 'react-dom';
 import { initialState } from '@/lib/definitions';
 import { registrarPeriodoExamen } from '@/lib/data/funcionario/actions';
 import InputField from '@/components/InputField/inputField';
+import { Alert, Collapse } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
 
 function RegistrarPeriodoButton() {
   const { pending } = useFormStatus();
@@ -28,15 +29,21 @@ export default function FuncionarioHorariosExamenesAgregarHome({
     initialState
   );
   const router = useRouter();
+  const [alertOk, setAlertOk] = useState(false);
+  const [alertError, setAlertError] = useState(false);
+  const [mensajeError, setMensajeError] = useState('');
 
   useEffect(() => {
     if (registro.message) {
-      alert(registro.message.split('.')[0]);
+      if (registro.message.includes('200')) {
+        setAlertOk(true);
+        setMensajeError('Periodo de examen registrado con éxito');
+      } else {
+        setAlertError(true);
+        setMensajeError(registro.message);
+      }
     }
-    if (registro.message.includes('200')) {
-      router.back();
-    }
-  }, [registro.message, router]);
+  }, [registro.message]);
 
   return (
     <FormContainer>
@@ -54,12 +61,11 @@ export default function FuncionarioHorariosExamenesAgregarHome({
           pattern='dd-mm-yyyy'
         ></InputField>
         <div id='fechaInicio-error' aria-live='polite' aria-atomic='true'>
-          {registro?.errors?.fechaInicio &&
-            registro.errors.fechaInicio.map((error: string) => (
-              <p className='mt-2 text-sm text-garnet' key={error}>
-                {error}
-              </p>
-            ))}
+          {registro?.errors?.fechaInicio?.map((error: string) => (
+            <p className='mt-2 text-sm text-garnet' key={error}>
+              {error}
+            </p>
+          ))}
         </div>
         <InputField
           type='date'
@@ -68,12 +74,11 @@ export default function FuncionarioHorariosExamenesAgregarHome({
           pattern='dd-mm-yyyy'
         ></InputField>
         <div id='fechaFin-error' aria-live='polite' aria-atomic='true'>
-          {registro?.errors?.fechaFin &&
-            registro.errors.fechaFin.map((error: string) => (
-              <p className='mt-2 text-sm text-garnet' key={error}>
-                {error}
-              </p>
-            ))}
+          {registro?.errors?.fechaFin?.map((error: string) => (
+            <p className='mt-2 text-sm text-garnet' key={error}>
+              {error}
+            </p>
+          ))}
         </div>
         <InputField
           type='number'
@@ -83,17 +88,51 @@ export default function FuncionarioHorariosExamenesAgregarHome({
           value={params.id}
         />
         <div id='carreraId-error' aria-live='polite' aria-atomic='true'>
-          {registro?.errors?.carreraId &&
-            registro.errors.carreraId.map((error: string) => (
-              <p className='mt-2 text-sm text-garnet' key={error}>
-                {error}
-              </p>
-            ))}
+          {registro?.errors?.carreraId?.map((error: string) => (
+            <p className='mt-2 text-sm text-garnet' key={error}>
+              {error}
+            </p>
+          ))}
         </div>
         <div className='flex w-2/3 flex-col justify-between gap-1 sm:flex-row'>
           <RegistrarPeriodoButton />
         </div>
       </form>
+      {alertOk && (
+        <Collapse
+          in={alertOk}
+          className='absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='success'
+            variant='filled'
+            onClose={() => {
+              setAlertOk(false);
+              router.back();
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
+      {alertError && (
+        <Collapse
+          in={alertError}
+          className='absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='error'
+            variant='filled'
+            onClose={() => {
+              setAlertError(false);
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
     </FormContainer>
   );
 }

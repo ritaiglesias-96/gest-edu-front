@@ -35,6 +35,7 @@ export default function AltaDocentePage() {
           type='text'
           name='nombre'
           label='Nombre'
+          required
         >
           <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
         </InputField>
@@ -50,6 +51,7 @@ export default function AltaDocentePage() {
           type='text'
           name='apellido'
           label='Apellido'
+          required
         >
           <UserIcon className='h-auto w-6 fill-garnet sm:w-8' />
         </InputField>

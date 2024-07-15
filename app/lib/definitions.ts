@@ -1,3 +1,6 @@
+import { GridLocaleText } from '@mui/x-data-grid';
+import { ReactNode } from 'react';
+
 export const initialState = { message: '', errors: {} };
 
 export enum Role {
@@ -443,3 +446,36 @@ export type ActaCurso = {
 };
 
 //Regex para CI ^[1-9][\.]?\d{3}[\.]?\d{3}[\.\-/_]?[1-9]
+
+export const localeTextConstants: Partial<GridLocaleText> = {
+  columnMenuUnsort: 'Desordenar',
+  columnMenuSortAsc: 'Ordenar Ascendente',
+  columnMenuSortDesc: 'Ordenar Descendente',
+  columnMenuFilter: 'Filtrar',
+  columnMenuHideColumn: 'Ocultar Columna',
+  columnMenuShowColumns: 'Mostrar Columnas',
+  columnsManagementReset: 'Resetear',
+  columnMenuManageColumns: 'Administrar Columnas',
+  columnsManagementNoColumns: 'No hay columnas',
+  columnsManagementSearchTitle: 'Buscar Columnas',
+  columnsManagementShowHideAllText: 'Mostrar/Ocultar todas',
+  noRowsLabel: 'No existen registros',
+  filterOperatorAfter: 'Después',
+  filterOperatorBefore: 'Antes',
+  filterOperatorContains: 'Contiene',
+  filterOperatorEndsWith: 'Termina con',
+  filterOperatorEquals: 'Igual',
+  filterOperatorIs: 'Es',
+  filterOperatorIsEmpty: 'Está vacío',
+  filterOperatorIsNotEmpty: 'No está vacío',
+  filterOperatorIsAnyOf: 'Es cualquiera de',
+  filterOperatorNot: 'No es',
+  filterOperatorOnOrAfter: 'En o después',
+  filterOperatorOnOrBefore: 'En o antes',
+  filterOperatorStartsWith: 'Empieza con',
+  MuiTablePagination: {
+    labelRowsPerPage: 'Filas por página',
+    labelDisplayedRows: ({ from, to, count }) =>
+      `${from}-${to} de ${count !== -1 ? count : `más de ${to}`}`,
+  },
+};

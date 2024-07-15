@@ -1,44 +1,5 @@
 import styles from './list.module.css';
-import {
-  asignaturaColumns,
-  carreraColumns,
-  noPreviaturasColumns,
-  previaturasColumns,
-  usuarioColumns,
-  estudianteColumns,
-  periodosExamenColumns,
-  inscriptoColumns,
-  cursosColumns,
-  asignaturaFuncionarioColumns,
-  calificarCursosColumns,
-  carrerasEstudiante,
-  asignaturaExamenColumns,
-  asignaturaCursoColumns,
-  carreraCalificacionesColumns,
-  calificarExamenesColumns,
-  datosEstudianteColumns,
-  carrerasFuncionario,
-  carreraInscripcionFuncionarioColumns,
-  asignaturaExamenFuncionarioColumns,
-  ExamenFuncionarioColumns,
-  InscriptosExamenFuncionarioColumns,
-  asignaturaBajaCursoColumns,
-  consultaTramitesEstudiante,
-  solicitudTituloColumns,
-  carrerasCalificacionesColums,
-  asignaturaCalificacionesColumns,
-  cursosCalificadosColumns,
-  calificacionCursoColumns,
-  examenesCalificadosColumns,
-  calificacionExamenColumns,
-  actasFuncionarioColumn,
-  actasAsignaturasFuncionarioColumn,
-  actaExamenColumn,
-  horariosColumns,
-  actividadUsuarioColumns,
-  actaCursoColumn,
-  examenColumns,
-} from './columnTypes';
+import { columnsMap, ColumnDefinitions } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@/components/Button/button';
 import EditIcon from '@/assets/svg/edit.svg';
@@ -49,6 +10,7 @@ import EnrollC from '@/assets/svg/enroll-exam.svg';
 import Close from '@/assets/svg/close.svg';
 import Schedule from '@/assets/svg/schedule.svg';
 import Grading from '@/assets/svg/grading.svg';
+import EyeIcon from '@/assets/svg/visibility.svg';
 import School from '@/assets/svg/school.svg';
 import Download from '@/assets/svg/download.svg';
 import CheckIcon from '@mui/icons-material/Check';
@@ -80,6 +42,7 @@ import {
   Certificado,
   Carrera,
   Escolaridad,
+  localeTextConstants,
 } from '@/lib/definitions';
 import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
 import { useRouter } from 'next/navigation';
@@ -111,46 +74,7 @@ import { convertirFecha } from '@/utils/utils';
 import InputField from '../InputField/inputField';
 import { obtenerDatosUsuarioFetch } from '@/lib/data/actions';
 
-type columnType =
-  | 'carrera'
-  | 'examen'
-  | 'asignatura'
-  | 'usuario'
-  | 'estudiante'
-  | 'carreras-estudiante'
-  | 'datos-estudiante'
-  | 'asignatura-examenes'
-  | 'asignatura-curso'
-  | 'inscripto'
-  | 'previtaturas'
-  | 'noPrevitaturas'
-  | 'periodosExamen'
-  | 'cursos'
-  | 'asignaturaFuncionario'
-  | 'carrera-calificaciones'
-  | 'calficar-examenes'
-  | 'calficar-cursos'
-  | 'carreras-funcionario'
-  | 'carreraInscripcionFuncionario'
-  | 'asignaturaExamenFuncionario'
-  | 'examenFuncionario'
-  | 'inscriptosExamenFuncionario'
-  | 'asignaturaBajaCurso'
-  | 'consultaTramitesEstudiante'
-  | 'solicitudTitulo'
-  | 'carreraCalificaciones'
-  | 'asignaturaCalificaciones'
-  | 'cursosCalificados'
-  | 'calificacionCurso'
-  | 'examenesCalificados'
-  | 'calificacionExamen'
-  | 'actasFuncionario'
-  | 'actasAsignaturasFuncionario'
-  | 'actaExamen'
-  | 'actaCurso'
-  | 'horarios'
-  | 'actividadUsuario'
-  | 'none';
+type columnType = keyof ColumnDefinitions;
 interface ListProps {
   isEditableDocentes?: boolean;
   isInscripcionExamen?: boolean;
@@ -183,124 +107,10 @@ export default function List({
   columnsType,
 }: ListProps) {
   let columns: GridColDef[] = [];
-  switch (columnsType) {
-    case 'carrera':
-      columns = carreraColumns;
-      break;
-    case 'asignatura':
-      columns = asignaturaColumns;
-      break;
-    case 'examen':
-      columns = examenColumns;
-      break;
-    case 'usuario':
-      columns = usuarioColumns;
-      break;
-    case 'estudiante':
-      columns = estudianteColumns;
-      break;
-    case 'datos-estudiante':
-      columns = datosEstudianteColumns;
-      break;
-    case 'carreras-estudiante':
-      columns = carrerasEstudiante;
-      break;
-    case 'carreras-funcionario':
-      columns = carrerasFuncionario;
-      break;
-    case 'asignatura-examenes':
-      columns = asignaturaExamenColumns;
-      break;
-    case 'asignatura-curso':
-      columns = asignaturaCursoColumns;
-      break;
-    case 'previtaturas':
-      columns = previaturasColumns;
-      break;
-    case 'noPrevitaturas':
-      columns = noPreviaturasColumns;
-      break;
-    case 'periodosExamen':
-      columns = periodosExamenColumns;
-      break;
-    case 'asignaturaFuncionario':
-      columns = asignaturaFuncionarioColumns;
-      break;
-    case 'inscripto':
-      columns = inscriptoColumns;
-      break;
-    case 'cursos':
-      columns = cursosColumns;
-      break;
-    case 'carrera-calificaciones':
-      columns = carreraCalificacionesColumns;
-      break;
-    case 'calficar-cursos':
-      columns = calificarCursosColumns;
-      break;
-    case 'calficar-examenes':
-      columns = calificarExamenesColumns;
-      break;
-    case 'carreraInscripcionFuncionario':
-      columns = carreraInscripcionFuncionarioColumns;
-      break;
-    case 'asignaturaExamenFuncionario':
-      columns = asignaturaExamenFuncionarioColumns;
-      break;
-    case 'examenFuncionario':
-      columns = ExamenFuncionarioColumns;
-      break;
-    case 'inscriptosExamenFuncionario':
-      columns = InscriptosExamenFuncionarioColumns;
-      break;
-    case 'asignaturaBajaCurso':
-      columns = asignaturaBajaCursoColumns;
-      break;
-    case 'consultaTramitesEstudiante':
-      columns = consultaTramitesEstudiante;
-      break;
-    case 'solicitudTitulo':
-      columns = solicitudTituloColumns;
-      break;
-    case 'carreraCalificaciones':
-      columns = carrerasCalificacionesColums;
-      break;
-    case 'asignaturaCalificaciones':
-      columns = asignaturaCalificacionesColumns;
-      break;
-    case 'cursosCalificados':
-      columns = cursosCalificadosColumns;
-      break;
-    case 'calificacionCurso':
-      columns = calificacionCursoColumns;
-      break;
-    case 'examenesCalificados':
-      columns = examenesCalificadosColumns;
-      break;
-    case 'calificacionExamen':
-      columns = calificacionExamenColumns;
-      break;
-    case 'actasFuncionario':
-      columns = actasFuncionarioColumn;
-      break;
-    case 'actasAsignaturasFuncionario':
-      columns = actasAsignaturasFuncionarioColumn;
-      break;
-    case 'actaExamen':
-      columns = actaExamenColumn;
-      break;
-    case 'actaCurso':
-      columns = actaCursoColumn;
-      break;
-    case 'horarios':
-      columns = horariosColumns;
-      break;
-    case 'actividadUsuario':
-      columns = actividadUsuarioColumns;
-      break;
-    default:
-      break;
-  }
+  columns = columnsMap[columnsType];
+  let estudianteAsignatura =
+    window.location.pathname.includes('estudiante') &&
+    columnsType === 'asignatura';
   return (
     <div className={styles.dataGridContainer}>
       {columnsType !== 'none' && (
@@ -311,7 +121,15 @@ export default function List({
             pagination: {
               paginationModel: { page: 0, pageSize: 5 },
             },
+            columns: {
+              columnVisibilityModel: {
+                nombre: columnsType !== 'inscripto',
+                apellido: columnsType !== 'inscripto',
+                detalles: !estudianteAsignatura,
+              },
+            },
           }}
+          localeText={localeTextConstants}
           loading={rowsLoading}
           autoHeight={true}
           rowSelection={false}
@@ -395,6 +213,8 @@ function EditableDocentesDataGrid({
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
+  const [alertError, setAlertError] = useState(false);
+  const [mensajeError, setMensajeError] = useState('');
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (
     params,
     event
@@ -432,11 +252,6 @@ function EditableDocentesDataGrid({
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
-
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow!.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
-    }
   };
 
   const processRowUpdate = (newRow: GridRowModel) => {
@@ -451,6 +266,11 @@ function EditableDocentesDataGrid({
       }
     };
     return edit(updatedRow);
+  };
+
+  const handleProcessRowUpdateError = (error: any) => {
+    setAlertError(true);
+    setMensajeError(error.message);
   };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -531,13 +351,14 @@ function EditableDocentesDataGrid({
   ];
 
   return (
-    <div className='mx-auto my-4 size-fit'>
+    <div className='mx-auto my-4 size-full'>
       <div className='my-4 box-content flex flex-row justify-end rounded-md bg-ivory p-4'>
         <Link href='/funcionario/docentes/agregar'>
           <Button styling='primary'>Agregar Docente</Button>
         </Link>
       </div>
       <DataGrid
+        localeText={localeTextConstants}
         rows={rows}
         loading={rowsLoading}
         columns={columns}
@@ -548,15 +369,32 @@ function EditableDocentesDataGrid({
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
+        onProcessRowUpdateError={handleProcessRowUpdateError}
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
         sx={{
           backgroundColor: '#f6f6e9',
           color: 'black',
-          width: 'fit-content',
         }}
       />
+      {alertError && (
+        <Collapse
+          in={alertError}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='error'
+            variant='filled'
+            onClose={() => {
+              setAlertError(false);
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
     </div>
   );
 }
@@ -714,6 +552,7 @@ function EditableAsignaturasDataGrid({
         </Button>
       </div>
       <DataGrid
+        localeText={localeTextConstants}
         rows={rows}
         loading={rowsLoading}
         columns={columns}
@@ -813,6 +652,7 @@ function EditarCalificacionCursoDataGrid({
   return (
     <div className='h-fit w-full p-4'>
       <DataGrid
+        localeText={localeTextConstants}
         rows={rows}
         autosizeOnMount={true}
         autoHeight={true}
@@ -830,6 +670,7 @@ function InscripcionExamenDataGrid({
   rowsParent: GridRowsProp;
   rowsLoadingParent: boolean;
 }>) {
+  const router = useRouter();
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [email, setEmail] = useState('');
@@ -853,7 +694,6 @@ function InscripcionExamenDataGrid({
     rowsParent.forEach((examen) => {
       examen.fecha = convertirFecha(examen.fecha);
     });
-    console.log(rowsParent);
     setRows(rowsParent);
     setRowsLoading(rowsLoadingParent);
   }, [rowsLoadingParent, rowsParent]);
@@ -942,18 +782,16 @@ function InscripcionExamenDataGrid({
 
   return (
     <>
-      <div>
-        <DataGrid
-          className='w-full'
-          rows={rows}
-          loading={rowsLoading}
-          autosizeOnMount={true}
-          autoHeight={true}
-          columns={columns}
-          sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
-        />
-      </div>
-
+      <DataGrid
+        localeText={localeTextConstants}
+        className='w-full'
+        rows={rows}
+        loading={rowsLoading}
+        autosizeOnMount={true}
+        autoHeight={true}
+        columns={columns}
+        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+      />
       {isOpen && (
         <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
           <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
@@ -1007,6 +845,7 @@ function InscripcionExamenDataGrid({
             variant='filled'
             onClose={() => {
               setAlertOk(false);
+              router.back();
             }}
           >
             {mensajeError}
@@ -1170,6 +1009,7 @@ function ApproveRejectDataGrid({
   return (
     <div className='relative size-full'>
       <DataGrid
+        localeText={localeTextConstants}
         rows={rows}
         loading={rowsLoading}
         columns={columns}
@@ -1319,17 +1159,16 @@ function InscripcionCursoDataGrid({
 
   return (
     <>
-      <div>
-        <DataGrid
-          className='w-full'
-          rows={rows}
-          autosizeOnMount={true}
-          autoHeight={true}
-          loading={rowsLoading}
-          columns={columns}
-          sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
-        />
-      </div>
+      <DataGrid
+        localeText={localeTextConstants}
+        className='w-full'
+        rows={rows}
+        autosizeOnMount={true}
+        autoHeight={true}
+        loading={rowsLoading}
+        columns={columns}
+        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+      />
       {isOpenCurso && (
         <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
           <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
@@ -1482,15 +1321,14 @@ function EditarCalificacionExamenDataGrid({
   ];
 
   return (
-    <div className='h-fit w-full p-4'>
-      <DataGrid
-        rows={rows}
-        autosizeOnMount={true}
-        autoHeight={true}
-        loading={rowsLoading}
-        columns={columns}
-      />
-    </div>
+    <DataGrid
+      localeText={localeTextConstants}
+      rows={rows}
+      autosizeOnMount={true}
+      autoHeight={true}
+      loading={rowsLoading}
+      columns={columns}
+    />
   );
 }
 
@@ -1585,9 +1423,10 @@ function HorariosCursosEstudiante({
 
   return (
     <>
-      <div className='m-4 h-fit w-full'>
+      <div className='h-fit w-full'>
         <DataGrid
           className='w-full'
+          localeText={localeTextConstants}
           rows={rows}
           loading={rowsLoading}
           autosizeOnMount={true}
@@ -1824,17 +1663,16 @@ function SolicitudTramiteDataGrid({
 
   return (
     <>
-      <div>
-        <DataGrid
-          className='m-4 h-fit w-full'
-          rows={rows}
-          loading={rowsLoading}
-          autosizeOnMount={true}
-          autoHeight={true}
-          columns={columns}
-          sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
-        />
-      </div>
+      <DataGrid
+        className='h-fit w-full'
+        rows={rows}
+        localeText={localeTextConstants}
+        loading={rowsLoading}
+        autosizeOnMount={true}
+        autoHeight={true}
+        columns={columns}
+        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+      />
       {isOpenTitulo && (
         <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
           <div className='my-2 box-content items-center justify-between rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
@@ -2079,6 +1917,20 @@ function InscripcionCarreraDataGrid({
       type: 'number',
     },
     {
+      field: 'detalles',
+      headerName: 'Detalles',
+      cellClassName: 'flex items-center self-end',
+      headerAlign: 'center',
+      renderCell: (params) => (
+        <Link
+          href={`${window.location.pathname}/${params.id}/carrera`}
+          className='mx-auto flex size-fit'
+        >
+          <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+        </Link>
+      ),
+    },
+    {
       field: 'actions',
       type: 'actions',
       headerName: 'Inscribirse',
@@ -2103,6 +1955,7 @@ function InscripcionCarreraDataGrid({
     <div className='relative size-full'>
       <DataGrid
         rows={rows}
+        localeText={localeTextConstants}
         loading={rowsLoading}
         columns={columns}
         rowModesModel={rowModesModel}

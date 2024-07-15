@@ -10,9 +10,11 @@ import Close from '@/assets/svg/close.svg';
 import List from '@/assets/svg/list.svg';
 import Link from 'next/link';
 import Add from '@/assets/svg/add.svg';
+import Calendar from '@/assets/svg/calendar.svg';
 import { altaPreviaFetch } from '@/lib/data/coordinador/actions';
 import Button from '../Button/button';
 import { bajaCursoFetch } from '@/lib/data/estudiante/actions';
+import { convertirFecha } from '@/utils/utils';
 
 export const carreraColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
@@ -123,14 +125,15 @@ export const asignaturaColumns: GridColDef[] = [
     headerName: 'Detalles',
     cellClassName: 'flex items-center self-end',
     headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.id}`}
-        className='mx-auto flex size-fit'
-      >
-        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
+    renderCell: (params) =>
+      window.location.pathname.includes('estudiante') ? null : (
+        <Link
+          href={`${window.location.pathname}/${params.id}`}
+          className='mx-auto flex size-fit'
+        >
+          <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+        </Link>
+      ),
   },
 ];
 
@@ -305,6 +308,20 @@ export const carrerasEstudiante: GridColDef[] = [
     type: 'number',
   },
   {
+    field: 'detalles',
+    headerName: 'Detalles',
+    cellClassName: 'flex items-center self-end',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Link
+        href={`${window.location.pathname}/${params.id}/carrera`}
+        className='mx-auto flex size-fit'
+      >
+        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+      </Link>
+    ),
+  },
+  {
     field: 'cursos',
     headerName: 'Cursos',
     cellClassName: 'flex items-center self-end',
@@ -317,7 +334,7 @@ export const carrerasEstudiante: GridColDef[] = [
         }
         className='mx-auto flex size-fit'
       >
-        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+        <Calendar className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
@@ -334,7 +351,7 @@ export const carrerasEstudiante: GridColDef[] = [
         }
         className='mx-auto flex size-fit'
       >
-        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
@@ -382,8 +399,12 @@ export const periodosExamenColumns: GridColDef[] = [
 ];
 
 export const inscriptoColumns: GridColDef[] = [
-  { field: 'id', headerName: 'ID' },
   { field: 'ci', headerName: 'Cédula' },
+  {
+    field: 'nombreCompleto',
+    headerName: 'Nombre Completo',
+    valueGetter: (value, row) => `${row.nombre || ''} ${row.apellido || ''}`,
+  },
   { field: 'nombre', headerName: 'Nombre' },
   { field: 'apellido', headerName: 'Apellido' },
   { field: 'email', headerName: 'Email' },
@@ -391,7 +412,7 @@ export const inscriptoColumns: GridColDef[] = [
   { field: 'fechaInscripcion', headerName: 'Fecha de Inscripción' },
   {
     field: 'creditosObtenidos',
-    headerName: 'Creditos Obtenidos',
+    headerName: 'Creditos',
     type: 'number',
   },
 ];
@@ -442,14 +463,23 @@ export const calificarCursosColumns: GridColDef[] = [
     headerName: 'Calificar',
     cellClassName: 'flex items-center self-end',
     headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.row.id}`}
-        className='mx-auto flex size-fit'
-      >
-        <Enter className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
+    renderCell: (params) => {
+      const disabled =
+        params.row.fechaFin > convertirFecha(new Date().toISOString());
+      return !disabled ? (
+        <Link
+          href={`${window.location.pathname}/curso/${params.row.id}`}
+          className='mx-auto flex size-fit disabled:pointer-events-none disabled:cursor-none'
+          aria-hidden={
+            params.row.fechaFin > convertirFecha(new Date().toISOString())
+          }
+        >
+          <Enter className='h-auto w-6 fill-garnet sm:w-8' />
+        </Link>
+      ) : (
+        <Enter className='mx-auto h-auto w-6 fill-grey-600 sm:w-8' />
+      );
+    },
   },
 ];
 
@@ -652,14 +682,20 @@ export const calificarExamenesColumns: GridColDef[] = [
     headerName: 'Calificar',
     cellClassName: 'flex items-center self-end',
     headerAlign: 'center',
-    renderCell: (params) => (
-      <Link
-        href={`${window.location.pathname}/${params.row.id}`}
-        className='mx-auto flex size-fit'
-      >
-        <Enter className='h-auto w-6 fill-garnet sm:w-8' />
-      </Link>
-    ),
+    renderCell: (params) => {
+      const disabled =
+        params.row.fecha > convertirFecha(new Date().toISOString());
+      return !disabled ? (
+        <Link
+          href={`${window.location.pathname}/examen/${params.row.id}`}
+          className='mx-auto flex size-fit'
+        >
+          <Enter className='h-auto w-6 fill-garnet sm:w-8' />
+        </Link>
+      ) : (
+        <Enter className='h-auto w-6 fill-grey-600 sm:w-8' />
+      );
+    },
   },
 ];
 
@@ -893,7 +929,7 @@ export const cursosCalificadosColumns: GridColDef[] = [
     headerAlign: 'center',
     renderCell: (params) => (
       <Link
-        href={`${window.location.pathname}/${params.row.id}/verCalificaciones`}
+        href={`${window.location.pathname}/curso/${params.row.id}/verCalificaciones`}
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
@@ -921,7 +957,7 @@ export const examenesCalificadosColumns: GridColDef[] = [
     headerAlign: 'center',
     renderCell: (params) => (
       <Link
-        href={`${window.location.pathname}/${params.row.id}/verCalificaciones`}
+        href={`${window.location.pathname}/examen/${params.row.id}/verCalificaciones`}
         className='mx-auto flex size-fit'
       >
         <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
@@ -1052,3 +1088,90 @@ export const actaCursoColumn: GridColDef[] = [
     ),
   },
 ];
+
+export const columnsMap: ColumnDefinitions = {
+  carrera: carreraColumns,
+  asignatura: asignaturaColumns,
+  examen: examenColumns,
+  usuario: usuarioColumns,
+  estudiante: estudianteColumns,
+  'datos-estudiante': datosEstudianteColumns,
+  'carreras-estudiante': carrerasEstudiante,
+  'carreras-funcionario': carrerasFuncionario,
+  'asignatura-examenes': asignaturaExamenColumns,
+  'asignatura-curso': asignaturaCursoColumns,
+  previtaturas: previaturasColumns,
+  noPrevitaturas: noPreviaturasColumns,
+  periodosExamen: periodosExamenColumns,
+  asignaturaFuncionario: asignaturaFuncionarioColumns,
+  inscripto: inscriptoColumns,
+  cursos: cursosColumns,
+  'carrera-calificaciones': carreraCalificacionesColumns,
+  'calficar-cursos': calificarCursosColumns,
+  'calficar-examenes': calificarExamenesColumns,
+  carreraInscripcionFuncionario: carreraInscripcionFuncionarioColumns,
+  asignaturaExamenFuncionario: asignaturaExamenFuncionarioColumns,
+  examenFuncionario: ExamenFuncionarioColumns,
+  inscriptosExamenFuncionario: InscriptosExamenFuncionarioColumns,
+  asignaturaBajaCurso: asignaturaBajaCursoColumns,
+  consultaTramitesEstudiante: consultaTramitesEstudiante,
+  solicitudTitulo: solicitudTituloColumns,
+  carreraCalificaciones: carrerasCalificacionesColums,
+  asignaturaCalificaciones: asignaturaCalificacionesColumns,
+  cursosCalificados: cursosCalificadosColumns,
+  calificacionCurso: calificacionCursoColumns,
+  examenesCalificados: examenesCalificadosColumns,
+  calificacionExamen: calificacionExamenColumns,
+  actasFuncionario: actasFuncionarioColumn,
+  actasAsignaturasFuncionario: actasAsignaturasFuncionarioColumn,
+  actaExamen: actaExamenColumn,
+  actaCurso: actaCursoColumn,
+  horarios: horariosColumns,
+  actividadUsuario: actividadUsuarioColumns,
+  none: [],
+};
+
+export interface ColumnDefinitions {
+  [key: string]: GridColDef[]; // This line allows any string as a key
+}
+
+type columnType =
+  | 'carrera'
+  | 'examen'
+  | 'asignatura'
+  | 'usuario'
+  | 'estudiante'
+  | 'carreras-estudiante'
+  | 'datos-estudiante'
+  | 'asignatura-examenes'
+  | 'asignatura-curso'
+  | 'inscripto'
+  | 'previtaturas'
+  | 'noPrevitaturas'
+  | 'periodosExamen'
+  | 'cursos'
+  | 'asignaturaFuncionario'
+  | 'carrera-calificaciones'
+  | 'calficar-examenes'
+  | 'calficar-cursos'
+  | 'carreras-funcionario'
+  | 'carreraInscripcionFuncionario'
+  | 'asignaturaExamenFuncionario'
+  | 'examenFuncionario'
+  | 'inscriptosExamenFuncionario'
+  | 'asignaturaBajaCurso'
+  | 'consultaTramitesEstudiante'
+  | 'solicitudTitulo'
+  | 'carreraCalificaciones'
+  | 'asignaturaCalificaciones'
+  | 'cursosCalificados'
+  | 'calificacionCurso'
+  | 'examenesCalificados'
+  | 'calificacionExamen'
+  | 'actasFuncionario'
+  | 'actasAsignaturasFuncionario'
+  | 'actaExamen'
+  | 'actaCurso'
+  | 'horarios'
+  | 'actividadUsuario'
+  | 'none';

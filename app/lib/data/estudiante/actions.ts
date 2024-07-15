@@ -145,7 +145,6 @@ export const inscribirseExamenFetch = async (
     }).then((res) => {
       return res.json();
     });
-
     if (response.status === 200) {
       return {
         message: 'Insripcion exitosa.',
@@ -238,7 +237,6 @@ export const obtenerAsignaturasParaInscripcionFetch = async (id: string) => {
       }
     );
     if (response.ok) {
-      console.log('response', response);
       const asignaturasJson = await response.json();
       return { asignaturas: asignaturasJson.content };
     } else {
@@ -468,7 +466,6 @@ export async function solicitarCertificadoFetch(id: string) {
     });
     if (response.ok) {
       const certificadoJson = await response.json();
-      console.log(certificadoJson);
       return certificadoJson;
     } else {
       return { message: 'No se pudo obtener certificado.' };

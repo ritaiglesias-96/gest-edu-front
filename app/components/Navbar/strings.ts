@@ -98,20 +98,9 @@ export const strings = {
       },
       { href: '/funcionario/actas', iconName: 'List', label: 'Actas' },
       {
-        href: '',
-        iconName: 'Lessons',
+        href: '/funcionario/calificaciones',
+        iconName: 'Grading',
         label: 'Calificaciones',
-      },
-      { href: '', iconName: '', label: '' },
-      {
-        href: '/funcionario/calificaciones/cursos',
-        iconName: 'Grading',
-        label: 'Cursos',
-      },
-      {
-        href: '/funcionario/calificaciones/examenes',
-        iconName: 'Grading',
-        label: 'Examenes',
       },
       { href: '', iconName: '', label: '' },
       { href: '/', iconName: 'Logout', label: 'Salir' },

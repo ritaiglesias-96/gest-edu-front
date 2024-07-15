@@ -2,7 +2,7 @@
 
 import List from '@/components/List/list';
 import { getTramitesEstudiantes } from '@/lib/data/estudiante/actions';
-import { Examen, TramiteEstudiante } from '@/lib/definitions';
+import { TramiteEstudiante } from '@/lib/definitions';
 import { convertirFecha } from '@/utils/utils';
 import { useEffect, useState } from 'react';
 
@@ -12,7 +12,6 @@ export default function TramitesEstudiantes() {
 
   useEffect(() => {
     getTramitesEstudiantes().then((response) => {
-      console.log(response);
       if (!response.message) {
         const tramites: TramiteEstudiante[] = response.map((r: any) => {
           const tramite: TramiteEstudiante = {

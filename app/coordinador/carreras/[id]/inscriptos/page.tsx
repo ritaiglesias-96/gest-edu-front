@@ -2,6 +2,7 @@
 
 import List from '@/components/List/list';
 import { getEstudiantesInscriptos } from '@/lib/data/coordinador/actions';
+import { convertirFecha } from '@/utils/utils';
 import { useEffect, useState } from 'react';
 
 export default function EstudiantesInscriptosPage({
@@ -23,9 +24,7 @@ export default function EstudiantesInscriptosPage({
           apellido: inscripcion.estudiante.apellido,
           email: inscripcion.estudiante.email,
           estado: inscripcion.estado,
-          fechaInscripcion: new Date(
-            inscripcion.fechaInscripcion
-          ).toLocaleDateString('es-ES'),
+          fechaInscripcion: convertirFecha(inscripcion.fechaInscripcion),
           creditosObtenidos: inscripcion.creditosObtenidos
             ? inscripcion.creditosObtenidos
             : 0,

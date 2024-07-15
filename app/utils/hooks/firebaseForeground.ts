@@ -7,16 +7,30 @@ import {
   getNotificaciones,
   tokenFirebasePost,
 } from '@/lib/data/estudiante/actions';
-import { SessionCtx } from '../../../context/SessionContext';
+import { Notificacion, SessionCtx } from '../../../context/SessionContext';
 
 export default function FcmTokenComp() {
-  const { setNotifications } = useContext(SessionCtx);
+  const { setNotifications, setNotReadNotifications } = useContext(SessionCtx);
   const messaging = getMessaging(app);
   const { fcmToken, notificationPermissionStatus } = useFcmToken();
 
   const fetchNotifications = async () => {
     const notifications = await getNotificaciones();
-    if (notifications) setNotifications(notifications);
+    if (notifications) {
+      const notRead = notifications.filter((not: Notificacion) => !not.leido);
+      setNotReadNotifications(notRead.length);
+      setNotifications(notifications);
+    } else {
+      setNotReadNotifications(0);
+      setNotifications([
+        {
+          id: 0,
+          titulo: 'No tienes notificaciones',
+          descripcion: '',
+          leido: true,
+        } as Notificacion,
+      ]);
+    }
   };
 
   useEffect(() => {

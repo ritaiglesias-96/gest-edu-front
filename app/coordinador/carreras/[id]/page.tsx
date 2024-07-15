@@ -73,36 +73,36 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
         <EditCarrera setOpen={setEdit} id={params.id} setCarrera={setCarrera} />
       )}
       <div className='relative box-border size-full justify-center overflow-auto md:w-5/6'>
-        {!fallout && !loading && (
-          <div className='h-fit w-full p-2'>
-            <div className='my-2 box-content flex flex-col items-center justify-between gap-3 rounded-md bg-ivory px-4 py-2 md:flex-row md:align-baseline'>
-              <div className='flex flex-col rounded-md text-center font-bold text-black md:text-left lg:max-w-md'>
-                <h3 className='m-0 p-0'>{carrera?.nombre}</h3>
-                <div className='flex flex-col'>
-                  <p className='font-bold'>Descripcion:</p>
-                  <p>{carrera?.descripcion}</p>
-                </div>
+        <div className='h-fit w-full p-2'>
+          <div className='my-2 box-content flex flex-col items-center justify-between gap-3 rounded-md bg-ivory px-4 py-2 lg:flex-row lg:align-baseline'>
+            <div className='flex max-w-full flex-col break-all rounded-md text-center font-bold text-black lg:max-w-md lg:text-left'>
+              <h3 className=''>{carrera?.nombre}</h3>
+              <div className='flex flex-col'>
+                <p className='font-bold'>Descripcion:</p>
+                <p>{carrera?.descripcion}</p>
               </div>
-              <div className='flex w-full flex-row justify-evenly rounded-md text-black md:w-fit md:flex-col md:justify-center'>
-                <div className='flex flex-col'>
-                  <p className='font-bold'>Duracion:</p>
-                  <p>{carrera?.duracionAnios ?? 0} años</p>
-                </div>
-                <div className='flex flex-col'>
-                  <p className='font-bold'>Creditos:</p>
-                  <p>{carrera?.creditos ?? 0} creditos</p>
-                </div>
-                <Button
-                  className='w-full self-center'
-                  styling='pill'
-                  onClick={() => {
-                    setEdit(!edit);
-                  }}
-                >
-                  <PencilIcon className='h-auto w-6 fill-garnet sm:w-8' />
-                </Button>
+            </div>
+            <div className='flex w-full flex-row justify-evenly rounded-md text-black lg:w-fit lg:flex-col lg:justify-center'>
+              <div className='flex flex-col'>
+                <p className='font-bold'>Duracion:</p>
+                <p>{carrera?.duracionAnios ?? 0} años</p>
               </div>
-              <div className='flex w-full flex-col justify-center rounded-md md:max-w-52'>
+              <div className='flex flex-col'>
+                <p className='font-bold'>Creditos:</p>
+                <p>{carrera?.creditos ?? 0} creditos</p>
+              </div>
+              <Button
+                className='w-full self-center'
+                styling='pill'
+                onClick={() => {
+                  setEdit(!edit);
+                }}
+              >
+                <PencilIcon className='h-auto w-6 fill-garnet sm:w-8' />
+              </Button>
+            </div>
+            <div className='flex w-full flex-col justify-center rounded-md lg:max-w-52'>
+              {rows.length > 0 && (
                 <Link href={`/coordinador/carreras/${params.id}/plan-estudio`}>
                   <Button className='w-full' styling='primary'>
                     {!carrera?.existePlanEstudio
@@ -110,22 +110,22 @@ export default function CarreraPage({ params }: { params: { id: string } }) {
                       : 'Ver Plan de estudio'}
                   </Button>
                 </Link>
-                {!carrera?.existePlanEstudio && (
-                  <Link href={`/coordinador/carreras/${params.id}/agregar`}>
-                    <Button className='w-full' styling='primary'>
-                      Agregar asignatura
-                    </Button>
-                  </Link>
-                )}
-              </div>
+              )}
+              {!carrera?.existePlanEstudio && (
+                <Link href={`/coordinador/carreras/${params.id}/agregar`}>
+                  <Button className='w-full' styling='primary'>
+                    Agregar asignatura
+                  </Button>
+                </Link>
+              )}
             </div>
-            <List
-              rows={rows}
-              rowsLoading={rowsLoading}
-              columnsType='asignatura'
-            />
           </div>
-        )}
+          <List
+            rows={rows}
+            rowsLoading={rowsLoading}
+            columnsType='asignatura'
+          />
+        </div>
       </div>
     </>
   );
