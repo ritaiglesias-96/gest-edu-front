@@ -119,8 +119,11 @@ export async function altaCarrera(prevState: CarreraState, formData: FormData) {
         message: 'Creada con exito. 201',
       };
     } else {
+      const data = await response.json();
       return {
-        errors: { descripcion: ['Error al crear carrera'] },
+        errors: {
+          descripcion: [data.message],
+        },
         message: 'Error al crear carrera',
       };
     }

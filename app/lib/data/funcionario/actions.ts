@@ -7,6 +7,7 @@ import {
   Curso,
   DocenteState,
   PeriodoExamenState,
+  HorarioCurso,
 } from '@/lib/definitions';
 import {
   AltaDocenteFormSchema,
@@ -14,7 +15,6 @@ import {
   RegistrarPeriopdoExamenFormSchema,
 } from '../schemasZod';
 import { GridRowModel } from '@mui/x-data-grid/models/gridRows';
-import { HorarioCurso } from '@/lib/definitions';
 import { getCarrera } from '../coordinador/actions';
 import { revalidatePath } from 'next/cache';
 
@@ -71,8 +71,10 @@ export async function altaDocente(prevState: DocenteState, formData: FormData) {
         message: 'Creada con exito. 201',
       };
     } else {
+      const res = await response.json();
       return {
-        message: 'Error al crear carrera',
+        errors: { documento: [`${res.message}`] },
+        message: 'Error al crear docente',
       };
     }
   }
@@ -80,14 +82,17 @@ export async function altaDocente(prevState: DocenteState, formData: FormData) {
 
 export async function editDocente(docentes: GridRowModel) {
   const token = authToken();
-  const { id, documento, nombre, apellido } = docentes;
+  const id: string = docentes.id as string;
+  const documento: string = docentes.documento as string;
+  const nombre: string = docentes.nombre as string;
+  const apellido: string = docentes.apellido as string;
   const response = await fetch(`${apiRoute}/docentes/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ id, documento, nombre, apellido }),
+    body: JSON.stringify({ documento, nombre, apellido }),
   });
   if (response.ok) {
     return response.json();
@@ -488,8 +493,8 @@ export async function registrarHorarioDiaCurso(
     const response = await fetch(`${apiRoute}/cursos/${cursoId}/horarios`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         dia: horario.dia,

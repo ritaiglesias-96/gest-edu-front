@@ -26,6 +26,8 @@ interface SessionContextType {
   setSession: Dispatch<SetStateAction<Session | null>>;
   notifications: Notificacion[];
   setNotifications: Dispatch<SetStateAction<Notificacion[] | []>>;
+  notReadNotifications: number;
+  setNotReadNotifications: Dispatch<SetStateAction<number>>;
 }
 
 // Create the session context
@@ -34,6 +36,8 @@ export const SessionCtx = createContext<SessionContextType>({
   setSession: () => {},
   notifications: [],
   setNotifications: () => {},
+  notReadNotifications: 0,
+  setNotReadNotifications: () => {},
 });
 
 export const SessionProvider = ({
@@ -43,10 +47,18 @@ export const SessionProvider = ({
 }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [notifications, setNotifications] = useState<Notificacion[] | []>([]);
+  const [notReadNotifications, setNotReadNotifications] = useState<number>(0);
 
   return (
     <SessionCtx.Provider
-      value={{ session, setSession, notifications, setNotifications }}
+      value={{
+        session,
+        setSession,
+        notifications,
+        setNotifications,
+        notReadNotifications,
+        setNotReadNotifications,
+      }}
     >
       {children}
     </SessionCtx.Provider>

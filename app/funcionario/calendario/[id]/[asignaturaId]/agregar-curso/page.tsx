@@ -4,7 +4,7 @@ import FormContainer from '@/components/FormContainer/formContainer';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getDocentes, registrarCurso } from '@/lib/data/funcionario/actions';
-import { Input, InputLabel } from '@mui/material';
+import { Alert, Collapse, Input, InputLabel } from '@mui/material';
 import * as React from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,10 +12,18 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Docente } from '@/lib/definitions';
 import ListItemText from '@mui/material/ListItemText';
-import Box from '@mui/material/Box';
+import CheckIcon from '@mui/icons-material/Check';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 export default function FuncionarioCursosAgregarHome({
   params,
@@ -29,15 +37,9 @@ export default function FuncionarioCursosAgregarHome({
   const [estado] = useState('ACTIVO'); // Estado por defecto
   const [docente, setDocente] = useState<string>('');
   const [listaDocentes, setListaDocentes] = useState<Docente[]>([]);
-
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
+  const [alertOk, setAlertOk] = useState(false);
+  const [alertError, setAlertError] = useState(false);
+  const [mensajeError, setMensajeError] = useState('');
 
   useEffect(() => {
     getDocentes().then((res) => {
@@ -46,7 +48,7 @@ export default function FuncionarioCursosAgregarHome({
   }, []);
 
   const handleChangeDocente = (event: SelectChangeEvent) => {
-    setDocente(event.target.value as string);
+    setDocente(event.target.value);
   };
 
   const handleClick = () => {
@@ -54,62 +56,59 @@ export default function FuncionarioCursosAgregarHome({
     const fin = new Date(fechaFin);
 
     if (fin <= inicio) {
-      alert('La fecha de fin debe ser posterior a la fecha de inicio');
-      return;
-    }
-
-    const asignaturaId = params.asignaturaId;
-    const docenteId = listaDocentes.find((d) => d.nombre === docente)?.id;
-
-    if (docenteId) {
-      const data = {
-        fechaInicio,
-        fechaFin,
-        diasPrevInsc,
-        estado,
-        asignaturaId,
-        docenteId,
-      };
-
-      // Convertir el objeto data a FormData
-      const formData = new FormData();
-      formData.append('fechaInicio', fechaInicio);
-      formData.append('fechaFin', fechaFin);
-      formData.append('diasPrevInsc', diasPrevInsc.toString());
-      formData.append('estado', estado);
-      formData.append('asignaturaId', asignaturaId);
-      formData.append('docenteId', docenteId.toString());
-
-      // Crear un prevState válido
-      const prevState = {
-        id: 0,
-        fechaInicio: '',
-        fechaFin: '',
-        diasPrevInsc: 30,
-        estado: 'ACTIVO',
-        asignaturaId: 0,
-        docenteId: 0,
-      };
-
-      registrarCurso(prevState, formData)
-        .then((res) => {
-          if (res) {
-            if (res.message) {
-              alert(res.message);
-            } else {
-              alert('Curso registrado');
-              router.back();
-            }
-          } else {
-            alert('Failed to register the course. Missing Fields.');
-          }
-        })
-        .catch((error) => {
-          console.error('Error registering the course:', error);
-          alert('An error occurred while registering the course.');
-        });
+      setMensajeError(
+        'La fecha de fin debe ser posterior a la fecha de inicio'
+      );
+      setAlertError(true);
+    } else if (inicio < new Date()) {
+      setMensajeError(
+        'La fecha de inicio debe ser posterior a la fecha actual'
+      );
+      setAlertError(true);
     } else {
-      alert('Debe seleccionar un docente');
+      const asignaturaId = params.asignaturaId;
+      const docenteId = listaDocentes.find((d) => d.nombre === docente)?.id;
+
+      if (docenteId) {
+        // Convertir el objeto data a FormData
+        const formData = new FormData();
+        formData.append('fechaInicio', fechaInicio);
+        formData.append('fechaFin', fechaFin);
+        formData.append('diasPrevInsc', diasPrevInsc.toString());
+        formData.append('estado', estado);
+        formData.append('asignaturaId', asignaturaId);
+        formData.append('docenteId', docenteId.toString());
+
+        // Crear un prevState válido
+        const prevState = {
+          id: 0,
+          fechaInicio: '',
+          fechaFin: '',
+          diasPrevInsc: 30,
+          estado: 'ACTIVO',
+          asignaturaId: 0,
+          docenteId: 0,
+        };
+
+        registrarCurso(prevState, formData)
+          .then((res) => {
+            if (res.message.includes('200')) {
+              setMensajeError('Curso registrado');
+              setAlertOk(true);
+              router.back();
+            } else {
+              setMensajeError(res.message);
+              setAlertError(true);
+            }
+          })
+          .catch(() => {
+            setMensajeError('Un error ocurrió al registrar el curso');
+            setAlertError(true);
+          });
+      } else {
+        setMensajeError('Debe seleccionar un docente');
+        setAlertError(true);
+      }
     }
   };
 
@@ -167,6 +166,40 @@ export default function FuncionarioCursosAgregarHome({
           </Button>
         </div>
       </div>
+      {alertOk && (
+        <Collapse
+          in={alertOk}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='success'
+            variant='filled'
+            onClose={() => {
+              setAlertOk(false);
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
+      {alertError && (
+        <Collapse
+          in={alertError}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='error'
+            variant='filled'
+            onClose={() => {
+              setAlertError(false);
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
     </FormContainer>
   );
 }

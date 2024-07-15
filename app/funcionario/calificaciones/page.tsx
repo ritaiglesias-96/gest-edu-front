@@ -17,7 +17,11 @@ export default function CalificacionesPage() {
       <h1 className='text-center font-bold'>Calificaciones</h1>
       <h4 className='text-center font-bold'>Seleccione una carrera</h4>
       <div className='h-fit w-full p-4'>
-        <List rows={rows} rowsLoading={rowsLoading} columnsType='carrera-calificaciones' />
+        <List
+          rows={rows}
+          rowsLoading={rowsLoading}
+          columnsType='carrera-calificaciones'
+        />
       </div>
     </div>
   );

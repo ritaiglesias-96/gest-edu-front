@@ -4,7 +4,6 @@ import FormContainer from '@/components/FormContainer/formContainer';
 import React, { useState } from 'react';
 import { Input, InputLabel, Collapse, Alert } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
-import { useRouter } from 'next/navigation';
 import { registrarHorarioDiaCurso } from '@/lib/data/funcionario/actions';
 import { horarios } from './horarios';
 import { HorarioCurso } from '@/lib/definitions';
@@ -41,7 +40,8 @@ function HorariosPorDia(cursoId: { cursoId: string }) {
           }
         });
       } else if (horario.dia == dia.toUpperCase()) {
-        alert('Seleccione horarios');
+        setMensajeError('Seleccione horarios');
+        setAlertError(true);
       }
     });
   };
@@ -49,7 +49,7 @@ function HorariosPorDia(cursoId: { cursoId: string }) {
   return (
     <div className='space-y-2'>
       {dias.map((dia, index) => (
-        <div key={index} className='flex justify-around space-x-40'>
+        <div key={dia + index} className='flex justify-around space-x-40'>
           <h4 className='w-6 justify-center text-black'>{dia}</h4>
           <div>
             <InputLabel htmlFor='component-simple'>Hora Inicio</InputLabel>
@@ -129,11 +129,6 @@ export default function FuncionarioHorariosCursoAgregarHome({
 }: {
   params: { id: string; asignaturaId: string; cursoId: string };
 }) {
-  const router = useRouter();
-  const [fecha, setFecha] = useState('');
-  const [diasPrevInsc, setDiasPrevInsc] = useState('');
-  const [docenteIds, setDocentes] = useState([1, 2, 3]);
-
   return (
     <FormContainer>
       <div className='flex min-h-full w-full flex-col items-center justify-between gap-1 md:mx-auto md:h-full md:max-w-full md:gap-2 md:px-6'>
