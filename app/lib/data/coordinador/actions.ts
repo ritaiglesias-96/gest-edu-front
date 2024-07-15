@@ -99,7 +99,7 @@ export async function altaCarrera(prevState: CarreraState, formData: FormData) {
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Career.',
+      message: 'Error al crear una carrera.',
     };
   } else {
     const { nombre, descripcion } = validatedFields.data;
@@ -121,10 +121,8 @@ export async function altaCarrera(prevState: CarreraState, formData: FormData) {
     } else {
       const data = await response.json();
       return {
-        errors: {
-          descripcion: [data.message],
-        },
-        message: 'Error al crear carrera',
+        errors: { nombre: [], descripcion: [data.message] },
+        message: data.message,
       };
     }
   }
@@ -163,7 +161,7 @@ export async function editCarrera(prevState: CarreraState, formData: FormData) {
       };
     } else {
       return {
-        errors: { descripcion: ['Error al editar carrera'] },
+        errors: { nombre: [], descripcion: ['Error al editar carrera'] },
         message: 'Error al editar carrera',
       };
     }
@@ -207,7 +205,7 @@ export async function editAsignatura(
       };
     } else {
       return {
-        errors: { descripcion: ['Error al editar asignatura'] },
+        errors: { nombre: [], descripcion: ['Error al editar asignatura'] },
         message: 'Error al editar asignatura',
       };
     }
@@ -254,7 +252,7 @@ export async function altaAsignatura(
       };
     } else {
       return {
-        errors: { descripcion: ['Error al crear asignatura'] },
+        errors: { nombre: [], descripcion: ['Error al crear asignatura'] },
         message: 'Error al crear asignatura',
       };
     }
