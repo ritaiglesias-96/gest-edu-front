@@ -179,12 +179,15 @@ export const inscribirseCarreraFetch = async (carreraId: string) => {
 export const obtenerCursosVigentes = async (id: string) => {
   const token = authToken();
   if (token) {
-    const response = await fetch(`${apiRoute}/asignaturas/${id}/cursos`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${apiRoute}/asignaturas/${id}/listado-cursos-disponibles`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.ok) {
       const data = await response.json();
       return data;

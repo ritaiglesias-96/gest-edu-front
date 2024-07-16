@@ -13,7 +13,8 @@ export type IconName =
   | 'Menu'
   | 'Rule'
   | 'Grading'
-  | 'UserAdd';
+  | 'UserAdd'
+  | 'Clock';
 
 export type NavLink = {
   href: string;
@@ -43,7 +44,7 @@ export const strings = {
       },
       {
         href: '',
-        iconName: 'Grading',
+        iconName: '',
         label: 'Consultar',
       },
       {
@@ -56,8 +57,8 @@ export const strings = {
         iconName: 'Calendar',
         label: 'Asignaturas pendientes',
       },
-      { href: '/estudiante/horarios', iconName: 'Calendar', label: 'Horarios' },
-      { href: '/estudiante/tramites', iconName: 'Book', label: 'Tramites' },
+      { href: '/estudiante/horarios', iconName: 'Clock', label: 'Horarios' },
+      { href: '/estudiante/tramites', iconName: 'Rule', label: 'Tramites' },
       {
         href: '',
         iconName: '',

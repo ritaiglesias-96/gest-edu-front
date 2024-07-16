@@ -3,6 +3,7 @@ import List from '@/components/List/list';
 import { getAsignatura } from '@/lib/data/coordinador/actions';
 import { obtenerCursosVigentes } from '@/lib/data/estudiante/actions';
 import { Asignatura } from '@/lib/definitions';
+import { convertirFecha } from '@/utils/utils';
 import React from 'react';
 import { useEffect, useState } from 'react';
 
@@ -40,6 +41,10 @@ export default function ConfirmarInscripcionCurso() {
   useEffect(() => {
     obtenerCursosVigentes(asignaturaId).then((data) => {
       if (data) {
+        data.forEach((curso: any) => {
+          curso.fechaInicio = convertirFecha(curso.fechaInicio);
+          curso.fechaFin = convertirFecha(curso.fechaFin);
+        });
         setRows(data ? data : []);
         setRowsLoading(false);
         setCursos(data);

@@ -1073,6 +1073,7 @@ function InscripcionCursoDataGrid({
   rowsParent: GridRowsProp;
   rowsLoadingParent: boolean;
 }>) {
+  const router = useRouter();
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
   const [usuarioId, setUsuarioId] = useState('');
@@ -1105,7 +1106,7 @@ function InscripcionCursoDataGrid({
           setAlertError(true);
           setAlertOk(false);
         } else {
-          setMensajeError('');
+          setMensajeError('Se ha inscrito al curso correctamente');
           setAlertError(false);
           setAlertOk(true);
         }
@@ -1214,9 +1215,10 @@ function InscripcionCursoDataGrid({
             variant='filled'
             onClose={() => {
               setAlertOk(false);
+              router.back();
             }}
           >
-            ¡Datos editados correctamente!
+            {mensajeError}
           </Alert>
         </Collapse>
       )}

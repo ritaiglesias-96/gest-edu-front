@@ -17,6 +17,7 @@ import Link from 'next/link';
 import ListIcon from '@/assets/svg/list.svg';
 import MenuIcon from '@/assets/svg/menu.svg';
 import Rule from '@/assets/svg/rule.svg';
+import Clock from '@/assets/svg/schedule.svg';
 import Grading from '@/assets/svg/grading.svg';
 import { Role } from '@/lib/definitions';
 import React, { useEffect } from 'react';
@@ -298,6 +299,7 @@ function DrawerNavbarStudent(sectionLinks: NavSection) {
                 <ListItem
                   key={label}
                   disablePadding={href === '' && label !== 'Salir'}
+                  sx={{ textAlign: 'center' }}
                   alignItems={
                     href === '' && label !== 'Salir' ? 'center' : 'flex-start'
                   }
@@ -402,7 +404,10 @@ function DrawerNavbar(sectionLinks: NavSection) {
                   </ListItemButton>
                 )}
                 {href === '' && label !== 'Salir' && (
-                  <ListItemText primary={label} />
+                  <ListItemText
+                    primary={label}
+                    sx={{ textAlign: 'center', fontWeight: 'bold' }}
+                  />
                 )}
                 {label === 'Salir' && (
                   <ListItemButton onClick={() => logoutFetch()}>
@@ -438,6 +443,7 @@ function getIconByName(name: IconName): any {
     Rule: <Rule className='h-6 self-center sm:w-auto' />,
     Grading: <Grading className='h-6 self-center sm:w-auto' />,
     UserAdd: <UserAdd className='h-6 self-center sm:w-auto' />,
+    Clock: <Clock className='h-6 self-center sm:w-auto' />,
   };
 
   return icons[name] || null;
