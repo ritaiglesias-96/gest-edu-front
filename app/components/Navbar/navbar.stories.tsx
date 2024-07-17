@@ -9,6 +9,7 @@ const meta = {
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
     rol: { control: Role },
+    usuario: {},
   },
 } satisfies Meta<typeof Navbar>;
 
@@ -19,6 +20,7 @@ export const Public: Story = {
   args: {
     rol: Role.public,
     mail: '',
+    usuario: {},
   },
 };
 
@@ -26,6 +28,7 @@ export const Admin: Story = {
   args: {
     rol: Role.admin,
     mail: '',
+    usuario: {},
   },
 };
 
@@ -33,6 +36,7 @@ export const Estudiante: Story = {
   args: {
     rol: Role.estudiante,
     mail: '',
+    usuario: {},
   },
 };
 
@@ -40,6 +44,7 @@ export const Coordinador: Story = {
   args: {
     rol: Role.coordinador,
     mail: '',
+    usuario: {},
   },
 };
 
@@ -47,5 +52,6 @@ export const Funcionario: Story = {
   args: {
     rol: Role.funcionario,
     mail: '',
+    usuario: {},
   },
 };
