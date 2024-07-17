@@ -380,15 +380,14 @@ export const cursosColumns: GridColDef[] = [
     cellClassName: 'flex items-center self-end',
     headerAlign: 'center',
     renderCell: (params) =>
-      params.row.estado !== 'FINALIZADO' ||
-      (params.row.horario && (
+      (params.row.estado !== 'FINALIZADO' || params.row.horario) && (
         <Link
           href={`${window.location.pathname}/${params.row.id}`}
           className='mx-auto flex size-fit'
         >
           <Schedule className='h-auto w-6 fill-garnet sm:w-8' />
         </Link>
-      )),
+      ),
   },
   {
     field: 'verHorarios',
