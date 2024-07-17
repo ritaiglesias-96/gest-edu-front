@@ -65,6 +65,7 @@ export default function CalificacionesPendientesPage({
   const fetchExamenesNoCalificados = async () => {
     const data = await geExamenesPendientesCalificacion();
     if (data) {
+      console.log(data);
       const arrayExamenesCarrera: ExamenFlattened[] = [];
       if (data.examenes) {
         data.examenes.forEach((element: Examen) => {
