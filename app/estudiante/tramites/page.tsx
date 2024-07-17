@@ -17,7 +17,6 @@ export default function TramitesEstudiantes() {
           const tramite: TramiteEstudiante = {
             id: r.id,
             carreraId: r.carreraNombre,
-            nombreCarrera: '', //TODO luego cambiar por el nombre
             tipo:
               r.tipo.toLowerCase().replace(/_/g, ' ').charAt(0).toUpperCase() +
               r.tipo.toLowerCase().replace(/_/g, ' ').slice(1),

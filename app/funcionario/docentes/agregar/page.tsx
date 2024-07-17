@@ -22,7 +22,7 @@ export default function AltaDocentePage() {
   }, [alta.message, router]);
 
   return (
-    <FormContainer className='w-1/3'>
+    <FormContainer className='w-9/12 md:w-3/5 lg:w-2/5'>
       <form
         className='flex min-h-full w-full flex-col items-center justify-between gap-1 md:mx-auto md:h-full md:max-w-full md:gap-2 md:px-6'
         action={dispatch}

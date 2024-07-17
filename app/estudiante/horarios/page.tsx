@@ -10,7 +10,6 @@ export default function CursosEstudiante() {
 
   useEffect(() => {
     getHorariosCursosEstudiante().then((horarioCursos: any[]) => {
-      console.log(horarioCursos);
       if (horarioCursos) {
         let horarios = horarioCursos.map((horario: any) => {
           const id = horario.cursoId;
@@ -20,7 +19,6 @@ export default function CursosEstudiante() {
         horarios = horarios.filter(
           (horario: any) => horario.estado === 'ACTIVO'
         );
-        console.log(horarios);
         setRows(horarios);
         setRowsLoading(false);
       }

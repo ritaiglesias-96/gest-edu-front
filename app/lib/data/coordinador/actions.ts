@@ -185,8 +185,7 @@ export async function editAsignatura(
       message: 'Missing Fields. Failed to Create Career.',
     };
   } else {
-    const { nombre, descripcion, asignaturaId, carreraId } =
-      validatedFields.data;
+    const { nombre, descripcion, asignaturaId } = validatedFields.data;
     const response = await fetch(`${apiRoute}/asignaturas/${asignaturaId}`, {
       method: 'PUT',
       headers: {
@@ -199,7 +198,6 @@ export async function editAsignatura(
       }),
     });
     if (response) {
-      revalidatePath(`/coordinador/carreras/${carreraId}`);
       return {
         message: 'Editada con exito. 200',
       };

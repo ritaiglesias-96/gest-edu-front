@@ -82,22 +82,25 @@ export async function altaDocente(prevState: DocenteState, formData: FormData) {
 
 export async function editDocente(docentes: GridRowModel) {
   const token = authToken();
-  const id: string = docentes.id as string;
-  const documento: string = docentes.documento as string;
-  const nombre: string = docentes.nombre as string;
-  const apellido: string = docentes.apellido as string;
+  const id = docentes.id as number;
+  const documento: string = docentes.documento;
+  const nombre: string = docentes.nombre;
+  const apellido: string = docentes.apellido;
+  console.log({ id, documento, nombre, apellido });
+
   const response = await fetch(`${apiRoute}/docentes/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ documento, nombre, apellido }),
+    body: JSON.stringify({ nombre, apellido }),
   });
+  const data = await response.json();
   if (response.ok) {
-    return response.json();
+    return data;
   } else {
-    return null;
+    return data.message;
   }
 }
 

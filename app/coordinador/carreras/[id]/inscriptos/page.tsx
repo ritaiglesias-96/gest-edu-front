@@ -16,7 +16,6 @@ export default function EstudiantesInscriptosPage({
   useEffect(() => {
     const fetch = async () => {
       const existenInscriptos = await getEstudiantesInscriptos(params.id);
-      console.log(existenInscriptos);
       if (existenInscriptos) {
         const estudiantes = existenInscriptos.map((inscripcion: any) => ({
           id: inscripcion.estudiante.id,
