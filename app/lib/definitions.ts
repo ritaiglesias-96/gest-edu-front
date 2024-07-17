@@ -341,7 +341,7 @@ export type Certificado = {
 export type TramiteEstudiante = {
   id: string;
   carreraId: string;
-  nombreCarrera: string;
+  nombreCarrera?: string;
   tipo: string;
   motivoRechazo: string;
   estado: string;

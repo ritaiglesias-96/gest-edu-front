@@ -148,14 +148,15 @@ function EditAsignatura({
   useEffect(() => {
     if (editForm.message.includes('200')) {
       const fetch = async () => {
-        await getAsignatura(id).then((data) => {
+        await getAsignatura(idAsignatura).then((data) => {
           setAsignatura(data);
         });
       };
       fetch();
       setOpen(false);
     }
-  }, [editForm.message, id, setAsignatura, setOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editForm.message]);
 
   return (
     <>

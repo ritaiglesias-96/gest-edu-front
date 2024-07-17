@@ -18,7 +18,7 @@ export default function ActaExamenPage({
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await getInscriptosAExamen('2'); //TODO HARDCODEADO PQ NO ME DEVUELVE NADA SI USO params.examenId pq no hay datos
+        const response = await getInscriptosAExamen(params.examenId);
         if (response && response.length > 0) {
           const examen = response[0].examen;
           const estudiantes = response.map(

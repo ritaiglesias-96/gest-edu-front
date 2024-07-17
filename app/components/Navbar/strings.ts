@@ -38,11 +38,6 @@ export const strings = {
   navEstudiante: {
     links: [
       {
-        href: '/estudiante/instructivos',
-        iconName: 'Rule',
-        label: 'Instructivos',
-      },
-      {
         href: '',
         iconName: '',
         label: 'Consultar',
@@ -51,6 +46,11 @@ export const strings = {
         href: '',
         iconName: '',
         label: '',
+      },
+      {
+        href: '/estudiante/instructivos',
+        iconName: 'List',
+        label: 'Instructivos',
       },
       {
         href: '/estudiante/pendientes',

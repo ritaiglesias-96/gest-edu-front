@@ -15,6 +15,7 @@ import EyeIcon from '@/assets/svg/visibility.svg';
 import School from '@/assets/svg/school.svg';
 import Download from '@/assets/svg/download.svg';
 import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Error';
 import CertificadoPDF from '../DocumentosPDF/CertificadoPDF';
 import EscolaridadPDF from '../DocumentosPDF/EscolaridadPDF';
 import {
@@ -63,6 +64,8 @@ import {
   TableContainer,
   TableCell,
   TableRow,
+  createTheme,
+  ThemeProvider,
 } from '@mui/material';
 import {
   bajaExamenFetch,
@@ -117,102 +120,122 @@ export default function List({
   columns = columnsMap[columnsType];
   let estudianteAsignatura =
     path.includes('estudiante') && columnsType === 'asignatura';
+
+  const theme = createTheme({
+    components: {
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            backgroundColor: '#f6f6e9',
+            boxShadow: '0px 0px 10px 10px #ff9362',
+          },
+        },
+      },
+    },
+  });
+
   return (
-    <div className={styles.dataGridContainer}>
-      {columnsType !== 'none' && (
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-            columns: {
-              columnVisibilityModel: {
-                nombre: columnsType !== 'inscripto',
-                apellido: columnsType !== 'inscripto',
-                detalles: !estudianteAsignatura,
-                horario: columnsType !== 'cursos',
+    <ThemeProvider theme={theme}>
+      <div className={styles.dataGridContainer}>
+        {columnsType !== 'none' && (
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
               },
-            },
-          }}
-          localeText={localeTextConstants}
-          loading={rowsLoading}
-          autoHeight={true}
-          rowSelection={false}
-          autosizeOnMount={true}
-          pageSizeOptions={[5, 10]}
-          className={styles.dataTable}
-          autosizeOptions={{ expand: true }}
-        />
-      )}
-      {isPrevias && (
-        <PreviaturasDataGrid
-          rowsParent={rows}
-          rowsLoadingParent={rowsLoading}
-        />
-      )}
-      {isEditableDocentes && (
-        <EditableDocentesDataGrid
-          rowsParent={rows}
-          rowsLoadingParent={rowsLoading}
-        />
-      )}
-      {isInscripcionExamen && (
-        <InscripcionExamenDataGrid
-          rowsParent={rows}
-          rowsLoadingParent={rowsLoading}
-        />
-      )}
-      {isEditableAsignaturas && (
-        <EditableAsignaturasDataGrid
-          rowsParent={rows}
-          rowsLoadingParent={rowsLoading}
-        />
-      )}
-      {editarCalificacionCurso && (
-        <EditarCalificacionCursoDataGrid
-          rowsParent={rows}
-          rowsLoadingParent={rowsLoading}
-        />
-      )}
-      {isApproveRejectCarrera && (
-        <ApproveRejectDataGrid
-          rowsParent={rows}
-          rowsLoadingParent={rowsLoading}
-        />
-      )}
-      {isInscripcionCurso && (
-        <InscripcionCursoDataGrid
-          rowsParent={rows}
-          rowsLoadingParent={rowsLoading}
-        />
-      )}
-      {isInscripcionCarrera && (
-        <InscripcionCarreraDataGrid
-          rowsParent={rows}
-          rowsLoadingParent={rowsLoading}
-        />
-      )}
-      {isHorarioCursoConsulta && (
-        <HorariosCursosEstudiante
-          rowsParent={rows}
-          rowsLoadingParent={rowsLoading}
-        />
-      )}
-      {isSolicitudTramite && (
-        <SolicitudTramiteDataGrid
-          rowsParent={rows}
-          rowsLoadingParent={rowsLoading}
-        />
-      )}
-      {editarCalificacionExamen && (
-        <EditarCalificacionExamenDataGrid
-          rowsParent={rows}
-          rowsLoadingParent={rowsLoading}
-        />
-      )}
-    </div>
+              columns: {
+                columnVisibilityModel: {
+                  nombre: columnsType !== 'inscripto',
+                  apellido: columnsType !== 'inscripto',
+                  detalles: !estudianteAsignatura,
+                  horario: columnsType !== 'cursos',
+                },
+              },
+            }}
+            localeText={localeTextConstants}
+            loading={rowsLoading}
+            autoHeight={true}
+            rowSelection={false}
+            autosizeOnMount={true}
+            pageSizeOptions={[5, 10]}
+            className={styles.dataTable}
+            autosizeOptions={{ expand: true }}
+            sx={{
+              backgroundColor: '#f6f6e9',
+              boxShadow: '1px 6px 36px 8px rgba(128,44,44,0.5)',
+            }}
+          />
+        )}
+        {isPrevias && (
+          <PreviaturasDataGrid
+            rowsParent={rows}
+            rowsLoadingParent={rowsLoading}
+          />
+        )}
+        {isEditableDocentes && (
+          <EditableDocentesDataGrid
+            rowsParent={rows}
+            rowsLoadingParent={rowsLoading}
+          />
+        )}
+        {isInscripcionExamen && (
+          <InscripcionExamenDataGrid
+            rowsParent={rows}
+            rowsLoadingParent={rowsLoading}
+          />
+        )}
+        {isEditableAsignaturas && (
+          <EditableAsignaturasDataGrid
+            rowsParent={rows}
+            rowsLoadingParent={rowsLoading}
+          />
+        )}
+        {editarCalificacionCurso && (
+          <EditarCalificacionCursoDataGrid
+            rowsParent={rows}
+            rowsLoadingParent={rowsLoading}
+          />
+        )}
+        {isApproveRejectCarrera && (
+          <ApproveRejectDataGrid
+            rowsParent={rows}
+            rowsLoadingParent={rowsLoading}
+          />
+        )}
+        {isInscripcionCurso && (
+          <InscripcionCursoDataGrid
+            rowsParent={rows}
+            rowsLoadingParent={rowsLoading}
+          />
+        )}
+        {isInscripcionCarrera && (
+          <InscripcionCarreraDataGrid
+            rowsParent={rows}
+            rowsLoadingParent={rowsLoading}
+          />
+        )}
+        {isHorarioCursoConsulta && (
+          <HorariosCursosEstudiante
+            rowsParent={rows}
+            rowsLoadingParent={rowsLoading}
+          />
+        )}
+        {isSolicitudTramite && (
+          <SolicitudTramiteDataGrid
+            rowsParent={rows}
+            rowsLoadingParent={rowsLoading}
+          />
+        )}
+        {editarCalificacionExamen && (
+          <EditarCalificacionExamenDataGrid
+            rowsParent={rows}
+            rowsLoadingParent={rowsLoading}
+          />
+        )}
+      </div>
+    </ThemeProvider>
   );
 }
 
@@ -228,6 +251,7 @@ function EditableDocentesDataGrid({
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [alertError, setAlertError] = useState(false);
   const [mensajeError, setMensajeError] = useState('');
+
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (
     params,
     event
@@ -255,6 +279,9 @@ function EditableDocentesDataGrid({
       const data = await deleteDocente(`${id}`);
       if (data && rows) {
         setRows(rows.filter((row) => row.id !== id));
+      } else {
+        setAlertError(true);
+        setMensajeError('Error al eliminar docente');
       }
     };
     deleteD();
@@ -269,21 +296,16 @@ function EditableDocentesDataGrid({
 
   const processRowUpdate = (newRow: GridRowModel) => {
     const updatedRow = { ...newRow, isNew: false };
-    const edit = async (docente: GridRowModel) => {
-      const data = await editDocente(docente);
+    editDocente(newRow).then((data) => {
       if (data) {
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
         return updatedRow;
       } else {
-        return rows;
+        setAlertError(true);
+        setMensajeError('Error al editar docente');
       }
-    };
-    return edit(updatedRow);
-  };
-
-  const handleProcessRowUpdateError = (error: any) => {
-    setAlertError(true);
-    setMensajeError(error.message);
+    });
+    return editDocente(newRow);
   };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -309,7 +331,7 @@ function EditableDocentesDataGrid({
       field: 'documento',
       headerName: 'Cedula',
       flex: 1,
-      editable: true,
+      editable: false,
     },
     {
       field: 'actions',
@@ -317,8 +339,9 @@ function EditableDocentesDataGrid({
       headerName: 'Actions',
       flex: 1,
       cellClassName: 'actions',
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+      getActions: (params) => {
+        const isInEditMode =
+          rowModesModel[params.id]?.mode === GridRowModes.Edit;
         if (isInEditMode) {
           return [
             <GridActionsCellItem
@@ -327,14 +350,14 @@ function EditableDocentesDataGrid({
               sx={{
                 color: '#802c2c',
               }}
-              onClick={handleSaveClick(id)}
-              key={id}
+              onClick={handleSaveClick(params.row.id)}
+              key={params.row.id}
             />,
             <GridActionsCellItem
               icon={<Close className='h-auto w-6 fill-garnet sm:w-8' />}
               label='Cancel'
-              onClick={handleCancelClick(id)}
-              key={`${id}-cancel`}
+              onClick={handleCancelClick(params.row.id)}
+              key={`${params.row.id}-cancel`}
             />,
           ];
         }
@@ -342,8 +365,8 @@ function EditableDocentesDataGrid({
           <GridActionsCellItem
             icon={<EditIcon className='h-auto w-6 fill-garnet sm:w-8 ' />}
             label='Edit'
-            onClick={handleEditClick(id)}
-            key={id}
+            onClick={handleEditClick(params.row.id)}
+            key={params.row.id}
             sx={{
               color: '#802c2c',
             }}
@@ -351,8 +374,8 @@ function EditableDocentesDataGrid({
           <GridActionsCellItem
             icon={<DeleteIcon className='h-auto w-6 fill-garnet sm:w-8' />}
             label='Delete'
-            onClick={handleDeleteClick(id)}
-            key={`${id}-delete`}
+            onClick={handleDeleteClick(params.row.id)}
+            key={`${params.row.id}-delete`}
             sx={{
               color: '#802c2c',
               height: '100%',
@@ -382,13 +405,13 @@ function EditableDocentesDataGrid({
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        onProcessRowUpdateError={handleProcessRowUpdateError}
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
         sx={{
           backgroundColor: '#f6f6e9',
           color: 'black',
+          boxShadow: '1px 6px 36px 8px rgba(128,44,44,0.5)',
         }}
       />
       {alertError && (
@@ -397,7 +420,7 @@ function EditableDocentesDataGrid({
           className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
         >
           <Alert
-            icon={<CheckIcon fontSize='inherit' />}
+            icon={<CloseIcon fontSize='inherit' />}
             severity='error'
             variant='filled'
             onClose={() => {
@@ -579,7 +602,11 @@ function EditableAsignaturasDataGrid({
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+        sx={{
+          backgroundColor: '#f6f6e9',
+          color: 'black',
+          boxShadow: '1px 6px 36px 8px rgba(128,44,44,0.5)',
+        }}
       />
     </div>
   );
@@ -671,6 +698,11 @@ function EditarCalificacionCursoDataGrid({
         autoHeight={true}
         loading={rowsLoading}
         columns={columns}
+        sx={{
+          backgroundColor: '#f6f6e9',
+          color: 'black',
+          boxShadow: '1px 6px 36px 8px rgba(128,44,44,0.5)',
+        }}
       />
     </div>
   );
@@ -803,7 +835,11 @@ function InscripcionExamenDataGrid({
         autosizeOnMount={true}
         autoHeight={true}
         columns={columns}
-        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+        sx={{
+          backgroundColor: '#f6f6e9',
+          color: 'black',
+          boxShadow: '1px 6px 36px 8px rgba(128,44,44,0.5)',
+        }}
       />
       {isOpen && (
         <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
@@ -871,7 +907,7 @@ function InscripcionExamenDataGrid({
           className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
         >
           <Alert
-            icon={<CheckIcon fontSize='inherit' />}
+            icon={<CloseIcon fontSize='inherit' />}
             severity='error'
             variant='filled'
             onClose={() => {
@@ -1041,7 +1077,11 @@ function ApproveRejectDataGrid({
         pageSizeOptions={[25, 50, 100]}
         rowSelection={false}
         autosizeOptions={{ expand: true }}
-        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+        sx={{
+          backgroundColor: '#f6f6e9',
+          color: 'black',
+          boxShadow: '1px 6px 36px 8px rgba(128,44,44,0.5)',
+        }}
       />
       {showModal && (
         <div className='absolute inset-0 z-20 m-auto flex h-fit max-w-fit flex-col rounded-xl bg-ivory  p-4 shadow-lg shadow-garnet md:p-6'>
@@ -1181,7 +1221,11 @@ function InscripcionCursoDataGrid({
         autoHeight={true}
         loading={rowsLoading}
         columns={columns}
-        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+        sx={{
+          backgroundColor: '#f6f6e9',
+          color: 'black',
+          boxShadow: '1px 6px 36px 8px rgba(128,44,44,0.5)',
+        }}
       />
       {isOpenCurso && (
         <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
@@ -1241,7 +1285,7 @@ function InscripcionCursoDataGrid({
           className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
         >
           <Alert
-            icon={<CheckIcon fontSize='inherit' />}
+            icon={<CloseIcon fontSize='inherit' />}
             severity='error'
             variant='filled'
             onClose={() => {
@@ -1343,6 +1387,11 @@ function EditarCalificacionExamenDataGrid({
       autoHeight={true}
       loading={rowsLoading}
       columns={columns}
+      sx={{
+        backgroundColor: '#f6f6e9',
+        color: 'black',
+        boxShadow: '1px 6px 36px 8px rgba(128,44,44,0.5)',
+      }}
     />
   );
 }
@@ -1447,7 +1496,11 @@ function HorariosCursosEstudiante({
           autosizeOnMount={true}
           autoHeight={true}
           columns={columns}
-          sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+          sx={{
+            backgroundColor: '#f6f6e9',
+            color: 'black',
+            boxShadow: '1px 6px 36px 8px rgba(128,44,44,0.5)',
+          }}
         />
       </div>
       {isOpen && (
@@ -1686,7 +1739,11 @@ function SolicitudTramiteDataGrid({
         autosizeOnMount={true}
         autoHeight={true}
         columns={columns}
-        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+        sx={{
+          backgroundColor: '#f6f6e9',
+          color: 'black',
+          boxShadow: '1px 6px 36px 8px rgba(128,44,44,0.5)',
+        }}
       />
       {isOpenTitulo && (
         <div className='absolute left-1/2 top-1/2 max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-md bg-ivory px-4 py-2 shadow-lg shadow-garnet'>
@@ -1798,7 +1855,7 @@ function SolicitudTramiteDataGrid({
           className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
         >
           <Alert
-            icon={<CheckIcon fontSize='inherit' />}
+            icon={<CloseIcon fontSize='inherit' />}
             severity='error'
             variant='filled'
             onClose={() => {
@@ -1987,7 +2044,11 @@ function InscripcionCarreraDataGrid({
         pageSizeOptions={[25, 50, 100]}
         rowSelection={false}
         autosizeOptions={{ expand: true }}
-        sx={{ backgroundColor: '#f6f6e9', color: 'black' }}
+        sx={{
+          backgroundColor: '#f6f6e9',
+          color: 'black',
+          boxShadow: '1px 6px 36px 8px rgba(128,44,44,0.5)',
+        }}
       />
       {showModal && (
         <div className='absolute inset-0 z-20 m-auto flex h-fit max-w-fit flex-col rounded-xl bg-ivory  p-4 shadow-lg shadow-garnet md:p-6'>
@@ -2170,6 +2231,11 @@ function PreviaturasDataGrid({
         pageSizeOptions={[5, 10]}
         className={styles.dataTable}
         autosizeOptions={{ expand: true }}
+        sx={{
+          backgroundColor: '#f6f6e9',
+          color: 'black',
+          boxShadow: '1px 6px 36px 8px rgba(128,44,44,0.5)',
+        }}
       />
       {alertOk && (
         <Collapse
