@@ -380,7 +380,7 @@ export const asignaturaExamenColumns: GridColDef[] = [
         }
         className='mx-auto flex size-fit'
       >
-        <EyeIcon className='h-auto w-6 fill-garnet sm:w-8' />
+        <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
       </Link>
     ),
   },
@@ -422,20 +422,22 @@ export const cursosColumns: GridColDef[] = [
   { field: 'estado', headerName: 'Estado' },
   { field: 'fechaInicio', headerName: 'Fecha de Inicio' },
   { field: 'fechaFin', headerName: 'Fecha de Fin' },
+  { field: 'horario', headerName: 'Horario' },
   {
     field: 'agregarHorarios',
     headerName: 'Crear Horarios',
     cellClassName: 'flex items-center self-end',
     headerAlign: 'center',
     renderCell: (params) =>
-      params.row.estado !== 'FINALIZADO' && (
+      params.row.estado !== 'FINALIZADO' ||
+      (params.row.horario && (
         <Link
           href={`${window.location.pathname}/${params.row.id}`}
           className='mx-auto flex size-fit'
         >
           <Schedule className='h-auto w-6 fill-garnet sm:w-8' />
         </Link>
-      ),
+      )),
   },
   {
     field: 'verHorarios',
@@ -1134,44 +1136,3 @@ export const columnsMap: ColumnDefinitions = {
 export interface ColumnDefinitions {
   [key: string]: GridColDef[]; // This line allows any string as a key
 }
-
-type columnType =
-  | 'carrera'
-  | 'examen'
-  | 'asignatura'
-  | 'usuario'
-  | 'estudiante'
-  | 'carreras-estudiante'
-  | 'datos-estudiante'
-  | 'asignatura-examenes'
-  | 'asignatura-curso'
-  | 'inscripto'
-  | 'previtaturas'
-  | 'noPrevitaturas'
-  | 'periodosExamen'
-  | 'cursos'
-  | 'asignaturaFuncionario'
-  | 'carrera-calificaciones'
-  | 'calficar-examenes'
-  | 'calficar-cursos'
-  | 'carreras-funcionario'
-  | 'carreraInscripcionFuncionario'
-  | 'asignaturaExamenFuncionario'
-  | 'examenFuncionario'
-  | 'inscriptosExamenFuncionario'
-  | 'asignaturaBajaCurso'
-  | 'consultaTramitesEstudiante'
-  | 'solicitudTitulo'
-  | 'carreraCalificaciones'
-  | 'asignaturaCalificaciones'
-  | 'cursosCalificados'
-  | 'calificacionCurso'
-  | 'examenesCalificados'
-  | 'calificacionExamen'
-  | 'actasFuncionario'
-  | 'actasAsignaturasFuncionario'
-  | 'actaExamen'
-  | 'actaCurso'
-  | 'horarios'
-  | 'actividadUsuario'
-  | 'none';
