@@ -34,3 +34,10 @@ export function convertirHora(hora: string) {
   // Devuelve las dos primeras partes (HH y MM) unidas por ':'
   return `${partes[0]}:${partes[1]}`;
 }
+
+export function convertirFechaHora(fecha: string) {
+  // Divide la cadena en partes utilizando ' ' como delimitador
+  const partes = fecha.split(' ');
+  // Devuelve la primera parte (DD/MM/AAAA) formateada y la segunda parte (HH:MM)
+  return `${convertirFecha(partes[0])} ${convertirHora(partes[1])}`;
+}

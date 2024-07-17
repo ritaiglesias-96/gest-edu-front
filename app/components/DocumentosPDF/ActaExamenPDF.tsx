@@ -67,12 +67,11 @@ const ActaExamenPDF: FC<Props> = ({ acta }) => {
 
     const doc = new jsPDF();
     const addHeader = () => {
-      doc.addImage(base64Image!, 'PNG', 10, 10, 50, 15); // Ajusta la imagen como encabezado
+      doc.addImage(base64Image!, 'PNG', 10, 10, 50, 15);
     };
     addHeader();
-    // Fecha de emisión del PDF
     doc.setFont('helvetica', 'italic');
-    doc.setTextColor(100); // Color gris
+    doc.setTextColor(100);
     doc.setFontSize(12);
     doc.text(
       `Fecha de Emisión: ${new Date().toLocaleDateString('es-ES')}`,
@@ -80,10 +79,9 @@ const ActaExamenPDF: FC<Props> = ({ acta }) => {
       20
     );
 
-    // Configurar estilos y contenido del PDF
     doc.setFontSize(20);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(0, 0, 0); // Color negro
+    doc.setTextColor(0, 0, 0);
     doc.text('Acta de Examen', 105, 40, { align: 'center' });
 
     doc.setFontSize(12);
@@ -109,23 +107,19 @@ const ActaExamenPDF: FC<Props> = ({ acta }) => {
         20,
         y
       );
-      doc.text('Calificación:', 160, y); // Espacio para calificación
+      doc.text('Calificación:', 160, y);
     });
 
-    // Añadir las firmas al final de la última página
     const pageHeight = doc.internal.pageSize.height;
-    const footerY = pageHeight - 30; // Espacio desde el final de la página
+    const footerY = pageHeight - 30;
 
-    // Línea y texto para firma del coordinador
     doc.setLineWidth(0.5);
     doc.line(20, footerY, 80, footerY);
     doc.text(`Firma Coordinador ${acta.asignaturaNombre}`, 20, footerY + 10);
 
-    // Línea y texto para firma del docente
     doc.line(130, footerY, 190, footerY);
     doc.text('Firma Docente', 130, footerY + 10);
 
-    // Descargar el PDF
     doc.save(`acta_examen_${acta.id}.pdf`);
   };
 

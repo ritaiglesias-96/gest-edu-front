@@ -248,6 +248,24 @@ export const obtenerAsignaturasParaInscripcionFetch = async (id: string) => {
   }
 };
 
+export const obtenerListadoExamenes = async () => {
+  const token = authToken();
+  if (token) {
+    const response = await fetch(`${apiRoute}/estudiantes/inscripto`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const examenesJson = await response.json();
+      return examenesJson;
+    } else {
+      return response.json();
+    }
+  }
+};
+
 export const obtenerAsignaturasParaInscripcionExamenFetch = async (
   id: string
 ) => {

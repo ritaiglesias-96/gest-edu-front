@@ -281,7 +281,8 @@ function SeleccionarPreviatura({
         <List
           rows={rows}
           rowsLoading={rowsLoading}
-          columnsType='noPrevitaturas'
+          columnsType='none'
+          isPrevias={true}
         />
       </div>
     </>

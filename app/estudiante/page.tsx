@@ -1,10 +1,23 @@
-'use strict';
+'use client';
 import Contacto from '@/components/Contacto/page';
+import GestEduLogo from '@/assets/svg/logo-light-vertical.svg';
+import { useSession } from '../../context/SessionContext';
 
 export default function EstudianteHome() {
+  const { usuario } = useSession();
+
   return (
-    <section className=' text-ivory'>
-      <h1>Estudiante</h1>
+    <section>
+      <div className='flex flex-1 flex-col items-center justify-center text-center'>
+        {usuario?.nombre && (
+          <h1 className='pt-6 text-ivory'>
+            Bienvenid@ {usuario?.nombre + ' ' + usuario?.apellido}!
+          </h1>
+        )}
+        <p className='pb-6 text-peach-yellow'>Estudiante</p>
+        <GestEduLogo />
+        <h4 className='text-md'>Administrador de gestión educativa</h4>
+      </div>
       <Contacto />
     </section>
   );

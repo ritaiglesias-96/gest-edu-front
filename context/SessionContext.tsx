@@ -8,9 +8,22 @@ import {
 } from 'react';
 import { Role } from '@/lib/definitions';
 
+export type User = {
+  id: number;
+  ci: string;
+  nombre: string;
+  apellido: string;
+  email: string;
+  telefono: string;
+  domicilio: string;
+  fechaNac: string;
+  imagen: string;
+};
+
 export type Session = {
   email: string;
   rol: Role;
+  usuario: User;
 };
 
 export type Notificacion = {
@@ -28,6 +41,8 @@ interface SessionContextType {
   setNotifications: Dispatch<SetStateAction<Notificacion[] | []>>;
   notReadNotifications: number;
   setNotReadNotifications: Dispatch<SetStateAction<number>>;
+  usuario: User | null;
+  setUsuario: Dispatch<SetStateAction<User | null>>;
 }
 
 // Create the session context
@@ -38,6 +53,8 @@ export const SessionCtx = createContext<SessionContextType>({
   setNotifications: () => {},
   notReadNotifications: 0,
   setNotReadNotifications: () => {},
+  usuario: null,
+  setUsuario: () => {},
 });
 
 export const SessionProvider = ({
@@ -48,6 +65,7 @@ export const SessionProvider = ({
   const [session, setSession] = useState<Session | null>(null);
   const [notifications, setNotifications] = useState<Notificacion[] | []>([]);
   const [notReadNotifications, setNotReadNotifications] = useState<number>(0);
+  const [usuario, setUsuario] = useState<User | null>(null);
 
   return (
     <SessionCtx.Provider
@@ -58,6 +76,8 @@ export const SessionProvider = ({
         setNotifications,
         notReadNotifications,
         setNotReadNotifications,
+        usuario,
+        setUsuario,
       }}
     >
       {children}
