@@ -1,3 +1,4 @@
+import { obtenerDatosUsuarioFetch } from '@/lib/data/actions';
 import { Role } from '@/lib/definitions';
 import { decodeJwt } from 'jose';
 import { cookies } from 'next/headers';
@@ -17,6 +18,17 @@ export const authRol = () => {
   }
 };
 
+export const authNombre = async () => {
+  const data = await obtenerDatosUsuarioFetch().then((data) => {
+    if (data) {
+      return data;
+    } else {
+      return null;
+    }
+  });
+  return data;
+};
+
 export const authMail = () => {
   const cookie = cookies().get('token');
   if (cookie && cookie.value !== '') {
@@ -29,6 +41,5 @@ export const authMail = () => {
 
 export const authToken = () => {
   const cookie = cookies().get('token');
-
   return cookie && cookie.value !== '' ? cookie.value : '';
 };

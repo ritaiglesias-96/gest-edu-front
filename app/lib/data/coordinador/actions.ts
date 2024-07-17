@@ -313,14 +313,11 @@ export async function altaPreviaFetch(asignaturaId: string, previaId: string) {
         },
       }
     );
+    const data = await previaturas.json();
     if (previaturas.ok) {
-      return {
-        message: 'Previa creada con exito.',
-      };
+      return data;
     } else {
-      return {
-        message: 'Error al crear previatura',
-      };
+      return data;
     }
   }
 }

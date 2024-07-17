@@ -1,6 +1,7 @@
 import styles from './list.module.css';
 import { columnsMap, ColumnDefinitions } from './columnTypes';
 import React, { useContext, useEffect, useState } from 'react';
+import Add from '@/assets/svg/add.svg';
 import Button from '@/components/Button/button';
 import EditIcon from '@/assets/svg/edit.svg';
 import DeleteIcon from '@/assets/svg/delete.svg';
@@ -44,7 +45,10 @@ import {
   Escolaridad,
   localeTextConstants,
 } from '@/lib/definitions';
-import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
+import {
+  altaPlanEstudio,
+  altaPreviaFetch,
+} from '@/lib/data/coordinador/actions';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   FormControl,
@@ -78,6 +82,7 @@ type columnType = keyof ColumnDefinitions;
 interface ListProps {
   isEditableDocentes?: boolean;
   isInscripcionExamen?: boolean;
+  isPrevias?: boolean;
   isInscripcionCurso?: boolean;
   isInscripcionCarrera?: boolean;
   isEditableAsignaturas?: boolean;
@@ -94,6 +99,7 @@ interface ListProps {
 export default function List({
   isEditableDocentes,
   isInscripcionCarrera,
+  isPrevias,
   isInscripcionExamen,
   isInscripcionCurso,
   isEditableAsignaturas,
@@ -138,6 +144,12 @@ export default function List({
           pageSizeOptions={[5, 10]}
           className={styles.dataTable}
           autosizeOptions={{ expand: true }}
+        />
+      )}
+      {isPrevias && (
+        <PreviaturasDataGrid
+          rowsParent={rows}
+          rowsLoadingParent={rowsLoading}
         />
       )}
       {isEditableDocentes && (
@@ -2044,6 +2056,146 @@ function InscripcionCarreraDataGrid({
         >
           <Alert
             severity='warning'
+            variant='filled'
+            onClose={() => {
+              setAlertError(false);
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
+    </div>
+  );
+}
+
+function PreviaturasDataGrid({
+  rowsParent,
+  rowsLoadingParent,
+}: Readonly<{
+  rowsParent: GridRowsProp;
+  rowsLoadingParent: boolean;
+}>) {
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [alertOk, setAlertOk] = useState(false);
+  const [alertError, setAlertError] = useState(false);
+  const [mensajeError, setMensajeError] = useState('');
+
+  const handleClick = (idAsignatura: string, id: string) => {
+    altaPreviaFetch(idAsignatura, id).then((data) => {
+      if (data?.message) {
+        setMensajeError(data.message);
+        setAlertError(true);
+        setAlertOk(false);
+      } else {
+        setMensajeError('Se ha agregado la previa correctamente');
+        setAlertError(false);
+        setAlertOk(true);
+      }
+    });
+  };
+
+  const noPreviaturasColumns: GridColDef[] = [
+    {
+      field: 'idAsignatura',
+      headerName: '',
+      disableColumnMenu: true,
+      sortable: false,
+      resizable: false,
+      cellClassName: 'invisible', // hidden column
+      headerClassName: 'invisible', // hidden column
+    },
+    {
+      field: 'id',
+      headerName: 'ID',
+      align: 'left',
+    },
+    {
+      field: 'semestrePlanEstudio',
+      headerName: 'Semestre',
+      align: 'right',
+    },
+    {
+      field: 'nombre',
+      headerName: 'Nombre',
+    },
+    {
+      field: 'descripcion',
+      headerName: 'Descripcion',
+    },
+    {
+      field: 'agregar',
+      headerName: 'Agregar',
+      cellClassName: 'flex items-center ',
+      headerAlign: 'center',
+      sortable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => (
+        <div className='mx-auto flex size-fit'>
+          <Add
+            onClick={() => {
+              handleClick(
+                params.row.idAsignatura.toString(),
+                params.row.id.toString()
+              );
+            }}
+            className='h-auto w-6 fill-garnet sm:w-8'
+          />
+        </div>
+      ),
+    },
+  ];
+
+  useEffect(() => {
+    setRows(rowsParent);
+    setRowsLoading(rowsLoadingParent);
+  }, [rowsLoadingParent, rowsParent]);
+
+  return (
+    <div>
+      <DataGrid
+        rows={rows}
+        columns={noPreviaturasColumns}
+        initialState={{
+          pagination: {
+            paginationModel: { page: 0, pageSize: 5 },
+          },
+        }}
+        localeText={localeTextConstants}
+        loading={rowsLoading}
+        autoHeight={true}
+        rowSelection={false}
+        autosizeOnMount={true}
+        pageSizeOptions={[5, 10]}
+        className={styles.dataTable}
+        autosizeOptions={{ expand: true }}
+      />
+      {alertOk && (
+        <Collapse
+          in={alertOk}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            icon={<CheckIcon fontSize='inherit' />}
+            severity='success'
+            variant='filled'
+            onClose={() => {
+              setAlertOk(false);
+              location.reload();
+            }}
+          >
+            {mensajeError}
+          </Alert>
+        </Collapse>
+      )}
+      {alertError && (
+        <Collapse
+          in={alertError}
+          className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-garnet'
+        >
+          <Alert
+            severity='error'
             variant='filled'
             onClose={() => {
               setAlertError(false);

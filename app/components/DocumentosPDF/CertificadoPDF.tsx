@@ -1,6 +1,6 @@
 import { FC, useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
-import { Certificado } from '@/lib/definitions'; // Asegúrate de ajustar la ruta según tu estructura de archivos
+import { Certificado } from '@/lib/definitions';
 import Button from '../Button/button';
 import Download from '@/assets/svg/download.svg';
 import { convertirFecha } from '@/utils/utils';
@@ -69,31 +69,26 @@ const CertificadoPDF: FC<Props> = ({ certificado }) => {
     let y = 40;
     let pageNumber = 1;
 
-    // Agregar encabezado con imagen en todas las páginas
     const addHeader = () => {
-      doc.addImage(base64Image!, 'PNG', 10, 10, 50, 15); // Ajusta la imagen como encabezado
+      doc.addImage(base64Image!, 'PNG', 10, 10, 50, 15);
     };
 
-    // Aplicar estilos generales
     const applyGeneralStyles = () => {
       doc.setFontSize(12);
       doc.setFont('helvetica', 'normal');
-      doc.setTextColor(0, 0, 0); // Negro
+      doc.setTextColor(0, 0, 0);
     };
 
-    // Configurar encabezado y primera página
     addHeader();
     applyGeneralStyles();
     doc.setFont('helvetica', 'italic');
-    doc.setTextColor(100); // Color gris
+    doc.setTextColor(100);
     doc.setFontSize(12);
     doc.text(`Fecha de Emisión: ${convertirFecha(certificado.fecha)}`, 130, 20);
 
-    // Configurar estilos y contenido del PDF
-
     doc.setFontSize(20);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(0, 0, 0); //color negro
+    doc.setTextColor(0, 0, 0);
     doc.text('Certificado', 105, 40, { align: 'center' });
 
     doc.setFontSize(12);
@@ -118,10 +113,9 @@ const CertificadoPDF: FC<Props> = ({ certificado }) => {
     doc.text(`Teléfono: ${certificado.estudiante.telefono}`, 20, 140);
 
     doc.setFont('helvetica', 'italic');
-    doc.setTextColor(100); // Color gris
+    doc.setTextColor(100);
     doc.text(`Código de Validación: ${certificado.codigoValidacion}`, 20, 170);
 
-    // Descargar el PDF
     doc.save(
       `certificado_${certificado.estudiante.ci}_${convertirFecha(certificado.fecha)}.pdf`
     );

@@ -235,7 +235,6 @@ export const editarPerfilFetch = async (
 
 export const obtenerDatosUsuarioFetch = async () => {
   const token = authToken();
-
   if (token) {
     try {
       const response = await fetch(`${apiRoute}/usuario/perfil`, {
@@ -244,15 +243,10 @@ export const obtenerDatosUsuarioFetch = async () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (!response.ok) {
-        // Manejar errores HTTP
-        console.error(`HTTP Error: ${response.status}`);
-        return null;
-      }
-
-      // Lee el cuerpo de la respuesta como JSON
-      const data = await response.json();
-      return data;
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else return null;
     } catch (error) {
       // Manejar errores de red u otros errores
       console.error('Fetch Error:', error);

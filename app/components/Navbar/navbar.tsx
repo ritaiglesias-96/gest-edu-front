@@ -5,7 +5,7 @@ import GestEduIcon from '@/assets/svg/logo-black-horizontal.svg';
 import Login from '@/assets/svg/login.svg';
 import Logout from '@/assets/svg/logout.svg';
 import Close from '@/assets/svg/close.svg';
-import User from '@/assets/svg/user.svg';
+import UserIcon from '@/assets/svg/user.svg';
 import Users from '@/assets/svg/people.svg';
 import UserAdd from '@/assets/svg/user-add.svg';
 import Hat from '@/assets/svg/school.svg';
@@ -40,6 +40,7 @@ import {
 import { logoutFetch } from '@/lib/data/actions';
 import { marcarComoLeida } from '@/lib/data/estudiante/actions';
 import {
+  User,
   Session,
   useSession,
   Notificacion,
@@ -71,10 +72,19 @@ const theme = createTheme({
 const drawerWidth = 240;
 const ITEM_HEIGHT = 48;
 
-export default function Navbar({ rol, mail }: { rol: Role; mail: string }) {
+export default function Navbar({
+  rol,
+  mail,
+  usuario,
+}: {
+  rol: Role;
+  mail: string;
+  usuario: {};
+}) {
   const context = useSession();
   useEffect(() => {
     context.setSession({ email: mail, rol: rol } as Session);
+    context.setUsuario(usuario as User);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mail]);
 
@@ -433,7 +443,7 @@ function getIconByName(name: IconName): any {
     Calendar: <Calendar className='h-6 self-center sm:w-auto' />,
     Users: <Users className='h-6 self-center sm:w-auto' />,
     Lessons: <Lessons className='h-6 self-center sm:w-auto' />,
-    User: <User className='h-6 self-center sm:w-auto' />,
+    User: <UserIcon className='h-6 self-center sm:w-auto' />,
     Logout: <Logout className='h-6 self-center sm:w-auto' />,
     Login: <Login className='h-6 self-center sm:w-auto' />,
     Hat: <Hat className='h-6 self-center sm:w-auto' />,

@@ -216,55 +216,6 @@ export const examenColumns: GridColDef[] = [
   },
 ];
 
-export const noPreviaturasColumns: GridColDef[] = [
-  {
-    field: 'idAsignatura',
-    headerName: '',
-    disableColumnMenu: true,
-    sortable: false,
-    resizable: false,
-    cellClassName: 'invisible', // hidden column
-    headerClassName: 'invisible', // hidden column
-  },
-  {
-    field: 'id',
-    headerName: 'ID',
-    align: 'left',
-  },
-  {
-    field: 'semestrePlanEstudio',
-    headerName: 'Semestre',
-    align: 'right',
-  },
-  {
-    field: 'nombre',
-    headerName: 'Nombre',
-  },
-  {
-    field: 'descripcion',
-    headerName: 'Descripcion',
-  },
-  {
-    field: 'agregar',
-    headerName: 'Agregar',
-    cellClassName: 'flex items-center ',
-    headerAlign: 'center',
-    sortable: false,
-    disableColumnMenu: true,
-    renderCell: (params) => (
-      <div className='mx-auto flex size-fit'>
-        <Add
-          onClick={() => {
-            altaPreviaFetch(params.row.idAsignatura, params.row.id);
-            location.reload();
-          }}
-          className='h-auto w-6 fill-garnet sm:w-8'
-        />
-      </div>
-    ),
-  },
-];
-
 export const estudianteColumns: GridColDef[] = [
   { field: 'id', headerName: 'ID' },
   { field: 'ci', headerName: 'Cedula' },
@@ -1103,7 +1054,6 @@ export const columnsMap: ColumnDefinitions = {
   'asignatura-examenes': asignaturaExamenColumns,
   'asignatura-curso': asignaturaCursoColumns,
   previtaturas: previaturasColumns,
-  noPrevitaturas: noPreviaturasColumns,
   periodosExamen: periodosExamenColumns,
   asignaturaFuncionario: asignaturaFuncionarioColumns,
   inscripto: inscriptoColumns,

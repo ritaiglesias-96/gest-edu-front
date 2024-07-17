@@ -5,17 +5,22 @@ import { useEffect, useState } from 'react';
 import Clock from '@/assets/svg/schedule.svg';
 
 export default function CursosEstudiante() {
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState<any[]>([]);
   const [rowsLoading, setRowsLoading] = useState(true);
 
   useEffect(() => {
-    getHorariosCursosEstudiante().then((horarioCursos: any) => {
+    getHorariosCursosEstudiante().then((horarioCursos: any[]) => {
+      console.log(horarioCursos);
       if (horarioCursos) {
-        const horarios = horarioCursos.map((horario: any) => {
+        let horarios = horarioCursos.map((horario: any) => {
           const id = horario.cursoId;
           const docente = horario.docenteNombre + ' ' + horario.docenteApellido;
           return { ...horario, id, docente };
         });
+        horarios = horarios.filter(
+          (horario: any) => horario.estado === 'ACTIVO'
+        );
+        console.log(horarios);
         setRows(horarios);
         setRowsLoading(false);
       }
