@@ -45,7 +45,7 @@ import {
   localeTextConstants,
 } from '@/lib/definitions';
 import { altaPlanEstudio } from '@/lib/data/coordinador/actions';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   FormControl,
   InputLabel,
@@ -106,11 +106,11 @@ export default function List({
   rowsLoading,
   columnsType,
 }: ListProps) {
+  const path = usePathname();
   let columns: GridColDef[] = [];
   columns = columnsMap[columnsType];
   let estudianteAsignatura =
-    window.location.pathname.includes('estudiante') &&
-    columnsType === 'asignatura';
+    path.includes('estudiante') && columnsType === 'asignatura';
   return (
     <div className={styles.dataGridContainer}>
       {columnsType !== 'none' && (
@@ -126,6 +126,7 @@ export default function List({
                 nombre: columnsType !== 'inscripto',
                 apellido: columnsType !== 'inscripto',
                 detalles: !estudianteAsignatura,
+                horario: columnsType !== 'cursos',
               },
             },
           }}
@@ -747,36 +748,36 @@ function InscripcionExamenDataGrid({
       flex: 1,
     },
     {
-      field: 'inscripcion',
-      headerName: 'Inscripcion',
-      cellClassName: 'flex text-center self-end',
-      headerAlign: 'center',
-      flex: 1,
-      renderCell: (params) => (
-        <>
-          <Link
-            href={`${window.location.pathname}`}
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Inscripcion | Darse de baja',
+      cellClassName: 'actions',
+      getActions: (params) => {
+        return [
+          <GridActionsCellItem
+            icon={<Enroll className='h-auto w-6 fill-garnet sm:w-8' />}
+            label='Inscribirse'
+            sx={{
+              color: '#802c2c',
+            }}
             onClick={() => {
               setIsOpen(true);
               setExamenId(params.id.toString());
             }}
-            className='mx-auto flex size-fit'
-          >
-            <Enroll className='h-auto w-6 fill-garnet sm:w-8' />
-          </Link>
-          <Link
-            href={`${window.location.pathname}`}
+            key={params.row.id}
+          />,
+          <GridActionsCellItem
+            icon={<Close className='h-auto w-6 fill-garnet sm:w-8' />}
+            label='Cancel'
             onClick={() => {
               setIsOpen(true);
               setIsBajaExamen(true);
               setExamenId(params.id.toString());
             }}
-            className='mx-auto flex size-fit'
-          >
-            <Close className='h-auto w-6 fill-garnet sm:w-8' />
-          </Link>
-        </>
-      ),
+            key={`${params.row.id}-cancel`}
+          />,
+        ];
+      },
     },
   ];
 

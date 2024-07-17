@@ -1,18 +1,89 @@
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import { Certificado } from '@/lib/definitions'; // Asegúrate de ajustar la ruta según tu estructura de archivos
 import Button from '../Button/button';
 import Download from '@/assets/svg/download.svg';
 import { convertirFecha } from '@/utils/utils';
+import headerImage from '@/assets/images/logo-black-horizontal.png';
 
 interface Props {
   certificado: Certificado;
 }
 
 const CertificadoPDF: FC<Props> = ({ certificado }) => {
-  const generatePDF = () => {
-    const doc = new jsPDF();
+  const [base64Image, setBase64Image] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    const convertImageToBase64 = (url: string) => {
+      return new Promise<string>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              resolve(reader.result as string);
+            };
+            reader.readAsDataURL(xhr.response);
+          } else {
+            reject(`Error al obtener la imagen: ${xhr.statusText}`);
+          }
+        };
+        xhr.onerror = () => {
+          reject('Error de red al obtener la imagen.');
+        };
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.send();
+      });
+    };
+
+    if (typeof headerImage === 'string') {
+      convertImageToBase64(headerImage)
+        .then((base64) => {
+          setBase64Image(base64);
+        })
+        .catch((error) => {
+          setError(`Error al cargar la imagen: ${error}`);
+        });
+    } else if (headerImage instanceof Object && 'src' in headerImage) {
+      convertImageToBase64(headerImage.src)
+        .then((base64) => {
+          setBase64Image(base64);
+        })
+        .catch((error) => {
+          setError(`Error al cargar la imagen: ${error}`);
+        });
+    } else {
+      setError('No se puede determinar la URL de la imagen.');
+    }
+  }, []);
+
+  const generatePDF = () => {
+    if (!base64Image) {
+      console.error('La imagen base64 no está disponible.');
+      return;
+    }
+
+    const doc = new jsPDF();
+    let y = 40;
+    let pageNumber = 1;
+
+    // Agregar encabezado con imagen en todas las páginas
+    const addHeader = () => {
+      doc.addImage(base64Image!, 'PNG', 10, 10, 50, 15); // Ajusta la imagen como encabezado
+    };
+
+    // Aplicar estilos generales
+    const applyGeneralStyles = () => {
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(0, 0, 0); // Negro
+    };
+
+    // Configurar encabezado y primera página
+    addHeader();
+    applyGeneralStyles();
     doc.setFont('helvetica', 'italic');
     doc.setTextColor(100); // Color gris
     doc.setFontSize(12);
@@ -32,11 +103,19 @@ const CertificadoPDF: FC<Props> = ({ certificado }) => {
     doc.setFont('helvetica', 'normal');
     doc.text(`Nombre: ${certificado.estudiante.nombre}`, 20, 80);
     doc.text(`Apellido: ${certificado.estudiante.apellido}`, 20, 90);
-    doc.text(`CI: ${certificado.estudiante.ci.replace(/(\d+)(?=\d$)/g,'$1-')}`, 20, 100);
+    doc.text(
+      `CI: ${certificado.estudiante.ci.replace(/(\d+)(?=\d$)/g, '$1-')}`,
+      20,
+      100
+    );
     doc.text(`Domicilio: ${certificado.estudiante.domicilio}`, 20, 110);
     doc.text(`Email: ${certificado.estudiante.email}`, 20, 120);
-    doc.text(`Fecha de Nacimiento: ${convertirFecha(certificado.estudiante.fechaNac!)}`, 20, 130);
-    doc.text(`Teléfono: ${certificado.estudiante.telefono}`, 20, 140);    
+    doc.text(
+      `Fecha de Nacimiento: ${convertirFecha(certificado.estudiante.fechaNac!)}`,
+      20,
+      130
+    );
+    doc.text(`Teléfono: ${certificado.estudiante.telefono}`, 20, 140);
 
     doc.setFont('helvetica', 'italic');
     doc.setTextColor(100); // Color gris

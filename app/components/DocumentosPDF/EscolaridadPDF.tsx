@@ -1,10 +1,10 @@
 import { FC, useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
-import { Escolaridad } from '@/lib/definitions'; // Ajusta la ruta según tu estructura de archivos
+import { Escolaridad } from '@/lib/definitions';
 import Button from '../Button/button';
 import Download from '@/assets/svg/download.svg';
 import { convertirFecha } from '@/utils/utils';
-import headerImage from '@/assets/images/logo-black-horizontal.png'; // Ajusta la ruta según tu estructura de archivos
+import headerImage from '@/assets/images/logo-black-horizontal.png';
 
 interface Props {
   escolaridad: Escolaridad;
@@ -15,7 +15,6 @@ const CertificadoPDF: FC<Props> = ({ escolaridad }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Función para convertir la imagen a base64
     const convertImageToBase64 = (url: string) => {
       return new Promise<string>((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -38,10 +37,7 @@ const CertificadoPDF: FC<Props> = ({ escolaridad }) => {
         xhr.send();
       });
     };
-
-    // Manejo de la imagen según cómo se importe
     if (typeof headerImage === 'string') {
-      // Si headerImage es una cadena (URL directa o importación dinámica)
       convertImageToBase64(headerImage)
         .then((base64) => {
           setBase64Image(base64);
@@ -50,7 +46,6 @@ const CertificadoPDF: FC<Props> = ({ escolaridad }) => {
           setError(`Error al cargar la imagen: ${error}`);
         });
     } else if (headerImage instanceof Object && 'src' in headerImage) {
-      // Si headerImage es un objeto de imagen (StaticImageData)
       convertImageToBase64(headerImage.src)
         .then((base64) => {
           setBase64Image(base64);
@@ -59,7 +54,6 @@ const CertificadoPDF: FC<Props> = ({ escolaridad }) => {
           setError(`Error al cargar la imagen: ${error}`);
         });
     } else {
-      // Manejar otros casos o lanzar un error si no se puede determinar la URL de la imagen
       setError('No se puede determinar la URL de la imagen.');
     }
   }, []);
@@ -71,17 +65,16 @@ const CertificadoPDF: FC<Props> = ({ escolaridad }) => {
     }
 
     const doc = new jsPDF();
-    let y = 40; // Coordenada y inicial, ajustada para dejar espacio debajo del encabezado
+    let y = 40;
     let pageNumber = 1;
     const pageHeight = doc.internal.pageSize.height;
     let totalPages = 1;
 
     const addPageIfNecessary = (heightToAdd: number) => {
       if (y + heightToAdd > pageHeight - 10) {
-        // Deja espacio para el pie de página
         doc.addPage();
         totalPages++;
-        y = 40; // Reinicia la posición vertical en la nueva página, ajustada para dejar espacio debajo del encabezado
+        y = 40;
         addHeader(); // Vuelve a agregar el encabezado en la nueva página
         footer(doc, totalPages);
         applyGeneralStyles(); // Vuelve a aplicar los estilos generales en la nueva página

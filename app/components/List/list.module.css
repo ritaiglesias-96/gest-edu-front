@@ -1,13 +1,9 @@
 .dataTable {
   border: none;
-  @apply text-base;
   @apply font-poppins;
-  @apply font-normal;
   background-color: theme('colors.ivory');
 
   & * {
-    @apply text-base;
     @apply font-poppins;
-    @apply font-normal;
   }
 }

@@ -362,7 +362,6 @@ export async function getEstudiantesInscriptos(id: string) {
   );
   if (response.ok) {
     const data = await response.json();
-
     return data;
   } else {
     return null;
