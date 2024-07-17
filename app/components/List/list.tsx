@@ -701,7 +701,6 @@ function EditarCalificacionCursoDataGrid({
         sx={{
           backgroundColor: '#f6f6e9',
           color: 'black',
-          boxShadow: '1px 6px 36px 8px rgba(128,44,44,0.5)',
         }}
       />
     </div>
@@ -1390,7 +1389,6 @@ function EditarCalificacionExamenDataGrid({
       sx={{
         backgroundColor: '#f6f6e9',
         color: 'black',
-        boxShadow: '1px 6px 36px 8px rgba(128,44,44,0.5)',
       }}
     />
   );

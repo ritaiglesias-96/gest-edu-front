@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Gestión Educativa - Frontend
 
-## Getting Started
+Este repositorio contiene la aplicación frontend para un sistema integral de gestión educativa.
 
-First, run the development server:
+## Funcionalidades
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Invitado
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Inicio de sesión:** Los usuarios pueden iniciar sesión en la plataforma utilizando sus credenciales (correo electrónico y contraseña).
+- **Registro como estudiante:** Los estudiantes pueden registrarse en la plataforma completando un formulario con detalles como nombre, apellido, correo electrónico, cédula, fecha de nacimiento, dirección, número de teléfono y contraseña.
+- **Recuperación de contraseña:** Los usuarios pueden recuperar su contraseña a través de correo electrónico.
+- **Validación de certificados:** Cualquier persona puede verificar la autenticidad de un certificado introduciendo su código de validación.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Administrador, Coordinador, Funcionario y Estudiante
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Cerrar sesión:** Los usuarios pueden cerrar sesión en la plataforma.
+- **Editar perfil:** Los usuarios pueden modificar detalles secundarios de su perfil como foto, teléfono y dirección (excepto cédula, nombre, apellido, correo electrónico y fecha de nacimiento).
 
-## Learn More
+### Coordinador y Estudiante
 
-To learn more about Next.js, take a look at the following resources:
+- **Listar plan de estudios:** Permite visualizar el plan de estudios de una carrera específica.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Administrador
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **Gestión de usuarios:** Los administradores pueden crear cuentas para Coordinadores y Funcionarios.
+- **Listar usuarios:** Proporciona un listado completo de usuarios registrados con capacidades de búsqueda, filtrado y ordenamiento.
+- **Desactivar cuenta de usuario:** Los administradores pueden desactivar cuentas de Coordinadores y Funcionarios.
+- **Resumen de actividad de usuario:** Los administradores pueden generar y visualizar un informe de actividad de un usuario, mostrando acciones como inicio de sesión, inscripciones a cursos y exámenes, entre otras.
 
-## Deploy on Vercel
+### Coordinador
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Gestión de carreras:** Permite agregar y editar detalles de carreras.
+- **Gestión de asignaturas:** Permite agregar y editar asignaturas dentro de una carrera.
+- **Registro de plan de estudios:** Permite registrar un plan de estudios para una carrera.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Funcionario
+
+- **Gestión de cursos y exámenes:** Permite registrar cursos, períodos de exámenes, horarios de cursos y calificaciones.
+- **Gestión de estudiantes:** Permite gestionar inscripciones de estudiantes y registros académicos.
+
+### Estudiante
+
+- **Inscripción en carreras:** Permite a los estudiantes inscribirse en carreras disponibles.
+- **Inscripción en cursos y exámenes:** Permite inscribirse en cursos y exámenes relacionados con las carreras inscritas.
+- **Solicitudes académicas:** Permite solicitar certificados, escolaridades y títulos.
+
+## Instalación
+
+Sigue estos pasos para configurar el proyecto localmente:
+
+1. Clona el repositorio:
+
+   ```bash
+   git clone https://github.com/ritaiglesias-96/gest-edu-front.git
+   cd gest-edu-front
+   ```
+
+2. Instala las dependencias:
+
+   ```bash
+   npm install
+   ```
+
+3. Inicia la aplicación:
+
+   ```bash
+   npm run dev
+   ```
